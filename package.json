@@ -10,8 +10,8 @@
   "license": "ISC",
   "homepage": "https://github.com/rshin8763/CS467-Perseus-Project",
   "dependencies": {
+    "http-server": "^0.11.1",
     "phaser": "^3.6.0"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
