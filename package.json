@@ -1,0 +1,17 @@
+{
+  "name": "CS467-Perseus-Project",
+  "version": "1.0.0",
+  "description": "A HTML5 RTS made using Javascript and Phaser",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rshin8763/CS467-Perseus-Project"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/rshin8763/CS467-Perseus-Project",
+  "dependencies": {
+    "phaser": "^3.6.0"
+  },
+  "devDependencies": {
+  }
+}
