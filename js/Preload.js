@@ -7,7 +7,7 @@ Perseus.Preload = function(){};
 Perseus.Preload.prototype = {
   preload: function() {
     //load game assets
-    this.load.tilemap('level1', 'assets/tilemaps/level1.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.tilemap('level1', 'assets/tilemaps/level1.json', null, Phaser.Tilemap.format.TILED_JSON);
   },
   create: function() {
     this.state.start('Game');
