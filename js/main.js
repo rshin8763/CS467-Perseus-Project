@@ -29,7 +29,7 @@ function create() {
 	//resizes the game world to match the layer dimensions
 	this.backgroundlayer.resizeWorld();
 
-	//Create cursors
+	//Create input objects
 	this.cursors = this.game.input.keyboard.createCursorKeys();
 	this.pointer = this.game.input.mousePointer;
 
