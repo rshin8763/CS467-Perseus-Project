@@ -1,71 +1,43 @@
+// var Phaser = require('phaser-ce');
 var Perseus = Perseus || {};
 
-
-let gameScene = new Phaser.Scene('Game');
-
-// our game's configuration
-let config = {
-  type: Phaser.AUTO,  //Phaser will decide how to render our game (WebGL or Canvas)
-  width: 320, // game width
-  height: 320, // game height
-  scene: gameScene // our newly created scene
-};
- 
 // create the game, and pass it the configuration
-let game = new Phaser.Game(config);
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
-// load asset files for our game
-gameScene.preload = function() {
-  // load images
-    // this.load.tilemapTiledJSON('map', 'assets/tilemaps/level1.json');
-    this.load.image('gameTiles', 'assets/images/level1.png');
-  },
- 
-  // executed once, after assets were loaded
-	gameScene.create = function() {
+function preload() {
+	this.load.tilemap('demo', 'assets/tilemaps/demo.json', null, Phaser.Tilemap.TILED_JSON);
+	this.load.image('gameTiles', 'assets/images/tiles.png');
+}
 
-		// this.map = this.add.tilemap('map');
-        let bg = this.add.sprite(0,0, 'gameTiles');
-        bg.setOrigin(0.0);
-        bg.setScale(2.);
+function create() {
+	this.map = this.game.add.tilemap('demo');
 
-        //@TODO Find a way to set up Tiled JSON maps with Phaser 3 API
-		// this.map.addTilesetImage('tiles', 'gameTiles');
-		//create layer
-		// this.backgroundlayer = this.map.createStaticLayer('Title Layer 1', this.map.tilesets[0], 0, 0);
+	//the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
+	this.map.addTilesetImage('tiles', 'gameTiles');
 
-		//resizes the game world to match the layer dimensions
-        // this.backgroundlayer.resizeWorld();
+	//create layer
+	this.backgroundlayer = this.map.createLayer('backgroundLayer');
 
-		//move player with cursor keys
-		this.cursors = game.input.keyboard.createCursorKeys();
+	//resizes the game world to match the layer dimensions
+	this.backgroundlayer.resizeWorld();
+
+	//Create cursors
+	this.cursors = this.game.input.keyboard.createCursorKeys();
+
+}
+
+function update(){
+	if(this.cursors.up.isDown) {
+		game.camera.y -= 10;
 	}
-
-	gameScene.update = function() {
-		Perseus.panCamera();
+	if(this.cursors.down.isDown) {
+		game.camera.y += 10;
 	}
-
-	Perseus.panCamera = function(){
-		// Camera Panning
-		console.log("panning");
-
-		if(this.cursors.up.isDown) {
-            game.camera.y += 10;
-		}
-		if(this.cursors.down.isDown) {
-            game.camera.y -= 10;
-		}
-		// else if(this.cursors.down.isDown) {
-		// 	if(this.player.body.velocity.y == 0)
-		// 		this.player.body.velocity.y += 50;
-		// }
-		// else {
-		// 	this.player.body.velocity.y = 0;
-		// }
-		// if(this.cursors.left.isDown) {
-		// 	this.player.body.velocity.x -= 50;
-		// }
-		// else if(this.cursors.right.isDown) {
-		// 	this.player.body.velocity.x += 50;
-		// }
+	if(this.cursors.left.isDown) {
+		game.camera.x -= 10;
 	}
+	if(this.cursors.right.isDown) {
+		game.camera.x += 10;
+	}
+}
+
