@@ -1,0 +1,83 @@
+    <!DOCTYPE html>
+<html>
+<head>
+        <!--<script src="//cdn.jsdelivr.net/npm/phaser@3.6.0/dist/phaser.js"></script> -->
+        <script src="//cdn.jsdelivr.net/npm/phaser-ce@2.10.3/build/phaser.js"></script>
+</head>
+<body>
+
+    <script type="module">
+        'use strict';
+        import {Barracks} from './js/barracks.js';    
+
+        // create the game, and pass it the configuration
+        var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+        
+        function preload() {
+            console.log("preload");
+            // this.load.image('swordsman', 'assets/swordsman_single.png');
+            // this.load.image('swordswoman', 'assets/swordswoman_single.png');
+            this.load.image('barracks', 'assets/barracks.png');
+            this.load.image('button', 'assets/button.png');
+
+
+            this.load.spritesheet('swordsman_walk', 'assets/swordsman_walk.png', 64, 64);
+            this.load.spritesheet('swordswoman_walk', 'assets/swordswoman_walk.png', 64, 64);
+
+            };
+
+        function create() {
+
+            let barracks = new Barracks(200, 100, this);
+            this.objects = [];
+            let button = {};
+            button.button = true;
+            button.update = () =>{};
+            button.movable = false;
+            button.sprite = this.add.sprite(200, 500, 'button');
+            button.sprite.inputEnabled = true;
+            button.sprite.events.onInputDown.add(function(){
+            if(!this.selected.movable)
+            {
+                this.selected.buildSoldier();
+            }
+        }, this);
+           
+            this.objects.push(button);
+
+            this.objects.push(barracks);
+
+            game.input.mouse.capture = true;
+        }
+
+
+        function update(){
+
+            if(game.input.activePointer.leftButton.isDown)
+            {   
+
+                if(this.selected.movable)
+                    {
+                        if(Math.abs(game.input.activePointer.x - this.selected.sprite.x) > 64 || Math.abs(game.input.activePointer.y - this.selected.sprite.y)  > 64)
+                        {
+                            this.selected.move(game.input.activePointer.x, game.input.activePointer.y);
+                        }
+
+                    }
+                
+                console.log(this.selected);
+
+            }
+            this.objects.forEach(function(object){
+                object.update();
+            });
+        }
+
+
+
+
+  
+    </script>
+
+</body>
+</html>
