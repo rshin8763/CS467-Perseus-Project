@@ -11,6 +11,7 @@ class Barracks extends Building{
         this.PIKE = 2;
         this.ARCH = 3;
         this.buildSpeed = .25;
+        this.type="Barracks";
     }
 
     buildSoldier()
@@ -33,7 +34,6 @@ class Barracks extends Building{
                 this.spawnUnit(this.x + 64, this.y+64,this.current);
             } else {
                 this.buildProgress += this.buildSpeed;
-                console.log(this.buildProgress);
             }
         }
     }

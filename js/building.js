@@ -8,6 +8,7 @@ class Building{
         this.current = null;
         this.units = {};
         this.movable = false;
+        
     }
 
     
