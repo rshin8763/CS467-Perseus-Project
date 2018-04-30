@@ -1,5 +1,5 @@
 class Unit{
-    constructor(hp, attk, defense, attkSpeed, scene){
+    constructor(hp, attk, defense, attkSpeed, game){
 
         this.hp = hp;
         this.attk = attk;
@@ -10,7 +10,7 @@ class Unit{
         this.desty = null;
         this.speed = 1;
         this.sprite = null;
-        this.scene = scene;
+        this.game = game;
         this.movable = true;
         this.target = null;
         this.attacking = false;
@@ -23,23 +23,39 @@ class Unit{
     console.log("I'm a unit!");
     }
 
-    addSprite(x, y, unitType){        
-        this.sprite = this.scene.add.sprite(x, y, unitType);
+    addSprite(x, y, unitType){    
+        console.log(this);    
+        this.sprite = this.game.add.sprite(x, y, unitType);
+        this.sprite.frame = 26;
         this.sprite.inputEnabled = true;
+        this.sprite.animations.add('wlk_right', [143, 144, 145, 146, 147, 148, 149, 150, 151], 10, true);
+        this.sprite.animations.add('wlk_left', [117, 118, 119, 120, 121, 122, 123, 124, 125], 10, true);
+        this.sprite.animations.add('atk_left', [195, 196, 197, 198, 199, 200], 10, true);
+        this.sprite.animations.add('atk_right', [169, 170, 171, 172, 173, 174], 10, true);
+        this.sprite.animations.add('work_right', [91, 92, 93, 94, 95, 96, 97, 98], 10, true);
         this.sprite.events.onInputDown.add(function(pointer){
-            if(this.scene.selected.movable && this.scene.input.activePointer.rightButton.isDown)
+
+            //NOTE(Michael): So for this I had a game.selected variable that held the one unit I was
+            //  selecting at the time. In the actual game we're going to want to have selected
+            //  be an array so that we can add multiple units.
+            if(this.game.selected)
             {
-                this.scene.selected.attack(this);
-            }else {
-            this.scene.selected = this;
+                if(this.game.selected.movable && this.game.input.activePointer.rightButton.isDown)
+                {
+                    this.game.selected.attack(this);
+                }else {
+                    this.game.selected = this;
+                }
+            } else {
+                this.game.selected = this;
             }
         }, this);
 
     }
 
     move(x, y){
-        this.destx = x;
-        this.desty = y;
+        this.destx = x - (this.sprite.width/2);
+        this.desty = y - (this.sprite.width/2);
         this.moving = true;
     }
 
@@ -55,20 +71,70 @@ class Unit{
         console.log(this.hp);
         if(this.hp < 1)
         {
-            for(let i = 0; i < this.scene.objects.length; i++)
+            for(let i = 0; i < this.game.objects.length; i++)
             {
-                if(this.scene.objects[i] === this )
+                if(this.game.objects[i] === this )
                 {
-                    this.scene.objects.splice(i, 1);
+                    this.game.objects.splice(i, 1);
                 }
             }
 
             this.sprite.destroy();
 
-            return true;
+            return true; //Unit is dead
+        }
+
+        return false; //Unit not dead
+    }
+
+    checkColision(direction)
+    {
+        let coord = {}
+
+        if(direction == "up")
+        {
+            coord.x = this.sprite.x;
+            coord.y = this.sprite.y - this.speed;
+            
+        }
+        if(direction == "down")
+        {
+            coord.x = this.sprite.x;
+            coord.y = this.sprite.y + this.speed;
+            
+        }
+        if(direction == "left")
+        {
+            coord.x =  this.sprite.x - this.speed;
+            coord.y = this.sprite.y;
+            
+        }
+        if(direction == "right")
+        {
+   
+            coord.x = this.sprite.x + this.speed;
+            coord.y = this.sprite.y;
+            
+        }
+
+        for(let i = 0; i < this.game.objects.length; i++)
+        {
+            if(this.game.objects[i].movable == false)
+            {
+                let obj = this.game.objects[i].sprite;
+                if(coord.y + 64 > obj.y && coord.y +16 < obj.y + obj.height)
+                {
+                    if(coord.x + 48 > obj.x  && coord.x + 16 < obj.x + obj.width)
+                    {
+                        console.log(coord.y + ", "+ obj.y + " + " + obj.height) 
+                        return true;
+                    }
+                }
+            }
         }
 
         return false;
+
     }
 
     update(){
@@ -77,7 +143,7 @@ class Unit{
         {
            
             
-            if(Math.abs(this.sprite.x - this.target.sprite.x) > 32 || Math.abs(this.sprite.y - this.target.sprite.y) > 32)
+            if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width / 2))
             {
                 this.move(this.target.sprite.x, this.target.sprite.y)
             } else{
@@ -86,7 +152,7 @@ class Unit{
                 {
                     this.cooldown--;
                 }else{
-                    if(this.sprite.x < this.target.sprite.x - 32)
+                    if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
                     {
                         this.sprite.animations.play('atk_right', true);
                     }else{
@@ -111,24 +177,39 @@ class Unit{
         }
         if(this.moving)
         {
+
+
             if(this.sprite.x < this.destx)
             {
-                this.sprite.x += this.speed;
-                this.sprite.animations.play('wlk_right');
+                if(!this.checkColision('right'))
+                {
+                    this.sprite.x += this.speed;
+                    this.sprite.animations.play('wlk_right');
+                }
+
             }
             if(this.sprite.x > this.destx)
             {
+                if(!this.checkColision('left'))
+                {
                 this.sprite.x -= this.speed;
                 this.sprite.animations.play('wlk_left');
+                }
             }
             if(this.sprite.y < this.desty)
             {
-                this.sprite.y += this.speed;
+                if(!this.checkColision('down'))
+                {
+                    this.sprite.y += this.speed;
+                }
 
             }
             if(this.sprite.y > this.desty)
             {
-                this.sprite.y -= this.speed;
+                if(!this.checkColision('up'))
+                {
+                    this.sprite.y -= this.speed;
+                }
 
             }
 

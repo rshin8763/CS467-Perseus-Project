@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
         <!--<script src="//cdn.jsdelivr.net/npm/phaser@3.6.0/dist/phaser.js"></script> -->
@@ -9,30 +9,31 @@
     <script type="module">
         'use strict';
         import {Barracks} from './js/barracks.js';    
+        import {Fort} from './js/fort.js';
 
         // create the game, and pass it the configuration
         var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
         function preload() {
             console.log("preload");
-            // this.load.image('swordsman', 'assets/swordsman_single.png');
-            // this.load.image('swordswoman', 'assets/swordswoman_single.png');
+         
             this.load.image('barracks', 'assets/barracks.png');
+            this.load.image('fort', 'assets/fort.png');
             this.load.image('button', 'assets/button.png');
 
 
-            // this.load.spritesheet('swordsman_walk', 'assets/swordsman_walk.png', 64, 64);
-            // this.load.spritesheet('swordswoman_walk', 'assets/swordswoman_walk.png', 64, 64);
-            // this.load.spritesheet('swordsman_attack', 'assets/swordsman_attack.png', 64, 64);
-            // this.load.spritesheet('swordswoman_attack', 'assets/swordswoman_attack.png', 64, 64);
             this.load.spritesheet('swordsman', 'assets/swordsman.png', 64, 64);
             this.load.spritesheet('swordswoman', 'assets/swordswoman.png', 64, 64);
+            this.load.spritesheet('worker_male', 'assets/worker_male.png', 64, 64);
+            this.load.spritesheet('worker_female', 'assets/worker_female.png', 64, 64);
+
 
             };
 
         function create() {
             game.canvas.oncontextmenu = function (e) { e.preventDefault();return false;}   
-            let barracks = new Barracks(200, 100, this);
+            let barracks = new Barracks(0, 0, this);
+            let fort = new Fort(400, 400, this);
             this.objects = [];
             let button = {};
             button.button = true;
@@ -42,14 +43,29 @@
             button.sprite.inputEnabled = true;
             button.sprite.events.onInputDown.add(function(){
             if(!this.selected.movable)
-            {
-                this.selected.buildSoldier();
+            {  
+                if(this.selected.type == "Barracks")
+                {
+                    this.selected.buildSoldier();
+                }
+
+                if(this.selected.type == "Fort")
+                {
+                    this.selected.buildWorker();
+                }
+            } else {
+                if(this.selected.type == "Worker")
+                {
+                    this.selected.build(100, 100, "Fort");
+                }
             }
         }, this);
            
             this.objects.push(button);
 
             this.objects.push(barracks);
+
+            this.objects.push(fort);
 
             game.input.mouse.capture = true;
         }
@@ -62,9 +78,15 @@
 
                 if(this.selected.movable)
                     {
-                        console.log(this.selected.type)
                         if(Math.abs(game.input.activePointer.x - this.selected.sprite.x) > 64 || Math.abs(game.input.activePointer.y - this.selected.sprite.y)  > 64)
                         {
+                            console.log(this.selected.placing)
+                            if(this.selected.placing == true)
+                            {
+                                console.log("Placing!");
+                                this.selected.place(game.input.x - 64, game.input.y -64);
+                                return; 
+                            }
                             this.selected.move(game.input.activePointer.x, game.input.activePointer.y);
                         } 
 

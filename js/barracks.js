@@ -4,8 +4,8 @@ import {SwordInfantry} from './swordInfantry.js';
 
 class Barracks extends Building{
 
-    constructor(x,y,scene){
-        super(1000, x, y, scene);
+    constructor(x,y,game){
+        super(1000, x, y, game);
         this.addSprite(x,y,'barracks');
         this.SWORD = 1;
         this.PIKE = 2;
@@ -31,7 +31,7 @@ class Barracks extends Building{
             {
                 this.building = false;
                 this.buildProgress =0;
-                this.spawnUnit(this.x + 64, this.y+64,this.current);
+                this.spawnUnit(this.x + this.sprite.width, this.y + this.sprite.height ,this.current);
             } else {
                 this.buildProgress += this.buildSpeed;
             }
@@ -41,7 +41,7 @@ class Barracks extends Building{
     spawnUnit(x,y, unitType)
     {
         if(unitType == this.SWORD){
-            this.scene.objects.push(new SwordInfantry(x, y, this.scene));     
+            this.game.objects.push(new SwordInfantry(x, y, this.game));     
         }
     }
 
