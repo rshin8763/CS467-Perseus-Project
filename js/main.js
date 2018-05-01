@@ -15,13 +15,14 @@ function preload() {
 	this.load.image('gameTiles', 'assets/images/tiles.png');
 	this.load.image('barracks32x32', 'assets/barracks.png');
 	this.load.image('fort32x32', 'assets/fort-debug.png');
-
+    
+    // this.load.image('ui', 'assets/images/stoneMenu.png');
 
 	this.load.spritesheet('swordsman', 'assets/swordsman32x32.png', 32, 32);
 	this.load.spritesheet('swordswoman', 'assets/swordswoman32x32.png',32, 32);
 	this.load.spritesheet('worker_male', 'assets/worker_male32x32.png', 32, 32);
 	this.load.spritesheet('worker_female', 'assets/worker_female32x32.png', 32, 32);
-
+    this.stage.backgroundColor = 0x000000
 }
 
 
@@ -73,9 +74,7 @@ function update(){
 	if(this.cursors.right.isDown || (this.camera.width - this.pointer.position.x) <= 50 ){
 		game.camera.x += 10;
 	}
-	//
 	// mouse selection box
-	// Is there a better way to create a consistent graphics object attached to game. then renaming variable every update()?
     //
 	if (wasDown == false) {
 		if (this.pointer.isDown == true){
@@ -89,6 +88,20 @@ function update(){
 			endPos = this.pointer.positionUp;
 			console.log(endPos);
 			this.graphics.drawRect(Math.min(startPos.x, endPos.x) + game.camera.x, Math.min(startPos.y, endPos.y)+ game.camera.y, Math.abs(endPos.x-startPos.x), Math.abs(endPos.y-startPos.y));
+            //Add interesecting objects to selected Objects
+            console.log(this.objects);
+            game.selectedObjects = [];
+            // Select objects
+            this.objects.forEach(function(obj){
+                console.log(obj.sprite.x, obj.sprite.y);
+                if(startPos.x <= obj.sprite.x  && obj.sprite.x <= endPos.x){
+                    if (startPos.y <= obj.sprite.y && obj.sprite.y <= endPos.y){
+                        console.log("this is inside foreach");
+                        game.selectedObjects.push(obj);
+                        console.log(game.selectedObjects);
+                    }
+                }
+            })
 		}
 		else if (this.pointer.isDown == true){
 			//draw rectangle
