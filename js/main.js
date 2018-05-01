@@ -1,3 +1,5 @@
+
+import {SwordInfantry} from './swordInfantry.js'
 // var Phaser = require('phaser-ce');
 var Perseus = Perseus || {};
 
@@ -12,6 +14,15 @@ var endPos;
 function preload() {
 	this.load.tilemap('demo', 'assets/tilemaps/demo.json', null, Phaser.Tilemap.TILED_JSON);
 	this.load.image('gameTiles', 'assets/images/tiles.png');
+	this.load.image('barracks32x32', 'assets/barracks.png');
+	this.load.image('fort32x32', 'assets/fort-debug.png');
+
+
+	this.load.spritesheet('swordsman', 'assets/swordsman32x32.png', 32, 32);
+	this.load.spritesheet('swordswoman', 'assets/swordswoman32x32.png',32, 32);
+	this.load.spritesheet('worker_male', 'assets/worker_male32x32.png', 32, 32);
+	this.load.spritesheet('worker_female', 'assets/worker_female32x32.png', 32, 32);
+
 }
 
 
@@ -33,6 +44,19 @@ function create() {
 	this.cursors = this.game.input.keyboard.createCursorKeys();
 	this.pointer = this.game.input.mousePointer;
 
+	//Create an objects array on the game object and add a soldier to it.
+	this.objects = [];
+	this.objects.push(new SwordInfantry(50, 50, this));
+
+	//Create two soldiers
+	this.objects.push(new SwordInfantry(100, 400, this));
+	this.objects.push(new SwordInfantry(100, 100, this));
+
+	//Command the first soldier to move to 300,300
+	this.objects[0].move(300, 300);
+
+	//Command the second soldioer to attack the third;
+	this.objects[1].attack(this.objects[2]);
 }
 
 function update(){
@@ -82,5 +106,10 @@ function update(){
 	}
 
 	wasDown = this.pointer.isDown;
+
+	//Call the update function on each game object
+	this.objects.forEach(function(obj){
+		obj.update();
+	})
 }
 
