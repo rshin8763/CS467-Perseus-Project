@@ -1,6 +1,5 @@
 class Unit{
     constructor(hp, attk, defense, attkSpeed, game){
-
         this.hp = hp;
         this.attk = attk;
         this.attkSpeed = attkSpeed;
@@ -15,8 +14,6 @@ class Unit{
         this.target = null;
         this.attacking = false;
         this.cooldown = 0;
-
-        
     }
 
     sayHi(){
@@ -141,8 +138,6 @@ class Unit{
         //Process movement if unit is moving
         if(this.attacking)
         {
-           
-            
             if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width / 2))
             {
                 this.move(this.target.sprite.x, this.target.sprite.y)

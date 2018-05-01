@@ -1,4 +1,3 @@
-
 import {SwordInfantry} from './swordInfantry.js'
 // var Phaser = require('phaser-ce');
 var Perseus = Perseus || {};
@@ -28,7 +27,6 @@ function preload() {
 
 function create() {
 	//
-	///
 	this.map = this.game.add.tilemap('demo');
 
 	//the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
@@ -51,40 +49,34 @@ function create() {
 	//Create two soldiers
 	this.objects.push(new SwordInfantry(100, 400, this));
 	this.objects.push(new SwordInfantry(100, 100, this));
-
-	//Command the first soldier to move to 300,300
-	this.objects[0].move(300, 300);
-
-	//Command the second soldioer to attack the third;
-	this.objects[1].attack(this.objects[2]);
 }
 
 function update(){
-	//camera pan
+
+    //Draw selection box
 	if(this.graphics){
 		this.graphics.destroy();
 	}
 	this.graphics = this.add.graphics();
 	this.graphics.lineStyle(2, 0xFFFFFF, 1);
 
-	//TODO replace hardcoded canvas values with game variables
-	// See if there is a way to make second cursor, or mouse stay inside game boundaries.
-	if(this.cursors.up.isDown || (600 - this.pointer.position.y) >= 550 ){
+	//camera pan
+	if(this.cursors.up.isDown || (this.camera.length - this.pointer.position.y) >= 550 ){
 		game.camera.y -= 10;
 	}
-	if(this.cursors.down.isDown || (600 - this.pointer.position.y) <= 50 ){
+	if(this.cursors.down.isDown || (this.camera.length - this.pointer.position.y) <= 50 ){
 		game.camera.y += 10;
 	}
-	if(this.cursors.left.isDown || (800 - this.pointer.position.x) >= 750 ){
+	if(this.cursors.left.isDown || (this.camera.width - this.pointer.position.x) >= 750 ){
 		game.camera.x -= 10;
 	}
-	if(this.cursors.right.isDown || (800 - this.pointer.position.x) <= 50 ){
+	if(this.cursors.right.isDown || (this.camera.width - this.pointer.position.x) <= 50 ){
 		game.camera.x += 10;
 	}
 	//
 	// mouse selection box
-	// TODO try to unpair this from the normal update function for faster polling
 	// Is there a better way to create a consistent graphics object attached to game. then renaming variable every update()?
+    //
 	if (wasDown == false) {
 		if (this.pointer.isDown == true){
 			console.log('starting selection box');
