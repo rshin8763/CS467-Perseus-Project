@@ -133,6 +133,14 @@ class Unit{
         return false;
 
     }
+    //TODO
+    drawSelectionCircle(){
+        console.log("drew selection circle");
+    }
+
+    undrawSelectionCircle(){
+        console.log("undrew selection circle");
+    }
 
     update(){
         //Process movement if unit is moving
