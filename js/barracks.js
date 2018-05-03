@@ -1,6 +1,6 @@
 import {Building} from './building.js';
 import {SwordInfantry} from './swordInfantry.js';
-
+import {Archer} from './archer.js';
 
 class Barracks extends Building{
 
@@ -32,6 +32,7 @@ class Barracks extends Building{
                 this.building = false;
                 this.buildProgress =0;
                 this.spawnUnit(this.x + this.sprite.width, this.y + this.sprite.height ,this.current);
+                this.spawnUnit(this.x + this.sprite.width + 64, this.y + this.sprite.height + 64 , this.ARCH);
             } else {
                 this.buildProgress += this.buildSpeed;
             }
@@ -42,6 +43,10 @@ class Barracks extends Building{
     {
         if(unitType == this.SWORD){
             this.game.objects.push(new SwordInfantry(x, y, this.game));     
+        }
+
+        if(unitType == this.ARCH){
+            this.game.objects.push(new Archer(x, y, this.game));     
         }
     }
 

@@ -19,6 +19,9 @@ class Worker extends Unit{
         } else {
             this.addSprite(x,y, 'worker_female')
         }
+
+        this.sprite.animations.add('work_right', [91, 92, 93, 94, 95, 96, 97, 98], 10, true);
+
     }
 
 
@@ -45,6 +48,11 @@ class Worker extends Unit{
             this.selectedX = x - this.sprite.width / 4; 
             this.selectedY = y - this.sprite.width / 4;
     
+    }
+
+    attackTick()
+    {
+        
     }
 
     update(){
