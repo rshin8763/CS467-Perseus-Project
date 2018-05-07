@@ -53,6 +53,8 @@
                 }
             }
 
+            console.log(this.navigator.navmap);
+
 
             this.objects = [];
             let button = {};
@@ -101,7 +103,6 @@
                     {
                         if(Math.abs(game.input.activePointer.x - this.selected.sprite.x) > 64 || Math.abs(game.input.activePointer.y - this.selected.sprite.y)  > 64)
                         {
-                            console.log(this.selected.placing)
                             if(this.selected.placing == true)
                             {
                                 console.log("Placing!");

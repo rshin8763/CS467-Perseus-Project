@@ -167,39 +167,38 @@ class Unit{
         }
         if(this.moving)
         {
-            console.log(this.game.navigator.getSquare(this.sprite.x + 32, this.sprite.y +32))
-            console.log(this.nextSquare);
-            if(this.game.navigator.getSquare(this.sprite.x + 32, this.sprite.y +32) == this.dest)
+            let currentSquare = this.game.navigator.getSquare(this.sprite.x + 32, this.sprite.y +32);
+
+            if(currentSquare.y == this.dest.y && currentSquare.x == this.dest.x)
             {
                 this.sprite.animations.stop();
                 this.moving = false;
-            } else if(this.game.navigator.getSquare(this.sprite.x + 32, this.sprite.y +32).y == this.nextSquare.y && this.game.navigator.getSquare(this.sprite.x + 32, this.sprite.y +32).x == this.nextSquare.x) {
-                console.log("HELLO");
+            } else if(currentSquare.y == this.nextSquare.y && currentSquare.x == this.nextSquare.x) {
                 this.nextSquare = this.game.navigator.findNextNode(this, this.dest);
             }else{
 
-                if(this.sprite.x < this.game.navigator.getCoords(this.nextSquare.x, this.nextSquare.y).x)
+                if(currentSquare.x < this.nextSquare.x)
                 {
                         this.sprite.x += this.speed;
                         this.sprite.animations.play('wlk_right');
                     
     
                 }
-                if(this.sprite.x > this.game.navigator.getCoords(this.nextSquare.x, this.nextSquare.y).x)
+                if(currentSquare.x > this.nextSquare.x)
                 {
 
                     this.sprite.x -= this.speed;
                     this.sprite.animations.play('wlk_left');
                     
                 }
-                if(this.sprite.y < this.game.navigator.getCoords(this.nextSquare.x, this.nextSquare.y).y)
+                if(currentSquare.y < this.nextSquare.y)
                 {
 
                         this.sprite.y += this.speed;
                     
     
                 }
-                if(this.sprite.y > this.game.navigator.getCoords(this.nextSquare.x, this.nextSquare.y).y)
+                if(currentSquare.y > this.nextSquare.y)
                 {
 
                         this.sprite.y -= this.speed;

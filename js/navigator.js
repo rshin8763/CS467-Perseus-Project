@@ -12,6 +12,7 @@ class Navigator {
             }
     }
 
+    //Get the navmap square based on x,y coordinates
     getSquare(x,y){
         let box = {};
         box.x = Math.floor(x/this.tileSize);
@@ -20,6 +21,7 @@ class Navigator {
         return (box);
     }
 
+    //Get x,y coordinates based on the navmap square
     getCoords(x, y)
     {
         let coords = {};
@@ -29,6 +31,7 @@ class Navigator {
         return coords;
     }
 
+    //Implements an A* routing algorithm. Then returns the next node in the path
     findNextNode(unit, target)
     {
         const start = this.getSquare(unit.sprite.x + this.tileSize, unit.sprite.y + this.tileSize);
@@ -78,6 +81,7 @@ class Navigator {
             return closed[0];
     }
 
+    //Create nodes representing the squares around a given node
     getNeightbors(node, target){
         let neighbors = [];
         //WEST
@@ -125,6 +129,8 @@ class Navigator {
 
         return neighbors;
     }
+
+    //Get the distance to from x,y to the target square
     getDistance(x, y, target){
         let hDiffernce = Math.abs(target.x - x);
         let yDifference = Math.abs(target.y - y);
@@ -132,6 +138,8 @@ class Navigator {
         return hDiffernce + yDifference;
     }
 
+
+    //Create a node for the A* algorithm
     createNode(x,y, current, target)
     {
 
