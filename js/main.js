@@ -12,7 +12,7 @@ import {Tree} from './tree.js';
 var Perseus = Perseus || {};
 
 // create the game, and pass it the configuration
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 var wasDown = false;
 var startPos;
@@ -58,6 +58,7 @@ function create() {
 	this.keys = {};
 	this.keys.A = this.game.input.keyboard.addKey(Phaser.KeyCode.A);
 	this.keys.M = this.game.input.keyboard.addKey(Phaser.KeyCode.M);
+	this.keys.X = this.game.input.keyboard.addKey(Phaser.KeyCode.X);
 	this.controlState = 'default';
 
 	//Create an objects array on the game object and add a soldier to it.
@@ -90,23 +91,24 @@ function update(){
 
 	//camera pan
 	//TODO encapsulate this in interface object methods
+    //TODO Selection box only selects units from left to right ATM.
 
-	if(this.cursors.up.isDown || (this.camera.length - this.pointer.position.y) >= 550 ){
+	if(this.cursors.up.isDown || (this.camera.height - this.pointer.position.y) >= 32 ){
 		let temp = game.camera.y 
 			game.camera.y -= 10;
 		game.ui.bar.y += game.camera.y - temp;
 	}
-	if(this.cursors.down.isDown || (this.camera.length - this.pointer.position.y) <= 50 ){
+	if(this.cursors.down.isDown || (this.camera.height - this.pointer.position.y) <= this.camera.height-32 ){
 		let temp = game.camera.y 
 			game.camera.y += 10;
 		game.ui.bar.y += game.camera.y - temp;
 	}
-	if(this.cursors.left.isDown || (this.camera.width - this.pointer.position.x) >= 750 ){
+	if(this.cursors.left.isDown || (this.camera.width - this.pointer.position.x) >= this.camera.width-32 ){
 		let temp = game.camera.x 
 			game.camera.x -= 10;
 		game.ui.bar.x += game.camera.x - temp;
 	}
-	if(this.cursors.right.isDown || (this.camera.width - this.pointer.position.x) <= 50 ){
+	if(this.cursors.right.isDown || (this.camera.width - this.pointer.position.x) <= 32 ){
 		let temp = game.camera.x 
 			game.camera.x += 10;
 		game.ui.bar.x += game.camera.x - temp;
@@ -124,6 +126,11 @@ function update(){
 			console.log('input move command');
 		}
 	}
+    // Cancel command ( no right click yet)
+    if (this.keys.X.isDown){
+        this.controlState = 'default';
+        console.log('controller state is default');
+    }
 
 	// TODO force BOX selection to end at UI bar
 	if (wasDown == false) {
