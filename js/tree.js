@@ -4,7 +4,6 @@ class Tree{
         this.game = game;
         this.resourceAmount = 1000;
         this.exhausted = false;
-        this.addSprite(x,y);
     }
 
     addSprite(x, y){    

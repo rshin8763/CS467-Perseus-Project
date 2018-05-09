@@ -1,8 +1,8 @@
 import {Tree} from './tree.js'
 import {Fort} from './fort.js'
 class mapRenderer{
-    constructor(game){
-        this.game = game;
+    constructor(Perseus){
+        this.Perseus = Perseus;
     }
 
     //These functions were adapted from https://gamedevacademy.org/html5-phaser-tutorial-top-down-games-with-tiled/
@@ -23,20 +23,20 @@ class mapRenderer{
     //create a sprite from an object
     createFromTiledObject(element, game) {
         if (element.type == 'tree'){
-            game.resources.push(new Tree(element.x, element.y, game));
+            game.resources.push(new Tree(element.x, element.y, this.Perseus.game));
         }
         if (element.type == 'fort'){
-            game.objects.push(new Fort(element.x, element.y, game));
+            game.objects.push(new Fort(element.x, element.y, this.Perseus.game));
         }
     }
 
     createResources(){
-        this.game.resources = [];
+        this.Perseus.resources = [];
 
         // TODO Change name to objectLayer
-        let result = this.getObjects(this.game.map, 'resourceLayer');
+        let result = this.getObjects(this.Perseus.map, 'resourceLayer');
         result.forEach((obj)=>{
-            this.createFromTiledObject(obj, this.game)
+            this.createFromTiledObject(obj, this.Perseus)
         }, this);
     }
 }
