@@ -1,3 +1,14 @@
+import {SwordInfantry} from './swordInfantry.js';
+import {mapRenderer} from './mapRenderer.js';
+import {Controller} from './controller.js';
+import {Fort} from './fort.js';
+import {Tree} from './tree.js';
+
+//I mostly changed the classes to pass around references of Perseus instead of game.
+//Perseus now contains objects, controller, map, graphics
+//Within Controller is the selected objects array. I still haven't changed anything to do with game.selected. 
+//We will need to add different logic for group selecting units, while buildings and resource nodes should only be 
+//able to be clicked directly. 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
 
@@ -5,19 +16,6 @@ Perseus.graphics = {}
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 //TODO set anchor point of all units to the center, not the corner
-//TODO I mostly changed the classes to pass around references of Perseus instead of game.
-//Perseus now contains objects, controller, map, graphics
-//Within Controller is the selected objects array. I still haven't changed anything to do with game.selected. 
-//We will need to add different logic for group selecting units, while buildings and resource nodes should only be 
-//able to be clicked directly. 
-
-import {SwordInfantry} from './swordInfantry.js';
-import {mapRenderer} from './mapRenderer.js';
-import {Controller} from './controller.js';
-import {Fort} from './fort.js';
-import {Tree} from './tree.js';
-
-// var Phaser = require('phaser-ce');
 
 function preload() {
 	this.load.tilemap('demo', 'assets/tilemaps/map1.json', null, Phaser.Tilemap.TILED_JSON);
