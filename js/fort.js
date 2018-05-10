@@ -40,9 +40,8 @@ class Fort extends Building{
 
     spawnUnit(x,y, unitType)
     {
-        console.log(this.game);
 
-            this.game.objects.push(new Worker(x, y, this.game));     
+            this.Perseus.objects.push(new Worker(x, y, this.Perseus));     
         
     }
 

@@ -12,112 +12,116 @@
         import {Barracks} from './js/barracks.js';    
         import {Fort} from './js/fort.js';
         import {Navigator} from './js/navigator.js';
+        let Perseus = {};
+        Perseus.graphics = {}
 
         // create the game, and pass it the configuration
-        var game = new Phaser.Game(800, 608, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+        Perseus.game = new Phaser.Game(800, 608, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
         function preload() {
             console.log("preload");
             
-            this.load.image('barracks', 'assets/barracks.png');
-            this.load.image('fort', 'assets/fort.png');
-            this.load.image('button', 'assets/button.png');
-            this.load.image('arrow', 'assets/arrow.png');
-            this.load.image('navSquare', 'assets/navSquare.png');
+            Perseus.game.load.image('barracks', 'assets/barracks.png');
+            Perseus.game.load.image('fort', 'assets/fort.png');
+            Perseus.game.load.image('button', 'assets/button.png');
+            Perseus.game.load.image('arrow', 'assets/arrow.png');
+            Perseus.game.load.image('navSquare', 'assets/navSquare.png');
 
 
 
 
-            this.load.spritesheet('swordsman', 'assets/swordsman.png', 64, 64);
-            this.load.spritesheet('swordswoman', 'assets/swordswoman.png', 64, 64);
-            this.load.spritesheet('archer_male', 'assets/archer_male.png', 64, 64);
-            this.load.spritesheet('archer_female', 'assets/archer_female.png', 64, 64);
-            this.load.spritesheet('worker_male', 'assets/worker_male.png', 64, 64);
-            this.load.spritesheet('worker_female', 'assets/worker_female.png', 64, 64);
+            Perseus.game.load.spritesheet('swordsman', 'assets/swordsman.png', 64, 64);
+            Perseus.game.load.spritesheet('swordswoman', 'assets/swordswoman.png', 64, 64);
+            Perseus.game.load.spritesheet('archer_male', 'assets/archer_male.png', 64, 64);
+            Perseus.game.load.spritesheet('archer_female', 'assets/archer_female.png', 64, 64);
+            Perseus.game.load.spritesheet('worker_male', 'assets/worker_male.png', 64, 64);
+            Perseus.game.load.spritesheet('worker_female', 'assets/worker_female.png', 64, 64);
 
 
             };
 
         function create() {
-            this.navigator = new Navigator(this, 25, 19, 32);
+            Perseus.navigator = new Navigator(Perseus.game, 25, 19, 32);
   
     
-            game.canvas.oncontextmenu = function (e) { e.preventDefault();return false;}   
-            let barracks = new Barracks(0, 0, this);
-            let fort = new Fort(320, 320, this);
+            Perseus.game.canvas.oncontextmenu = function (e) { e.preventDefault();return false;}   
+            
+            let barracks = new Barracks(0, 0, Perseus);
+            let fort = new Fort(320, 320, Perseus);
             for(let i = 0; i < 4; i++)
             {
                 for(let j = 0; j < 4; j++)
                 {
-                    this.navigator.navmap[i + Math.floor(320/32)][j + Math.floor(320/32)] = 1;
+                    Perseus.navigator.navmap[i + Math.floor(320/32)][j + Math.floor(320/32)] = 1;
                 }
             }
 
-            console.log(this.navigator.navmap);
+            console.log(Perseus.navigator.navmap);
 
-
-            this.objects = [];
+            Perseus.selectionCircles=[];
+            Perseus.selected = fort;
+            Perseus.objects = [];
             let button = {};
             button.button = true;
             button.update = () =>{};
             button.movable = false;
-            button.sprite = this.add.sprite(200, 500, 'button');
+            button.sprite = Perseus.game.add.sprite(200, 500, 'button');
             button.sprite.inputEnabled = true;
             button.sprite.events.onInputDown.add(function(){
-            if(!this.selected.movable)
+            if(!Perseus.selected.movable)
             {  
-                if(this.selected.type == "Barracks")
+                if(Perseus.selected.type == "Barracks")
                 {
-                    this.selected.buildSoldier();
+                    Perseus.selected.buildSoldier();
                 }
 
-                if(this.selected.type == "Fort")
+                if(Perseus.selected.type == "Fort")
                 {
-                    this.selected.buildWorker();
+                    Perseus.selected.buildWorker();
                 }
             } else {
-                if(this.selected.type == "Worker")
+                if(Perseus.selected.type == "Worker")
                 {
-                    this.selected.build(100, 100, "Fort");
+                    Perseus.selected.build(100, 100, "Fort");
                 }
             }
-        }, this);
+        }, Perseus.game);
            
-            this.objects.push(button);
+            Perseus.objects.push(button);
 
-            this.objects.push(barracks);
+            Perseus.objects.push(barracks);
 
-            this.objects.push(fort);
+            Perseus.objects.push(fort);
 
-            game.input.mouse.capture = true;
+            Perseus.game.input.mouse.capture = true;
         }
 
 
         function update(){
 
-            if(game.input.activePointer.leftButton.isDown)
+            if(Perseus.game.input.activePointer.leftButton.isDown)
             {   
-                //console.log(game.input.activePointer.x + "," + game.input.activePointer.y + " " + this.getSquare(game.input.activePointer.x, game.input.activePointer.y));
-                this.navigator.getSquare(game.input.activePointer.x, game.input.activePointer.y);
-                if(this.selected.movable)
+                //console.log(game.input.activePointer.x + "," + game.input.activePointer.y + " " + Perseus.game.getSquare(game.input.activePointer.x, game.input.activePointer.y));
+                Perseus.navigator.getSquare(Perseus.game.input.activePointer.x, Perseus.game.input.activePointer.y);
+                if(Perseus.selected.movable)
                     {
-                        if(Math.abs(game.input.activePointer.x - this.selected.sprite.x) > 64 || Math.abs(game.input.activePointer.y - this.selected.sprite.y)  > 64)
+                        if(Math.abs(Perseus.game.input.activePointer.x - Perseus.selected.sprite.x) > 64 || Math.abs(Perseus.game.input.activePointer.y - Perseus.selected.sprite.y)  > 64)
                         {
-                            if(this.selected.placing == true)
+                            if(Perseus.selected.placing == true)
                             {
                                 console.log("Placing!");
-                                this.selected.place(game.input.x - 64, game.input.y -64);
+                                Perseus.selected.place(Perseus.game.input.x - 64, Perseus.game.input.y -64);
                                 return; 
                             }
-                            //this.navigator.findNextNode(this.selected ,this.navigator.getSquare(game.input.activePointer.x, game.input.activePointer.y));
-                            this.selected.move(game.input.activePointer.x, game.input.activePointer.y);
+                            //Perseus.game.navigator.findNextNode(Perseus.game.selected ,Perseus.game.navigator.getSquare(game.input.activePointer.x, game.input.activePointer.y));
+                            Perseus.selected.move(Perseus.game.input.activePointer.x, Perseus.game.input.activePointer.y);
                         } 
 
                     }
                 
 
             }
-            this.objects.forEach(function(object){
+            Perseus.objects.forEach(function(object){
                 object.update();
             });
         }

@@ -42,11 +42,11 @@ class Barracks extends Building{
     spawnUnit(x,y, unitType)
     {
         if(unitType == this.SWORD){
-            this.Perseus.objects.push(new SwordInfantry(x, y, this.game));     
+            this.Perseus.objects.push(new SwordInfantry(x, y, this.Perseus));     
         }
 
         if(unitType == this.ARCH){
-            this.game.objects.push(new Archer(x, y, this.game));     
+            this.game.objects.push(new Archer(x, y, this.Perseus));     
         }
     }
 
