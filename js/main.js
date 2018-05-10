@@ -19,16 +19,13 @@ Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, cr
 
 function preload() {
 	this.load.tilemap('demo', 'assets/tilemaps/map1.json', null, Phaser.Tilemap.TILED_JSON);
-
+	this.load.image('topbar', 'assets/topbar.png');
 	// TODO insert tiles url and creators
 	this.load.image('gameTiles', 'assets/tilemaps/forestTiles.png');
-
 	this.load.image('tree', 'assets/images/tree.png');
 	this.load.image('barracks', 'assets/barracks.png');
 	this.load.image('fort', 'assets/fort.png');
 	this.load.image('ui', 'assets/ui/stoneMenu.png');
-
-
 	this.load.spritesheet('swordsman', 'assets/swordsman.png', 64, 64);
 	this.load.spritesheet('swordswoman', 'assets/swordswoman.png', 64, 64);
 	this.load.spritesheet('worker_male', 'assets/worker_male.png', 64, 64);
@@ -47,6 +44,20 @@ function create() {
 
 	// Sets collision  TODO make it work with unit's move method.
 	Perseus.map.setCollisionByExclusion([], true, Perseus.collisionLayer, true);
+
+
+    //I added a 800x20 sprite that's just a blue bar
+	let topbar = this.add.sprite(0, 0, 'topbar');
+	//And set it fixed to Camera
+	topbar.fixedToCamera = true;
+
+	let style = { font: "12px Arial", fill: "#ffffff", align: "center" };
+
+	this.barText = this.add.text(100, 0, "This number can change each update:", style);
+	this.testText = "This number can change each update:";
+	this.barText.fixedToCamera = true;
+
+	this.count = 0;
 
 	//resizes the game world to match the layer dimensions
 	Perseus.backgroundLayer.resizeWorld();
@@ -75,8 +86,10 @@ function create() {
 
 function update(){
 
-    Perseus.controller.takeInput();
 
+    Perseus.controller.takeInput();
+	this.count++;
+	this.barText.text = this.testText +  " " + this.count;
 	//Call the update function on each game object
 	Perseus.objects.forEach(function(obj){
 		obj.update();
