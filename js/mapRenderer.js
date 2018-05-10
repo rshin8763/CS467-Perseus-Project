@@ -11,9 +11,6 @@ class mapRenderer{
         map.objects[layer].forEach(function(element){
             console.log(element);
             if(element.type != '') {
-                //Phaser uses top left, Tiled bottom left so we have to adjust the y position
-                //TODO create logic to subtract the actual sprite height for trees, forts etc
-                element.y -= map.tileHeight;
                 result.push(element);
             }      
         });
@@ -21,12 +18,14 @@ class mapRenderer{
     }
 
     //create a sprite from an object
-    createFromTiledObject(element, game) {
+    createFromTiledObject(element, Perseus) {
         if (element.type == 'tree'){
-            game.resources.push(new Tree(element.x, element.y, this.Perseus.game));
+            console.log('creating tree');
+            Perseus.resources.push(new Tree(element.x+32, element.y+32, this.Perseus));
+
         }
         if (element.type == 'fort'){
-            game.objects.push(new Fort(element.x, element.y, this.Perseus.game));
+            Perseus.objects.push(new Fort(element.x+64, element.y+64, this.Perseus));
         }
     }
 

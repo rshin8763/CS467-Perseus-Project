@@ -1,5 +1,5 @@
 class Unit{
-    constructor(hp, attk, defense, attkSpeed, game){
+    constructor(hp, attk, defense, attkSpeed, Perseus){
         this.hp = hp;
         this.attk = attk;
         this.attkSpeed = attkSpeed;
@@ -9,7 +9,8 @@ class Unit{
         this.desty = null;
         this.speed = 1;
         this.sprite = null;
-        this.game = game;
+        this.game = Perseus.game;
+        this.Perseus = Perseus;
         this.movable = true;
         this.target = null;
         this.attacking = false;
@@ -35,10 +36,8 @@ class Unit{
             //NOTE(Michael): So for this I had a game.selected variable that held the one unit I was
             //  selecting at the time. In the actual game we're going to want to have selected
             //  be an array so that we can add multiple units.
-            if(this.game.selected)
-            {
-                if(this.game.selected.movable && this.game.input.activePointer.rightButton.isDown)
-                {
+            if(this.game.selected) {
+                if(this.game.selected.movable && this.game.input.activePointer.rightButton.isDown) {
                     this.game.selected.attack(this);
                 }else {
                     this.game.selected = this;
@@ -68,11 +67,11 @@ class Unit{
         console.log(this.hp);
         if(this.hp < 1)
         {
-            for(let i = 0; i < this.game.objects.length; i++)
+            for(let i = 0; i < this.Perseus.objects.length; i++)
             {
-                if(this.game.objects[i] === this )
+                if(this.Perseus.objects[i] === this )
                 {
-                    this.game.objects.splice(i, 1);
+                    this.Perseus.objects.splice(i, 1);
                 }
             }
 
@@ -114,11 +113,11 @@ class Unit{
             
         }
 
-        for(let i = 0; i < this.game.objects.length; i++)
+        for(let i = 0; i < this.Perseus.objects.length; i++)
         {
-            if(this.game.objects[i].movable == false)
+            if(this.Perseus.objects[i].movable == false)
             {
-                let obj = this.game.objects[i].sprite;
+                let obj = this.Perseus.objects[i].sprite;
                 if(coord.y + 64 > obj.y && coord.y +16 < obj.y + obj.height)
                 {
                     if(coord.x + 48 > obj.x  && coord.x + 16 < obj.x + obj.width)

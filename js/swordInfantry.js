@@ -1,8 +1,8 @@
 import {Unit} from './unit.js';
 
 class SwordInfantry extends Unit {
-    constructor(x, y, game){
-        super(100, 30, 15, 3, game);
+    constructor(x, y, Perseus){
+        super(100, 30, 15, 3, Perseus);
         if (Math.random() >= 0.5){
             this.type="Swordsman";
             this.addSprite(x,y,'swordsman');

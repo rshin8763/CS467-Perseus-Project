@@ -1,9 +1,15 @@
 var Perseus = Perseus || {};
+Perseus.graphics = {}
 
 // create the game, and pass it the configuration
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 //TODO set anchor point of all units to the center, not the corner
+//TODO I mostly changed the classes to pass around references of Perseus instead of game.
+//Perseus now contains objects, controller, map, graphics
+//Within Controller is the selected objects array. I still haven't changed anything to do with game.selected. 
+//We will need to add different logic for group selecting units, while buildings and resource nodes should only be 
+//able to be clicked directly. 
 
 import {SwordInfantry} from './swordInfantry.js';
 import {mapRenderer} from './mapRenderer.js';
@@ -47,6 +53,17 @@ function create() {
 	//resizes the game world to match the layer dimensions
 	Perseus.backgroundLayer.resizeWorld();
 
+	//Create an objects array on the game object and add a soldier to it.
+	Perseus.objects = [];
+
+	Perseus.objects.push(new SwordInfantry(250, 250, Perseus));
+	Perseus.objects.push(new SwordInfantry(200, 400, Perseus));
+	Perseus.objects.push(new SwordInfantry(300, 300, Perseus));
+
+    //Create resources
+    Perseus.mapRenderer = new mapRenderer(Perseus);
+    Perseus.mapRenderer.createResources();
+
 	// Create GUI bar
 	Perseus.ui = {}
 	Perseus.ui.bar = this.add.sprite(0,0,'ui');
@@ -56,27 +73,9 @@ function create() {
 
 	//Create Controller 
     Perseus.controller = new Controller(Perseus);
-
-	//Create an objects array on the game object and add a soldier to it.
-	Perseus.objects = [];
-
-	Perseus.objects.push(new SwordInfantry(250, 250, this));
-	Perseus.objects.push(new SwordInfantry(200, 400, this));
-	Perseus.objects.push(new SwordInfantry(300, 300, this));
-
-    //Create resources
-    Perseus.mapRenderer = new mapRenderer(Perseus);
-    Perseus.mapRenderer.createResources();
-
 }
 
 function update(){
-	// Destroy old selection box
-	if(Perseus.graphics){
-		Perseus.graphics.destroy();
-	}
-	Perseus.graphics = this.add.graphics();
-	Perseus.graphics.lineStyle(2, 0xFFFFFF, 1);
 
     Perseus.controller.takeInput();
 
