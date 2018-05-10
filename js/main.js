@@ -16,10 +16,13 @@ function preload() {
 	this.load.image('gameTiles', 'assets/images/tiles.png');
 	this.load.image('barracks32x32', 'assets/barracks.png');
 	this.load.image('fort32x32', 'assets/fort-debug.png');
+	this.load.image('topbar', 'assets/topbar.png');
 
 
 	this.load.spritesheet('swordsman', 'assets/swordsman32x32.png', 32, 32);
 	this.load.spritesheet('swordswoman', 'assets/swordswoman32x32.png',32, 32);
+	this.load.spritesheet('swordsman', 'assets/archer_male.png', 32, 32);
+	this.load.spritesheet('swordswoman', 'assets/archer_female.png',32, 32);
 	this.load.spritesheet('worker_male', 'assets/worker_male32x32.png', 32, 32);
 	this.load.spritesheet('worker_female', 'assets/worker_female32x32.png', 32, 32);
 
@@ -35,10 +38,33 @@ function create() {
 	this.map.addTilesetImage('tiles', 'gameTiles');
 
 	//create layer
-	this.backgroundlayer = this.map.createLayer('backgroundLayer');
-
+	this.backgroundlayer = this.map.createLayer('backgroundLayer', 800, 600);
+	//this.backgroundlayer2 = this.map.createLayer('backgroundLayer')
 	//resizes the game world to match the layer dimensions
+	//this.backgroundlayer.fixedToCamera = false;
 	this.backgroundlayer.resizeWorld();
+	//this.backgroundlayer.alignIn(this.world.bounds, Phaser.TOP_LEFT, 0, -20);
+
+	console.log(this.backgroundlayer);
+
+	
+
+
+    //I added a 800x20 sprite that's just a blue bar
+	let topbar = this.add.sprite(0, 0, 'topbar');
+	//And set it fixed to Camera
+	topbar.fixedToCamera = true;
+
+	let style = { font: "12px Arial", fill: "#ffffff", align: "center" };
+
+	this.barText = this.add.text(100, 0, "This number can change each update:", style);
+	this.testText = "This number can change each update:";
+	this.barText.fixedToCamera = true;
+
+	this.count = 0;
+
+
+
 
 	//Create input objects
 	this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -60,6 +86,9 @@ function create() {
 }
 
 function update(){
+
+	this.count++;
+	this.barText.text = this.testText +  " " + this.count;
 	//camera pan
 	if(this.graphics){
 		this.graphics.destroy();
@@ -69,10 +98,11 @@ function update(){
 
 	//TODO replace hardcoded canvas values with game variables
 	// See if there is a way to make second cursor, or mouse stay inside game boundaries.
-	if(this.cursors.up.isDown || (600 - this.pointer.position.y) >= 550 ){
+	console.log(620 - this.pointer.position.y );
+	if(this.cursors.up.isDown || (620 - this.pointer.position.y) >= 550 ){
 		game.camera.y -= 10;
 	}
-	if(this.cursors.down.isDown || (600 - this.pointer.position.y) <= 50 ){
+	if(this.cursors.down.isDown || (620 - this.pointer.position.y) <= 50 ){
 		game.camera.y += 10;
 	}
 	if(this.cursors.left.isDown || (800 - this.pointer.position.x) >= 750 ){
