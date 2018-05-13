@@ -9,6 +9,7 @@ class Building{
         this.current = null;
         this.units = {};
         this.movable = false;
+        this.circle = null;
     }
 
     addSprite(x, y, buildingType){        
@@ -17,8 +18,7 @@ class Building{
         this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(function(){
-            this.game.selected = this;
-            this.drawSelectionCircle();
+            this.Perseus.controller.select(this);
         }, this);
     }
 
@@ -26,18 +26,16 @@ class Building{
 
     }
 
-    //TODO set anchor points.
     drawSelectionCircle(){
-        let circle = this.game.add.graphics();
-        this.Perseus.selectionCircles.push(circle);
+        this.circle = this.game.add.graphics();
         console.log('drawing circle');
         circle.lineStyle(2, 0xFFFFFF, 1);
         circle.drawCircle(this.x,this.y, 128);
     }
+
     unDrawSelectionCircle(){
+        this.circle.destroy();
     }
-
-
     
 }
 

@@ -33,7 +33,10 @@ function preload() {
 }
 
 function create() {
+    
 	Perseus.map = this.game.add.tilemap('demo');
+
+    Perseus.controller = new Controller(Perseus);
 
 	//the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
 	Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
@@ -43,6 +46,8 @@ function create() {
 	Perseus.collisionLayer = Perseus.map.createLayer('collisionLayer');
 
 	// Sets collision  TODO make it work with unit's move method.
+    // This uses phaser arcade physics. Since we are using a navmap,
+    // TODO find a way to prarse collision layer tiles into navmap
 	Perseus.map.setCollisionByExclusion([], true, Perseus.collisionLayer, true);
 
 
@@ -74,14 +79,13 @@ function create() {
     Perseus.mapRenderer.createResources();
 
 	// Create GUI bar
-	Perseus.ui = {}
-	Perseus.ui.bar = this.add.sprite(0,0,'ui');
-	Perseus.ui.bar.height = 600;
+	let bar = this.add.sprite(0,0,'ui');
+    bar.fixedToCamera = true;
+	bar.height = 600;
 	// 6 32px tiles
-	Perseus.ui.bar.width =  192;
+	bar.width =  192;
+    Perseus.ui.bar = bar;
 
-	//Create Controller 
-    Perseus.controller = new Controller(Perseus);
 }
 
 function update(){

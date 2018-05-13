@@ -16,6 +16,13 @@ class Controller{
         this.wasDown = false;
     }
 
+    select(obj){
+        this.selectedObjects.forEach((elem)=> {elem.unDrawSelectionCircle()})
+        this.selectedObjects = [];
+        this.selectedObjects.push(obj);
+        obj.drawSelectionCircle();
+    }
+
     takeInput(){
         if(this.Perseus.graphics.selectionBox){
             this.Perseus.graphics.selectionBox.destroy();
@@ -23,25 +30,25 @@ class Controller{
         this.Perseus.graphics.selectionBox = this.game.add.graphics();
         this.Perseus.graphics.selectionBox.lineStyle(2, 0xFFFFFF, 1);
 
-        if(this.cursors.up.isDown || (this.game.camera.height - this.pointer.position.y) >= 32 ){
-            let temp = this.game.camera.y 
-                this.game.camera.y -= 10;
-            this.Perseus.ui.bar.y += this.game.camera.y - temp;
+        if(this.cursors.up.isDown || this.game.camera.height - this.pointer.position.y >= this.game.camera.height-32){
+            let temp = this.game.camera.y; 
+            console.log("panning up");
+            this.game.camera.y -= 10;
         }
-        if(this.cursors.down.isDown || (this.game.camera.height - this.pointer.position.y) <= this.game.camera.height-32 ){
-            let temp = this.game.camera.y 
-                this.game.camera.y += 10;
-            this.Perseus.ui.bar.y += this.game.camera.y - temp;
+        if(this.cursors.down.isDown || this.game.camera.height - this.pointer.position.y <= 32){
+            let temp = this.game.camera.y;
+            console.log("panning down");
+            this.game.camera.y += 10;
         }
         if(this.cursors.left.isDown || (this.game.camera.width - this.pointer.position.x) >= this.game.camera.width-32 ){
-            let temp = this.game.camera.x 
-                this.game.camera.x -= 10;
-            this.Perseus.ui.bar.x += this.game.camera.x - temp;
+            let temp = this.game.camera.x; 
+            console.log("panning left");
+            this.game.camera.x -= 10;
         }
         if(this.cursors.right.isDown || (this.game.camera.width - this.pointer.position.x) <= 32 ){
-            let temp = this.game.camera.x 
-                this.game.camera.x += 10;
-            this.Perseus.ui.bar.x += this.game.camera.x - temp;
+            let temp = this.game.camera.x; 
+            console.log("panning right");
+            this.game.camera.x += 10;
         }
 
         if(this.keys.A.isDown){

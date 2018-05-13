@@ -17,6 +17,7 @@ class Unit{
         this.attacking = false;
         this.cooldown = 0;
         this.range=1;
+        this.circle = null;
     }
 
     addSprite(x, y, unitType){    
@@ -149,15 +150,17 @@ class Unit{
         return false;
 
     }
-    //TODO
+
     drawSelectionCircle(){
-        console.log("drew selection circle");
+        this.circle = this.game.add.graphics();
+        console.log('drawing circle');
+        this.circle.lineStyle(1, 0xFFFFFF, 1);
+        this.circle.drawCircle(this.sprite.x,this.sprite.y, 64);
     }
 
-    undrawSelectionCircle(){
-        console.log("undrew selection circle");
+    unDrawSelectionCircle(){
+        this.circle.destroy();
     }
-
    
 
     update(){
