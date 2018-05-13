@@ -5,6 +5,7 @@ import {Worker} from './worker.js'
 class Fort extends Building{
     constructor(faction, x,y,Perseus){
         super(faction, 2500, x, y, Perseus);
+
         this.addSprite(x,y, 'fort');
         this.type = "Fort";
         this.WORKER = 1;
@@ -45,6 +46,7 @@ class Fort extends Building{
             this.Perseus.objects.push(worker);     
             this.Perseus.selected = worker;
             
+
     }
 
 

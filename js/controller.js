@@ -55,7 +55,7 @@ class Controller{
             if (this.pointer.isDown == false){
                 this.controlState = 'move';
                 console.log('input move command');
-                console.log(this.controlState);
+
             }
         }
         // Cancel command ( no right click yet)

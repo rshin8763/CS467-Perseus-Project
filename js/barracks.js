@@ -4,8 +4,10 @@ import {Archer} from './archer.js';
 
 class Barracks extends Building{
 
+
     constructor(faction, x,y,Perseus){
         super(faction, 1000, x, y, Perseus);
+
         this.addSprite(x,y,'barracks');
         this.SWORD = 1;
         this.PIKE = 2;
@@ -47,6 +49,7 @@ class Barracks extends Building{
 
         if(unitType == this.ARCH){
             this.game.objects.push(new Archer(this.faction, x, y, this.Perseus));     
+
         }
     }
 

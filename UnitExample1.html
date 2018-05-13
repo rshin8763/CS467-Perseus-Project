@@ -15,6 +15,7 @@
         import {Controller} from './js/controller.js';
         import {Archer} from './js/archer.js';
 
+
         let Perseus = {};
         Perseus.graphics = {}
 
@@ -65,10 +66,12 @@
     
             Perseus.game.canvas.oncontextmenu = function (e) { e.preventDefault();return false;}   
             
+
             let barracks = new Barracks('human', 320, 100, Perseus);
             
 
             let fort = new Fort('human', 320, 320, Perseus);
+
             for(let i = 0; i < 4; i++)
             {
                 for(let j = 0; j < 4; j++)
@@ -87,6 +90,7 @@
             Perseus.ui.bar.width =  192;
 
             Perseus.controller = new Controller(Perseus);
+
             Perseus.selectionCircles=[];
             Perseus.selected = fort;
             Perseus.objects = [];
@@ -116,6 +120,7 @@
             }
         }, Perseus.game);
            
+
         let attackers = [];
         let targets = [];
 
@@ -172,13 +177,12 @@
             Perseus.objects.push(fort);
 
 
-
-
             Perseus.game.input.mouse.capture = true;
         }
 
 
         function update(){
+
             Perseus.controller.takeInput();
             // if(Perseus.game.input.activePointer.leftButton.isDown)
             // {   
@@ -203,6 +207,7 @@
 
             // }
             console.log(Perseus.selectedObjects);
+
             Perseus.objects.forEach(function(object){
                 object.update();
             });

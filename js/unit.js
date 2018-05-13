@@ -1,6 +1,7 @@
 class Unit{
     constructor(faction, hp, attk, defense, attkSpeed, Perseus){
         this.faction = faction;
+
         this.hp = hp;
         this.attk = attk;
         this.attkSpeed = attkSpeed;
@@ -205,6 +206,7 @@ class Unit{
             //         }
             //     }
             // }
+
            
             this.attackTick();
           

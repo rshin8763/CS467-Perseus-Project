@@ -4,6 +4,7 @@ import {Fort} from './fort.js'
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
         super(faction, 70, 17, 5, 3, Perseus)
+
         this.type="Worker";
         this.placing = false;
         this.building = false;

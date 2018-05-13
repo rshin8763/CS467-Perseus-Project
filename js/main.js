@@ -4,7 +4,9 @@ import {mapRenderer} from './mapRenderer.js';
 import {Controller} from './controller.js';
 import {Fort} from './fort.js';
 import {Tree} from './tree.js';
+
 import {Navigator} from './navigator.js';
+
 
 //I mostly changed the classes to pass around references of Perseus instead of game.
 //Perseus now contains objects, controller, map, graphics
@@ -28,6 +30,7 @@ function preload() {
 	this.load.image('barracks', 'assets/barracks.png');
 	this.load.image('fort', 'assets/fort.png');
 	this.load.image('ui', 'assets/ui/stoneMenu.png');
+
 
 	Perseus.game.load.spritesheet('swordsman_human', 'assets/images/units/swordsman_human.png', 64, 64);
 	Perseus.game.load.spritesheet('swordswoman_human', 'assets/images/units/swordswoman_human.png', 64, 64);
@@ -89,9 +92,11 @@ function create() {
 	//Create an objects array on the game object and add a soldier to it.
 	Perseus.objects = [];
 
+
 	Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
 	Perseus.objects.push(new SwordInfantry('human', 200, 400, Perseus));
 	Perseus.objects.push(new Archer('human', 300, 300, Perseus));
+
 
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
