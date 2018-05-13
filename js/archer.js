@@ -1,12 +1,11 @@
 import {Unit} from './unit.js';
-
+import {Arrow} from './arrow.js';
 class Archer extends Unit {
-    constructor(x, y, game){
-        super(100, 15, 5, 1, game);
+    constructor(faction, x, y, Perseus){
+        super(faction, 100, 15, 10, 1, Perseus);
         this.range = 5;
         this.arrow = false;
         this.arrowSprite = null;
-
         if (Math.random() >= 0.5){
             this.type="Archer";
             this.addSprite(x,y,'archer_male');
@@ -24,39 +23,7 @@ class Archer extends Unit {
 
     attackTick()
     {
-        if(this.arrow)
-        {
-            if (this.arrowSprite.x < this.target.sprite.x)
-            {
-                this.arrowSprite.x += Math.abs(this.target.sprite.x - this.sprite.x) / 60;
-            }
-
-            if (this.arrowSprite.x > this.target.sprite.x)
-            {
-                this.arrowSprite.x -= Math.abs(this.target.sprite.x - this.sprite.x) / 60;
-            }
-
-            if (this.arrowSprite.y < this.target.sprite.y)
-            {
-                this.arrowSprite.y += Math.abs(this.target.sprite.y - this.sprite.y) / 60;
-            }
-
-            if (this.arrowSprite.y < this.target.sprite.y)
-            {
-                this.arrowSprite.y += Math.abs(this.target.sprite.y - this.sprite.y) / 60;
-            }
-
-            if(Math.abs(this.arrowSprite.x - this.target.sprite.x) < 10)
-            {
-                if(Math.abs(this.arrowSprite.y - this.target.sprite.y) < 10)
-                {
-                    this.arrow = false;
-                    this.arrowSprite.destroy();
-                    this.arrowSprite = null;
-                }
-            }
-        }
-        if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) * this.range > (this.sprite.width / 2) * this.range )
+        if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y)  > (this.sprite.width / 2) * this.range )
         {
             this.move(this.target.sprite.x, this.target.sprite.y)
         } else{
@@ -72,20 +39,22 @@ class Archer extends Unit {
                     this.sprite.animations.play('atk_left', null, false, false);
 
                 }
-
-                this.arrowSprite = this.game.add.sprite(this.sprite.x, this.sprite.y + (this.sprite.width /2), 'arrow');
-                this.arrow = true;
-
-                let targetDead = this.target.takeDamage(this.attk);
-
-                this.cooldown = 200 / this.attkSpeed;
-                
-                if(targetDead)
+                if (this.Perseus.objects.includes(this.target))
                 {
+                    new Arrow(this.sprite.x, this.sprite.y + 32, this.target, this.Perseus, 60);
+                    this.cooldown = 200 / this.attkSpeed;
+                } else {
                     this.attacking = false;
                     this.target = null;
                     this.sprite.animations.stop();
                 }
+
+                // if(targetDead)
+                // {
+                //     this.attacking = false;
+                //     this.target = null;
+                //     this.sprite.animations.stop();
+                // }
             }
         }
     }

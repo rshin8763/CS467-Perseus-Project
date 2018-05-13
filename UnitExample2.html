@@ -32,6 +32,8 @@
 
             Perseus.game.load.image('navSquare', 'assets/navSquare.png');
 
+	        Perseus.game.load.image('ui', 'assets/ui/stoneMenu.png');
+
 
 
             Perseus.game.load.spritesheet('swordsman_human', 'assets/images/units/swordsman_human.png', 64, 64);
@@ -57,6 +59,7 @@
             Perseus.game.load.spritesheet('pikeman_female_orc', 'assets/images/units/pikeman_female_orc.png', 64, 64);
 
 
+
             };
 
         function create() {
@@ -65,17 +68,8 @@
     
             Perseus.game.canvas.oncontextmenu = function (e) { e.preventDefault();return false;}   
             
-            let barracks = new Barracks('human', 320, 100, Perseus);
-            
 
-            let fort = new Fort('human', 320, 320, Perseus);
-            for(let i = 0; i < 4; i++)
-            {
-                for(let j = 0; j < 4; j++)
-                {
-                    Perseus.navigator.navmap[i + Math.floor(320/32)][j + Math.floor(320/32)] = 1;
-                }
-            }
+
 
             console.log(Perseus.navigator.navmap);
 
@@ -88,7 +82,6 @@
 
             Perseus.controller = new Controller(Perseus);
             Perseus.selectionCircles=[];
-            Perseus.selected = fort;
             Perseus.objects = [];
             let button = {};
             button.button = true;
@@ -121,14 +114,14 @@
 
             for(var i = 0; i < 10; i++)
             {
-                let newArcher = new Archer('human', 200, i*50, Perseus)
+                let newArcher = new Archer('human', 600, i*50, Perseus)
                 attackers.push(newArcher);
 
             }
 
             for(var i = 0; i < 10; i++)
             {
-                let newArcher = new Archer('human', 500, i*50, Perseus)
+                let newArcher = new Archer('orc', 200, i*50, Perseus)
                 targets.push(newArcher);
 
             }

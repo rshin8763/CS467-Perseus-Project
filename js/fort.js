@@ -3,8 +3,8 @@ import {Worker} from './worker.js'
 
 
 class Fort extends Building{
-    constructor(x,y,game){
-        super(2500, x, y, game);
+    constructor(faction, x,y,Perseus){
+        super(faction, 2500, x, y, Perseus);
         this.addSprite(x,y, 'fort');
         this.type = "Fort";
         this.WORKER = 1;
@@ -40,10 +40,11 @@ class Fort extends Building{
 
     spawnUnit(x,y, unitType)
     {
-        console.log(this.game);
 
-            this.game.objects.push(new Worker(x, y, this.game));     
-        
+        let worker = new Worker(this.faction, x, y, this.Perseus)
+            this.Perseus.objects.push(worker);     
+            this.Perseus.selected = worker;
+            
     }
 
 
