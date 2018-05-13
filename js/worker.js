@@ -2,8 +2,8 @@ import {Unit} from './unit.js'
 import {Fort} from './fort.js'
 
 class Worker extends Unit{
-    constructor(x,y,game){
-        super(70, 17, 5, 3, game)
+    constructor(x,y,Perseus){
+        super(70, 17, 5, 3, Perseus)
         this.type="Worker";
         this.placing = false;
         this.building = false;

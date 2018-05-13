@@ -1,6 +1,5 @@
 class Unit{
-    constructor(hp, attk, defense, attkSpeed, game){
-
+    constructor(hp, attk, defense, attkSpeed, Perseus){
         this.hp = hp;
         this.attk = attk;
         this.attkSpeed = attkSpeed;
@@ -11,14 +10,13 @@ class Unit{
         this.desty = null;
         this.speed = 1;
         this.sprite = null;
-        this.game = game;
+        this.game = Perseus.game;
+        this.Perseus = Perseus;
         this.movable = true;
         this.target = null;
         this.attacking = false;
         this.cooldown = 0;
         this.range=1;
-
-        
     }
 
     addSprite(x, y, unitType){    
@@ -51,11 +49,8 @@ class Unit{
             //NOTE(Michael): So for this I had a game.selected variable that held the one unit I was
             //  selecting at the time. In the actual game we're going to want to have selected
             //  be an array so that we can add multiple units.
-  
-            if(this.game.selected)
-            {
-                if(this.game.selected.movable && this.game.input.activePointer.rightButton.isDown)
-                {
+            if(this.game.selected) {
+                if(this.game.selected.movable && this.game.input.activePointer.rightButton.isDown) {
                     this.game.selected.attack(this);
                 }else {
                     this.game.selected = this;
@@ -90,11 +85,11 @@ class Unit{
         this.hp -= (damage - this.defense);
         if(this.hp < 1)
         {
-            for(let i = 0; i < this.game.objects.length; i++)
+            for(let i = 0; i < this.Perseus.objects.length; i++)
             {
-                if(this.game.objects[i] === this )
+                if(this.Perseus.objects[i] === this )
                 {
-                    this.game.objects.splice(i, 1);
+                    this.Perseus.objects.splice(i, 1);
                 }
             }
 
@@ -136,11 +131,11 @@ class Unit{
             
         }
 
-        for(let i = 0; i < this.game.objects.length; i++)
+        for(let i = 0; i < this.Perseus.objects.length; i++)
         {
-            if(this.game.objects[i].movable == false)
+            if(this.Perseus.objects[i].movable == false)
             {
-                let obj = this.game.objects[i].sprite;
+                let obj = this.Perseus.objects[i].sprite;
                 if(coord.y + 64 > obj.y && coord.y +16 < obj.y + obj.height)
                 {
                     if(coord.x + 48 > obj.x  && coord.x + 16 < obj.x + obj.width)
@@ -154,6 +149,14 @@ class Unit{
         return false;
 
     }
+    //TODO
+    drawSelectionCircle(){
+        console.log("drew selection circle");
+    }
+
+    undrawSelectionCircle(){
+        console.log("undrew selection circle");
+    }
 
    
 
@@ -161,6 +164,37 @@ class Unit{
         //Process movement if unit is moving
         if(this.attacking)
         {
+            if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width / 2))
+            {
+                this.move(this.target.sprite.x, this.target.sprite.y)
+            } else{
+                this.moving = false;
+                if(this.cooldown > 0)
+                {
+                    this.cooldown--;
+                }else{
+                    if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
+                    {
+                        this.sprite.animations.play('atk_right', true);
+                    }else{
+                        this.sprite.animations.play('atk_left',true);
+
+                    }
+
+
+                    let targetDead = this.target.takeDamage(this.attk);
+                    console.log(targetDead);
+                    console.log(this);
+                    this.cooldown = 200 / this.attkSpeed;
+                    
+                    if(targetDead)
+                    {
+                        this.attacking = false;
+                        this.target = null;
+                        this.sprite.animations.stop();
+                    }
+                }
+            }
            
             this.attackTick();
           
