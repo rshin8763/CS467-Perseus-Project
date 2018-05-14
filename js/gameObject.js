@@ -4,7 +4,11 @@ class GameObject {
         this.game = Perseus.game;
         this.movable = movable;
         this.circle = null;
-        this.uiData = null;
+        this.uiData = {
+            canBuild: false,
+            commandList:[],
+            buildList:[]
+        };
     }
     drawSelectionCircle(){
         this.circle = this.game.add.graphics();
