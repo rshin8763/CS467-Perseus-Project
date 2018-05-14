@@ -14,10 +14,11 @@ class Controller{
         this.boxStartPos = {};
         this.boxEndPos = {};
         this.wasDown = false;
+        this.boxSelect = true;
     }
 
     select(obj){
-        this.selectedObjects.forEach((elem)=> {elem.unDrawSelectionCircle()})
+        this.selectedObjects.forEach((elem)=> {elem.unDrawSelectionCircle();})
         this.selectedObjects = [];
         this.selectedObjects.push(obj);
         obj.drawSelectionCircle();
@@ -70,7 +71,8 @@ class Controller{
             console.log('controller state is default');
         }
 
-        // TODO force BOX selection to end at UI bar
+        //
+        if(this.boxSelect){
         if (this.wasDown == false) {
             if (this.pointer.isDown == true){
                 if (this.controlState == 'default'){
@@ -98,6 +100,7 @@ class Controller{
                     console.log(this.boxEndPos);
                     this.Perseus.graphics.selectionBox.drawRect(Math.min(this.boxStartPos.x, this.boxEndPos.x) + this.game.camera.x, Math.min(this.boxStartPos.y, this.boxEndPos.y)+ this.game.camera.y, Math.abs(this.boxEndPos.x-this.boxStartPos.x), Math.abs(this.boxEndPos.y-this.boxStartPos.y));
                     //Add interesecting objects to selected Objects
+                    this.selectedObjects.forEach((elem)=> {elem.unDrawSelectionCircle();})
                     this.selectedObjects = [];
                     // Select objects
                     this.Perseus.objects.forEach(function(obj){
@@ -127,9 +130,10 @@ class Controller{
                 }
             }
         }
-
         this.wasDown = this.pointer.isDown;
-
+        } else{
+            this.boxSelect = true;
+        }
     }
 }
 export {Controller}

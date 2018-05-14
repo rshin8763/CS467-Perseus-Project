@@ -22,6 +22,9 @@ class Unit{
 
     addSprite(x, y, unitType){    
         this.sprite = this.game.add.sprite(x, y, unitType);
+        this.sprite.anchor.x = 0.5;
+        this.sprite.anchor.y = 0.5;
+
         this.sprite.frame = 26;
         this.sprite.inputEnabled = true;
         this.sprite.animations.add('wlk_right', [143, 144, 145, 146, 147, 148, 149, 150, 151], 10, true);
@@ -50,15 +53,15 @@ class Unit{
             //NOTE(Michael): So for this I had a game.selected variable that held the one unit I was
             //  selecting at the time. In the actual game we're going to want to have selected
             //  be an array so that we can add multiple units.
-            if(this.game.selected) {
-                if(this.game.selected.movable && this.game.input.activePointer.rightButton.isDown) {
-                    this.game.selected.attack(this);
-                }else {
-                    this.game.selected = this;
-                }
-            } else {
-                this.game.selected = this;
-            }
+            // if(this.game.selected) {
+            //     if(this.game.selected.movable && this.game.input.activePointer.rightButton.isDown) {
+            //         this.game.selected.attack(this);
+            //     }else {
+            //         this.game.selected = this;
+            //     }
+            // } else {
+            //     this.game.selected = this;
+            // }
         }, this);
 
     }
@@ -159,6 +162,7 @@ class Unit{
     }
 
     unDrawSelectionCircle(){
+        console.log('destroying circle', this.sprite.x, ' ', this.sprite.y);
         this.circle.destroy();
     }
    

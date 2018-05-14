@@ -34,6 +34,8 @@ function preload() {
 
 function create() {
     
+    Perseus.ui = {};
+
 	Perseus.map = this.game.add.tilemap('demo');
 
     Perseus.controller = new Controller(Perseus);

@@ -18,6 +18,7 @@ class Building{
         this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(function(){
+            this.Perseus.controller.boxSelect = false;
             this.Perseus.controller.select(this);
         }, this);
     }
@@ -29,8 +30,8 @@ class Building{
     drawSelectionCircle(){
         this.circle = this.game.add.graphics();
         console.log('drawing circle');
-        circle.lineStyle(2, 0xFFFFFF, 1);
-        circle.drawCircle(this.x,this.y, 128);
+        this.circle.lineStyle(2, 0xFFFFFF, 1);
+        this.circle.drawCircle(this.x,this.y, 128);
     }
 
     unDrawSelectionCircle(){

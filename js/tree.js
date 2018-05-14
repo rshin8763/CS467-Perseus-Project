@@ -10,7 +10,9 @@ class Tree{
 
     addSprite(x, y){    
         console.log(this.game);
-        this.game.add.sprite(x, y, 'tree');
+        this.sprite = this.game.add.sprite(x, y, 'tree');
+        this.sprite.anchor.x = 0.5;
+        this.sprite.anchor.y = 0.5;
     }
 
     drawSelectionCircle(){
