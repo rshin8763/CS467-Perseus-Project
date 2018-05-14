@@ -15,11 +15,28 @@ import {Navigator} from './navigator.js';
 //able to be clicked directly. 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
+var Main = function() {};
 
 // create the game, and pass it the configuration
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 //TODO set anchor point of all units to the center, not the corner
+
+// RESOURCES OBJECTS
+var gold = 0;
+var stone = 0;
+var wood = 0;
+var thisHealth = 100;
+var enemyHealth = 100;
+
+// RESOURCES TEXT OBJECTS
+var goldText, stoneText, woodText, thisHealthText, enemyHealthText;
+var buttonClick = false;
+
+// GENERAL DECLARATIONS 
+var w = 800, h = 600;
+var menuBar, pause_button, saveButton, quitButton, newGameButton, resumeButton;
+var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 
 function preload() {
 	this.load.tilemap('demo', 'assets/tilemaps/map1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -55,6 +72,9 @@ function preload() {
 	Perseus.game.load.spritesheet('pikeman_female_orc', 'assets/images/units/pikeman_female_orc.png', 64, 64);
 	Perseus.game.load.image('arrow_right', 'assets/arrow_right.png');
 	Perseus.game.load.image('arrow_left', 'assets/arrow_left.png');
+
+	// MENU BAR AND BUTTONS
+	Perseus.game.load.image('menuBar', 'assets/menuBar.png');
 
 }
 
@@ -111,6 +131,42 @@ function create() {
 
 	//Create Controller 
     Perseus.controller = new Controller(Perseus);
+    // RESOURCE DATA BAR ------------------------------------------------------
+	menuBar = game.add.sprite(0, 0, 'menuBar'); // ADD MENU
+    menuBar.fixedToCamera = true;
+    menuBar.cameraOffset.setTo(0, 0);
+
+	// GOLD
+    goldText = game.add.text(32, 550, 'Gold: 0', style);
+    goldText.fixedToCamera = true;
+    goldText.cameraOffset.setTo(100, 0);
+
+    // STONE
+    stoneText = game.add.text(32, 550, 'Stone: 0',style);
+    stoneText.fixedToCamera = true;
+    stoneText.cameraOffset.setTo(200, 0);
+
+    // WOOD
+    woodText = game.add.text(32, 550, 'Wood: 0', style);
+    woodText.fixedToCamera = true;
+    woodText.cameraOffset.setTo(300, 0);
+
+    // USER HEALTH
+    thisHealth = game.add.text(32, 550, 'Health: 100', style);
+    thisHealth.fixedToCamera = true;
+    thisHealth.cameraOffset.setTo(400, 0);
+
+    // USER HEALTH
+    enemyHealth = game.add.text(0, 0, 'Enemy Health: 100', style);
+    enemyHealth.fixedToCamera = true;
+    enemyHealth.cameraOffset.setTo(530, 0);
+    
+    // PAUSE BUTTON AND MENU --------------------------------------------------
+    var pause_button = game.add.text(0, 0, 'Pause', style);
+    pause_button.fixedToCamera = true;
+    pause_button.cameraOffset.setTo(10, 0);
+    pause_button.inputEnabled = true;
+    pause_button.events.onInputUp.add(pause);
 }
 
 function update(){
@@ -125,3 +181,133 @@ function update(){
 	});
 }
 
+/*****
+** DESCRIPTION: PAUSES THE GAME STATE
+** ADDS RESUME, SAVE, QUIT, AND NEW GAME BUTTONS TO THE GAME STATE
+*****/
+function pause()
+{
+	// ADD MENU BUTTONS
+	resumeButton = game.add.button(game.camera.x + 250, game.camera.y + 50, 
+		'resumeButton', unpause, this, 2, 1, 0);
+
+	saveButton = game.add.button(game.camera.x + 250, game.camera.y + 160, 
+		'saveButton', saveGame, this, 2, 1, 0);
+
+	quitButton = game.add.button(game.camera.x + 250, game.camera.y + 268, 
+		'quitButton', quitGame, this, 2, 1, 0);
+
+	newGameButton = game.add.button(game.camera.x + 250, game.camera.y + 376, 
+		'newGameButton', newGame, this, 2, 1, 0);
+	game.paused = true;
+}
+
+/*****
+** DESCRIPTION: UNPAUSES THE GAME STATE
+** DESTROYS RESUME, SAVE, QUIT, AND NEW GAME BUTTONS FROM THE GAME STATE
+*****/
+function unpause()
+{
+	if(game.paused)
+	{
+		game.paused = false;
+		saveButton.destroy();
+		quitButton.destroy();
+		newGameButton.destroy();
+		resumeButton.destroy();
+	}
+}
+
+/*****
+** DESCRIPTION: ADDS GOLD AMOUNT SPECIFIED BY NUMBER TO CURRENT COUNT
+** UPDATES AMOUNT ON SCREEN
+*****/
+function updateGold(x)
+{
+	gold = gold + x;
+	goldText.text = 'Gold: ' + gold;
+}
+
+/*****
+** DESCRIPTION: ADDS STONE AMOUNT SPECIFIED BY NUMBER TO CURRENT COUNT
+** UPDATES AMOUNT ON SCREEN
+*****/
+function updateStone(x)
+{
+	stone = stone + x;
+	stoneText = 'Stone: ' + stone;
+}
+
+/*****
+** DESCRIPTION: ADDS WOOD AMOUNT SPECIFIED BY NUMBER TO CURRENT COUNT
+** UPDATES AMOUNT ON SCREEN
+*****/
+function updateWood(x)
+{
+	wood = wood + x;
+	woodText = 'Wood: ' + wood;
+}
+
+/*****
+** DESCRIPTION: DETRACTS HEALTH AMOUNT FROM USER SPECIFIED BY NUMBER
+** UPDATES AMOUNT ON SCREEN; IF HEALTH IS <= 0, GAME ENDS
+*****/
+function updateThisHealth(x)
+{
+	thisHealth = thisHealth - x;
+	thisHealthText = 'Health: ' + thisHealth;
+	
+	// IMPLEMENTS GAME OVER FUNCTION
+	/*
+	if (thisHealth <= 0)
+	{
+		gameOver();
+	}
+	*/
+}
+
+/*****
+** DESCRIPTION: DETRACTS HEALTH AMOUNT FROM ENEMY SPECIFIED BY NUMBER
+** UPDATES AMOUNT ON SCREEN. IF HEALTH IS <= 0, GAME ENDS
+*****/
+function updateEnemyHealth(x)
+{
+	enemyHealth = enemyHealth - x;
+	enemyHealthText = 'Enemy Health: ' + enemyHealth;
+
+	// IMPLEMENTS GAME OVER FUNCTION
+	/*
+	if (enemyHealth <= 0)
+	{
+		gameOver();
+	}
+	*/
+}
+
+/*****
+** DESCRIPTION: SAVES THE CURRENT GAME STATE
+** RETURNS NOTHING
+*****/
+function saveGame()
+{
+	var test = game.add.text(100, 200, 'You clicked the SAVE button', style);
+}
+
+/*****
+** DESCRIPTION: QUITS THE CURRENT GAME STATE
+** IMMEDIATELY LOADS MAIN MENU
+*****/
+function quitGame()
+{
+	var test = game.add.text(100, 300, 'You clicked the QUIT button', style);
+	//gameOver();
+}
+
+/*****
+** DESCRIPTION: RESTARTS THE GAME FROM SCRATCH
+** RETURNS NOTHING
+*****/
+function newGame()
+{
+	var test = game.add.text(100, 400, 'You clicked the NEW GAME button', style);
+}
