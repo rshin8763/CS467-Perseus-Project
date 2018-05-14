@@ -18,7 +18,7 @@ Perseus.graphics = {}
 var Main = function() {};
 
 // create the game, and pass it the configuration
-Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
 //TODO set anchor point of all units to the center, not the corner
 
@@ -35,10 +35,11 @@ var buttonClick = false;
 
 // GENERAL DECLARATIONS 
 var w = 800, h = 600;
-var menuBar, pause_button, saveButton, quitButton, newGameButton, resumeButton;
+var menuBar, pause_button, saveButton, quitButton, newGameButton, resumeButton, mute_button;
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 
-function preload() {
+Main.prototype = {
+	preload:function() {
 	this.load.tilemap('demo', 'assets/tilemaps/map1.json', null, Phaser.Tilemap.TILED_JSON);
 	this.load.image('topbar', 'assets/topbar.png');
 	// TODO insert tiles url and creators
@@ -74,11 +75,14 @@ function preload() {
 	Perseus.game.load.image('arrow_left', 'assets/arrow_left.png');
 
 	// MENU BAR AND BUTTONS
-	Perseus.game.load.image('menuBar', 'assets/menuBar.png');
+	Perseus.game.load.image('menuBar', 'assets/images/menuBar.png');
+	Perseus.game.load.image('saveButton', 'assets/images/saveButton.png');
+	Perseus.game.load.image('quitButton', 'assets/images/quitButton.png');
+	Perseus.game.load.image('resumeButton', 'assets/images/resumeButton.png');
+	Perseus.game.load.image('newGameButton', 'assets/images/newGameButton.png');
+	},
 
-}
-
-function create() {
+	create:function() {
 	Perseus.map = this.game.add.tilemap('demo');
 
 	Perseus.navigator = new Navigator(Perseus.game, 25, 19, 32);
@@ -97,8 +101,6 @@ function create() {
 	let topbar = this.add.sprite(0, 0, 'topbar');
 	//And set it fixed to Camera
 	topbar.fixedToCamera = true;
-
-	let style = { font: "12px Arial", fill: "#ffffff", align: "center" };
 
 	this.barText = this.add.text(100, 0, "This number can change each update:", style);
 	this.testText = "This number can change each update:";
@@ -132,44 +134,49 @@ function create() {
 	//Create Controller 
     Perseus.controller = new Controller(Perseus);
     // RESOURCE DATA BAR ------------------------------------------------------
-	menuBar = game.add.sprite(0, 0, 'menuBar'); // ADD MENU
+	menuBar = Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
     menuBar.fixedToCamera = true;
     menuBar.cameraOffset.setTo(0, 0);
 
 	// GOLD
-    goldText = game.add.text(32, 550, 'Gold: 0', style);
+    goldText = Perseus.game.add.text(0, 0, 'Gold: 0', style);
     goldText.fixedToCamera = true;
     goldText.cameraOffset.setTo(100, 0);
 
     // STONE
-    stoneText = game.add.text(32, 550, 'Stone: 0',style);
+    stoneText = Perseus.game.add.text(0, 0, 'Stone: 0',style);
     stoneText.fixedToCamera = true;
     stoneText.cameraOffset.setTo(200, 0);
 
     // WOOD
-    woodText = game.add.text(32, 550, 'Wood: 0', style);
+    woodText = Perseus.game.add.text(0, 0, 'Wood: 0', style);
     woodText.fixedToCamera = true;
     woodText.cameraOffset.setTo(300, 0);
 
     // USER HEALTH
-    thisHealth = game.add.text(32, 550, 'Health: 100', style);
+    thisHealth = Perseus.game.add.text(0, 0, 'Health: 100', style);
     thisHealth.fixedToCamera = true;
     thisHealth.cameraOffset.setTo(400, 0);
 
     // USER HEALTH
-    enemyHealth = game.add.text(0, 0, 'Enemy Health: 100', style);
+    enemyHealth = Perseus.game.add.text(0, 0, 'Enemy Health: 100', style);
     enemyHealth.fixedToCamera = true;
     enemyHealth.cameraOffset.setTo(530, 0);
     
-    // PAUSE BUTTON AND MENU --------------------------------------------------
-    var pause_button = game.add.text(0, 0, 'Pause', style);
+    // PAUSE BUTTON, MUTE, MENU -----------------------------------------------
+    var pause_button = Perseus.game.add.text(0, 0, 'Pause', style);
     pause_button.fixedToCamera = true;
     pause_button.cameraOffset.setTo(10, 0);
     pause_button.inputEnabled = true;
     pause_button.events.onInputUp.add(pause);
-}
-
-function update(){
+	
+	mute_button = Perseus.game.add.text(0, 0, 'Mute', style);
+	mute_button.fixedToCamera = true;
+    mute_button.cameraOffset.setTo(700, 0);
+    	mute_button.inputEnabled = true;
+    	mute_button.events.onInputUp.add(muteMusic);
+    },
+	update:function(){
 
 
     Perseus.controller.takeInput();
@@ -180,6 +187,7 @@ function update(){
 		obj.update();
 	});
 }
+};
 
 /*****
 ** DESCRIPTION: PAUSES THE GAME STATE
@@ -188,18 +196,18 @@ function update(){
 function pause()
 {
 	// ADD MENU BUTTONS
-	resumeButton = game.add.button(game.camera.x + 250, game.camera.y + 50, 
+	resumeButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 50, 
 		'resumeButton', unpause, this, 2, 1, 0);
 
-	saveButton = game.add.button(game.camera.x + 250, game.camera.y + 160, 
+	saveButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 160, 
 		'saveButton', saveGame, this, 2, 1, 0);
 
-	quitButton = game.add.button(game.camera.x + 250, game.camera.y + 268, 
+	quitButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 268, 
 		'quitButton', quitGame, this, 2, 1, 0);
 
-	newGameButton = game.add.button(game.camera.x + 250, game.camera.y + 376, 
+	newGameButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 376, 
 		'newGameButton', newGame, this, 2, 1, 0);
-	game.paused = true;
+	Perseus.game.paused = true;
 }
 
 /*****
@@ -208,12 +216,12 @@ function pause()
 *****/
 function unpause()
 {
-	if(game.paused)
+	if(Perseus.game.paused)
 	{
-		game.paused = false;
+		Perseus.game.paused = false;
 		saveButton.destroy();
 		quitButton.destroy();
-		newGameButton.destroy();
+		game.newGameButton.destroy();
 		resumeButton.destroy();
 	}
 }
@@ -290,7 +298,7 @@ function updateEnemyHealth(x)
 *****/
 function saveGame()
 {
-	var test = game.add.text(100, 200, 'You clicked the SAVE button', style);
+	var test = Perseus.game.add.text(100, 200, 'You clicked the SAVE button', style);
 }
 
 /*****
@@ -299,7 +307,7 @@ function saveGame()
 *****/
 function quitGame()
 {
-	var test = game.add.text(100, 300, 'You clicked the QUIT button', style);
+	var test = Perseus.game.add.text(100, 300, 'You clicked the QUIT button', style);
 	//gameOver();
 }
 
@@ -309,5 +317,26 @@ function quitGame()
 *****/
 function newGame()
 {
-	var test = game.add.text(100, 400, 'You clicked the NEW GAME button', style);
+	var test = Perseus.game.add.text(100, 400, 'You clicked the NEW GAME button', style);
 }
+
+function muteMusic()
+{
+	if(music.mute == true)
+	{
+		music.mute = false;
+	}
+	else
+	{
+		music.mute = true;
+	}
+	
+};
+
+Perseus.game.state.add('Main', Main);
+Perseus.game.state.add('Boot', Boot);
+Perseus.game.state.add('MainMenu', MainMenu);
+Perseus.game.state.start('Boot');
+
+
+

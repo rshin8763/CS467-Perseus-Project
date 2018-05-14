@@ -13,7 +13,7 @@ MainMenu.prototype =
 	{
 		// TITLE SCREEN AND GAME NAME TEXT
 		titlescreen = this.add.sprite(this.world.centerX, this.world.centerY, 'titlescreen');
-		titlescreen.scale.setTo(.70, .65);
+		titlescreen.scale.setTo(.57, .57);
 		titlescreen.anchor.setTo(0.5, 0.5);
 		gameName = this.add.text(275, 75, "Perseus", 
 		{
@@ -26,7 +26,7 @@ MainMenu.prototype =
 		music.play();
 
 		// LOAD, NEW GAME, & MUTE BUTTONS
-		load_button = this.add.button(300, 300, 'loadButton', loadGame, this, 2, 1, 0);
+		load_button = this.add.button(300, 350, 'loadButton', loadGame, this, 2, 1, 0);
 		new_game_button = this.add.button(300, 200, 'newGameButton', newGame, this, 2, 1, 0);
 		mute_button = this.add.text(15, 15, 'Mute', style);
     	mute_button.inputEnabled = true;
@@ -42,12 +42,12 @@ MainMenu.prototype =
 
 function loadGame()
 {
-	this.start('Main');
+	this.state.start('Main');
 };
 
 function newGame()
 {
-	var test = this.add.text(300, 300, 'You clicked the NEW GAME button', style);
+	this.state.start('Main');
 };
 
 function muteMusic()
