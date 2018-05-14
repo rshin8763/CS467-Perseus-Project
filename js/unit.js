@@ -1,7 +1,8 @@
-class Unit{
+import {GameObject} from './gameObject.js'
+class Unit extends GameObject{
     constructor(faction, hp, attk, defense, attkSpeed, Perseus){
+        super(true, Perseus);
         this.faction = faction;
-
         this.hp = hp;
         this.attk = attk;
         this.attkSpeed = attkSpeed;
@@ -12,14 +13,10 @@ class Unit{
         this.desty = null;
         this.speed = 1;
         this.sprite = null;
-        this.game = Perseus.game;
-        this.Perseus = Perseus;
-        this.movable = true;
         this.target = null;
         this.attacking = false;
         this.cooldown = 0;
         this.range=1;
-        this.circle = null;
     }
 
     addSprite(x, y, unitType){

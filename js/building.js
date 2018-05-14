@@ -1,17 +1,14 @@
-class Building{
+import {GameObject} from './gameObject.js' 
+class Building extends GameObject{
     constructor(faction, hp, x, y, Perseus){
+        super(false, Perseus);
         this.faction = faction;
-
         this.hp = hp;
         this.x = x;
         this.y = y;
-        this.Perseus = Perseus;
-        this.game = Perseus.game;
         this.building = false;
         this.current = null;
         this.units = {};
-        this.movable = false;
-        this.circle = null;
     }
 
     addSprite(x, y, buildingType){        
