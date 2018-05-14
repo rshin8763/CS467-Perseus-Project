@@ -75,7 +75,7 @@ class Navigator {
             closed.push(min);
             current = min;
             let coords = this.getCoords(min.x, min.y);
-            this.game.add.sprite(coords.x, coords.y, 'navSquare');
+            //this.game.add.sprite(coords.x, coords.y, 'navSquare');
         }while(current.x != target.x || current.y != target.y)
 
             return closed[0];

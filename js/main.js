@@ -1,8 +1,12 @@
 import {SwordInfantry} from './swordInfantry.js';
+import {Archer} from './archer.js';
 import {mapRenderer} from './mapRenderer.js';
 import {Controller} from './controller.js';
 import {Fort} from './fort.js';
 import {Tree} from './tree.js';
+
+import {Navigator} from './navigator.js';
+
 
 //I mostly changed the classes to pass around references of Perseus instead of game.
 //Perseus now contains objects, controller, map, graphics
@@ -26,10 +30,32 @@ function preload() {
 	this.load.image('barracks', 'assets/barracks.png');
 	this.load.image('fort', 'assets/fort.png');
 	this.load.image('ui', 'assets/ui/stoneMenu.png');
-	this.load.spritesheet('swordsman', 'assets/swordsman.png', 64, 64);
-	this.load.spritesheet('swordswoman', 'assets/swordswoman.png', 64, 64);
-	this.load.spritesheet('worker_male', 'assets/worker_male.png', 64, 64);
-	this.load.spritesheet('worker_female', 'assets/worker_female.png', 64, 64);
+
+
+	Perseus.game.load.spritesheet('swordsman_human', 'assets/images/units/swordsman_human.png', 64, 64);
+	Perseus.game.load.spritesheet('swordswoman_human', 'assets/images/units/swordswoman_human.png', 64, 64);
+	Perseus.game.load.spritesheet('archer_male_human', 'assets/images/units/archer_male_human.png', 64, 64);
+	Perseus.game.load.spritesheet('archer_female_human', 'assets/images/units/archer_female_human.png', 64, 64);
+	Perseus.game.load.spritesheet('worker_male_human', 'assets/images/units/worker_male_human.png', 64, 64);
+	Perseus.game.load.spritesheet('worker_female_human', 'assets/images/units/worker_female_human.png', 64, 64);
+	Perseus.game.load.spritesheet('wizard_male_human', 'assets/images/units/wizard_male_human.png', 64, 64);
+	Perseus.game.load.spritesheet('wizard_female_human', 'assets/images/units/wizard_female_human.png', 64, 64);
+	Perseus.game.load.spritesheet('pikeman_male_human', 'assets/images/units/pikeman_male_human.png', 64, 64);
+	Perseus.game.load.spritesheet('pikeman_female_human', 'assets/images/units/pikeman_female_human.png', 64, 64);
+
+	Perseus.game.load.spritesheet('swordsman_orc', 'assets/images/units/swordsman_orc.png', 64, 64);
+	Perseus.game.load.spritesheet('swordswoman_orc', 'assets/images/units/swordswoman_orc.png', 64, 64);
+	Perseus.game.load.spritesheet('archer_male_orc', 'assets/images/units/archer_male_orc.png', 64, 64);
+	Perseus.game.load.spritesheet('archer_female_orc', 'assets/images/units/archer_female_orc.png', 64, 64);
+	Perseus.game.load.spritesheet('worker_male_orc', 'assets/images/units/worker_male_orc.png', 64, 64);
+	Perseus.game.load.spritesheet('worker_female_orc', 'assets/images/units/worker_female_orc.png', 64, 64);
+	Perseus.game.load.spritesheet('wizard_male_orc', 'assets/images/units/wizard_male_orc.png', 64, 64);
+	Perseus.game.load.spritesheet('wizard_female_orc', 'assets/images/units/wizard_female_orc.png', 64, 64);
+	Perseus.game.load.spritesheet('pikeman_male_orc', 'assets/images/units/pikeman_male_orc.png', 64, 64);
+	Perseus.game.load.spritesheet('pikeman_female_orc', 'assets/images/units/pikeman_female_orc.png', 64, 64);
+	Perseus.game.load.image('arrow_right', 'assets/arrow_right.png');
+	Perseus.game.load.image('arrow_left', 'assets/arrow_left.png');
+
 }
 
 function create() {
@@ -39,6 +65,7 @@ function create() {
 	Perseus.map = this.game.add.tilemap('demo');
 
     Perseus.controller = new Controller(Perseus);
+	Perseus.navigator = new Navigator(Perseus.game, 25, 19, 32);
 
 	//the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
 	Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
@@ -72,9 +99,11 @@ function create() {
 	//Create an objects array on the game object and add a soldier to it.
 	Perseus.objects = [];
 
-	Perseus.objects.push(new SwordInfantry(250, 250, Perseus));
-	Perseus.objects.push(new SwordInfantry(200, 400, Perseus));
-	Perseus.objects.push(new SwordInfantry(300, 300, Perseus));
+
+	Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
+	Perseus.objects.push(new SwordInfantry('human', 200, 400, Perseus));
+	Perseus.objects.push(new Archer('human', 300, 300, Perseus));
+
 
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);

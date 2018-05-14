@@ -1,4 +1,4 @@
-class Controller{
+class ControllerTemp{
     constructor(Perseus){
         this.Perseus = Perseus;
         this.game = Perseus.game;
@@ -14,14 +14,6 @@ class Controller{
         this.boxStartPos = {};
         this.boxEndPos = {};
         this.wasDown = false;
-        this.boxSelect = true;
-    }
-
-    select(obj){
-        this.selectedObjects.forEach((elem)=> {elem.unDrawSelectionCircle();})
-        this.selectedObjects = [];
-        this.selectedObjects.push(obj);
-        obj.drawSelectionCircle();
     }
 
     takeInput(){
@@ -31,25 +23,25 @@ class Controller{
         this.Perseus.graphics.selectionBox = this.game.add.graphics();
         this.Perseus.graphics.selectionBox.lineStyle(2, 0xFFFFFF, 1);
 
-        if(this.cursors.up.isDown || this.game.camera.height - this.pointer.position.y >= this.game.camera.height-32){
-            let temp = this.game.camera.y; 
-            console.log("panning up");
-            this.game.camera.y -= 10;
+        if(this.cursors.up.isDown || (this.game.camera.height - this.pointer.position.y) >= 32 ){
+            let temp = this.game.camera.y 
+                this.game.camera.y -= 10;
+            this.Perseus.ui.bar.y += this.game.camera.y - temp;
         }
-        if(this.cursors.down.isDown || this.game.camera.height - this.pointer.position.y <= 32){
-            let temp = this.game.camera.y;
-            console.log("panning down");
-            this.game.camera.y += 10;
+        if(this.cursors.down.isDown || (this.game.camera.height - this.pointer.position.y) <= this.game.camera.height-32 ){
+            let temp = this.game.camera.y 
+                this.game.camera.y += 10;
+            this.Perseus.ui.bar.y += this.game.camera.y - temp;
         }
         if(this.cursors.left.isDown || (this.game.camera.width - this.pointer.position.x) >= this.game.camera.width-32 ){
-            let temp = this.game.camera.x; 
-            console.log("panning left");
-            this.game.camera.x -= 10;
+            let temp = this.game.camera.x 
+                this.game.camera.x -= 10;
+            this.Perseus.ui.bar.x += this.game.camera.x - temp;
         }
         if(this.cursors.right.isDown || (this.game.camera.width - this.pointer.position.x) <= 32 ){
-            let temp = this.game.camera.x; 
-            console.log("panning right");
-            this.game.camera.x += 10;
+            let temp = this.game.camera.x 
+                this.game.camera.x += 10;
+            this.Perseus.ui.bar.x += this.game.camera.x - temp;
         }
 
         if(this.keys.A.isDown){
@@ -63,7 +55,7 @@ class Controller{
             if (this.pointer.isDown == false){
                 this.controlState = 'move';
                 console.log('input move command');
-
+                console.log(this.controlState);
             }
         }
         // Cancel command ( no right click yet)
@@ -72,9 +64,9 @@ class Controller{
             console.log('controller state is default');
         }
 
-        //
-        if(this.boxSelect){
+        // TODO force BOX selection to end at UI bar
         if (this.wasDown == false) {
+            console.log(this.selectedObjects)
             if (this.pointer.isDown == true){
                 if (this.controlState == 'default'){
                     console.log('starting selection box');
@@ -101,7 +93,6 @@ class Controller{
                     console.log(this.boxEndPos);
                     this.Perseus.graphics.selectionBox.drawRect(Math.min(this.boxStartPos.x, this.boxEndPos.x) + this.game.camera.x, Math.min(this.boxStartPos.y, this.boxEndPos.y)+ this.game.camera.y, Math.abs(this.boxEndPos.x-this.boxStartPos.x), Math.abs(this.boxEndPos.y-this.boxStartPos.y));
                     //Add interesecting objects to selected Objects
-                    this.selectedObjects.forEach((elem)=> {elem.unDrawSelectionCircle();})
                     this.selectedObjects = [];
                     // Select objects
                     this.Perseus.objects.forEach(function(obj){
@@ -131,10 +122,9 @@ class Controller{
                 }
             }
         }
+
         this.wasDown = this.pointer.isDown;
-        } else{
-            this.boxSelect = true;
-        }
+
     }
 }
 export {Controller}

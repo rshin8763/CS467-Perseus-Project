@@ -14,6 +14,10 @@
         import {Navigator} from './js/navigator.js';
         import {Controller} from './js/controller.js';
         import {Archer} from './js/archer.js';
+        import {Pikeman} from './js/pikeman.js';
+        import {SwordInfantry} from './js/swordinfantry.js';
+        import {Worker} from './js/worker.js';
+
 
 
         let Perseus = {};
@@ -33,6 +37,7 @@
 
             Perseus.game.load.image('navSquare', 'assets/navSquare.png');
 
+	        Perseus.game.load.image('ui', 'assets/ui/stoneMenu.png');
 
 
             Perseus.game.load.spritesheet('swordsman_human', 'assets/images/units/swordsman_human.png', 64, 64);
@@ -67,18 +72,7 @@
             Perseus.game.canvas.oncontextmenu = function (e) { e.preventDefault();return false;}   
             
 
-            let barracks = new Barracks('human', 320, 100, Perseus);
-            
 
-            let fort = new Fort('human', 320, 320, Perseus);
-
-            for(let i = 0; i < 4; i++)
-            {
-                for(let j = 0; j < 4; j++)
-                {
-                    Perseus.navigator.navmap[i + Math.floor(320/32)][j + Math.floor(320/32)] = 1;
-                }
-            }
 
             console.log(Perseus.navigator.navmap);
 
@@ -88,101 +82,41 @@
             Perseus.ui.bar.height = 600;
             // 6 32px tiles
             Perseus.ui.bar.width =  192;
-
-            Perseus.controller = new Controller(Perseus);
-
-            Perseus.selectionCircles=[];
-            Perseus.selected = fort;
             Perseus.objects = [];
-            let button = {};
-            button.button = true;
-            button.update = () =>{};
-            button.movable = false;
-            button.sprite = Perseus.game.add.sprite(200, 500, 'button');
-            button.sprite.inputEnabled = true;
-            button.sprite.events.onInputDown.add(function(){
-            if(!Perseus.selected.movable)
-            {  
-                if(Perseus.selected.type == "Barracks")
-                {
-                    Perseus.selected.buildSoldier();
-                }
+            Perseus.controller = new Controller(Perseus);
+            Perseus.selectionCircles=[];
+     
+        
+            let humanPikeman = new Pikeman('human', 300, 100, Perseus);
+            let orcPikeman = new Pikeman('orc', 600, 100, Perseus);
+            let humanSwordsman = new SwordInfantry('human', 300, 200, Perseus);
+            let orcSwordsman = new SwordInfantry('orc', 600, 200, Perseus);
+            let humanArcher= new Archer('human', 300, 300, Perseus);
+            let orcArcher = new Archer('orc', 600, 300, Perseus);
+            let humanWorker = new Worker('human', 300, 400, Perseus);
+            let orcWorker= new Worker('orc', 600, 400, Perseus);
 
-                if(Perseus.selected.type == "Fort")
-                {
-                    Perseus.selected.buildWorker();
-                }
-            } else {
-                if(Perseus.selected.type == "Worker")
-                {
-                    Perseus.selected.build(100, 100, "Fort");
-                }
-            }
-        }, Perseus.game);
-           
 
-        let attackers = [];
-        let targets = [];
+            Perseus.objects.push(humanPikeman);
+            Perseus.objects.push(orcPikeman);
+            Perseus.objects.push(humanSwordsman);
+            Perseus.objects.push(orcSwordsman);
+            Perseus.objects.push(humanArcher);
+            Perseus.objects.push(orcArcher);
+            Perseus.objects.push(humanWorker);
+            Perseus.objects.push(orcWorker);
 
-            for(var i = 0; i < 10; i++)
-            {
-                let newArcher = new Archer('human', 200, i*50, Perseus)
-                attackers.push(newArcher);
 
-            }
-
-            for(var i = 0; i < 10; i++)
-            {
-                let newArcher = new Archer('human', 500, i*50, Perseus)
-                targets.push(newArcher);
-
-            }
-            
-            Perseus.objects = Perseus.objects.concat(attackers);
-            Perseus.objects = Perseus.objects.concat(targets);
-
-             attackers[0].attack(targets[2]);
-            attackers[1].attack(targets[0]);
-            attackers[2].attack(targets[7]);
-            attackers[3].attack(targets[3]);
-            attackers[4].attack(targets[4]);
-            attackers[5].attack(targets[9]);
-            attackers[6].attack(targets[5]);
-            attackers[7].attack(targets[8]);
-            attackers[8].attack(targets[1]);
-            attackers[9].attack(targets[6]);
-
-            // let archer = [];
-            // for(var i = 0; i < 10; i++)
-            // {
-            //     archer[i] = new Archer(200, i * 100, Perseus)
-            // }
-            // // archer[0] = new Archer(520, 100, Perseus);
-            // // archer[1] = new Archer(320, 50, Perseus);
-            // // archer[3] = new Archer(420, 100, Perseus);
-            // // archer[4] = new Archer(520, 50, Perseus);
-
-            // Perseus.objects.push(archer[0]);
-            // Perseus.objects.push(archer[1]);
-            // Perseus.objects.push(archer[3]);
-            // Perseus.objects.push(archer[4]);
-            
-            // archer[1].attack(archer[0]);
-            // archer[3].attack(archer[4]);
-
-            Perseus.objects.push(button);
-
-            Perseus.objects.push(barracks);
-
-            Perseus.objects.push(fort);
-
+            orcPikeman.attack(humanPikeman);
+            humanSwordsman.attack(orcSwordsman);
+            orcArcher.attack(humanArcher);
+            humanWorker.attack(orcWorker);
 
             Perseus.game.input.mouse.capture = true;
         }
 
 
         function update(){
-
             Perseus.controller.takeInput();
             // if(Perseus.game.input.activePointer.leftButton.isDown)
             // {   
@@ -207,7 +141,6 @@
 
             // }
             console.log(Perseus.selectedObjects);
-
             Perseus.objects.forEach(function(object){
                 object.update();
             });
