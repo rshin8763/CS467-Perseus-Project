@@ -1,5 +1,7 @@
 class Building{
-    constructor(hp, x, y, Perseus){
+    constructor(faction, hp, x, y, Perseus){
+        this.faction = faction;
+
         this.hp = hp;
         this.x = x;
         this.y = y;

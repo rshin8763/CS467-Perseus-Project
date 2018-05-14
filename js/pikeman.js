@@ -1,27 +1,26 @@
 import {Unit} from './unit.js';
 
-class SwordInfantry extends Unit {
+class Pikeman extends Unit {
     constructor(faction, x, y, Perseus){
-        super(faction, 100, 30, 15, 3, Perseus);
-
+        super(faction, 100, 40, 15, 3, Perseus);
         if (Math.random() >= 0.5){
-            this.type="Swordsman";
-            this.addSprite(x,y,'swordsman');
+            this.type="Pikeman";
+            this.addSprite(x,y,'pikeman_male');
 
 
         } else {
-            this.type="Swordswoman";
-            this.addSprite(x,y,'swordswoman'); 
+            this.type="Pikeman";
+            this.addSprite(x,y,'pikeman_female'); 
         }
 
-        this.sprite.animations.add('atk_right', [195, 196, 197, 198, 199, 200], 10, true);
-        this.sprite.animations.add('atk_left', [169, 170, 171, 172, 173, 174], 10, true);
+        this.sprite.animations.add('atk_left', [65, 66, 67, 68, 69, 70], 10, true);
+        this.sprite.animations.add('atk_right', [91, 92, 93, 94, 95, 96], 10, true);
 
     }
 
     attackTick()
     {
-        if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
+        if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width / 2) * this.range )
         {
             this.move(this.target.sprite.x, this.target.sprite.y)
         } else{
@@ -56,4 +55,4 @@ class SwordInfantry extends Unit {
     }
 
 }
-export {SwordInfantry};
+export {Pikeman};

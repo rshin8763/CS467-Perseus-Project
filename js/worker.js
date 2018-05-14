@@ -2,8 +2,9 @@ import {Unit} from './unit.js'
 import {Fort} from './fort.js'
 
 class Worker extends Unit{
-    constructor(x,y,Perseus){
-        super(70, 17, 5, 3, Perseus)
+    constructor(faction, x,y,Perseus){
+        super(faction, 70, 17, 5, 3, Perseus)
+
         this.type="Worker";
         this.placing = false;
         this.building = false;
@@ -22,8 +23,8 @@ class Worker extends Unit{
 
         this.sprite.animations.add('work_right', [91, 92, 93, 94, 95, 96, 97, 98], 10, true);
 
-        this.sprite.animations.add('atk_left', [195, 196, 197, 198, 199, 200], 10, true);
-        this.sprite.animations.add('atk_right', [169, 170, 171, 172, 173, 174], 10, true);
+        this.sprite.animations.add('atk_right', [195, 196, 197, 198, 199, 200], 10, true);
+        this.sprite.animations.add('atk_left', [169, 170, 171, 172, 173, 174], 10, true);
     }
 
 
@@ -54,7 +55,7 @@ class Worker extends Unit{
 
     attackTick()
     {
-        if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) * this.range > (this.sprite.width / 2) * this.range )
+        if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
         {
             this.move(this.target.sprite.x, this.target.sprite.y)
         } else{

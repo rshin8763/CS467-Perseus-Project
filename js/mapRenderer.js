@@ -25,7 +25,9 @@ class mapRenderer{
 
         }
         if (element.type == 'fort'){
-            Perseus.objects.push(new Fort(element.x+64, element.y+64, this.Perseus));
+
+            Perseus.objects.push(new Fort('human', element.x+64, element.y+64, this.Perseus));
+
         }
     }
 

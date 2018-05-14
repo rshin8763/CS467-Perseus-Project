@@ -1,5 +1,7 @@
 class Unit{
-    constructor(hp, attk, defense, attkSpeed, Perseus){
+    constructor(faction, hp, attk, defense, attkSpeed, Perseus){
+        this.faction = faction;
+
         this.hp = hp;
         this.attk = attk;
         this.attkSpeed = attkSpeed;
@@ -19,7 +21,13 @@ class Unit{
         this.range=1;
     }
 
-    addSprite(x, y, unitType){    
+    addSprite(x, y, unitType){
+        if(this.faction == 'orc')
+        {
+            unitType += '_orc';
+        }else {
+            unitType +='_human';
+        }    
         this.sprite = this.game.add.sprite(x, y, unitType);
         this.sprite.frame = 26;
         this.sprite.inputEnabled = true;
@@ -67,8 +75,9 @@ class Unit{
         this.destx = x - (this.sprite.width/2);
         this.desty = y - (this.sprite.width/2);
         */
-        this.dest = this.game.navigator.getSquare(x, y);
-        this.nextSquare = this.game.navigator.findNextNode(this, this.dest);
+       console.log("move!");
+        this.dest = this.Perseus.navigator.getSquare(x, y);
+        this.nextSquare = this.Perseus.navigator.findNextNode(this, this.dest);
         this.destx = x
         this.desty = y
         this.moving = true;
@@ -82,7 +91,9 @@ class Unit{
 
     takeDamage(damage)
     {
+    
         this.hp -= (damage - this.defense);
+        console.log(this.hp);
         if(this.hp < 1)
         {
             for(let i = 0; i < this.Perseus.objects.length; i++)
@@ -164,51 +175,52 @@ class Unit{
         //Process movement if unit is moving
         if(this.attacking)
         {
-            if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width / 2))
-            {
-                this.move(this.target.sprite.x, this.target.sprite.y)
-            } else{
-                this.moving = false;
-                if(this.cooldown > 0)
-                {
-                    this.cooldown--;
-                }else{
-                    if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
-                    {
-                        this.sprite.animations.play('atk_right', true);
-                    }else{
-                        this.sprite.animations.play('atk_left',true);
+            // if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width / 2))
+            // {
+            //     this.move(this.target.sprite.x, this.target.sprite.y)
+            // } else{
+            //     this.moving = false;
+            //     if(this.cooldown > 0)
+            //     {
+            //         this.cooldown--;
+            //     }else{
+            //         if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
+            //         {
+            //             this.sprite.animations.play('atk_right', true);
+            //         }else{
+            //             this.sprite.animations.play('atk_left',true);
 
-                    }
+            //         }
 
 
-                    let targetDead = this.target.takeDamage(this.attk);
-                    console.log(targetDead);
-                    console.log(this);
-                    this.cooldown = 200 / this.attkSpeed;
+            //         let targetDead = this.target.takeDamage(this.attk);
+            //         console.log(targetDead);
+            //         console.log(this);
+            //         this.cooldown = 200 / this.attkSpeed;
                     
-                    if(targetDead)
-                    {
-                        this.attacking = false;
-                        this.target = null;
-                        this.sprite.animations.stop();
-                    }
-                }
-            }
+            //         if(targetDead)
+            //         {
+            //             this.attacking = false;
+            //             this.target = null;
+            //             this.sprite.animations.stop();
+            //         }
+            //     }
+            // }
+
            
             this.attackTick();
           
         }
         if(this.moving)
         {
-            let currentSquare = this.game.navigator.getSquare(this.sprite.x + 32, this.sprite.y +32);
+            let currentSquare = this.Perseus.navigator.getSquare(this.sprite.x + 32, this.sprite.y +32);
 
             if(currentSquare.y == this.dest.y && currentSquare.x == this.dest.x)
             {
                 this.sprite.animations.stop();
                 this.moving = false;
             } else if(currentSquare.y == this.nextSquare.y && currentSquare.x == this.nextSquare.x) {
-                this.nextSquare = this.game.navigator.findNextNode(this, this.dest);
+                this.nextSquare = this.Perseus.navigator.findNextNode(this, this.dest);
             }else{
 
                 if(currentSquare.x < this.nextSquare.x)

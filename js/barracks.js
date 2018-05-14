@@ -4,8 +4,10 @@ import {Archer} from './archer.js';
 
 class Barracks extends Building{
 
-    constructor(x,y,Perseus){
-        super(1000, x, y, Perseus);
+
+    constructor(faction, x,y,Perseus){
+        super(faction, 1000, x, y, Perseus);
+
         this.addSprite(x,y,'barracks');
         this.SWORD = 1;
         this.PIKE = 2;
@@ -42,11 +44,12 @@ class Barracks extends Building{
     spawnUnit(x,y, unitType)
     {
         if(unitType == this.SWORD){
-            this.Perseus.objects.push(new SwordInfantry(x, y, this.Perseus));     
+            this.Perseus.objects.push(new SwordInfantry(this.faction, x, y, this.Perseus));     
         }
 
         if(unitType == this.ARCH){
-            this.game.objects.push(new Archer(x, y, this.Perseus));     
+            this.game.objects.push(new Archer(this.faction, x, y, this.Perseus));     
+
         }
     }
 

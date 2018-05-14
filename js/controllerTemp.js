@@ -1,4 +1,4 @@
-class Controller{
+class ControllerTemp{
     constructor(Perseus){
         this.Perseus = Perseus;
         this.game = Perseus.game;
@@ -55,7 +55,7 @@ class Controller{
             if (this.pointer.isDown == false){
                 this.controlState = 'move';
                 console.log('input move command');
-
+                console.log(this.controlState);
             }
         }
         // Cancel command ( no right click yet)
@@ -66,6 +66,7 @@ class Controller{
 
         // TODO force BOX selection to end at UI bar
         if (this.wasDown == false) {
+            console.log(this.selectedObjects)
             if (this.pointer.isDown == true){
                 if (this.controlState == 'default'){
                     console.log('starting selection box');
