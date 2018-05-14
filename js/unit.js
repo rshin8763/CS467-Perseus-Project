@@ -38,7 +38,9 @@ class Unit{
         this.sprite.animations.add('wlk_right', [143, 144, 145, 146, 147, 148, 149, 150, 151], 10, true);
         this.sprite.animations.add('wlk_left', [117, 118, 119, 120, 121, 122, 123, 124, 125], 10, true);
 
+
         this.sprite.events.onInputDown.add(function(pointer){
+            this.Perseus.controller.select(this);
 
             // let node = {
             //     x : this.game.getSquare(this.game.input.activePointer.x, this.game.input.activePointer.y).x,
@@ -72,19 +74,23 @@ class Unit{
             // }
         }, this);
 
+        this.sprite.events.onInputUp.add(function(pointer){
+            this.Perseus.controller.endWithSelect(this);
+        }, this);
+
     }
 
     move(x, y){
         /*
-        this.destx = x - (this.sprite.width/2);
-        this.desty = y - (this.sprite.width/2);
-        */
-       console.log("move!");
+           this.destx = x - (this.sprite.width/2);
+           this.desty = y - (this.sprite.width/2);
+           */
+        console.log("move!");
         this.dest = this.Perseus.navigator.getSquare(x, y);
         this.nextSquare = this.Perseus.navigator.findNextNode(this, this.dest);
         this.destx = x
-        this.desty = y
-        this.moving = true;
+            this.desty = y
+            this.moving = true;
     }
 
     attack(target)
@@ -95,7 +101,6 @@ class Unit{
 
     takeDamage(damage)
     {
-    
         this.hp -= (damage - this.defense);
         console.log(this.hp);
         if(this.hp < 1)
@@ -124,26 +129,26 @@ class Unit{
         {
             coord.x = this.sprite.x;
             coord.y = this.sprite.y - this.speed;
-            
+
         }
         if(direction == "down")
         {
             coord.x = this.sprite.x;
             coord.y = this.sprite.y + this.speed;
-            
+
         }
         if(direction == "left")
         {
             coord.x =  this.sprite.x - this.speed;
             coord.y = this.sprite.y;
-            
+
         }
         if(direction == "right")
         {
-   
+
             coord.x = this.sprite.x + this.speed;
             coord.y = this.sprite.y;
-            
+
         }
 
         for(let i = 0; i < this.Perseus.objects.length; i++)
@@ -170,13 +175,8 @@ class Unit{
         console.log('drawing circle');
         this.circle.lineStyle(1, 0xFFFFFF, 1);
         this.circle.drawCircle(this.sprite.x,this.sprite.y, 64);
+        this.Perseus.controller.selectionCircles.push(this.circle);
     }
-
-    unDrawSelectionCircle(){
-        console.log('destroying circle', this.sprite.x, ' ', this.sprite.y);
-        this.circle.destroy();
-    }
-   
 
     update(){
         //Process movement if unit is moving
@@ -204,7 +204,7 @@ class Unit{
             //         console.log(targetDead);
             //         console.log(this);
             //         this.cooldown = 200 / this.attkSpeed;
-                    
+
             //         if(targetDead)
             //         {
             //             this.attacking = false;
@@ -214,9 +214,9 @@ class Unit{
             //     }
             // }
 
-           
+
             this.attackTick();
-          
+
         }
         if(this.moving)
         {
@@ -232,37 +232,40 @@ class Unit{
 
                 if(currentSquare.x < this.nextSquare.x)
                 {
-                        this.sprite.x += this.speed;
-                        this.sprite.animations.play('wlk_right');
-                    
-    
+                    this.sprite.x += this.speed;
+                    this.sprite.animations.play('wlk_right');
+
+
                 }
                 if(currentSquare.x > this.nextSquare.x)
                 {
 
                     this.sprite.x -= this.speed;
                     this.sprite.animations.play('wlk_left');
-                    
+
                 }
                 if(currentSquare.y < this.nextSquare.y)
                 {
 
-                        this.sprite.y += this.speed;
-                    
-    
+                    this.sprite.y += this.speed;
+
+
                 }
                 if(currentSquare.y > this.nextSquare.y)
                 {
 
-                        this.sprite.y -= this.speed;
-                    
-    
+                    this.sprite.y -= this.speed;
+
+
                 }
 
             }            
         }
+        // if(this.circle){
+        //     this.circle.x = this.sprite.x;
+        //     this.circle.y = this.sprite.y;
+        // }
     }
-
 }
 
 export {Unit};

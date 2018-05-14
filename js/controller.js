@@ -15,16 +15,18 @@ class Controller{
         this.boxEndPos = {};
         this.wasDown = false;
         this.boxSelect = true;
+        this.selectionCircles = [];
     }
 
     select(obj){
-        this.selectedObjects.forEach((elem)=> {elem.unDrawSelectionCircle();})
+        this.selectionCircles.forEach((elem)=> {elem.destroy();})
         this.selectedObjects = [];
         this.selectedObjects.push(obj);
         obj.drawSelectionCircle();
     }
 
-    takeInput(){
+
+    update(){
         if(this.Perseus.graphics.selectionBox){
             this.Perseus.graphics.selectionBox.destroy();
         }
@@ -72,8 +74,6 @@ class Controller{
             console.log('controller state is default');
         }
 
-        //
-        if(this.boxSelect){
         if (this.wasDown == false) {
             if (this.pointer.isDown == true){
                 if (this.controlState == 'default'){
@@ -100,9 +100,11 @@ class Controller{
                     this.boxEndPos = this.pointer.positionUp;
                     console.log(this.boxEndPos);
                     this.Perseus.graphics.selectionBox.drawRect(Math.min(this.boxStartPos.x, this.boxEndPos.x) + this.game.camera.x, Math.min(this.boxStartPos.y, this.boxEndPos.y)+ this.game.camera.y, Math.abs(this.boxEndPos.x-this.boxStartPos.x), Math.abs(this.boxEndPos.y-this.boxStartPos.y));
-                    //Add interesecting objects to selected Objects
-                    this.selectedObjects.forEach((elem)=> {elem.unDrawSelectionCircle();})
+
                     this.selectedObjects = [];
+                    this.selectionCircles.forEach((circle)=>{
+                        circle.destroy();
+                    });
                     // Select objects
                     this.Perseus.objects.forEach(function(obj){
                         console.log(obj.sprite.x, obj.sprite.y);
@@ -114,10 +116,7 @@ class Controller{
                                 console.log("this is inside foreach");
                                 this.selectedObjects.push(obj);
                                 console.log(this.selectedObjects);
-                                this.selectedObjects.forEach((obj)=>{
-                                    //TODO implement function to draw white circle around units.
-                                    obj.drawSelectionCircle();
-                                });
+                                obj.drawSelectionCircle();
                             }
                         }
                     }, this);
@@ -132,9 +131,12 @@ class Controller{
             }
         }
         this.wasDown = this.pointer.isDown;
-        } else{
-            this.boxSelect = true;
-        }
+    }
+
+    endWithSelect(obj){
+        this.update();
+        this.selectedObjects.push(obj);
+        obj.drawSelectionCircle();
     }
 }
 export {Controller}
