@@ -221,7 +221,7 @@ function unpause()
 		Perseus.game.paused = false;
 		saveButton.destroy();
 		quitButton.destroy();
-		game.newGameButton.destroy();
+		newGameButton.destroy();
 		resumeButton.destroy();
 	}
 }
@@ -298,7 +298,7 @@ function updateEnemyHealth(x)
 *****/
 function saveGame()
 {
-	var test = Perseus.game.add.text(100, 200, 'You clicked the SAVE button', style);
+	
 }
 
 /*****
@@ -307,7 +307,7 @@ function saveGame()
 *****/
 function quitGame()
 {
-	var test = Perseus.game.add.text(100, 300, 'You clicked the QUIT button', style);
+	
 	//gameOver();
 }
 
@@ -317,7 +317,6 @@ function quitGame()
 *****/
 function newGame()
 {
-	var test = Perseus.game.add.text(100, 400, 'You clicked the NEW GAME button', style);
 }
 
 function muteMusic()
