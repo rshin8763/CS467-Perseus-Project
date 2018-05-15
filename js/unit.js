@@ -85,10 +85,11 @@ class Unit extends GameObject{
         console.log("move!");
         this.dest = this.Perseus.navigator.getSquare(x, y);
         this.nextSquare = this.Perseus.navigator.findNextNode(this, this.dest);
-        this.destx = x
-            this.desty = y
-            this.moving = true;
+        this.destx = x;
+        this.desty = y;
+        this.moving = true;
     }
+
 
     attack(target)
     {
@@ -165,14 +166,6 @@ class Unit extends GameObject{
 
         return false;
 
-    }
-
-    drawSelectionCircle(){
-        this.circle = this.game.add.graphics();
-        console.log('drawing circle');
-        this.circle.lineStyle(1, 0xFFFFFF, 1);
-        this.circle.drawCircle(this.sprite.x,this.sprite.y, 64);
-        this.Perseus.controller.selectionCircles.push(this.circle);
     }
 
     update(){

@@ -27,19 +27,6 @@ class Building extends GameObject{
     update(){
 
     }
-
-    drawSelectionCircle(){
-        this.circle = this.game.add.graphics();
-        console.log('drawing circle');
-        this.circle.lineStyle(2, 0xFFFFFF, 1);
-        this.circle.drawCircle(this.x,this.y, 128);
-        this.Perseus.controller.selectionCircles.push(this.circle);
-    }
-
-    unDrawSelectionCircle(){
-        this.circle.destroy();
-    }
-    
 }
 
 export {Building};

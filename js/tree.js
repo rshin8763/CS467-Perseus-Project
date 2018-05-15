@@ -1,7 +1,8 @@
-class Tree{
+import {GameObject} from './gameObject.js'
+class Tree extends GameObject{
     constructor(x, y, Perseus){
+        super(false, Perseus);
         this.sprite = null;
-        this.game = Perseus.game;
         this.resourceAmount = 1000;
         this.exhausted = false;
         this.addSprite(x,y);
@@ -13,17 +14,20 @@ class Tree{
         this.sprite = this.game.add.sprite(x, y, 'tree');
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
-    }
+        this.sprite.inputEnabled = true;
+        this.sprite.events.onInputDown.add(function(){
+            this.Perseus.controller.select(this);
+        }, this);
 
-    drawSelectionCircle(){
-        this.circle = this.game.add.graphics();
-        console.log('drawing circle');
-        this.circle.lineStyle(2, 0xFFFFFF, 1);
-        this.circle.drawCircle(this.x,this.y, 64);
+        this.sprite.events.onInputUp.add(function(){
+            this.Perseus.controller.endWithSelect(this);
+        }, this);
     }
-
-    unDrawSelectionCircle(){
-        this.circle.destroy();
+    takeDamage(rate){
+        resourceAmount -= rate;
+        if (resouceAmount <= 0) {
+            this.exhausted = true;
+        }
     }
 }
 export {Tree};

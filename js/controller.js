@@ -1,3 +1,4 @@
+import {Unit} from './unit.js'
 class Controller{
     constructor(Perseus){
         this.Perseus = Perseus;
@@ -7,6 +8,7 @@ class Controller{
         this.pointer = this.game.input.mousePointer;
         this.keys = {};
         this.keys.A = this.game.input.keyboard.addKey(Phaser.KeyCode.A);
+        this.keys.G = this.game.input.keyboard.addKey(Phaser.KeyCode.G);
         this.keys.M = this.game.input.keyboard.addKey(Phaser.KeyCode.M);
         this.keys.B = this.game.input.keyboard.addKey(Phaser.KeyCode.B);
         this.keys.F = this.game.input.keyboard.addKey(Phaser.KeyCode.F);
@@ -31,6 +33,11 @@ class Controller{
                 elem.attack(obj);
             });
             this.state = 'default';
+        } else if (this.state == 'gather'){
+            this.selectedObjects.forEach( (elem) => {
+                elem.gather(obj);
+            });
+            this.state = 'default';
         }
     }
 
@@ -43,16 +50,18 @@ class Controller{
         });
         // Select objects
         this.Perseus.objects.forEach(function(obj){
-            console.log(obj.sprite.x, obj.sprite.y);
-            // Put this logic in function.
-            if(this.boxStartPos.x <= obj.sprite.x  && obj.sprite.x <= this.boxEndPos.x 
-                    || this.boxEndPos.x <= obj.sprite.x && obj.sprite.x <= this.boxStartPos.x){
-                if (this.boxStartPos.y <= obj.sprite.y && obj.sprite.y <= this.boxEndPos.y
-                        || this.boxEndPos.y <= obj.sprite.y && obj.sprite.y <= this.boxStartPos.y){
-                    console.log("this is inside foreach");
-                    this.selectedObjects.push(obj);
-                    console.log(this.selectedObjects);
-                    obj.drawSelectionCircle();
+            if(obj instanceof Unit){
+                console.log(obj.sprite.x, obj.sprite.y);
+                // Put this logic in function.
+                if(this.boxStartPos.x <= obj.sprite.x  && obj.sprite.x <= this.boxEndPos.x 
+                        || this.boxEndPos.x <= obj.sprite.x && obj.sprite.x <= this.boxStartPos.x){
+                    if (this.boxStartPos.y <= obj.sprite.y && obj.sprite.y <= this.boxEndPos.y
+                            || this.boxEndPos.y <= obj.sprite.y && obj.sprite.y <= this.boxStartPos.y){
+                        console.log("this is inside foreach");
+                        this.selectedObjects.push(obj);
+                        console.log(this.selectedObjects);
+                        obj.drawSelectionCircle();
+                    }
                 }
             }
         }, this);
@@ -97,6 +106,15 @@ class Controller{
         if(this.keys.M.isDown){
             this.state = 'move';
             console.log('input move command');
+        }
+
+        if(this.keys.G.isDown){
+            this.state = 'gather';
+            console.log('click on a resource');
+        }
+
+        if(this.keys.B.isDown){
+            this.selectedObjects[0].buildWorker();
         }
         // Cancel command ( no right click yet)
         if (this.keys.X.isDown){
