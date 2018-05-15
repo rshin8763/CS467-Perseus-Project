@@ -8,11 +8,6 @@ import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
 
 
-//I mostly changed the classes to pass around references of Perseus instead of game.
-//Perseus now contains objects, controller, map, graphics
-//Within Controller is the selected objects array. I still haven't changed anything to do with game.selected. 
-//We will need to add different logic for group selecting units, while buildings and resource nodes should only be 
-//able to be clicked directly. 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
 var Main = function() {};
@@ -20,7 +15,6 @@ var Main = function() {};
 // create the game, and pass it the configuration
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
-//TODO set anchor point of all units to the center, not the corner
 
 // RESOURCES OBJECTS
 var gold = 0;
@@ -38,8 +32,8 @@ var w = 800, h = 600;
 var menuBar, pause_button, saveButton, quitButton, newGameButton, resumeButton, mute_button;
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 
-Main.prototype = {
-	preload:function() {
+
+function preload() {
 	this.load.tilemap('demo', 'assets/tilemaps/map1.json', null, Phaser.Tilemap.TILED_JSON);
 	this.load.image('topbar', 'assets/topbar.png');
 	// TODO insert tiles url and creators
@@ -48,7 +42,6 @@ Main.prototype = {
 	this.load.image('barracks', 'assets/barracks.png');
 	this.load.image('fort', 'assets/fort.png');
 	this.load.image('ui', 'assets/ui/stoneMenu.png');
-
 
 	Perseus.game.load.spritesheet('swordsman_human', 'assets/images/units/swordsman_human.png', 64, 64);
 	Perseus.game.load.spritesheet('swordswoman_human', 'assets/images/units/swordswoman_human.png', 64, 64);
@@ -82,10 +75,15 @@ Main.prototype = {
 	Perseus.game.load.image('newGameButton', 'assets/images/newGameButton.png');
 	},
 
-	create:function() {
+function create() {
+    
+    Perseus.ui = {};
+
 	Perseus.map = this.game.add.tilemap('demo');
 
+    Perseus.controller = new Controller(Perseus);
 	Perseus.navigator = new Navigator(Perseus.game, 25, 19, 32);
+
 	//the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
 	Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
 
@@ -94,19 +92,19 @@ Main.prototype = {
 	Perseus.collisionLayer = Perseus.map.createLayer('collisionLayer');
 
 	// Sets collision  TODO make it work with unit's move method.
+    // This uses phaser arcade physics. Since we are using a navmap,
+    // TODO find a way to prarse collision layer tiles into navmap
 	Perseus.map.setCollisionByExclusion([], true, Perseus.collisionLayer, true);
 
-
     //I added a 800x20 sprite that's just a blue bar
-	let topbar = this.add.sprite(0, 0, 'topbar');
-	//And set it fixed to Camera
-	topbar.fixedToCamera = true;
 
-	this.barText = this.add.text(100, 0, "This number can change each update:", style);
-	this.testText = "This number can change each update:";
-	this.barText.fixedToCamera = true;
-
-	this.count = 0;
+	//let topbar = this.add.sprite(0, 0, 'topbar');
+	////And set it fixed to Camera
+	//topbar.fixedToCamera = true;
+	// let style = { font: "12px Arial", fill: "#ffffff", align: "center" };
+	// this.barText = this.add.text(100, 0, "This number can change each update:", style);
+	// this.testText = "This number can change each update:";
+	// this.barText.fixedToCamera = true;
 
 	//resizes the game world to match the layer dimensions
 	Perseus.backgroundLayer.resizeWorld();
@@ -114,25 +112,34 @@ Main.prototype = {
 	//Create an objects array on the game object and add a soldier to it.
 	Perseus.objects = [];
 
-
 	Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
 	Perseus.objects.push(new SwordInfantry('human', 200, 400, Perseus));
 	Perseus.objects.push(new Archer('human', 300, 300, Perseus));
-
 
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
 
 	// Create GUI bar
-	Perseus.ui = {}
-	Perseus.ui.bar = this.add.sprite(0,0,'ui');
-	Perseus.ui.bar.height = 600;
+	let bar = this.add.sprite(0,0,'ui');
+    bar.fixedToCamera = true;
+	bar.height = 600;
 	// 6 32px tiles
-	Perseus.ui.bar.width =  192;
+	bar.width =  192;
+    Perseus.ui.bar = bar;
 
-	//Create Controller 
-    Perseus.controller = new Controller(Perseus);
+    let infoBox = this.add.graphics();
+    Perseus.ui.infoBox = infoBox;
+    infoBox.lineStyle(2, 0xFFFFFF, 1);
+    infoBox.drawRect(10,410,172,180);
+    infoBox.fixedToCamera = true;
+
+    let commandBox = this.add.graphics();
+    Perseus.ui.commandBox = commandBox;
+    commandBox.lineStyle(2, 0xFFFFFF, 1);
+    commandBox.drawRect(10,210,172, 180);
+    commandBox.fixedToCamera = true;
+  
     // RESOURCE DATA BAR ------------------------------------------------------
 	menuBar = Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
     menuBar.fixedToCamera = true;
@@ -158,6 +165,7 @@ Main.prototype = {
     thisHealth.fixedToCamera = true;
     thisHealth.cameraOffset.setTo(400, 0);
 
+
     // USER HEALTH
     enemyHealth = Perseus.game.add.text(0, 0, 'Enemy Health: 100', style);
     enemyHealth.fixedToCamera = true;
@@ -175,13 +183,12 @@ Main.prototype = {
     mute_button.cameraOffset.setTo(700, 0);
     	mute_button.inputEnabled = true;
     	mute_button.events.onInputUp.add(muteMusic);
-    },
-	update:function(){
+    }
 
 
-    Perseus.controller.takeInput();
-	this.count++;
-	this.barText.text = this.testText +  " " + this.count;
+function update(){
+    Perseus.controller.update();
+
 	//Call the update function on each game object
 	Perseus.objects.forEach(function(obj){
 		obj.update();

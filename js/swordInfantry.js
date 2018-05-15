@@ -14,6 +14,12 @@ class SwordInfantry extends Unit {
             this.addSprite(x,y,'swordswoman'); 
         }
 
+        this.uiData = {
+            canBuild: false,
+            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
+            buildList:[]
+        };
+
         this.sprite.animations.add('atk_right', [195, 196, 197, 198, 199, 200], 10, true);
         this.sprite.animations.add('atk_left', [169, 170, 171, 172, 173, 174], 10, true);
 
