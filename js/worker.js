@@ -21,6 +21,13 @@ class Worker extends Unit{
             this.addSprite(x,y, 'worker_female')
         }
 
+        this.uiData = {
+            canBuild: true,
+            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
+            buildList:[{"F" : "Fort"}, {"B" : "Barracks"}]  
+        };
+
+
         this.sprite.animations.add('work_right', [91, 92, 93, 94, 95, 96, 97, 98], 10, true);
 
         this.sprite.animations.add('atk_right', [195, 196, 197, 198, 199, 200], 10, true);

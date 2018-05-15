@@ -39,6 +39,11 @@ class Building extends GameObject{
     unDrawSelectionCircle(){
         this.circle.destroy();
     }
+
+    takeDamage(damage)
+    {
+        //TODO: Implement
+    }
     
 }
 
