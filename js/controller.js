@@ -87,7 +87,6 @@ class Controller{
     }
 
     update(){
-        console.log(this.state);
         if(this.selectionBox){
             this.selectionBox.destroy();
         }

@@ -9,7 +9,10 @@ import {Navigator} from './navigator.js';
 
 
 var Perseus = Perseus || {};
-Perseus.graphics = {}
+Perseus.graphics = {};
+Perseus.player = {};
+Perseus.player.lumber = 0;
+Perseus.player.gold = 0;
 
 // create the game, and pass it the configuration
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
