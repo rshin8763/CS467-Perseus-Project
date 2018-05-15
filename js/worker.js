@@ -1,4 +1,4 @@
-import {Unit} rom './unit.js'
+import {Unit} from './unit.js'
 import {Fort} from './fort.js'
 
 class Worker extends Unit{
