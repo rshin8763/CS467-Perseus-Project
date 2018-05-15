@@ -6,11 +6,11 @@ class Tree extends GameObject{
         this.resourceAmount = 1000;
         this.exhausted = false;
         this.addSprite(x,y);
-        this.circle = null;
+        this.type = 'wood';
+
     }
 
     addSprite(x, y){    
-        console.log(this.game);
         this.sprite = this.game.add.sprite(x, y, 'tree');
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;

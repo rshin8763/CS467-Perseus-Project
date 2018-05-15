@@ -1,4 +1,4 @@
-import {Unit} from './unit.js'
+import {Unit} rom './unit.js'
 import {Fort} from './fort.js'
 
 class Worker extends Unit{
@@ -52,6 +52,7 @@ class Worker extends Unit{
                 }
             }
         });
+        console.log('found fort ', closest);
         return closest;
     }
 
@@ -125,16 +126,17 @@ class Worker extends Unit{
 
     move(x,y){
         super.move(x,y);
+        console.log(this.destx, this.desty);
     }
 
     moveTo(obj){
         console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
-        this.move(obj.sprite.x+64, obj.sprite.y+64);
+        this.move(obj.sprite.x+32, obj.sprite.y+32);
     }
     update(){
         super.update();
         // heading to resource node
-        console.log(this.gatherState);
+        // console.log(this.gatherState);
 
         if (this.gatherState == 1){
             if (this.moving == false){
@@ -146,21 +148,20 @@ class Worker extends Unit{
                 this.gatherProgress += 1;
             } else {
                 this.gatherState = 3;
-                console.log(this.gatherState);
                 console.log('moving to fort');
-                this.moveTo(this.Perseus.objects[3]);
+                this.moveTo(this.findNearestFort());
             }
         // returning to fort
         } if (this.gatherState == 3){
             if (this.moving == false){
-                if (resource.type == lumber){
-                    Perseus.player.lumber += 10;
+                if (this.lastResource.type == 'wood'){
+                    this.Perseus.updateWood(10);
                 } else {
-                    Perseus.player.gold += 10;
+                    this.Perseus.resources.gold += 10;
                 }
+                this.gather(this.lastResource);
             }
             //loop
-            this.gather(this.lastResource);
         }
 
         if(this.placing)
