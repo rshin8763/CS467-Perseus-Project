@@ -27,6 +27,12 @@ class Building extends GameObject{
     update(){
 
     }
+
+    takeDamage(damage)
+    {
+        //TODO: Implement
+    }
+    
 }
 
 export {Building};

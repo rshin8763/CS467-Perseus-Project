@@ -16,6 +16,12 @@ class Archer extends Unit {
             this.addSprite(x,y,'archer_female'); 
         }
 
+        this.uiData = {
+            canBuild: false,
+            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
+            buildList:[]
+        };
+
         this.sprite.animations.add('atk_right', [247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259], 10, true);
         this.sprite.animations.add('atk_left', [221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233], 10, true);
 
