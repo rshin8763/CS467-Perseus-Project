@@ -12,7 +12,11 @@ class Worker extends Unit{
         this.selectedBuilding = null;
         this.selectedSprite = null;
         this.selectedX = null;
-        this.selectedY = null
+        this.selectedY = null;
+        this.gatherState = 0;
+        this.gatherProgress = 0;
+        this.lastResource = null;
+        
         
         
         if(Math.random() >= 0.5){
@@ -21,12 +25,35 @@ class Worker extends Unit{
             this.addSprite(x,y, 'worker_female')
         }
 
-        this.sprite.animations.add('work_right', [91, 92, 93, 94, 95, 96, 97, 98], 10, true);
+        this.uiData = {
+            canBuild: true,
+            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
+            buildList:[{"F" : "Fort"}, {"B" : "Barracks"}]  
+        };
 
+
+        this.sprite.animations.add('work_right', [91, 92, 93, 94, 95, 96, 97, 98], 10, true);
         this.sprite.animations.add('atk_right', [195, 196, 197, 198, 199, 200], 10, true);
         this.sprite.animations.add('atk_left', [169, 170, 171, 172, 173, 174], 10, true);
     }
 
+    findNearestFort(){
+        let x = this.sprite.x;
+        let y = this.sprite.y;
+
+        let closest = null;
+        let min = Number.MAX_SAFE_INTEGER;
+        this.Perseus.objects.forEach((obj)=>{
+            if (obj instanceof Fort){
+                //get distance
+                if (Math.hypot(x-obj.x, y-obj.y) < min){
+                    min = Math.hypot(x-obj.x, y-obj.y) < min;
+                    closest = obj;
+                }
+            }
+        });
+        return closest;
+    }
 
     build(type)
     {
@@ -89,8 +116,53 @@ class Worker extends Unit{
         }
     }
 
+    gather(resource){
+        this.gatherProgress = 0;
+        this.moveTo(resource);
+        this.gatherState = 1;
+        this.lastResource = resource;
+    }
+
+    move(x,y){
+        super.move(x,y);
+    }
+
+    moveTo(obj){
+        console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
+        this.move(obj.sprite.x+64, obj.sprite.y+64);
+    }
     update(){
         super.update();
+        // heading to resource node
+        console.log(this.gatherState);
+
+        if (this.gatherState == 1){
+            if (this.moving == false){
+                this.gatherState = 2;
+            }
+        //gathering at node
+        } if (this.gatherState == 2){
+            if (this.gatherProgress < 150){
+                this.gatherProgress += 1;
+            } else {
+                this.gatherState = 3;
+                console.log(this.gatherState);
+                console.log('moving to fort');
+                this.moveTo(this.Perseus.objects[3]);
+            }
+        // returning to fort
+        } if (this.gatherState == 3){
+            if (this.moving == false){
+                if (resource.type == lumber){
+                    Perseus.player.lumber += 10;
+                } else {
+                    Perseus.player.gold += 10;
+                }
+            }
+            //loop
+            this.gather(this.lastResource);
+        }
+
         if(this.placing)
         {
             this.selectedSprite.x = this.game.input.x - this.sprite.width;

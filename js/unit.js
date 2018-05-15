@@ -1,7 +1,8 @@
-class Unit{
+import {GameObject} from './gameObject.js'
+class Unit extends GameObject{
     constructor(faction, hp, attk, defense, attkSpeed, Perseus){
+        super(true, Perseus);
         this.faction = faction;
-
         this.hp = hp;
         this.attk = attk;
         this.attkSpeed = attkSpeed;
@@ -12,9 +13,6 @@ class Unit{
         this.desty = null;
         this.speed = 1;
         this.sprite = null;
-        this.game = Perseus.game;
-        this.Perseus = Perseus;
-        this.movable = true;
         this.target = null;
         this.attacking = false;
         this.cooldown = 0;
@@ -29,12 +27,17 @@ class Unit{
             unitType +='_human';
         }    
         this.sprite = this.game.add.sprite(x, y, unitType);
+        this.sprite.anchor.x = 0.5;
+        this.sprite.anchor.y = 0.5;
+
         this.sprite.frame = 26;
         this.sprite.inputEnabled = true;
         this.sprite.animations.add('wlk_right', [143, 144, 145, 146, 147, 148, 149, 150, 151], 10, true);
         this.sprite.animations.add('wlk_left', [117, 118, 119, 120, 121, 122, 123, 124, 125], 10, true);
 
+
         this.sprite.events.onInputDown.add(function(pointer){
+            this.Perseus.controller.select(this);
 
             // let node = {
             //     x : this.game.getSquare(this.game.input.activePointer.x, this.game.input.activePointer.y).x,
@@ -57,31 +60,36 @@ class Unit{
             //NOTE(Michael): So for this I had a game.selected variable that held the one unit I was
             //  selecting at the time. In the actual game we're going to want to have selected
             //  be an array so that we can add multiple units.
-            if(this.game.selected) {
-                if(this.game.selected.movable && this.game.input.activePointer.rightButton.isDown) {
-                    this.game.selected.attack(this);
-                }else {
-                    this.game.selected = this;
-                }
-            } else {
-                this.game.selected = this;
-            }
+            // if(this.game.selected) {
+            //     if(this.game.selected.movable && this.game.input.activePointer.rightButton.isDown) {
+            //         this.game.selected.attack(this);
+            //     }else {
+            //         this.game.selected = this;
+            //     }
+            // } else {
+            //     this.game.selected = this;
+            // }
+        }, this);
+
+        this.sprite.events.onInputUp.add(function(pointer){
+            this.Perseus.controller.endWithSelect(this);
         }, this);
 
     }
 
     move(x, y){
         /*
-        this.destx = x - (this.sprite.width/2);
-        this.desty = y - (this.sprite.width/2);
-        */
-       console.log("move!");
+           this.destx = x - (this.sprite.width/2);
+           this.desty = y - (this.sprite.width/2);
+           */
+        console.log("move!");
         this.dest = this.Perseus.navigator.getSquare(x, y);
         this.nextSquare = this.Perseus.navigator.findNextNode(this, this.dest);
-        this.destx = x
-        this.desty = y
+        this.destx = x;
+        this.desty = y;
         this.moving = true;
     }
+
 
     attack(target)
     {
@@ -91,7 +99,6 @@ class Unit{
 
     takeDamage(damage)
     {
-    
         this.hp -= (damage - this.defense);
         console.log(this.hp);
         if(this.hp < 1)
@@ -120,26 +127,26 @@ class Unit{
         {
             coord.x = this.sprite.x;
             coord.y = this.sprite.y - this.speed;
-            
+
         }
         if(direction == "down")
         {
             coord.x = this.sprite.x;
             coord.y = this.sprite.y + this.speed;
-            
+
         }
         if(direction == "left")
         {
             coord.x =  this.sprite.x - this.speed;
             coord.y = this.sprite.y;
-            
+
         }
         if(direction == "right")
         {
-   
+
             coord.x = this.sprite.x + this.speed;
             coord.y = this.sprite.y;
-            
+
         }
 
         for(let i = 0; i < this.Perseus.objects.length; i++)
@@ -160,16 +167,6 @@ class Unit{
         return false;
 
     }
-    //TODO
-    drawSelectionCircle(){
-        console.log("drew selection circle");
-    }
-
-    undrawSelectionCircle(){
-        console.log("undrew selection circle");
-    }
-
-   
 
     update(){
         //Process movement if unit is moving
@@ -197,7 +194,7 @@ class Unit{
             //         console.log(targetDead);
             //         console.log(this);
             //         this.cooldown = 200 / this.attkSpeed;
-                    
+
             //         if(targetDead)
             //         {
             //             this.attacking = false;
@@ -207,9 +204,9 @@ class Unit{
             //     }
             // }
 
-           
+
             this.attackTick();
-          
+
         }
         if(this.moving)
         {
@@ -225,37 +222,40 @@ class Unit{
 
                 if(currentSquare.x < this.nextSquare.x)
                 {
-                        this.sprite.x += this.speed;
-                        this.sprite.animations.play('wlk_right');
-                    
-    
+                    this.sprite.x += this.speed;
+                    this.sprite.animations.play('wlk_right');
+
+
                 }
                 if(currentSquare.x > this.nextSquare.x)
                 {
 
                     this.sprite.x -= this.speed;
                     this.sprite.animations.play('wlk_left');
-                    
+
                 }
                 if(currentSquare.y < this.nextSquare.y)
                 {
 
-                        this.sprite.y += this.speed;
-                    
-    
+                    this.sprite.y += this.speed;
+
+
                 }
                 if(currentSquare.y > this.nextSquare.y)
                 {
 
-                        this.sprite.y -= this.speed;
-                    
-    
+                    this.sprite.y -= this.speed;
+
+
                 }
 
             }            
         }
+        // if(this.circle){
+        //     this.circle.x = this.sprite.x;
+        //     this.circle.y = this.sprite.y;
+        // }
     }
-
 }
 
 export {Unit};

@@ -13,6 +13,13 @@ class Pikeman extends Unit {
             this.addSprite(x,y,'pikeman_female'); 
         }
 
+        this.uiData = {
+            canBuild: false,
+            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
+            buildList:[]
+        };
+        
+
         this.sprite.animations.add('atk_left', [65, 66, 67, 68, 69, 70], 10, true);
         this.sprite.animations.add('atk_right', [91, 92, 93, 94, 95, 96], 10, true);
 
