@@ -6,7 +6,7 @@ class Tree extends GameObject{
         this.resourceAmount = 1000;
         this.exhausted = false;
         this.addSprite(x,y);
-        this.type = 'lumber';
+        this.type = 'wood';
 
     }
 

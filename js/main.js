@@ -14,7 +14,6 @@ Perseus.graphics = {}
 // create the game, and pass it the configuration
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
-// RESOURCES OBJECTS
 var gold = 0;
 var stone = 0;
 var wood = 0;
@@ -157,15 +156,15 @@ function create() {
     woodText.cameraOffset.setTo(300, 0);
 
     // USER HEALTH
-    thisHealth = Perseus.game.add.text(0, 0, 'Health: 100', style);
-    thisHealth.fixedToCamera = true;
-    thisHealth.cameraOffset.setTo(400, 0);
+    thisHealthText = Perseus.game.add.text(0, 0, 'Health: 100', style);
+    thisHealthText.fixedToCamera = true;
+    thisHealthText.cameraOffset.setTo(400, 0);
 
 
     // USER HEALTH
-    enemyHealth = Perseus.game.add.text(0, 0, 'Enemy Health: 100', style);
-    enemyHealth.fixedToCamera = true;
-    enemyHealth.cameraOffset.setTo(530, 0);
+    enemyHealthText = Perseus.game.add.text(0, 0, 'Enemy Health: 100', style);
+    enemyHealthText.fixedToCamera = true;
+    enemyHealthText.cameraOffset.setTo(530, 0);
 
     // PAUSE BUTTON, MUTE, MENU -----------------------------------------------
     var pause_button = Perseus.game.add.text(0, 0, 'Pause', style);
@@ -251,10 +250,10 @@ function updateStone(x)
  ** DESCRIPTION: ADDS WOOD AMOUNT SPECIFIED BY NUMBER TO CURRENT COUNT
  ** UPDATES AMOUNT ON SCREEN
  *****/
-function updateWood(x)
+Perseus.updateWood = function (x)
 {
     wood = wood + x;
-    woodText = 'Wood: ' + wood;
+    woodText.text = 'Wood: ' + wood;
 }
 
 /*****

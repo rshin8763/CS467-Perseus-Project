@@ -1,4 +1,4 @@
-import {Unit} from './unit.js'
+import {Unit} rom './unit.js'
 import {Fort} from './fort.js'
 
 class Worker extends Unit{
@@ -154,10 +154,10 @@ class Worker extends Unit{
         // returning to fort
         } if (this.gatherState == 3){
             if (this.moving == false){
-                if (this.lastResource.type == 'lumber'){
-                    this.Perseus.player.lumber += 10;
+                if (this.lastResource.type == 'wood'){
+                    this.Perseus.updateWood(10);
                 } else {
-                    this.Perseus.player.gold += 10;
+                    this.Perseus.resources.gold += 10;
                 }
                 this.gather(this.lastResource);
             }
