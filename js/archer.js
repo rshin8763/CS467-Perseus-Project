@@ -3,6 +3,7 @@ import {Arrow} from './arrow.js';
 class Archer extends Unit {
     constructor(faction, x, y, Perseus){
         super(faction, 100, 15, 10, 1, Perseus);
+        this.maxHP = 100;
         this.range = 5;
         this.arrow = false;
         this.arrowSprite = null;

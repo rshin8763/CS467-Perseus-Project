@@ -3,6 +3,7 @@ import {Unit} from './unit.js';
 class Pikeman extends Unit {
     constructor(faction, x, y, Perseus){
         super(faction, 100, 40, 15, 3, Perseus);
+        this.maxHP = 100;
         if (Math.random() >= 0.5){
             this.type="Pikeman";
             this.addSprite(x,y,'pikeman_male');

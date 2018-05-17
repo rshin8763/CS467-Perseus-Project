@@ -39,6 +39,7 @@ function preload() {
     this.load.image('barracks', 'assets/barracks.png');
     this.load.image('fort', 'assets/fort.png');
     this.load.image('ui', 'assets/ui/stoneMenu.png');
+    this.load.image('hpbar', 'assets/healthbar.png');
 
     Perseus.game.load.spritesheet('swordsman_human', 'assets/images/units/swordsman_human.png', 64, 64);
     Perseus.game.load.spritesheet('swordswoman_human', 'assets/images/units/swordswoman_human.png', 64, 64);

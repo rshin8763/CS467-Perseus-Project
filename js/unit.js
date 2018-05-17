@@ -17,6 +17,7 @@ class Unit extends GameObject{
         this.attacking = false;
         this.cooldown = 0;
         this.range=1;
+        this.hpbar = null; 
     }
 
     addSprite(x, y, unitType){
@@ -32,10 +33,14 @@ class Unit extends GameObject{
 
         this.sprite.frame = 26;
         this.sprite.inputEnabled = true;
+        this.sprite.animations.add('wlk_up', [104, 105, 106, 107, 108, 109, 110, 111, 112], 10, true);
+        this.sprite.animations.add('wlk_down', [130, 131, 132, 133, 134, 135, 136, 137, 138], 10, true);
         this.sprite.animations.add('wlk_right', [143, 144, 145, 146, 147, 148, 149, 150, 151], 10, true);
         this.sprite.animations.add('wlk_left', [117, 118, 119, 120, 121, 122, 123, 124, 125], 10, true);
 
-
+        this.hpbar = this.game.add.sprite(x,y, 'hpbar');
+        this.hpbar.anchor.x = .5;
+        this.hpbar.anchor.y = 6;
         this.sprite.events.onInputDown.add(function(pointer){
             this.Perseus.controller.select(this);
 
@@ -112,9 +117,12 @@ class Unit extends GameObject{
             }
 
             this.sprite.destroy();
-
+            this.hpbar.destroy();
             return true; //Unit is dead
         }
+
+        this.hpbar.width = (this.hp / this.maxHP) * 64;
+
 
         return false; //Unit not dead
     }
@@ -169,42 +177,9 @@ class Unit extends GameObject{
     }
 
     update(){
-        //Process movement if unit is moving
+
         if(this.attacking)
         {
-            // if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width / 2))
-            // {
-            //     this.move(this.target.sprite.x, this.target.sprite.y)
-            // } else{
-            //     this.moving = false;
-            //     if(this.cooldown > 0)
-            //     {
-            //         this.cooldown--;
-            //     }else{
-            //         if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
-            //         {
-            //             this.sprite.animations.play('atk_right', true);
-            //         }else{
-            //             this.sprite.animations.play('atk_left',true);
-
-            //         }
-
-
-            //         let targetDead = this.target.takeDamage(this.attk);
-            //         console.log(targetDead);
-            //         console.log(this);
-            //         this.cooldown = 200 / this.attkSpeed;
-
-            //         if(targetDead)
-            //         {
-            //             this.attacking = false;
-            //             this.target = null;
-            //             this.sprite.animations.stop();
-            //         }
-            //     }
-            // }
-
-
             this.attackTick();
 
         }
@@ -223,6 +198,7 @@ class Unit extends GameObject{
                 if(currentSquare.x < this.nextSquare.x)
                 {
                     this.sprite.x += this.speed;
+                    this.hpbar.x += this.speed;
                     this.sprite.animations.play('wlk_right');
 
 
@@ -231,20 +207,32 @@ class Unit extends GameObject{
                 {
 
                     this.sprite.x -= this.speed;
+                    this.hpbar.x -= this.speed;
+
                     this.sprite.animations.play('wlk_left');
 
                 }
                 if(currentSquare.y < this.nextSquare.y)
                 {
-
+                    if(currentSquare.x == this.nextSquare.x)
+                    {
+                        this.sprite.animations.play('wlk_down');
+                    }
                     this.sprite.y += this.speed;
+                    this.hpbar.y += this.speed;
+
 
 
                 }
                 if(currentSquare.y > this.nextSquare.y)
                 {
-
+                    if(currentSquare.x == this.nextSquare.x)
+                    {
+                        this.sprite.animations.play('wlk_up');
+                    }
                     this.sprite.y -= this.speed;
+                    this.hpbar.y -= this.speed;
+
 
 
                 }
