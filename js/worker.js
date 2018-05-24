@@ -3,7 +3,7 @@ import {Fort} from './fort.js'
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
-        super(faction, 70, 17, 5, 3, Perseus)
+        super(x,y, faction, 70, 17, 5, 3, Perseus)
         this.maxHP = 70;
         this.type="Worker";
         this.placing = false;
@@ -20,9 +20,9 @@ class Worker extends Unit{
         
         
         if(Math.random() >= 0.5){
-            this.addSprite(x,y, 'worker_male');
+            this.addSprite('worker_male');
         } else {
-            this.addSprite(x,y, 'worker_female')
+            this.addSprite('worker_female')
         }
 
         this.uiData = {
@@ -102,7 +102,7 @@ class Worker extends Unit{
                 }
 
 
-                let targetDead = this.target.takeDamage(this.attk);
+                let targetDead = this.target.takeDamage(this.attk, this);
                 console.log(targetDead);
                 console.log(this);
                 this.cooldown = 200 / this.attkSpeed;

@@ -2,19 +2,19 @@ import {Unit} from './unit.js';
 import {Arrow} from './arrow.js';
 class Archer extends Unit {
     constructor(faction, x, y, Perseus){
-        super(faction, 100, 15, 10, 1, Perseus);
+        super(x,y, faction, 100, 15, 10, 1, Perseus);
         this.maxHP = 100;
         this.range = 5;
         this.arrow = false;
         this.arrowSprite = null;
         if (Math.random() >= 0.5){
             this.type="Archer";
-            this.addSprite(x,y,'archer_male');
+            this.addSprite('archer_male');
 
 
         } else {
             this.type="Archer";
-            this.addSprite(x,y,'archer_female'); 
+            this.addSprite('archer_female'); 
         }
 
         this.uiData = {
@@ -48,7 +48,7 @@ class Archer extends Unit {
                 }
                 if (this.Perseus.objects.includes(this.target))
                 {
-                    new Arrow(this.sprite.x, this.sprite.y + 32, this.target, this.Perseus, 60);
+                    new Arrow(this.sprite.x, this.sprite.y + 32, this, this.target, this.Perseus, 60);
                     this.cooldown = 200 / this.attkSpeed;
                 } else {
                     this.attacking = false;

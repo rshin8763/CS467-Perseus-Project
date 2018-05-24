@@ -1,5 +1,5 @@
 class Arrow{
-    constructor(x,y, target, Perseus, animWait){
+    constructor(x,y, parent, target, Perseus, animWait){
         //Assign the correct sprite depending on which way the arrow will be flying
         if (target.sprite.x > x)
         {
@@ -9,6 +9,7 @@ class Arrow{
         }
 
         //Initialize some valies
+        this.parent = parent;
         this.target = target;
         this.Perseus = Perseus;
         this.Perseus.objects.push(this);
@@ -62,7 +63,7 @@ class Arrow{
                         //Set active to false, destroy the sprite, and cause damage to the target
                         this.active = false;
                         this.sprite.destroy();
-                        this.target.takeDamage(35);           
+                        this.target.takeDamage(35, this.parent);           
                     }
                 }
             }else {

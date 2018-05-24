@@ -5,7 +5,7 @@ class Navigator {
         this.xTiles = xTiles;
         this.yTiles = yTiles;
         this.tileSize = tileSize;
-
+        this.recalc = false;
         this.navmap = [];
         for(let x = 0; x < this.xTiles; x++){
             this.navmap[x] = new Uint8Array(this.yTiles);
@@ -25,19 +25,30 @@ class Navigator {
     getCoords(x, y)
     {
         let coords = {};
-        coords.x = (x*32);
-        coords.y = (y*32);
+        coords.x = (x*this.tileSize) + this.tileSize / 2;
+        coords.y = (y* this.tileSize) + this.tileSize / 2;
 
         return coords;
     }
 
-    //Implements an A* routing algorithm. Then returns the next node in the path
-    findNextNode(unit, target)
+    markOccupied(x,y)
     {
-        const start = this.getSquare(unit.sprite.x + this.tileSize, unit.sprite.y + this.tileSize);
+
+        this.navmap[x][y] = 1;
+    }
+
+    markNotOccupied(x,y)
+    {
+        this.navmap[x][y] = 0;
+    }
+
+    //Implements an A* routing algorithm. Then returns the next node in the path
+    findPath(unit, target)
+    {
+      let start = {x : unit.x, y : unit.y};
         let current = {
-            x : start.x,
-            y : start.y,
+            x : unit.x,
+            y : unit.y,
             h : this.getDistance(start.x, start.y, target),
             g : 0,
             parent: null
@@ -45,8 +56,9 @@ class Navigator {
 
         let open = [];
         let closed = [];
-
+  
         do{
+     
             let neighbors = this.getNeightbors(current, target);
             for(let i = 0; i < neighbors.length; i++ )
             {
@@ -75,12 +87,20 @@ class Navigator {
             closed.push(min);
             current = min;
             let coords = this.getCoords(min.x, min.y);
-            //this.game.add.sprite(coords.x, coords.y, 'navSquare');
+            let d = 1+1;
+            // let navSquare = this.game.add.sprite(coords.x, coords.y, 'navSquare');
+            // navSquare.anchor.x = 0.5;
+            // navSquare.anchor.y = 0.5;
         }while(current.x != target.x || current.y != target.y)
 
-            return closed[0];
+            return closed;
     }
 
+    findNextNode(unit, target)
+    {
+        return this.findPath(unit, target)[0];
+
+    }
     //Create nodes representing the squares around a given node
     getNeightbors(node, target){
         let neighbors = [];

@@ -2,16 +2,16 @@ import {Unit} from './unit.js';
 
 class SwordInfantry extends Unit {
     constructor(faction, x, y, Perseus){
-        super(faction, 100, 30, 15, 3, Perseus);
+        super(x,y, faction, 100, 30, 15, 3, Perseus);
         this.maxHP = 100;
         if (Math.random() >= 0.5){
             this.type="Swordsman";
-            this.addSprite(x,y,'swordsman');
+            this.addSprite('swordsman');
 
 
         } else {
             this.type="Swordswoman";
-            this.addSprite(x,y,'swordswoman'); 
+            this.addSprite('swordswoman'); 
         }
 
         this.uiData = {
@@ -46,7 +46,7 @@ class SwordInfantry extends Unit {
                 }
 
 
-                let targetDead = this.target.takeDamage(this.attk);
+                let targetDead = this.target.takeDamage(this.attk, this);
                 console.log(targetDead);
                 console.log(this);
                 this.cooldown = 200 / this.attkSpeed;
@@ -55,6 +55,7 @@ class SwordInfantry extends Unit {
                 {
                     this.attacking = false;
                     this.target = null;
+                    this.stop();
                     this.sprite.animations.stop();
                 }
             }

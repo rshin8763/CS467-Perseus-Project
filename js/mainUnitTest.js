@@ -76,13 +76,12 @@ function preload() {
 }
 
 function create() {
-
-
+    
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
     Perseus.navigator = new Navigator(Perseus.game, 40, 40, 64);
-
+    console.log(Perseus.navigator.getCoords(4,4));
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
     Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
 
@@ -110,14 +109,15 @@ function create() {
     //Create an objects array on the game object and add a soldier to it.
     Perseus.objects = [];
 
-    Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 200, 400, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 4, 4, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 8, 6, Perseus));
+    console.log(Perseus.objects);
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
     console.log(Perseus.navigator.navmap);
 
-    Perseus.navigator.markOccupied(256,256);
-    Perseus.navigator.markOccupied(128, 384);
+    // Perseus.navigator.markOccupied(4,4);
+    // Perseus.navigator.markOccupied(8, 6);
     // Perseus.navigator.markOccupied(300, 300);
 
 
@@ -196,7 +196,6 @@ function create() {
 
 function update(){
 
-    
     Perseus.controller.update();
     //Call the update function on each game object
     Perseus.objects.forEach(function(obj){

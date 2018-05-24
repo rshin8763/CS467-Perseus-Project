@@ -2,16 +2,16 @@ import {Unit} from './unit.js';
 
 class Pikeman extends Unit {
     constructor(faction, x, y, Perseus){
-        super(faction, 100, 40, 15, 3, Perseus);
+        super(x,y,faction, 100, 40, 15, 3, Perseus);
         this.maxHP = 100;
         if (Math.random() >= 0.5){
             this.type="Pikeman";
-            this.addSprite(x,y,'pikeman_male');
+            this.addSprite('pikeman_male');
 
 
         } else {
             this.type="Pikeman";
-            this.addSprite(x,y,'pikeman_female'); 
+            this.addSprite('pikeman_female'); 
         }
 
         this.uiData = {
@@ -47,7 +47,7 @@ class Pikeman extends Unit {
                 }
 
 
-                let targetDead = this.target.takeDamage(this.attk);
+                let targetDead = this.target.takeDamage(this.attk, this);
                 console.log(targetDead);
                 console.log(this);
                 this.cooldown = 200 / this.attkSpeed;
