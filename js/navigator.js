@@ -6,6 +6,7 @@ class Navigator {
         this.yTiles = yTiles;
         this.tileSize = tileSize;
         this.recalc = false;
+        this.units = [];
         this.navmap = [];
         for(let x = 0; x < this.xTiles; x++){
             this.navmap[x] = new Uint8Array(this.yTiles);
@@ -162,7 +163,6 @@ class Navigator {
     //Create a node for the A* algorithm
     createNode(x,y, current, target)
     {
-
         let node = {
             x : x,
             y : y,
@@ -173,6 +173,178 @@ class Navigator {
         }
 
         return node;
+    }
+
+    //Check for collisions with this unit
+    checkCollision(unit){
+    
+    //Check each other unit of which the navigator is aware 
+    this.units.forEach((u) =>{
+        if(!(Object.is(unit, u)))
+        {
+            let ax, ay, bx, by;
+
+            //If the unit is moving we will check it's nextSquare (ie, where it's going). 
+            //If it isn't moving, we'll check the square it's currently occupying
+            if(unit.moving == true)
+            {
+                ax = unit.nextSquare.x;
+                ay = unit.nextSquare.y;
+            } else {
+                ax = unit.x;
+                ay = unit.y;
+            }
+
+            //Same for each unit it's checking against
+            if(u.moving == true)
+            {
+                bx = u.nextSquare.x;
+                by = u.nextSquare.y;
+            } else {
+                bx = u.x;
+                by = u.y;
+            }
+
+            //If there is a collision, resolve it.
+            if(ax == bx && ay == by)
+            {
+                this.resolveCollision(unit, u);
+            }
+        }
+    });
+    }
+
+    //Find all the empty squares around a square
+    findAllEmpty(x,y)
+    {
+        let empties = [];
+        //North
+        if(this.navmap[x][y-1] != 1)
+            empties.push({x: x, y: y-1});
+        //East
+        if(this.navmap[x+1][y] != 1)
+            empties.push({x: x + 1, y: y});
+
+        //South
+        if(this.navmap[x][y+1] != 1)
+            empties.push({x: x, y: y+1});
+
+        //West
+        if(this.navmap[x-1][y] != 1)
+            empties.push({x: x, y: y-1});
+    
+        //Northwest
+        if(this.navmap[x-1][y-1] != 1)
+            empties.push({x: x-1, y: y-1});
+    
+        //Northeast
+        if(this.navmap[x+1][y-1] != 1)
+            empties.push({x: x+1, y: y-1});
+      
+        //Southwest
+        if(this.navmap[x-1][y+1] != 1)
+            empties.push({x: x-1, y: y+1});
+  
+        //Southeast
+        if(this.navmap[x+1][y+1] != 1)
+            empties.push({x: x+1, y: y+1});
+
+        return empties;
+    }
+
+    //Return one random empty square
+    findEmpty(x, y)
+    {
+        let origX = x;
+        let origY = y;
+        do{
+            x = origX;
+            y = origY;
+        let dir = Math.floor(Math.random() * 8);
+        switch(dir){
+            case 0:
+                x++;
+                break;
+            case 1:
+                x--;
+                break;
+            case 2:
+                y++;
+                break;
+            case 3:
+                y--;
+                break;
+            case 4:
+                x++;
+                y++;
+                break;
+            case 5:
+                x++;
+                y--;
+                break;
+            case 6:
+                x--;
+                y++;
+                break;
+            case 7:
+                x--;
+                y--;
+                break;       
+        }
+
+        }while(this.navmap[x][y] == 1)
+
+        return {x : x, y: y};
+    }
+
+    //Figure out how to move two units who are in conflict
+    resolveCollision(unit1, unit2)
+    {
+        console.log("Collision between " + unit1.type + " and " + unit2.type);
+
+        //Both units are stopped on top of eachother so move one of them
+        if(unit1.moving == false && unit2.moving == false)
+        {
+            let newSquare = this.findEmpty(unit1.x, unit1.y);
+            let newCoords = this.getCoords(newSquare.x, newSquare.y);
+            unit1.move(newCoords.x, newCoords.y);
+            return;
+        }
+
+        //Unit1 is moving and unit 2 isn't, so if unit1 is finishing in unit2's square, stop it, otherwise, let it keep going.
+        if(unit1.moving == true && unit2.moving == false)
+        {
+            if(unit1.nextSquare.x == unit1.dest.x && unit1.nextSquare.y == unit1.dest.y)
+            {
+                unit1.stop();
+                return
+            }
+            return;
+        }
+
+        //Unit2 is moving and unit1 isn't, so if unit2 is finishing in unit1's square, stop it, otherwise, let it keep going.
+        if(unit2.moving == true && unit1.moving == false)
+        {
+            if(unit2.nextSquare.x == unit2.dest.x && unit2.nextSquare.y == unit2.dest.y)
+            {
+                unit2.stop();
+                return;
+            }
+            return;
+        }
+
+
+        //Both units are moving. If they are headed for the same square reroute one of them to an adjacent square
+        if(unit2.moving == true && unit1.moving == true)
+        {
+            if(unit1.dest.x == unit2.dest.x && unit1.dest.y == unit2.dest.y)
+            {
+                let newDest = this.findEmpty(unit1.dest.x, unit1.dest.y);
+                let newCoords = this.getCoords(newDest.x, newDest.y);
+                unit1.move(newCoords.x, newCoords.y);
+            }
+        }
+
     }
 
 }

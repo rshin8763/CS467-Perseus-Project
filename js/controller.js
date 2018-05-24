@@ -29,9 +29,27 @@ class Controller{
             this.selectedObjects.push(obj);
             obj.drawSelectionCircle();
         } else if (this.state == 'attack'){
-            this.selectedObjects.forEach( (elem) => {
-                elem.attack(obj);
-            });
+            /***********MICHAEL ADDED THIS************** */
+                //Get the empty squares around the object to be attacked
+                let emptySquares = this.Perseus.navigator.findAllEmpty(obj.x, obj.y);
+                let limit;
+                //If there are more empty squares then attackers, the number of attackers is limiting. Otherwise, the number of empty squares is. 
+                if(this.selectedObjects.length < emptySquares.length)
+                {
+                    limit = this.selectedObjects.length;
+                }else{
+                    limit = emptySquares.length;
+                }
+
+                //Assign one attacker to each empty square.
+                for(let i = 0; i < limit; i++)
+                {
+                    this.selectedObjects[i].attack(obj, emptySquares[i]);
+                }
+            /********************************************* */
+            // this.selectedObjects.forEach( (elem) => {
+            //     elem.attack(obj);
+            // });
             this.state = 'default';
         } else if (this.state == 'gather'){
             this.selectedObjects.forEach( (elem) => {

@@ -25,6 +25,8 @@ class Unit extends GameObject{
         this.currentPath = null;
         this.pathStep = 0;
 
+        Perseus.navigator.units.push(this);
+
     }
 
     addSprite(unitType){
@@ -60,7 +62,7 @@ class Unit extends GameObject{
     }
 
     move(x, y){
-        this.stop();
+        //this.stop();
         /*
            this.destx = x - (this.sprite.width/2);
            this.desty = y - (this.sprite.width/2);
@@ -75,9 +77,10 @@ class Unit extends GameObject{
     }
 
 
-    attack(target)
+    attack(target, square)
     {
         this.target = target;
+        this.attackSquare = square;
         this.attacking = true;
     }
 
@@ -85,7 +88,14 @@ class Unit extends GameObject{
     {
         if(this.moving != true && this.attacking != true)
         {
-            this.attack(attacker);
+            let atkSquare
+            if(attacker.type == "archer" || "wizard")
+            {
+                atkSquare = this.Perseus.navigator.findEmpty(attacker.x, attacker.y);
+            } else {
+                atkSquare = {x: this.x, y: this.y};
+            }
+            this.attack(attacker, atkSquare);
         }
         this.hp -= (damage - this.defense);
         console.log(this.hp);
@@ -143,12 +153,14 @@ class Unit extends GameObject{
         this.pathStep = 0;
         this.dest = null;
         this.nextSquare = null;
+   
+        this.sprite.animations.stop();
         
     }
     
 
     update(){
-
+        this.Perseus.navigator.checkCollision(this);
         if(this.attacking)
         {
             this.attackTick();
@@ -192,9 +204,10 @@ class Unit extends GameObject{
                     this.pathStep = 0;
                 }
                 this.nextSquare = this.currentPath[this.pathStep];
+                this.Perseus.navigator.checkCollision(this);
                 console.log(this.currentPath);
                 console.log("Path Step:" + this.pathStep);
-                console.log(this.nextSquare.x, this.nextSquare.y);
+    
 
 
             }else{

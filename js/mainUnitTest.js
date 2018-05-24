@@ -109,8 +109,12 @@ function create() {
     //Create an objects array on the game object and add a soldier to it.
     Perseus.objects = [];
 
+    Perseus.objects.push(new Archer('human', 5, 7, Perseus));
     Perseus.objects.push(new SwordInfantry('human', 4, 4, Perseus));
     Perseus.objects.push(new SwordInfantry('human', 8, 6, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 4, 4, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 8, 6, Perseus));
+
     console.log(Perseus.objects);
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 

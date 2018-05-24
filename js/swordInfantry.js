@@ -27,9 +27,11 @@ class SwordInfantry extends Unit {
 
     attackTick()
     {
-        if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
+        // if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
+        if(this.x != this.attackSquare.x || this.y != this.attackSquare.y)
         {
-            this.move(this.target.sprite.x, this.target.sprite.y)
+            let attackCoords = this.Perseus.navigator.getCoords(this.attackSquare.x, this.attackSquare.y);
+            this.move(attackCoords.x, attackCoords.y);
         } else{
             console.log(this.target);
             this.moving = false;
