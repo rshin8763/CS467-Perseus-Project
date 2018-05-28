@@ -88,8 +88,9 @@ class Unit extends GameObject{
     {
         if(this.moving != true && this.attacking != true)
         {
-            let atkSquare
-            if(attacker.type == "archer" || "wizard")
+            let atkSquare;
+            
+            if(attacker.type === "archer" || attacker.type === "wizard")
             {
                 atkSquare = this.Perseus.navigator.findEmpty(attacker.x, attacker.y);
             } else {

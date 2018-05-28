@@ -5,7 +5,7 @@ import {Controller} from './controller.js';
 import {Fort} from './fort.js';
 import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
-
+import {Worker} from './worker.js';
 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
@@ -110,14 +110,16 @@ function create() {
     //Create an objects array on the game object and add a soldier to it.
     Perseus.objects = [];
 
-    Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 200, 400, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 2, 2, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 4, 4, Perseus));
+    Perseus.objects.push(new Worker('human', 4,5,Perseus));
+
+
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
     console.log(Perseus.navigator.navmap);
 
-    Perseus.navigator.markOccupied(256,256);
-    Perseus.navigator.markOccupied(128, 384);
+
     // Perseus.navigator.markOccupied(300, 300);
 
 

@@ -5,6 +5,7 @@ import {Controller} from './controller.js';
 import {Fort} from './fort.js';
 import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
+import {Worker} from './worker.js';
 
 
 var Perseus = Perseus || {};
@@ -109,11 +110,15 @@ function create() {
     //Create an objects array on the game object and add a soldier to it.
     Perseus.objects = [];
 
-    Perseus.objects.push(new Archer('human', 5, 7, Perseus));
+    
     Perseus.objects.push(new SwordInfantry('human', 4, 4, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 8, 6, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 4, 4, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 8, 6, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 4, 5, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 4, 6, Perseus));
+
+    
+    Perseus.objects.push(new SwordInfantry('orc', 5,2,Perseus));
+    Perseus.objects.push(new SwordInfantry('orc', 5,3,Perseus));
+    Perseus.objects.push(new SwordInfantry('orc', 5,4,Perseus));
 
     console.log(Perseus.objects);
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));

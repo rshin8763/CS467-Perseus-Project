@@ -44,7 +44,13 @@ class Controller{
                 //Assign one attacker to each empty square.
                 for(let i = 0; i < limit; i++)
                 {
-                    this.selectedObjects[i].attack(obj, emptySquares[i]);
+                    //Don't move the unit if it's already within attack range
+                    if(Math.abs(this.selectedObjects[i].x - obj.x) <= 1 && Math.abs(this.selectedObjects[i].y - obj.y) <= 1 )
+                    {
+                        this.selectedObjects[i].attack(obj, {x: this.selectedObjects[i].x, y: this.selectedObjects[i].y});
+                    }else{
+                        this.selectedObjects[i].attack(obj, emptySquares[i]);
+                    }
                 }
             /********************************************* */
             // this.selectedObjects.forEach( (elem) => {

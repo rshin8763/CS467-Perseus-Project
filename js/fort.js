@@ -6,7 +6,7 @@ class Fort extends Building{
     constructor(faction, x,y,Perseus){
         super(faction, 2500, x, y, Perseus);
 
-        this.addSprite(x,y, 'fort');
+        this.addSprite('fort');
         this.type = "Fort";
         this.WORKER = 1;
         this.buildSpeed = 1;

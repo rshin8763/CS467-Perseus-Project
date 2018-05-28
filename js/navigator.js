@@ -36,6 +36,7 @@ class Navigator {
     {
 
         this.navmap[x][y] = 1;
+
     }
 
     markNotOccupied(x,y)
@@ -93,8 +94,21 @@ class Navigator {
             // navSquare.anchor.x = 0.5;
             // navSquare.anchor.y = 0.5;
         }while(current.x != target.x || current.y != target.y)
+            let path = [];
+            while(current.x != start.x || current.y != start.y)
+            {
+                path.unshift(current);
+                current = current.parent;
+            }
 
-            return closed;
+            path.forEach((node) =>
+        {
+            // let coords = this.getCoords(node.x, node.y);
+            // let navSquare = this.game.add.sprite(coords.x, coords.y, 'navSquare');
+            // navSquare.anchor.x = 0.5;
+            // navSquare.anchor.y = 0.5;
+        })
+            return path;
     }
 
     findNextNode(unit, target)
@@ -156,7 +170,9 @@ class Navigator {
         let hDiffernce = Math.abs(target.x - x);
         let yDifference = Math.abs(target.y - y);
 
-        return hDiffernce + yDifference;
+        let min = Math.min(hDiffernce, yDifference);
+
+        return (hDiffernce + yDifference) + (-1 * min);
     }
 
 
@@ -214,41 +230,78 @@ class Navigator {
     });
     }
 
+    isOccupied(x, y)
+    {
+        for(let i = 0; i < this.units.length; i++)
+        {
+            if(x == this.units[i].x && y == this.units[i].y)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
     //Find all the empty squares around a square
     findAllEmpty(x,y)
     {
         let empties = [];
         //North
         if(this.navmap[x][y-1] != 1)
-            empties.push({x: x, y: y-1});
+        {
+            if(!this.isOccupied(x, y-1))
+                empties.push({x: x, y: y-1});
+        }
+
         //East
         if(this.navmap[x+1][y] != 1)
-            empties.push({x: x + 1, y: y});
+        {
+            if(!this.isOccupied(x+1, y))
+                empties.push({x: x+1, y: y});
+        }
 
         //South
         if(this.navmap[x][y+1] != 1)
-            empties.push({x: x, y: y+1});
+        {
+            if(!this.isOccupied(x, y+1))
+                empties.push({x: x, y: y+1});
+        }
 
         //West
         if(this.navmap[x-1][y] != 1)
-            empties.push({x: x, y: y-1});
-    
+        {
+            if(!this.isOccupied(x, y-1))
+                empties.push({x: x, y: y-1});
+        }
+
         //Northwest
         if(this.navmap[x-1][y-1] != 1)
-            empties.push({x: x-1, y: y-1});
-    
+        {
+            if(!this.isOccupied(x-1, y-1))
+                empties.push({x: x-1, y: y-1});
+        }
+
         //Northeast
         if(this.navmap[x+1][y-1] != 1)
-            empties.push({x: x+1, y: y-1});
-      
+        {
+            if(!this.isOccupied(x+1, y-1))
+                empties.push({x: x+1, y: y-1});
+        }
+
         //Southwest
         if(this.navmap[x-1][y+1] != 1)
-            empties.push({x: x-1, y: y+1});
-  
+        {
+            if(!this.isOccupied(x-1, y+1))
+                empties.push({x: x-1, y: y+1});
+        }
+
         //Southeast
         if(this.navmap[x+1][y+1] != 1)
-            empties.push({x: x+1, y: y+1});
-
+        {
+            if(!this.isOccupied(x+1, y+1))
+                empties.push({x: x+1, y: y+1});
+        }
         return empties;
     }
 
