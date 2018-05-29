@@ -17,6 +17,7 @@ class Unit extends GameObject{
         this.attacking = false;
         this.cooldown = 0;
         this.range=1;
+        this.priority=0; // commandList priority. Mages will have spells visible when group selected with others.
     }
 
     addSprite(x, y, unitType){
@@ -223,6 +224,7 @@ class Unit extends GameObject{
                 if(currentSquare.x < this.nextSquare.x)
                 {
                     this.sprite.x += this.speed;
+                    this.circle.x += this.speed;
                     this.sprite.animations.play('wlk_right');
 
 
@@ -231,6 +233,7 @@ class Unit extends GameObject{
                 {
 
                     this.sprite.x -= this.speed;
+                    this.circle.x -= this.speed;
                     this.sprite.animations.play('wlk_left');
 
                 }
@@ -238,6 +241,7 @@ class Unit extends GameObject{
                 {
 
                     this.sprite.y += this.speed;
+                    this.circle.y += this.speed;
 
 
                 }
@@ -245,16 +249,12 @@ class Unit extends GameObject{
                 {
 
                     this.sprite.y -= this.speed;
-
+                    this.circle.y -= this.speed;
 
                 }
 
             }            
         }
-        // if(this.circle){
-        //     this.circle.x = this.sprite.x;
-        //     this.circle.y = this.sprite.y;
-        // }
     }
 }
 

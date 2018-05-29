@@ -6,8 +6,8 @@ class GameObject {
         this.circle = null;
         this.uiData = {
             canBuild: false,
-            commandList:[],
-            buildList:[]
+            commandList:{},
+            buildList:{}
         };
     }
     drawSelectionCircle(){

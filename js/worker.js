@@ -16,6 +16,7 @@ class Worker extends Unit{
         this.gatherState = 0;
         this.gatherProgress = 0;
         this.lastResource = null;
+        this.priority = 1;
         
         
         
@@ -27,8 +28,8 @@ class Worker extends Unit{
 
         this.uiData = {
             canBuild: true,
-            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
-            buildList:[{"F" : "Fort"}, {"B" : "Barracks"}]  
+            commandList: {M: "Move", A: "Attack", G:"Gather", B:"Build"},
+            buildList: {F: "Fort", B: "Barracks"}  
         };
 
 
@@ -58,7 +59,7 @@ class Worker extends Unit{
 
     build(type)
     {
-        alert("Build!")
+        // alert("Build!")
         if(type = "Fort")
         {
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort')
@@ -183,7 +184,7 @@ class Worker extends Unit{
                 {
                     if(this.selectedBuilding == "Fort")
                     {
-                        this.game.objects.push(new Fort(this.selectedSprite.x, this.selectedSprite.y, this.game));
+                        this.Perseus.objects.push(new Fort('human', this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
                     }
                     this.building = false;
                     this.selectedSprite.destroy();
