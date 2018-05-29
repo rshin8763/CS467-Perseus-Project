@@ -7,7 +7,8 @@ class Tree extends GameObject{
         this.exhausted = false;
         this.addSprite(x,y);
         this.type = 'wood';
-
+        this.x = x;
+        this.y = y;
     }
 
     addSprite(x, y){    
@@ -25,7 +26,8 @@ class Tree extends GameObject{
     }
     takeDamage(rate){
         resourceAmount -= rate;
-        if (resouceAmount <= 0) {
+        console.log("The current resource amount is: " + this.resourceAmount)
+        if (resourceAmount <= 0) {
             this.exhausted = true;
         }
     }
