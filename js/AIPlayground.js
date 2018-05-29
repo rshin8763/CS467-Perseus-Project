@@ -7,6 +7,7 @@ import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
 import {AI} from './ai.js';
 import {Worker} from './worker.js';
+import {Player} from './player.js';
 
 
 var Perseus = Perseus || {};
@@ -112,10 +113,6 @@ var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 
         //Create an objects array on the game object and add a soldier to it.
         Perseus.objects = [];
-
-        Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
-        Perseus.objects.push(new SwordInfantry('human', 200, 400, Perseus));
-        Perseus.objects.push(new Archer('human', 300, 300, Perseus));
         //Perseus.objects.push(new Worker('human', 320, 300, Perseus));
 
         //Create resources
@@ -128,6 +125,11 @@ var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
         Perseus.AI.Main();
 
         // AI -----------------------------------------------------------------
+
+        // PLAYER -------------------------------------------------------------
+        Perseus.Player = new Player(Perseus);
+        Perseus.Player.Main();
+        // PLAYER -------------------------------------------------------------
 
         // Create GUI bar
         let bar = this.add.sprite(0,0,'ui');

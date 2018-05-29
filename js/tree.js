@@ -25,9 +25,9 @@ class Tree extends GameObject{
         }, this);
     }
     takeDamage(rate){
-        resourceAmount -= rate;
+        this.resourceAmount -= rate;
         console.log("The current resource amount is: " + this.resourceAmount)
-        if (resourceAmount <= 0) {
+        if (this.resourceAmount <= 0) {
             this.exhausted = true;
         }
     }

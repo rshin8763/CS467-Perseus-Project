@@ -12,7 +12,7 @@ import {Worker} from './worker.js';
 var workerCount, fortCount;
 /*********/
 
-class player
+class Player
 {
 	/*-----------------------------------------------------------------------*/
 	// GAME CONSTRUCTOR
@@ -27,8 +27,8 @@ class player
 	AddStartingSprites()
 	{
 		// ADD ONE FORT AND ONE WORKER
-		this.Perseus.objects.push(new Fort('human', 600, 300, this.Perseus));
-		this.Perseus.objects.push(new Worker('human', 350, 350, this.Perseus));
+		this.Perseus.objects.push(new Fort('human', 340, 300, this.Perseus));
+		this.Perseus.objects.push(new Worker('human', 300, 350, this.Perseus));
 		fortCount = 1;
 		workerCount = 1;
 	}
@@ -40,3 +40,5 @@ class player
 		this.AddStartingSprites();
 	}
 }
+
+export {Player};
