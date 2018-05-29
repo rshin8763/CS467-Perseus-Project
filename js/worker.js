@@ -1,5 +1,6 @@
-import {Unit} from './unit.js'
-import {Fort} from './fort.js'
+import {Unit} from './unit.js';
+import {Fort} from './fort.js';
+import {AI} from './ai.js';
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
@@ -153,13 +154,36 @@ class Worker extends Unit{
             }
         // returning to fort
         } if (this.gatherState == 3){
-            if (this.moving == false){
-                if (this.lastResource.type == 'wood'){
-                    this.Perseus.updateWood(10);
-                } else {
+            if (this.moving == false)
+            {
+                if (this.lastResource.type == 'wood')
+                {
+                    // UPDATES WOOD BASED ON AI OR USER
+                   if(this.faction == 'orc')
+                   {
+                        this.Perseus.AI.UpdateAIWood(10);
+                        this.lastResource.takeDamage(10);
+                   }
+                   else
+                   {
+                        this.Perseus.updateWood(10);
+                   }
+                    
+                } 
+                else 
+                {
                     this.Perseus.resources.gold += 10;
                 }
-                this.gather(this.lastResource);
+                // CHECKS TO SEE IF RESOURCE IS EXHAUSTED
+                if (this.lastResource.exhausted == true)
+                {
+                    this.gatherState = 0;
+                    this.moveTo(this.findNearestFort());
+                }
+                else
+                {
+                    this.gather(this.lastResource);
+                }
             }
             //loop
         }
