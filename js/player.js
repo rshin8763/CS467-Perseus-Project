@@ -22,7 +22,6 @@ class Player
 	{
 		// GENERAL
 		this.Perseus = Perseus;
-		this.health = 0;
 		
 		// RESOURCES
 		this.playerGold = 0;
@@ -33,7 +32,6 @@ class Player
 		this.playerPikemen = 0;
 		this.playerSwordInfantry = 0;
 		this.playerArchers = 0;
-		this.playerHealth = 0;
 
 		// BUILDINGS
 		this.playerForts = 0;
@@ -47,13 +45,21 @@ class Player
 	{
 		if (type == 'wood' || type == 'Wood')
 		{
-			this.wood = this.wood + x;
-			woodText.text = 'Wood: ' + this.wood;
+			this.playerWood = this.playerWood + x;
+			woodText.text = 'Wood: ' + this.playerWood;
+			if (this.playerWood >= 40)
+			{
+				// ASK USER IF WANTS TO BUILD FORT
+			}
 		}
 		else if (type == 'gold' || type == 'Gold')
 		{
 			this.playerGold = this.playerGold + x;
 			goldText.text = 'Gold: ' + this.playerGold;
+			if (this.playerGold >= 50)
+			{
+				// ASK USER IF WANTS TO BUILD BARRACKS
+			}
 		}
 		else
 		{
@@ -133,7 +139,7 @@ class Player
 		// CHECKS TO SEE IF ANY BUILDINGS LEFT; IF NOT, GAME ENDS
 		if(this.playerAllBuildings <= 0)
 		{
-			// GO TO GAME OVER IN GAMESTATE CLASS
+			this.Perseus.gameState.GameOver();
 		}
 	}
 

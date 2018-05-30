@@ -226,6 +226,7 @@ function quitGame()
  *****/
 function newGame()
 {
+    Perseus.unpause();
 }
 
 function muteMusic()

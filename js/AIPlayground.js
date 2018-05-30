@@ -15,7 +15,6 @@ Perseus.graphics = {};
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', 
     { preload:preload, update:update, create:create });
 
-
 var buttonClick = false;
 
 // GENERAL DECLARATIONS

@@ -19,23 +19,48 @@ class AI
 	{
 		// GENERAL
 		this.Perseus = Perseus;
-		this.objects = this.Perseus.objects;
-		this.resources = this.Perseus.resources;
-		this.health = 100;
 		
 		// RESOURCES
-		this.gold = 0;
-		this.wood = 0;
+		this.AIGold = 0;
+		this.AIWood = 0;
 
 		// UNITS
-		this.workers = 0;
-		this.soldiers = 0;
+		this.AIWorkers = 0;
+		this.AIPikemen = 0;
+		this.AISwordInfantry = 0;
+		this.AIArchers = 0;
 
 		// BUILDINGS
-		this.buildingsBurned = false;
-		this.forts = 0;
-		this.barracks = 0;
-		this.allBuildings = 0;
+		this.AIForts = 0;
+		this.AIBarracks = 0;
+		this.AIAllBuildings = 0;
+	}
+
+	/*-----------------------------------------------------------------------*/
+ 	// UPDATES AI WOOD COUNT AND PRINTS TO CONSOLE
+	UpdateAIResources(x, type)
+	{
+		if (type == 'wood' || type == 'Wood')
+		{
+			this.AIWood = this.AIWood + x;
+			if(this.AIWood >= 40)
+			{
+				this.BuildBuildings('Fort');
+			}
+		}
+		else if (type == 'gold' || type == 'Gold')
+		{
+			this.AIGold = this.AIGold + x;
+			if (this.AIGold >= 50)
+			{
+				this.BuildBuildings('Barracks');
+			}
+		}
+		else
+		{
+			console.log("You entered an invalid type: " + type);
+			return false;
+		}
 	}
  	
  	/*-----------------------------------------------------------------------*/
@@ -49,34 +74,10 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
- 	// UPDATES AI WOOD COUNT AND PRINTS TO CONSOLE
-	UpdateAIWood(x)
-	{
-		this.wood = this.wood + x;
-		console.log("AI now has " + this.wood + " amount of wood.");
-	}
-
-	/*-----------------------------------------------------------------------*/
- 	// UPDATES AI GOLD COUNT AND PRINTS TO CONSOLE
-	UpdateAIGold(x)
-	{
-		this.gold = this.gold + x;
-		console.log("AI now has " + this.gold + " amount of gold.");
-	}
-
-	/*-----------------------------------------------------------------------*/
- 	// UPDATES AI HEALTH COUNT AND PRINTS TO USER
-	UpdateAIHealth(x)
-	{
-		this.health = this.health + x;
-		healthText.text = 'Enemy Health: ' + this.health;
-	}
-
-	/*-----------------------------------------------------------------------*/
 	// SENDS ALL WORKERS TO GATHER RESOURCES
 	GatherResources()
 	{
-		if(this.wood < 30 || this.gold < 30)
+		if(this.AIWood < 30 || this.AIWood < 30)
 		{
 			// VARIABLE DECLARATIONS
 			var workerCount = this.CountObjects(this.Perseus.objects, 'Worker');
@@ -130,15 +131,21 @@ class AI
 		}
 	}
 
+	/*-----------------------------------------------------------------------*/
+	// Defense STATE: DEFEND THE BORDERS
 	BuildBuildings(type)
 	{
-		if (type == 'Fort')
+		if (type == 'Fort' || type == 'fort')
 		{
-
+			this.UpdateAIResources(-30, 'wood');
+		}
+		else if (type == 'Barracks' || type == 'barracks')
+		{
+			this.UpdateAIResources(-50, 'gold');
 		}
 		else
 		{
-
+			console.log("You entered an invalid type: " + type);
 		}
 	}
 
