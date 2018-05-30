@@ -1,7 +1,7 @@
 import {Player} from './player.js';
 import {AI} from './ai.js';
 
-class GameOver
+class GameState
 {
 	constructor(Perseus)
 	{
@@ -11,4 +11,4 @@ class GameOver
 	
 }
 
-{export GameOver}
+{export GameState}
