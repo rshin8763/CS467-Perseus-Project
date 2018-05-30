@@ -31,7 +31,7 @@ class Player
 		// UNITS
 		this.playerWorkers = 0;
 		this.playerPikemen = 0;
-		this.playerSwordsInfantry = 0;
+		this.playerSwordInfantry = 0;
 		this.playerArchers = 0;
 		this.playerHealth = 0;
 
@@ -74,8 +74,8 @@ class Player
 		}
 		else if (type == 'swordsman' || type == 'Swordsman')
 		{
-			this.playerSwordsInfantry = this.playerSwordsInfantry + x;
-			console.log("Player has " + this.playerSwordsInfantry + " swordsmen");
+			this.playerSwordInfantry = this.playerSwordInfantry + x;
+			console.log("Player has " + this.playerSwordInfantry + " swordsmen");
 		}
 		else if (type == 'archer' || type == 'Archer')
 		{
@@ -120,6 +120,7 @@ class Player
 		{
 			this.playerBarracks = this.playerBarracks + x;
 			barracksText.text = 'Barracks: ' + this.playerBarracks;
+			// IF BARRACKS ADDED, DO ARCHERS, SWORDSMEN, ETC AUTOMATICALLY SPAWN?????????
 		}
 		else
 		{
