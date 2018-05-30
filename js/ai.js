@@ -7,51 +7,82 @@ import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
 import {Worker} from './worker.js';
 
-var workerCount, fortCount;
-var wood = 0, stone = 0, gold = 0;
-var objects, resources;
+var objects, resources, enemyHealthText;
+var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 var i = 0;
 
 class AI
 {
 	/*-----------------------------------------------------------------------*/
-	// GAME CONSTRUCTOR
+	// GAME CONSTRUCTOR 
 	constructor(Perseus)
 	{
+		// GENERAL
 		this.Perseus = Perseus;
+		this.objects = this.Perseus.objects;
+		this.resources = this.Perseus.resources;
+		this.health = 100;
+		
+		// RESOURCES
+		this.gold = 0;
+		this.wood = 0;
+
+		// UNITS
+		this.workers = 0;
+		this.soldiers = 0;
+
+		// BUILDINGS
 		this.buildingsBurned = false;
+		this.forts = 0;
+		this.barracks = 0;
+		this.allBuildings = 0;
 	}
  	
  	/*-----------------------------------------------------------------------*/
  	// ADDS BEGINNING PIECES FOR AI - ONE WORKER AND ONE BUILDING
  	AddStartingSprites()
 	{
-		// ADD ONE FORT AND ONE WORKER
 		this.Perseus.objects.push(new Fort('orc', 600, 300, this.Perseus));
 		this.Perseus.objects.push(new Worker('orc', 350, 350, this.Perseus));
-		fortCount = 1;
-		workerCount = 1;
+		this.forts = 1;
+		this.workers = 1;
 	}
 
+	/*-----------------------------------------------------------------------*/
+ 	// UPDATES AI WOOD COUNT AND PRINTS TO CONSOLE
 	UpdateAIWood(x)
 	{
-		wood = wood + x;
-		console.log("AI now has " + wood + " amount of wood");
+		this.wood = this.wood + x;
+		console.log("AI now has " + this.wood + " amount of wood.");
+	}
+
+	/*-----------------------------------------------------------------------*/
+ 	// UPDATES AI GOLD COUNT AND PRINTS TO CONSOLE
+	UpdateAIGold(x)
+	{
+		this.gold = this.gold + x;
+		console.log("AI now has " + this.gold + " amount of gold.");
+	}
+
+	/*-----------------------------------------------------------------------*/
+ 	// UPDATES AI HEALTH COUNT AND PRINTS TO USER
+	UpdateAIHealth(x)
+	{
+		this.health = this.health + x;
+		healthText.text = 'Enemy Health: ' + this.health;
 	}
 
 	/*-----------------------------------------------------------------------*/
 	// SENDS ALL WORKERS TO GATHER RESOURCES
 	GatherResources()
 	{
-		if(wood < 30 || stone < 30 || gold < 30)
+		if(this.wood < 30 || this.gold < 30)
 		{
 			// VARIABLE DECLARATIONS
 			var workerCount = this.CountObjects(this.Perseus.objects, 'Worker');
 			var woodCount = this.CountObjects(this.Perseus.resources, 'wood');
-			/* var goldCount = this.CountObjects(this.Perseus.resources, 'gold');
-			var stoneCount = this.CountObjects(this.Perseus.resources, 'stone'); */
-			objects = this.Perseus.objects;
-			resources = this.Perseus.resources;
+			var goldCount = this.CountObjects(this.Perseus.resources, 'gold');
+			var stoneCount = this.CountObjects(this.Perseus.resources, 'stone');
 
 			// ERROR HANDLING: NO WORKERS
 			if(workerCount < 1)
@@ -61,31 +92,27 @@ class AI
 
 			// ERROR HANDLING: NO RESOURCES
 			if (woodCount < 1)
-			{/*
+			{
 				if (goldCount < 1)
 				{
-					if (stoneCount < 1)
-					{*/
-						return false;
-						/*
-					}
-				}*/
+					return false;
+				}
 			}
 
 			// SEND WORKERS TO WORK TOGETHER TO GATHER SINGLE RESOURCE
 			i = 0;
-			for (i in objects)
+			for (i in this.objects)
 			{
-				if(objects[i].type == 'Worker')
+				if(this.objects[i].type == 'Worker')
 				{
-					if(objects[i].faction == 'orc')
+					if(this.objects[i].faction == 'orc')
 					{
-						for(var b in resources)
+						for(var b in this.resources)
 						{
 							// GATHER RESOURCES BASED ON LOCATION
-							if(resources[b].x >= 600 && resources[b].exhausted == false)
+							if(this.resources[b].x >= 600 && this.resources[b].exhausted == false)
 							{
-								objects[i].gather(resources[b]);
+								this.objects[i].gather(this.resources[b]);
 							}
 						}
 					}
@@ -93,16 +120,13 @@ class AI
 			}
 		}
 		// IF RESOURCE IS SUFFICIENT TO BUILD SOMETHING, GO FOR IT
-		if (wood >= 30)
+		if (this.wood >= 30)
 		{
-			BuildBuildings('Fort');
+			this.BuildBuildings('Fort');
 		}
-		if (stone >= 30)
+		if (this.gold >= 30)
 		{
-			if (gold >= 30)
-			{
-				this.BuildBuildings('Barracks');
-			}
+			this.BuildBuildings('Barracks');
 		}
 	}
 
@@ -199,6 +223,12 @@ class AI
 
 	Main()
 	{
+		// ADD HEALTH DISPLAY COUNT FOR USER
+		enemyHealthText = this.Perseus.game.add.text(0, 0, 'Enemy Health: ' + this.health, style);
+		enemyHealthText.fixedToCamera = true;
+		enemyHealthText.cameraOffset.setTo(600, 0);
+
+
 		this.AddStartingSprites();
 		this.GatherResources();
 
