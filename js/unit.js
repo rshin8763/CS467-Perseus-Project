@@ -161,7 +161,9 @@ class Unit extends GameObject{
     
 
     update(){
+        
         this.Perseus.navigator.checkCollision(this);
+       
         if(this.attacking)
         {
             this.attackTick();
@@ -172,10 +174,7 @@ class Unit extends GameObject{
             
             let destCoords = this.Perseus.navigator.getCoords(this.dest.x, this.dest.y);
             let nextSquareCoords = this.Perseus.navigator.getCoords(this.nextSquare.x, this.nextSquare.y);
-            // if(this.Perseus.navigator.recalc)
-            // {
-            //     this.nextSquare = this.Perseus.navigator.findNextNode(this, this.dest);
-            // }
+
             if(this.sprite.y == nextSquareCoords.y)
             {
                 this.y = this.nextSquare.y;
@@ -251,53 +250,11 @@ class Unit extends GameObject{
 
                 }
 
-                // if(this.checkCollision())
-                // {
-                //     console.log("COLLISION");
-                //     this.nextSquare = this.Perseus.navigator.findNextNode(this, this.dest);
-                // }
-                // let collision = this.checkCollision();
-                // console.log(collision); 
 
-                // if(collision != false && this.nudgeY ==0 && this.nudgeX == 0)
-                // {
-                //     if(collision = 'right')
-                //     {
-                //         this.nudgeY += 10;
-                //     }
-
-                //     if(collision = 'left')
-                //     {
-                //         this.nudgeY += 10;
-                //     }
-
-                //     if(collision = 'up')
-                //     {
-                //         this.nudgeX += 10;
-                //     }
-
-                //     if(collision = 'down')
-                //     {
-                //         this.nudgeX += 10;
-                //     }
-                // }
-
-                // if(this.nudgeY != 0)
-                // {
-                //     this.sprite.y += this.speed *2;
-                //     this.nudgeY--;
-                // }
-                // if(this.nudgeX != 0)
-                // {
-                //     this.sprite.x += this.speed *2;
-                //     this.nudgeX--;
-                // }
+           
             }            
         }
-        // if(this.circle){
-        //     this.circle.x = this.sprite.x;
-        //     this.circle.y = this.sprite.y;
-        // }
+
     }
 }
 

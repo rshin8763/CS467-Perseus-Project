@@ -41,7 +41,7 @@ function preload() {
     this.load.image('fort', 'assets/fort.png');
     this.load.image('ui', 'assets/ui/stoneMenu.png');
     this.load.image('hpbar', 'assets/healthbar.png');
-    this.load.image('navSquare', 'assets/navSquare64.png');
+    this.load.image('navSquare', 'assets/navSquare.png');
     
 
     Perseus.game.load.spritesheet('swordsman_human', 'assets/images/units/swordsman_human.png', 64, 64);
@@ -81,7 +81,7 @@ function create() {
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
-    Perseus.navigator = new Navigator(Perseus.game, 40, 40, 64);
+    Perseus.navigator = new Navigator(Perseus.game, 80, 80, 32);
     console.log(Perseus.navigator.getCoords(4,4));
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
     Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
@@ -111,14 +111,18 @@ function create() {
     Perseus.objects = [];
 
     
-    Perseus.objects.push(new SwordInfantry('human', 4, 4, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 4, 5, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 4, 6, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 8, 6, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 8, 7, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 8, 8, Perseus));
+
 
     
-    Perseus.objects.push(new SwordInfantry('orc', 5,2,Perseus));
-    Perseus.objects.push(new SwordInfantry('orc', 5,3,Perseus));
-    Perseus.objects.push(new SwordInfantry('orc', 5,4,Perseus));
+    Perseus.objects.push(new SwordInfantry('orc', 10,6,Perseus));
+    Perseus.objects.push(new SwordInfantry('orc', 10,7,Perseus));
+    Perseus.objects.push(new SwordInfantry('orc', 10,8,Perseus));
+
+
+    Perseus.objects[0].move(2000,2000);
 
     console.log(Perseus.objects);
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
@@ -209,7 +213,10 @@ function update(){
     //Call the update function on each game object
     Perseus.objects.forEach(function(obj){
         obj.update();
+        //Make sure that sprites higher up on the map are rendered behind the lower sprites
+
     });
+
 }
 
 /*****

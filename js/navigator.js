@@ -82,6 +82,7 @@ class Navigator {
                 if(min === open[i] )
                 {
                     open.splice(i, 1);
+                    break;
                 }
             }
 
@@ -100,7 +101,8 @@ class Navigator {
                 path.unshift(current);
                 current = current.parent;
             }
-
+            closed.length = 0;
+            open.length = 0;
             path.forEach((node) =>
         {
             // let coords = this.getCoords(node.x, node.y);
@@ -172,7 +174,9 @@ class Navigator {
 
         let min = Math.min(hDiffernce, yDifference);
 
-        return (hDiffernce + yDifference) + (-1 * min);
+        //Using Diagnal Distance and Biasing the h value of each square so that the nav alg. checks many fewer squares
+        //http://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html was SUPER helpful
+        return ((hDiffernce + yDifference) + (-1 * min)) * (1.0 + (1/1000));
     }
 
 

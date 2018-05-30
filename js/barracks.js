@@ -20,6 +20,7 @@ class Barracks extends Building{
     {
         if(!this.building)
         {
+      
             this.building = true;
             this.current = this.SWORD;
             this.buildProgress = 0;

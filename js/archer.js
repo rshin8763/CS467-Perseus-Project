@@ -3,6 +3,8 @@ import {Arrow} from './arrow.js';
 class Archer extends Unit {
     constructor(faction, x, y, Perseus){
         super(x,y, faction, 100, 15, 10, 1, Perseus);
+        this.woodCost = 100;
+        this.goldCost = 500;
         this.maxHP = 100;
         this.range = 5;
         this.arrow = false;

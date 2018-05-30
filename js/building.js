@@ -22,6 +22,12 @@ class Building extends GameObject{
         this.sprite.inputEnabled = true;
 
 
+        for(let i = 0; i < 4; i++)
+        {
+            for(let j = 0; j < 4; j++){
+                this.Perseus.navigator.markOccupied(this.x+i, this.y+j);
+            }
+        }
         this.Perseus.navigator.markOccupied(this.x, this.y);
         this.Perseus.navigator.markOccupied(this.x, this.y+1);
         this.Perseus.navigator.markOccupied(this.x+1, this.y);

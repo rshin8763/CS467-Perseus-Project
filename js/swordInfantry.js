@@ -3,6 +3,8 @@ import {Unit} from './unit.js';
 class SwordInfantry extends Unit {
     constructor(faction, x, y, Perseus){
         super(x,y, faction, 100, 30, 15, 3, Perseus);
+        this.woodCost = 0;
+        this.goldCost = 500;
         this.maxHP = 100;
         if (Math.random() >= 0.5){
             this.type="Swordsman";

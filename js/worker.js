@@ -4,6 +4,8 @@ import {Fort} from './fort.js'
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
         super(x,y, faction, 70, 17, 5, 3, Perseus)
+        this.woodCost = 0;
+        this.goldCost = 300;
         this.maxHP = 70;
         this.type="Worker";
         this.placing = false;
