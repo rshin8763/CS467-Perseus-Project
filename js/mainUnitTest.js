@@ -6,7 +6,9 @@ import {Fort} from './fort.js';
 import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
 import {Worker} from './worker.js';
-
+import {Wizard} from './wizard.js';
+import {WizardTower} from './wizardtower.js';
+import {ArcheryRange} from './archeryrange.js';
 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
@@ -38,6 +40,8 @@ function preload() {
     this.load.image('gameTiles', 'assets/tilemaps/forestTiles.png');
     this.load.image('tree', 'assets/images/tree.png');
     this.load.image('barracks', 'assets/barracks.png');
+    this.load.image('wizardtower', 'assets/wizardtower.png');
+    this.load.image('archeryrange', 'assets/archeryrange.png');
     this.load.image('fort', 'assets/fort.png');
     this.load.image('ui', 'assets/ui/stoneMenu.png');
     this.load.image('hpbar', 'assets/healthbar.png');
@@ -67,7 +71,8 @@ function preload() {
     Perseus.game.load.spritesheet('pikeman_female_orc', 'assets/images/units/pikeman_female_orc.png', 64, 64);
     Perseus.game.load.image('arrow_right', 'assets/arrow_right.png');
     Perseus.game.load.image('arrow_left', 'assets/arrow_left.png');
-
+    Perseus.game.load.image('fireball_right', 'assets/fireball_right.png');
+    Perseus.game.load.image('fireball_left', 'assets/fireball_left.png');
     // MENU BAR AND BUTTONS
     Perseus.game.load.image('menuBar', 'assets/images/menuBar.png');
     Perseus.game.load.image('saveButton', 'assets/images/saveButton.png');
@@ -119,7 +124,16 @@ function create() {
     
     Perseus.objects.push(new SwordInfantry('orc', 10,6,Perseus));
     Perseus.objects.push(new SwordInfantry('orc', 10,7,Perseus));
-    Perseus.objects.push(new SwordInfantry('orc', 10,8,Perseus));
+    Perseus.objects.push(new Wizard('orc', 10,8,Perseus));
+
+    let wizardTower = new WizardTower('human', 400, 400, Perseus);
+    Perseus.objects.push(wizardTower);
+    wizardTower.buildWizard();
+
+
+    let archeryRange = new ArcheryRange('orc', 400, 600, Perseus);
+    Perseus.objects.push(archeryRange);
+    archeryRange.buildArcher();
 
 
     Perseus.objects[0].move(2000,2000);
