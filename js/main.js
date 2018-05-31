@@ -5,6 +5,7 @@ import {Controller} from './controller.js';
 import {Fort} from './fort.js';
 import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
+import {Player} from './player.js';
 
 
 var Perseus = Perseus || {};
@@ -14,14 +15,7 @@ Perseus.graphics = {}
 // create the game, and pass it the configuration
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
-var gold = 0;
-var stone = 0;
-var wood = 0;
-var thisHealth = 100;
-var enemyHealth = 100;
-
 // RESOURCES TEXT OBJECTS
-var goldText, stoneText, woodText, thisHealthText, enemyHealthText;
 var buttonClick = false;
 
 // GENERAL DECLARATIONS
@@ -114,6 +108,17 @@ function create() {
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
 
+    // ------------------------------------------------------------------------
+    // PLAYER
+    Perseus.Player = new Player(Perseus);
+    Perseus.Player.Main();
+
+    // ------------------------------------------------------------------------
+    // AI
+    Perseus.AI = new AI(Perseus);
+    Perseus.AI.Main();
+
+    // ------------------------------------------------------------------------
     // Create GUI bar
     let bar = this.add.sprite(0,0,'ui');
     bar.fixedToCamera = true;
@@ -135,38 +140,8 @@ function create() {
     commandBox.drawRect(10,210,172, 180);
     commandBox.fixedToCamera = true;
 
-    // RESOURCE DATA BAR ------------------------------------------------------
-    menuBar = Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
-    menuBar.fixedToCamera = true;
-    menuBar.cameraOffset.setTo(0, 0);
-
-    // GOLD
-    goldText = Perseus.game.add.text(0, 0, 'Gold: 0', style);
-    goldText.fixedToCamera = true;
-    goldText.cameraOffset.setTo(100, 0);
-
-    // STONE
-    stoneText = Perseus.game.add.text(0, 0, 'Stone: 0',style);
-    stoneText.fixedToCamera = true;
-    stoneText.cameraOffset.setTo(200, 0);
-
-    // WOOD
-    woodText = Perseus.game.add.text(0, 0, 'Wood: 0', style);
-    woodText.fixedToCamera = true;
-    woodText.cameraOffset.setTo(300, 0);
-
-    // USER HEALTH
-    thisHealthText = Perseus.game.add.text(0, 0, 'Health: 100', style);
-    thisHealthText.fixedToCamera = true;
-    thisHealthText.cameraOffset.setTo(400, 0);
-
-
-    // USER HEALTH
-    enemyHealthText = Perseus.game.add.text(0, 0, 'Enemy Health: 100', style);
-    enemyHealthText.fixedToCamera = true;
-    enemyHealthText.cameraOffset.setTo(530, 0);
-
-    // PAUSE BUTTON, MUTE, MENU -----------------------------------------------
+    // ------------------------------------------------------------------------
+    // PAUSE BUTTON, MUTE, MENU
     var pause_button = Perseus.game.add.text(0, 0, 'Pause', style);
     pause_button.fixedToCamera = true;
     pause_button.cameraOffset.setTo(10, 0);
@@ -227,78 +202,12 @@ function unpause()
 }
 
 /*****
- ** DESCRIPTION: ADDS GOLD AMOUNT SPECIFIED BY NUMBER TO CURRENT COUNT
- ** UPDATES AMOUNT ON SCREEN
- *****/
-function updateGold(x)
-{
-    gold = gold + x;
-    goldText.text = 'Gold: ' + gold;
-}
-
-/*****
- ** DESCRIPTION: ADDS STONE AMOUNT SPECIFIED BY NUMBER TO CURRENT COUNT
- ** UPDATES AMOUNT ON SCREEN
- *****/
-function updateStone(x)
-{
-    stone = stone + x;
-    stoneText = 'Stone: ' + stone;
-}
-
-/*****
- ** DESCRIPTION: ADDS WOOD AMOUNT SPECIFIED BY NUMBER TO CURRENT COUNT
- ** UPDATES AMOUNT ON SCREEN
- *****/
-Perseus.updateWood = function (x)
-{
-    wood = wood + x;
-    woodText.text = 'Wood: ' + wood;
-}
-
-/*****
- ** DESCRIPTION: DETRACTS HEALTH AMOUNT FROM USER SPECIFIED BY NUMBER
- ** UPDATES AMOUNT ON SCREEN; IF HEALTH IS <= 0, GAME ENDS
- *****/
-function updateThisHealth(x)
-{
-    thisHealth = thisHealth - x;
-    thisHealthText = 'Health: ' + thisHealth;
-
-    // IMPLEMENTS GAME OVER FUNCTION
-    /*
-       if (thisHealth <= 0)
-       {
-       gameOver();
-       }
-       */
-}
-
-/*****
- ** DESCRIPTION: DETRACTS HEALTH AMOUNT FROM ENEMY SPECIFIED BY NUMBER
- ** UPDATES AMOUNT ON SCREEN. IF HEALTH IS <= 0, GAME ENDS
- *****/
-function updateEnemyHealth(x)
-{
-    enemyHealth = enemyHealth - x;
-    enemyHealthText = 'Enemy Health: ' + enemyHealth;
-
-    // IMPLEMENTS GAME OVER FUNCTION
-    /*
-       if (enemyHealth <= 0)
-       {
-       gameOver();
-       }
-       */
-}
-
-/*****
  ** DESCRIPTION: SAVES THE CURRENT GAME STATE
  ** RETURNS NOTHING
  *****/
 function saveGame()
 {
-
+    Perseus.unpause();
 }
 
 /*****
@@ -308,7 +217,7 @@ function saveGame()
 function quitGame()
 {
 
-    //gameOver();
+    Perseus.unpause();
 }
 
 /*****
@@ -317,6 +226,7 @@ function quitGame()
  *****/
 function newGame()
 {
+    Perseus.unpause();
 }
 
 function muteMusic()

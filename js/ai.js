@@ -7,51 +7,83 @@ import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
 import {Worker} from './worker.js';
 
-var workerCount, fortCount;
-var wood = 0, stone = 0, gold = 0;
-var objects, resources;
+var objects, resources, enemyHealthText;
+var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 var i = 0;
 
 class AI
 {
 	/*-----------------------------------------------------------------------*/
-	// GAME CONSTRUCTOR
+	// GAME CONSTRUCTOR 
 	constructor(Perseus)
 	{
+		// GENERAL
 		this.Perseus = Perseus;
-		this.buildingsBurned = false;
+		
+		// RESOURCES
+		this.AIGold = 0;
+		this.AIWood = 0;
+
+		// UNITS
+		this.AIWorkers = 0;
+		this.AIPikemen = 0;
+		this.AISwordInfantry = 0;
+		this.AIArchers = 0;
+
+		// BUILDINGS
+		this.AIForts = 0;
+		this.AIBarracks = 0;
+		this.AIAllBuildings = 0;
+	}
+
+	/*-----------------------------------------------------------------------*/
+ 	// UPDATES AI WOOD COUNT AND PRINTS TO CONSOLE
+	UpdateAIResources(x, type)
+	{
+		if (type == 'wood' || type == 'Wood')
+		{
+			this.AIWood = this.AIWood + x;
+			if(this.AIWood >= 40)
+			{
+				this.BuildBuildings('Fort');
+			}
+		}
+		else if (type == 'gold' || type == 'Gold')
+		{
+			this.AIGold = this.AIGold + x;
+			if (this.AIGold >= 50)
+			{
+				this.BuildBuildings('Barracks');
+			}
+		}
+		else
+		{
+			console.log("You entered an invalid type: " + type);
+			return false;
+		}
 	}
  	
  	/*-----------------------------------------------------------------------*/
  	// ADDS BEGINNING PIECES FOR AI - ONE WORKER AND ONE BUILDING
  	AddStartingSprites()
 	{
-		// ADD ONE FORT AND ONE WORKER
 		this.Perseus.objects.push(new Fort('orc', 600, 300, this.Perseus));
 		this.Perseus.objects.push(new Worker('orc', 350, 350, this.Perseus));
-		fortCount = 1;
-		workerCount = 1;
-	}
-
-	UpdateAIWood(x)
-	{
-		wood = wood + x;
-		console.log("AI now has " + wood + " amount of wood");
+		this.forts = 1;
+		this.workers = 1;
 	}
 
 	/*-----------------------------------------------------------------------*/
 	// SENDS ALL WORKERS TO GATHER RESOURCES
 	GatherResources()
 	{
-		if(wood < 30 || stone < 30 || gold < 30)
+		if(this.AIWood < 30 || this.AIWood < 30)
 		{
 			// VARIABLE DECLARATIONS
 			var workerCount = this.CountObjects(this.Perseus.objects, 'Worker');
 			var woodCount = this.CountObjects(this.Perseus.resources, 'wood');
-			/* var goldCount = this.CountObjects(this.Perseus.resources, 'gold');
-			var stoneCount = this.CountObjects(this.Perseus.resources, 'stone'); */
-			objects = this.Perseus.objects;
-			resources = this.Perseus.resources;
+			var goldCount = this.CountObjects(this.Perseus.resources, 'gold');
+			var stoneCount = this.CountObjects(this.Perseus.resources, 'stone');
 
 			// ERROR HANDLING: NO WORKERS
 			if(workerCount < 1)
@@ -61,31 +93,27 @@ class AI
 
 			// ERROR HANDLING: NO RESOURCES
 			if (woodCount < 1)
-			{/*
+			{
 				if (goldCount < 1)
 				{
-					if (stoneCount < 1)
-					{*/
-						return false;
-						/*
-					}
-				}*/
+					return false;
+				}
 			}
 
 			// SEND WORKERS TO WORK TOGETHER TO GATHER SINGLE RESOURCE
 			i = 0;
-			for (i in objects)
+			for (i in this.objects)
 			{
-				if(objects[i].type == 'Worker')
+				if(this.objects[i].type == 'Worker')
 				{
-					if(objects[i].faction == 'orc')
+					if(this.objects[i].faction == 'orc')
 					{
-						for(var b in resources)
+						for(var b in this.resources)
 						{
 							// GATHER RESOURCES BASED ON LOCATION
-							if(resources[b].x >= 600 && resources[b].exhausted == false)
+							if(this.resources[b].x >= 600 && this.resources[b].exhausted == false)
 							{
-								objects[i].gather(resources[b]);
+								this.objects[i].gather(this.resources[b]);
 							}
 						}
 					}
@@ -93,28 +121,31 @@ class AI
 			}
 		}
 		// IF RESOURCE IS SUFFICIENT TO BUILD SOMETHING, GO FOR IT
-		if (wood >= 30)
+		if (this.wood >= 30)
 		{
-			BuildBuildings('Fort');
+			this.BuildBuildings('Fort');
 		}
-		if (stone >= 30)
+		if (this.gold >= 30)
 		{
-			if (gold >= 30)
-			{
-				this.BuildBuildings('Barracks');
-			}
+			this.BuildBuildings('Barracks');
 		}
 	}
 
+	/*-----------------------------------------------------------------------*/
+	// Defense STATE: DEFEND THE BORDERS
 	BuildBuildings(type)
 	{
-		if (type == 'Fort')
+		if (type == 'Fort' || type == 'fort')
 		{
-
+			this.UpdateAIResources(-30, 'wood');
+		}
+		else if (type == 'Barracks' || type == 'barracks')
+		{
+			this.UpdateAIResources(-50, 'gold');
 		}
 		else
 		{
-
+			console.log("You entered an invalid type: " + type);
 		}
 	}
 
@@ -199,6 +230,12 @@ class AI
 
 	Main()
 	{
+		// ADD HEALTH DISPLAY COUNT FOR USER
+		enemyHealthText = this.Perseus.game.add.text(0, 0, 'Enemy Health: ' + this.health, style);
+		enemyHealthText.fixedToCamera = true;
+		enemyHealthText.cameraOffset.setTo(600, 0);
+
+
 		this.AddStartingSprites();
 		this.GatherResources();
 
