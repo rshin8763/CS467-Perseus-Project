@@ -25,7 +25,7 @@ class Wizard extends Unit {
             buildList:[]
         };
 
-        this.sprite.animations.add('atk_right', [247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259], 10, true);
+        this.sprite.animations.add('atk_right', [39, 40, 41, 42, 43, 44, 45], 10, true);
         this.sprite.animations.add('atk_left', [13, 14, 15, 16, 17, 18, 19], 10, true);
 
     }
@@ -34,7 +34,8 @@ class Wizard extends Unit {
     {
         if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y)  > (this.sprite.width / 2) * this.range )
         {
-            this.move(this.target.sprite.x, this.target.sprite.y)
+            let attackCoords = this.Perseus.navigator.getCoords(this.attackSquare.x, this.attackSquare.y);
+            this.move(attackCoords.x, attackCoords.y)
         } else{
             this.moving = false;
             if(this.cooldown > 0)

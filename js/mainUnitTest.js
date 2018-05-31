@@ -3,12 +3,14 @@ import {Archer} from './archer.js';
 import {mapRenderer} from './mapRenderer.js';
 import {Controller} from './controller.js';
 import {Fort} from './fort.js';
+import {Barracks} from './barracks.js';
 import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
 import {Worker} from './worker.js';
 import {Wizard} from './wizard.js';
 import {WizardTower} from './wizardtower.js';
 import {ArcheryRange} from './archeryrange.js';
+import {Farm} from './farm.js';
 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
@@ -42,6 +44,7 @@ function preload() {
     this.load.image('barracks', 'assets/barracks.png');
     this.load.image('wizardtower', 'assets/wizardtower.png');
     this.load.image('archeryrange', 'assets/archeryrange.png');
+    this.load.image('farm', 'assets/farm.png');
     this.load.image('fort', 'assets/fort.png');
     this.load.image('ui', 'assets/ui/stoneMenu.png');
     this.load.image('hpbar', 'assets/healthbar.png');
@@ -130,13 +133,29 @@ function create() {
     Perseus.objects.push(wizardTower);
     wizardTower.buildWizard();
 
+    let barracks = new Barracks('human', 600, 400, Perseus);
+    Perseus.objects.push(barracks);
+    barracks.buildPike();
+
+    let barracks2 = new Barracks('human', 600, 200, Perseus);
+    Perseus.objects.push(barracks2);
+    barracks2.buildSword();
 
     let archeryRange = new ArcheryRange('orc', 400, 600, Perseus);
     Perseus.objects.push(archeryRange);
     archeryRange.buildArcher();
 
+    // let farm = new Farm('human', 500, 200, Perseus);
+    // Perseus.objects.push(farm);
 
-    Perseus.objects[0].move(2000,2000);
+
+    Perseus.objects[0].move(1800,1100);
+    Perseus.objects[1].move(20,1100);
+    Perseus.objects[2].move(2000,100);
+    Perseus.objects[3].move(1000,500);
+    Perseus.objects[4].move(1800,200);
+    Perseus.objects[5].move(180,1100);
+
 
     console.log(Perseus.objects);
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));

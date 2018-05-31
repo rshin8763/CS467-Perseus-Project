@@ -1,6 +1,6 @@
 import {Building} from './building.js';
 import {SwordInfantry} from './swordInfantry.js';
-import {Archer} from './archer.js';
+import {Pikeman} from './pikeman.js';
 
 class Barracks extends Building{
 
@@ -8,21 +8,31 @@ class Barracks extends Building{
     constructor(faction, x,y,Perseus){
         super(faction, 1000, x, y, Perseus);
 
-        this.addSprite(x,y,'barracks');
+        this.addSprite('barracks');
         this.SWORD = 1;
         this.PIKE = 2;
-        this.ARCH = 3;
         this.buildSpeed = .25;
         this.type="Barracks";
     }
 
-    buildSoldier()
+    buildSword()
     {
         if(!this.building)
         {
       
             this.building = true;
             this.current = this.SWORD;
+            this.buildProgress = 0;
+        }
+    }
+
+    buildPike()
+    {
+        if(!this.building)
+        {
+      
+            this.building = true;
+            this.current = this.PIKE;
             this.buildProgress = 0;
         }
     }
@@ -34,8 +44,7 @@ class Barracks extends Building{
             {
                 this.building = false;
                 this.buildProgress =0;
-                this.spawnUnit(this.x + this.sprite.width, this.y + this.sprite.height ,this.current);
-                this.spawnUnit(this.x + this.sprite.width + 64, this.y + this.sprite.height + 64 , this.ARCH);
+                this.spawnUnit(this.x + 3, this.y + 3 ,this.current);
             } else {
                 this.buildProgress += this.buildSpeed;
             }
@@ -48,8 +57,8 @@ class Barracks extends Building{
             this.Perseus.objects.push(new SwordInfantry(this.faction, x, y, this.Perseus));     
         }
 
-        if(unitType == this.ARCH){
-            this.game.objects.push(new Archer(this.faction, x, y, this.Perseus));     
+        if(unitType == this.PIKE){
+            this.Perseus.objects.push(new Pikeman(this.faction, x, y, this.Perseus));     
 
         }
     }
