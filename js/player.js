@@ -119,14 +119,14 @@ class Player
 		if(type == 'Fort' || type == 'fort')
 		{
 			this.playerForts = this.playerForts + x;
-			this.playerWorkers = this.playerWorkers + workerCount;
 			fortText.text = 'Forts: ' + this.playerForts;
+// DO FORTS AUTOMATICALLY SPAWN WORKERS????????
 		}
 		else if (type == 'barracks' || type == 'Barracks')
 		{
 			this.playerBarracks = this.playerBarracks + x;
 			barracksText.text = 'Barracks: ' + this.playerBarracks;
-			// IF BARRACKS ADDED, DO ARCHERS, SWORDSMEN, ETC AUTOMATICALLY SPAWN?????????
+// IF BARRACKS ADDED, DO ARCHERS, SWORDSMEN, ETC AUTOMATICALLY SPAWN?????????
 		}
 		else
 		{

@@ -47,7 +47,7 @@ class AI
 			this.AIWood = this.AIWood + x;
 			if(this.AIWood >= 40)
 			{
-				// SPAWN NEW BUILDING WITH MARKERS
+// SPAWN NEW BUILDING WITH MARKERS
 			}
 		}
 		else if (type == 'gold' || type == 'Gold')
@@ -55,7 +55,7 @@ class AI
 			this.AIGold = this.AIGold + x;
 			if (this.AIGold >= 50)
 			{
-				// SPAWN NEW BUILDING WITH MARKERS
+// SPAWN NEW BUILDING WITH MARKERS
 			}
 		}
 		else
@@ -63,6 +63,85 @@ class AI
 			console.log("You entered an invalid type: " + type);
 			return false;
 		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	// UPDATES WORKER COUNT DISPLAY - TAKES NUMBER AND TYPE
+	UpdateAIUnits(x, type)
+	{
+		if (type == 'worker' || type == 'Worker')
+		{
+			this.AIWorkers = this.AIWorkers + x;
+			console.log("AI has " + this.AIWorkers + " workers");
+		}
+		else if (type == 'swordsman' || type == 'Swordsman')
+		{
+			this.AISwordInfantry = this.AISwordInfantry + x;
+			console.log("AI has " + this.AISwordInfantry + " swordsmen");
+		}
+		else if (type == 'archer' || type == 'Archer')
+		{
+			this.AIArchers = this.AIArchers + x;
+			console.log("AI has " + this.AIArchers + " archers");
+		}
+		else if (type == 'pikeman' || type == 'Pikeman')
+		{
+			this.AIPikemen = this.AIPikemen + x;
+			console.log("AI has " + this.AIPikemen + " pikemen");
+		}
+		else
+		{
+			console.log("You entered an invalid type: " + type);
+			return false;
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	// UPDATES AI BUILDINGS COUNT AND RESOURCES; INVALID INPUT RETURNS FALSE
+	UpdateAIBuildings(x, type)
+	{
+		// CHECKS TO SEE IF ADDING A BUILDING OR SUBTRACTING
+		var addBuilding;
+		if(x == -1)
+		{
+			addBuilding = false;
+		}
+		else if (addBuilding == 1)
+		{
+			addBuilding = true;
+		}
+		else
+		{
+			console.log("You entered an invalid number (accepts -1 or 1): "+x);
+			return false;
+		}
+
+		// UPDATES RESOURCES, BUILDING COUNT, AND ALLBUILDING COUNT
+		if (type == 'Fort' || type == 'fort')
+		{
+			if(addBuilding == true)
+			{
+				this.UpdateAIResources(-30, 'wood');
+// AUTOMATICALLY SPAWN UNITS??????????
+			}
+			this.AIForts = this.AIForts + x;
+		}
+		else if (type == 'Barracks' || type == 'barracks')
+		{
+			if (addBuilding == true)
+			{
+				this.UpdateAIResources(-50, 'gold');
+// AUTOMATICALLY SPAWN UNITS?????
+
+			}
+			this.AIBarracks = this.AIBarracks + x;
+		}
+		else // ERROR HANDLING
+		{
+			console.log("You entered an invalid type: " + type);
+			return false;
+		}
+		this.AIAllBuildings = this.AIAllBuildings + x;
 	}
 
  	/*-----------------------------------------------------------------------*/
@@ -134,51 +213,6 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
-	// UPDATES AI BUILDINGS COUNT AND RESOURCES; INVALID INPUT RETURNS FALSE
-	UpdateAIBuildings(x, type)
-	{
-		// CHECKS TO SEE IF ADDING A BUILDING OR SUBTRACTING
-		var addBuilding;
-		if(x == -1)
-		{
-			addBuilding = false;
-		}
-		else if (addBuilding == 1)
-		{
-			addBuilding = true;
-		}
-		else
-		{
-			console.log("You entered an invalid number (accepts -1 or 1): "+x);
-			return false;
-		}
-
-		// UPDATES RESOURCES, BUILDING COUNT, AND ALLBUILDING COUNT
-		if (type == 'Fort' || type == 'fort')
-		{
-			if(addBuilding == true)
-			{
-				this.UpdateAIResources(-30, 'wood');
-			}
-			this.AIForts = this.AIForts + x;
-		}
-		else if (type == 'Barracks' || type == 'barracks')
-		{
-			if (addBuilding == true)
-			{
-				this.UpdateAIResources(-50, 'gold');
-			}
-			this.AIBarracks = this.AIBarracks + x;
-		}
-		else // ERROR HANDLING
-		{
-			console.log("You entered an invalid type: " + type);
-			return false;
-		}
-		this.AIAllBuildings = this.AIAllBuildings + x;
-	}
-
-	/*-----------------------------------------------------------------------*/
 	// Defense STATE: DEFEND THE BORDERS
 	DefenseState()
 	{
@@ -209,9 +243,10 @@ class AI
 
 	/*-----------------------------------------------------------------------*/
 	// EVENT SEQUENCES THAT TRIGGER THE THREE (IDLE, OFFENSE, ATTACK) STATES
-	EventSequences()
+	EventSequencesLoop()
 	{
 		// SET TIMER FOR IDLE STATE TO BUILD CERTAIN NUMBER OF RESOURCES
+		this.GatherResources();
 		// ONCE TIMER ENDS, BUILD BUILDINGS
 
 
@@ -222,10 +257,7 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
-	/*****
-	** DESCRIPTION: HELPER FUNCTION THAT COUNTS THE NUMBER OF A TYPE OF OBJECT
-	** TAKES REFERENCE TO PERSEUS OBJECTS AND THE TYPE, RETURNS ORC NUMBER
-	*****/
+	// COUNTS NUMBER OF OBJECTS
 	CountObjects(obj, type)
 	{
 		var count = 0;
@@ -248,35 +280,15 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
-	update()
-	{
-		super.update();
-		if(wood >= 10)
-		{
-			objects[i].build('Fort');
-		}
-	}
-
 	Main()
 	{
-		// ADD HEALTH DISPLAY COUNT FOR USER
 		enemyHealthText = this.Perseus.game.add.text(0, 0, 
 			'Enemy Buildings: ' + this.AIAllBuildings, style);
 		enemyHealthText.fixedToCamera = true;
 		enemyHealthText.cameraOffset.setTo(600, 0);
 
-
 		this.AddStartingSprites();
-		this.GatherResources();
-
-		// IF NO ONE FOREIGN IS WITHIN BORDERS
-			// IDLE STATE
-
-		// ELSE SOMEONE IS WITHIN BORDERS
-			// OFFENSIVE STATE
-
-		// IF ARMY HAS REACHED A CERTAIN NUMBER -> ATTACK STATE
-
+		this.EventSequencesLoop();
 	}
 }
 
