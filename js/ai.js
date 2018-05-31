@@ -19,6 +19,8 @@ class AI
 	{
 		// GENERAL
 		this.Perseus = Perseus;
+		this.objects = this.Perseus.objects;
+		this.resources = this.Perseus.resources;
 		
 		// RESOURCES
 		this.AIGold = 0;
@@ -45,7 +47,7 @@ class AI
 			this.AIWood = this.AIWood + x;
 			if(this.AIWood >= 40)
 			{
-				this.BuildBuildings('Fort');
+				// SPAWN NEW BUILDING WITH MARKERS
 			}
 		}
 		else if (type == 'gold' || type == 'Gold')
@@ -53,7 +55,7 @@ class AI
 			this.AIGold = this.AIGold + x;
 			if (this.AIGold >= 50)
 			{
-				this.BuildBuildings('Barracks');
+				// SPAWN NEW BUILDING WITH MARKERS
 			}
 		}
 		else
@@ -62,7 +64,7 @@ class AI
 			return false;
 		}
 	}
- 	
+
  	/*-----------------------------------------------------------------------*/
  	// ADDS BEGINNING PIECES FOR AI - ONE WORKER AND ONE BUILDING
  	AddStartingSprites()
@@ -77,13 +79,12 @@ class AI
 	// SENDS ALL WORKERS TO GATHER RESOURCES
 	GatherResources()
 	{
-		if(this.AIWood < 30 || this.AIWood < 30)
+		if(this.AIWood < 30 || this.AIGold < 30)
 		{
 			// VARIABLE DECLARATIONS
 			var workerCount = this.CountObjects(this.Perseus.objects, 'Worker');
 			var woodCount = this.CountObjects(this.Perseus.resources, 'wood');
 			var goldCount = this.CountObjects(this.Perseus.resources, 'gold');
-			var stoneCount = this.CountObjects(this.Perseus.resources, 'stone');
 
 			// ERROR HANDLING: NO WORKERS
 			if(workerCount < 1)
@@ -96,6 +97,7 @@ class AI
 			{
 				if (goldCount < 1)
 				{
+					console.log("There are no resources left to gather");
 					return false;
 				}
 			}
@@ -132,21 +134,48 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
-	// Defense STATE: DEFEND THE BORDERS
-	BuildBuildings(type)
+	// UPDATES AI BUILDINGS COUNT AND RESOURCES; INVALID INPUT RETURNS FALSE
+	UpdateAIBuildings(x, type)
 	{
-		if (type == 'Fort' || type == 'fort')
+		// CHECKS TO SEE IF ADDING A BUILDING OR SUBTRACTING
+		var addBuilding;
+		if(x == -1)
 		{
-			this.UpdateAIResources(-30, 'wood');
+			addBuilding = false;
 		}
-		else if (type == 'Barracks' || type == 'barracks')
+		else if (addBuilding == 1)
 		{
-			this.UpdateAIResources(-50, 'gold');
+			addBuilding = true;
 		}
 		else
 		{
-			console.log("You entered an invalid type: " + type);
+			console.log("You entered an invalid number (accepts -1 or 1): "+x);
+			return false;
 		}
+
+		// UPDATES RESOURCES, BUILDING COUNT, AND ALLBUILDING COUNT
+		if (type == 'Fort' || type == 'fort')
+		{
+			if(addBuilding == true)
+			{
+				this.UpdateAIResources(-30, 'wood');
+			}
+			this.AIForts = this.AIForts + x;
+		}
+		else if (type == 'Barracks' || type == 'barracks')
+		{
+			if (addBuilding == true)
+			{
+				this.UpdateAIResources(-50, 'gold');
+			}
+			this.AIBarracks = this.AIBarracks + x;
+		}
+		else // ERROR HANDLING
+		{
+			console.log("You entered an invalid type: " + type);
+			return false;
+		}
+		this.AIAllBuildings = this.AIAllBuildings + x;
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -231,7 +260,8 @@ class AI
 	Main()
 	{
 		// ADD HEALTH DISPLAY COUNT FOR USER
-		enemyHealthText = this.Perseus.game.add.text(0, 0, 'Enemy Health: ' + this.health, style);
+		enemyHealthText = this.Perseus.game.add.text(0, 0, 
+			'Enemy Buildings: ' + this.AIAllBuildings, style);
 		enemyHealthText.fixedToCamera = true;
 		enemyHealthText.cameraOffset.setTo(600, 0);
 

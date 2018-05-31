@@ -1,6 +1,7 @@
 import {Unit} from './unit.js';
 import {Fort} from './fort.js';
 import {AI} from './ai.js';
+import {Player} from './player.js';
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
@@ -158,21 +159,30 @@ class Worker extends Unit{
             {
                 if (this.lastResource.type == 'wood')
                 {
-                    // UPDATES WOOD BASED ON AI OR USER
-                   if(this.faction == 'orc')
+                   if(this.faction == 'orc') // IF IS AI, UPDATE AI
                    {
-                        this.Perseus.AI.UpdateAIWood(10);
+                        this.Perseus.AI.UpdateAIResources(10, 'wood');
                         this.lastResource.takeDamage(10);
                    }
-                   else
+                   else // ELSE IS PLAYER
                    {
-                        this.Perseus.updateWood(10);
+                        this.Perseus.Player.UpdatePlayerResources(10, 'wood');
+                        this.lastResource.takeDamage(10);
                    }
                     
                 } 
-                else 
+                else // MUST BE GOLD 
                 {
-                    this.Perseus.resources.gold += 10;
+                    if(this.faction == 'orc') // 
+                    {
+                        this.Perseus.AI.UpdateAIResources(10, 'gold');
+                        this.lastResource.takeDamage(10);
+                    }
+                   else
+                   {
+                        this.Perseus.Player.UpdatePlayerResources(10, 'gold');
+                        this.lastResource.takeDamage(10);
+                   }
                 }
                 // CHECKS TO SEE IF RESOURCE IS EXHAUSTED
                 if (this.lastResource.exhausted == true)
@@ -182,6 +192,10 @@ class Worker extends Unit{
                 }
                 else
                 {
+                    if (this.faction == 'orc') // AI NEEDS TO STOP
+                    {
+                        //CHECK IF ANYONE IS ATTACKING
+                    }
                     this.gather(this.lastResource);
                 }
             }
