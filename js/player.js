@@ -40,6 +40,23 @@ class Player
 	}
 
 	/*-----------------------------------------------------------------------*/
+	// 	RETREIVES PLAYER STATISTICS
+	GetPlayerStats()
+	{
+		console.log("Current Amounts for Player 1");
+		console.log("Gold: " + this.playerGold);
+		console.log("Wood: " + this.playerWood);
+		console.log("Workers: " + this.playerWorkers);
+		console.log("Pikemen: " + this.playerPikemen);
+		console.log("Swordsman: " + this.playerSwordInfantry);
+		console.log("Archers: " + this.playerArchers);
+		console.log("Forts: " + this.playerForts);
+		console.log("Barracks: " + this.playerBarracks);
+		console.log("All Buildings: " + this.playerAllBuildings);
+	}
+
+
+	/*-----------------------------------------------------------------------*/
 	// 	UPDATES RESOURCES AND COUNT DISPLAY - TAKES NUMBER AND TYPE
 	UpdatePlayerResources(x, type)
 	{
@@ -104,6 +121,8 @@ class Player
 	// UPDATES BUILDINGS COUNT  - TAKES NUMBER AND TYPE
 	UpdatePlayerBuildings(x, type)
 	{
+		// ERROR HANDLING IF PLAYER DOESNT HAVE ENOUGH RESOURCES
+
 		// ADDS OR DETRACTS HEALTH POINTS BASED ON GAINING OR LOSING A BUILDING
 		var healthCount, workerCount;
 		if (x == 1)
@@ -118,12 +137,36 @@ class Player
 		// ADDS X TO CURRENT COUNT OF FORTS AND BARRACKS; UPDATES HEALTH
 		if(type == 'Fort' || type == 'fort')
 		{
+			if (x == 1) // ERROR HANDLING: NOT ENOUGH RESOURCES FOR BUILD
+			{
+				if (this.playerWood < 30)
+				{
+					console.log("Player does not have enough resources.");
+					return false;
+				}
+				else
+				{
+					this.UpdatePlayerResources(-30, 'wood');
+				}
+			}
 			this.playerForts = this.playerForts + x;
 			fortText.text = 'Forts: ' + this.playerForts;
 // DO FORTS AUTOMATICALLY SPAWN WORKERS????????
 		}
 		else if (type == 'barracks' || type == 'Barracks')
 		{
+			if (x == 1)
+			{
+				if (this.playerGold < 50) 
+				{
+					console.log("Player does not have enough resources.");
+					return false;
+				}
+				else
+				{
+					this.UpdatePlayerResources(-50, 'gold');
+				}
+			}
 			this.playerBarracks = this.playerBarracks + x;
 			barracksText.text = 'Barracks: ' + this.playerBarracks;
 // IF BARRACKS ADDED, DO ARCHERS, SWORDSMEN, ETC AUTOMATICALLY SPAWN?????????
@@ -150,6 +193,7 @@ class Player
 		// ADD ONE FORT AND ONE WORKER
 		this.Perseus.objects.push(new Fort('human', 340, 300, this.Perseus));
 		this.Perseus.objects.push(new Worker('human', 300, 350, this.Perseus));
+		this.playerWood = 30;
 		this.UpdatePlayerBuildings(1, 'Fort');
 	}
 
@@ -189,6 +233,7 @@ class Player
 	    barracksText.cameraOffset.setTo(500, 0);
 
 	    this.AddStartingSprites();
+	    this.GetPlayerStats();
 	}
 }
 

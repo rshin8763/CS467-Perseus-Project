@@ -256,6 +256,18 @@ class AI
 		// AFTER CERTAIN NUMBER OF STANDING ARMY MEMBERS IS REACHED, ATTACK
 	}
 
+	CheckSafetyState()
+	{
+		// GO THROUGH LIST OF HUMAN OBJECTS
+		for (x in this.objects)
+		{
+			
+		}
+		// CHECK IF CURRENT COORDINATES ARE WITHIN BORDERS
+		// IF SO, START DEFENSE FUNCTION
+		// IF NOT, DO NOTHING 
+	}
+
 	/*-----------------------------------------------------------------------*/
 	// COUNTS NUMBER OF OBJECTS
 	CountObjects(obj, type)
