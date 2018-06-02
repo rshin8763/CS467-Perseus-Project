@@ -6,6 +6,7 @@ import {Fort} from './fort.js';
 import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
 import {Player} from './player.js';
+import {AI} from './ai.js';
 
 
 var Perseus = Perseus || {};

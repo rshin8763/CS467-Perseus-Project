@@ -19,6 +19,8 @@ class AI
 	{
 		// GENERAL
 		this.Perseus = Perseus;
+		this.objects = this.Perseus.objects;
+		this.resources = this.Perseus.resources;
 		
 		// RESOURCES
 		this.AIGold = 0;
@@ -45,7 +47,7 @@ class AI
 			this.AIWood = this.AIWood + x;
 			if(this.AIWood >= 40)
 			{
-				this.BuildBuildings('Fort');
+// SPAWN NEW BUILDING WITH MARKERS
 			}
 		}
 		else if (type == 'gold' || type == 'Gold')
@@ -53,7 +55,7 @@ class AI
 			this.AIGold = this.AIGold + x;
 			if (this.AIGold >= 50)
 			{
-				this.BuildBuildings('Barracks');
+// SPAWN NEW BUILDING WITH MARKERS
 			}
 		}
 		else
@@ -62,7 +64,86 @@ class AI
 			return false;
 		}
 	}
- 	
+
+	/*-----------------------------------------------------------------------*/
+	// UPDATES WORKER COUNT DISPLAY - TAKES NUMBER AND TYPE
+	UpdateAIUnits(x, type)
+	{
+		if (type == 'worker' || type == 'Worker')
+		{
+			this.AIWorkers = this.AIWorkers + x;
+			console.log("AI has " + this.AIWorkers + " workers");
+		}
+		else if (type == 'swordsman' || type == 'Swordsman')
+		{
+			this.AISwordInfantry = this.AISwordInfantry + x;
+			console.log("AI has " + this.AISwordInfantry + " swordsmen");
+		}
+		else if (type == 'archer' || type == 'Archer')
+		{
+			this.AIArchers = this.AIArchers + x;
+			console.log("AI has " + this.AIArchers + " archers");
+		}
+		else if (type == 'pikeman' || type == 'Pikeman')
+		{
+			this.AIPikemen = this.AIPikemen + x;
+			console.log("AI has " + this.AIPikemen + " pikemen");
+		}
+		else
+		{
+			console.log("You entered an invalid type: " + type);
+			return false;
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	// UPDATES AI BUILDINGS COUNT AND RESOURCES; INVALID INPUT RETURNS FALSE
+	UpdateAIBuildings(x, type)
+	{
+		// CHECKS TO SEE IF ADDING A BUILDING OR SUBTRACTING
+		var addBuilding;
+		if(x == -1)
+		{
+			addBuilding = false;
+		}
+		else if (addBuilding == 1)
+		{
+			addBuilding = true;
+		}
+		else
+		{
+			console.log("You entered an invalid number (accepts -1 or 1): "+x);
+			return false;
+		}
+
+		// UPDATES RESOURCES, BUILDING COUNT, AND ALLBUILDING COUNT
+		if (type == 'Fort' || type == 'fort')
+		{
+			if(addBuilding == true)
+			{
+				this.UpdateAIResources(-30, 'wood');
+// AUTOMATICALLY SPAWN UNITS??????????
+			}
+			this.AIForts = this.AIForts + x;
+		}
+		else if (type == 'Barracks' || type == 'barracks')
+		{
+			if (addBuilding == true)
+			{
+				this.UpdateAIResources(-50, 'gold');
+// AUTOMATICALLY SPAWN UNITS?????
+
+			}
+			this.AIBarracks = this.AIBarracks + x;
+		}
+		else // ERROR HANDLING
+		{
+			console.log("You entered an invalid type: " + type);
+			return false;
+		}
+		this.AIAllBuildings = this.AIAllBuildings + x;
+	}
+
  	/*-----------------------------------------------------------------------*/
  	// ADDS BEGINNING PIECES FOR AI - ONE WORKER AND ONE BUILDING
  	AddStartingSprites()
@@ -77,13 +158,12 @@ class AI
 	// SENDS ALL WORKERS TO GATHER RESOURCES
 	GatherResources()
 	{
-		if(this.AIWood < 30 || this.AIWood < 30)
+		if(this.AIWood < 30 || this.AIGold < 30)
 		{
 			// VARIABLE DECLARATIONS
 			var workerCount = this.CountObjects(this.Perseus.objects, 'Worker');
 			var woodCount = this.CountObjects(this.Perseus.resources, 'wood');
 			var goldCount = this.CountObjects(this.Perseus.resources, 'gold');
-			var stoneCount = this.CountObjects(this.Perseus.resources, 'stone');
 
 			// ERROR HANDLING: NO WORKERS
 			if(workerCount < 1)
@@ -96,6 +176,7 @@ class AI
 			{
 				if (goldCount < 1)
 				{
+					console.log("There are no resources left to gather");
 					return false;
 				}
 			}
@@ -133,24 +214,6 @@ class AI
 
 	/*-----------------------------------------------------------------------*/
 	// Defense STATE: DEFEND THE BORDERS
-	BuildBuildings(type)
-	{
-		if (type == 'Fort' || type == 'fort')
-		{
-			this.UpdateAIResources(-30, 'wood');
-		}
-		else if (type == 'Barracks' || type == 'barracks')
-		{
-			this.UpdateAIResources(-50, 'gold');
-		}
-		else
-		{
-			console.log("You entered an invalid type: " + type);
-		}
-	}
-
-	/*-----------------------------------------------------------------------*/
-	// Defense STATE: DEFEND THE BORDERS
 	DefenseState()
 	{
 		// FRACTION OF ARMY DESIGNATED AS STANDING ARMY 
@@ -180,9 +243,10 @@ class AI
 
 	/*-----------------------------------------------------------------------*/
 	// EVENT SEQUENCES THAT TRIGGER THE THREE (IDLE, OFFENSE, ATTACK) STATES
-	EventSequences()
+	EventSequencesLoop()
 	{
 		// SET TIMER FOR IDLE STATE TO BUILD CERTAIN NUMBER OF RESOURCES
+		this.GatherResources();
 		// ONCE TIMER ENDS, BUILD BUILDINGS
 
 
@@ -192,11 +256,20 @@ class AI
 		// AFTER CERTAIN NUMBER OF STANDING ARMY MEMBERS IS REACHED, ATTACK
 	}
 
+	CheckSafetyState()
+	{
+		// GO THROUGH LIST OF HUMAN OBJECTS
+		for (x in this.objects)
+		{
+			
+		}
+		// CHECK IF CURRENT COORDINATES ARE WITHIN BORDERS
+		// IF SO, START DEFENSE FUNCTION
+		// IF NOT, DO NOTHING 
+	}
+
 	/*-----------------------------------------------------------------------*/
-	/*****
-	** DESCRIPTION: HELPER FUNCTION THAT COUNTS THE NUMBER OF A TYPE OF OBJECT
-	** TAKES REFERENCE TO PERSEUS OBJECTS AND THE TYPE, RETURNS ORC NUMBER
-	*****/
+	// COUNTS NUMBER OF OBJECTS
 	CountObjects(obj, type)
 	{
 		var count = 0;
@@ -219,34 +292,15 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
-	update()
-	{
-		super.update();
-		if(wood >= 10)
-		{
-			objects[i].build('Fort');
-		}
-	}
-
 	Main()
 	{
-		// ADD HEALTH DISPLAY COUNT FOR USER
-		enemyHealthText = this.Perseus.game.add.text(0, 0, 'Enemy Health: ' + this.health, style);
+		enemyHealthText = this.Perseus.game.add.text(0, 0, 
+			'Enemy Buildings: ' + this.AIAllBuildings, style);
 		enemyHealthText.fixedToCamera = true;
 		enemyHealthText.cameraOffset.setTo(600, 0);
 
-
 		this.AddStartingSprites();
-		this.GatherResources();
-
-		// IF NO ONE FOREIGN IS WITHIN BORDERS
-			// IDLE STATE
-
-		// ELSE SOMEONE IS WITHIN BORDERS
-			// OFFENSIVE STATE
-
-		// IF ARMY HAS REACHED A CERTAIN NUMBER -> ATTACK STATE
-
+		this.EventSequencesLoop();
 	}
 }
 
