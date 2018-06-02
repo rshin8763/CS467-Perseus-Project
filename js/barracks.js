@@ -1,6 +1,9 @@
 import {Building} from './building.js';
 import {SwordInfantry} from './swordInfantry.js';
 import {Pikeman} from './pikeman.js';
+import {AI} from './ai.js';
+import {Player} from './player.js';
+
 
 class Barracks extends Building{
 
@@ -21,6 +24,7 @@ class Barracks extends Building{
             wood : 600,
             gold : 900
         };
+        this.faction = faction;
 
     }
 
@@ -62,6 +66,14 @@ class Barracks extends Building{
                 this.building = false;
                 this.buildProgress =0;
                 this.spawnUnit(this.x + 3, this.y + 3 ,this.current);
+                if(this.faction == 'orc') // update orc or player buildings count;
+                {
+                    this.Perseus.AI.UpdateAIBuildings(1, 'Barracks');
+                }
+                else
+                {
+                    this.Perseus.Player.UpdatePlayerBuildings(1, 'Barracks');
+                }
             } else {
                 this.buildProgress += this.buildSpeed;
             }

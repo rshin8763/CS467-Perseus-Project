@@ -1,9 +1,14 @@
+
 import {Unit} from './unit.js'
 import {Fort} from './fort.js'
 import {Barracks} from './barracks.js'
 import {ArcheryRange} from './archeryrange.js'
 import {WizardTower} from './wizardtower.js'
 import {Farm} from './farm.js'
+import {Unit} from './unit.js';
+import {Fort} from './fort.js';
+import {AI} from './ai.js';
+import {Player} from './player.js';
 
 
 class Worker extends Unit{
@@ -246,13 +251,49 @@ class Worker extends Unit{
             }
         // returning to fort
         } if (this.gatherState == 3){
-            if (this.moving == false){
-                if (this.lastResource.type == 'wood'){
-                    this.Perseus.updateWood(10);
-                } else {
-                    this.Perseus.resources.gold += 10;
+            if (this.moving == false)
+            {
+                if (this.lastResource.type == 'wood')
+                {
+                   if(this.faction == 'orc') // IF IS AI, UPDATE AI
+                   {
+                        this.Perseus.AI.UpdateAIResources(10, 'wood');
+                        this.lastResource.takeDamage(10);
+                   }
+                   else // ELSE IS PLAYER
+                   {
+                        this.Perseus.Player.UpdatePlayerResources(10, 'wood');
+                        this.lastResource.takeDamage(10);
+                   }
+                    
+                } 
+                else // MUST BE GOLD 
+                {
+                    if(this.faction == 'orc') // 
+                    {
+                        this.Perseus.AI.UpdateAIResources(10, 'gold');
+                        this.lastResource.takeDamage(10);
+                    }
+                   else
+                   {
+                        this.Perseus.Player.UpdatePlayerResources(10, 'gold');
+                        this.lastResource.takeDamage(10);
+                   }
                 }
-                this.gather(this.lastResource);
+                // CHECKS TO SEE IF RESOURCE IS EXHAUSTED
+                if (this.lastResource.exhausted == true)
+                {
+                    this.gatherState = 0;
+                    this.moveTo(this.findNearestFort());
+                }
+                else
+                {
+                    if (this.faction == 'orc') // AI NEEDS TO STOP
+                    {
+                        //CHECK IF ANYONE IS ATTACKING
+                    }
+                    this.gather(this.lastResource);
+                }
             }
             //loop
         }
