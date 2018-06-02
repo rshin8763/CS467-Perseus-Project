@@ -1,5 +1,3 @@
-import {BinaryHeap} from './BinaryHeap.js';
-
 class Navigator {
     constructor(game, xTiles, yTiles, tileSize){
         this.game = game;
@@ -36,15 +34,6 @@ class Navigator {
 
     markOccupied(x,y)
     {
-        //Make sure that x,y is valid
-        if(x > this.xTiles || 
-           x < 0 ||
-           y > this.yTiles || 
-           y < 0)
-        {
-            return;
-        }
-
 
         this.navmap[x][y] = 1;
 
@@ -52,73 +41,78 @@ class Navigator {
 
     markNotOccupied(x,y)
     {
-        //Make sure that x,y is valid
-        if(x >= this.xTiles || 
-            x < 0 ||
-            y >= this.yTiles || 
-            y < 0)
-         {
-             return;
-         }
-
         this.navmap[x][y] = 0;
     }
 
     //Implements an A* routing algorithm. Then returns the next node in the path
-    //Written by Michael Downing referencing pseudocode at: https://briangrinstead.com/blog/astar-search-algorithm-in-javascript-updated/
-    //   and utilizing Marijn Haverbeke's Binary Heap implementation available at http://eloquentjavascript.net/1st_edition/appendix2.html 
     findPath(unit, target)
     {
-        let start = {
+      let start = {x : unit.x, y : unit.y};
+        let current = {
             x : unit.x,
             y : unit.y,
-            h : this.getDistance(unit.x, unit.y, target),
+            h : this.getDistance(start.x, start.y, target),
             g : 0,
-            visited : true,
-            closed : false,
             parent: null
         };
 
-        let open = new BinaryHeap(function(x){return x.h;});
-        let visited = [this.yTiles];
-        for(let i = 0; i < this.yTiles; i++)
-        {
-            for(let j = 0; j < this.xTiles; j++)
+        let open = [];
+        let closed = [];
+  
+        do{
+     
+            let neighbors = this.getNeightbors(current, target);
+            for(let i = 0; i < neighbors.length; i++ )
             {
-                visited[i] = [];
-                visited[i].push(0);
+                open.push(neighbors[i]);
             }
-        }
-
-        open.push(start);
-        while(open.content.length > 0)
-        {
-            let currentNode = open.pop();
-            if(currentNode.x == target.x && currentNode.y == target.y)
+            let min = null;
+            for(let i = 0; i < open.length; i++)
             {
-                let path = [];
-                while(currentNode.x != start.x || currentNode.y != start.y)
+                if(min == null || open[i].f < min.f)
                 {
-                    path.unshift(currentNode);
-                    currentNode = currentNode.parent;
-                }           
-                return path;
-            } else{
-                currentNode.closed = true;
-                let neighbors = this.getNeightbors(currentNode, target);
-                for(let i = 0; i < neighbors.length; i++)
+                    min = open[i];
+                }
+
+            }
+
+            //remove node from Open
+            for(let i = 0; i < open.length; i++)
+            {
+                if(min === open[i] )
                 {
-                    if(visited[neighbors[i].y][neighbors[i].x] != 1)
-                    {
-                        visited[neighbors[i].y][neighbors[i].x] = 1;
-                        open.push(neighbors[i]);
-                    }
+                    open.splice(i, 1);
+                    break;
                 }
             }
-        }
 
+            //Add node to closed
+            closed.push(min);
+            current = min;
+            // let coords = this.getCoords(min.x, min.y);
+            // let d = 1+1;
+            // let navSquare = this.game.add.sprite(coords.x, coords.y, 'navSquare');
+            // navSquare.anchor.x = 0.5;
+            // navSquare.anchor.y = 0.5;
+        }while(current.x != target.x || current.y != target.y)
+            let path = [];
+            while(current.x != start.x || current.y != start.y)
+            {
+                path.unshift(current);
+                current = current.parent;
+            }
+            closed.length = 0;
+            open.length = 0;
+        //     path.forEach((node) =>
+        // {
+            // let coords = this.getCoords(node.x, node.y);
+            // let navSquare = this.game.add.sprite(coords.x, coords.y, 'navSquare');
+            // navSquare.anchor.x = 0.5;
+            // navSquare.anchor.y = 0.5;
+        //})
+            return path;
     }
-   
+
     findNextNode(unit, target)
     {
         return this.findPath(unit, target)[0];
@@ -289,7 +283,7 @@ class Navigator {
         //West
         if(this.navmap[x-1][y] != 1)
         {
-            if(!this.isOccupied(x-1, y))
+            if(!this.isOccupied(x, y-1))
                 empties.push({x: x, y: y-1});
         }
 

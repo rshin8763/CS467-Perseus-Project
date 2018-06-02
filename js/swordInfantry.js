@@ -2,16 +2,18 @@ import {Unit} from './unit.js';
 
 class SwordInfantry extends Unit {
     constructor(faction, x, y, Perseus){
-        super(faction, 100, 30, 15, 3, Perseus);
-
+        super(x,y, faction, 100, 30, 15, 3, Perseus);
+        this.woodCost = 0;
+        this.goldCost = 500;
+        this.maxHP = 100;
         if (Math.random() >= 0.5){
             this.type="Swordsman";
-            this.addSprite(x,y,'swordsman');
+            this.addSprite('swordsman');
 
 
         } else {
             this.type="Swordswoman";
-            this.addSprite(x,y,'swordswoman'); 
+            this.addSprite('swordswoman'); 
         }
 
         this.uiData = {
@@ -27,9 +29,11 @@ class SwordInfantry extends Unit {
 
     attackTick()
     {
-        if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
+        // if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
+        if(this.x != this.attackSquare.x || this.y != this.attackSquare.y)
         {
-            this.move(this.target.sprite.x, this.target.sprite.y)
+            let attackCoords = this.Perseus.navigator.getCoords(this.attackSquare.x, this.attackSquare.y);
+            this.move(attackCoords.x, attackCoords.y);
         } else{
             console.log(this.target);
             this.moving = false;
@@ -46,7 +50,7 @@ class SwordInfantry extends Unit {
                 }
 
 
-                let targetDead = this.target.takeDamage(this.attk);
+                let targetDead = this.target.takeDamage(this.attk, this);
                 console.log(targetDead);
                 console.log(this);
                 this.cooldown = 200 / this.attkSpeed;
@@ -55,6 +59,7 @@ class SwordInfantry extends Unit {
                 {
                     this.attacking = false;
                     this.target = null;
+                    this.stop();
                     this.sprite.animations.stop();
                 }
             }
