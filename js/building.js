@@ -10,6 +10,7 @@ class Building extends GameObject{
         this.building = false;
         this.current = null;
         this.units = {};
+        this.Perseus.objects.push(this);
     }
 
     addSprite(buildingType){       
@@ -17,21 +18,18 @@ class Building extends GameObject{
         let y = this.y;
         let coords = this.Perseus.navigator.getCoords(x,y);
         this.sprite = this.game.add.sprite(coords.x, coords.y, buildingType);
-        this.sprite.anchor.x = 0.25;
-        this.sprite.anchor.y = 0.25;
+        this.sprite.anchor.x = 0.5;
+        this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
 
 
-        for(let i = 0; i < 4; i++)
+        for(let i = -2; i < 2; i++)
         {
-            for(let j = 0; j < 4; j++){
+            for(let j = -2; j < 2; j++){
                 this.Perseus.navigator.markOccupied(this.x+i, this.y+j);
             }
         }
-        this.Perseus.navigator.markOccupied(this.x, this.y);
-        this.Perseus.navigator.markOccupied(this.x, this.y+1);
-        this.Perseus.navigator.markOccupied(this.x+1, this.y);
-        this.Perseus.navigator.markOccupied(this.x+1, this.y+1);
+
         
         this.sprite.events.onInputDown.add(function(){
             this.Perseus.controller.select(this);

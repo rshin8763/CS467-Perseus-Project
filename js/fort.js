@@ -10,11 +10,20 @@ class Fort extends Building{
         this.type = "Fort";
         this.WORKER = 1;
         this.buildSpeed = 1;
+        this.WorkerCosts = {
+            wood : 0,
+            gold : 400
+        }
     }
 
 
     buildWorker()
     {
+            //TODO:  Move logic inside loop once resources are available
+            // if(this.Perseus.resources.wood > this.WorkerCosts.wood
+            //     && this.Persesus.resources.gold > this.WorkerCosts.gold)
+            //     {
+            //     }
         if(!this.building)
         {
             this.building = true;

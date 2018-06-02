@@ -1,5 +1,10 @@
 import {Unit} from './unit.js'
 import {Fort} from './fort.js'
+import {Barracks} from './barracks.js'
+import {ArcheryRange} from './archeryrange.js'
+import {WizardTower} from './wizardtower.js'
+import {Farm} from './farm.js'
+
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
@@ -18,6 +23,22 @@ class Worker extends Unit{
         this.gatherState = 0;
         this.gatherProgress = 0;
         this.lastResource = null;
+        this.validToPlace = true;
+        this.woodCosts = {
+            Fort : 1500,
+            Barracks: 600,
+            ArcheryRange : 1200,
+            WizardTower : 1000,
+            Farm : 500
+        }
+
+        this.goldCosts = {
+            Fort : 2500,
+            Barracks: 100,
+            ArcheryRange : 900,
+            WizardTower : 1500,
+            Farm : 700
+        }
         
         
         
@@ -30,7 +51,7 @@ class Worker extends Unit{
         this.uiData = {
             canBuild: true,
             commandList:[{"M" : "Move"}, {"A" : "Attack"}],
-            buildList:[{"F" : "Fort"}, {"B" : "Barracks"}]  
+            buildList:[{"F" : "Fort"}, {"B" : "Barracks"}, {"R" : "Archery Range"}, {"W" : "Wizard Tower"}, {"F" : "Farm"}]  
         };
 
 
@@ -58,29 +79,97 @@ class Worker extends Unit{
         return closest;
     }
 
-    build(type)
+
+    buildFort()
     {
-        alert("Build!")
-        if(type = "Fort")
-        {
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort')
-            this.selectedBuilding = "Fort";
-            this.placing = true;
-        }
+        //TODO: Move logic inside this if statment once we have access to resource amounts
+        // if(this.Perseus.resources.wood > this.woodCosts.Fort 
+        //     && this.Perseus.resources.gold > this.goldCosts.Fort)
+        // {
+        // }
+
+        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort')
+        this.selectedBuilding = "Fort";
+        this.placing = true;
+
+        this.createConflictSquares();
 
     }
 
-    place(x, y){
-            console.log("Place called!")
+    buildBarracks()
+    {
+        //TODO: Move logic inside this if statment once we have access to resource amounts
+        // if(this.Perseus.resources.wood > this.woodCosts.Barracks 
+        //     && this.Perseus.resources.gold > this.goldCosts.Barracks)
+        // {
+        // }
+
+        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks')
+        this.selectedBuilding = "Barracks";
+        this.placing = true;
+        this.createConflictSquares();
+    }
+    buildArcheryRange()
+    {
+        //TODO: Move logic inside this if statment once we have access to resource amounts
+        // if(this.Perseus.resources.wood > this.woodCosts.ArcheryRange 
+        //     && this.Perseus.resources.gold > this.goldCosts.ArcheryRange)
+        // {
+        // }
+
+        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange')
+        this.selectedBuilding = "ArcheryRange";
+        this.placing = true;
+        this.createConflictSquares();
+
+    }
+
+    buildWizardTower()
+    {
+        //TODO: Move logic inside this if statment once we have access to resource amounts
+        // if(this.Perseus.resources.wood > this.woodCosts.WizardTower 
+        //     && this.Perseus.resources.gold > this.goldCosts.WizardTower)
+        // {
+        // }
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower')
+            this.selectedBuilding = "WizardTower";
+            this.placing = true;
+            this.createConflictSquares();    
+    }
+
+    buildFarm()
+    {
+
+        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm')
+        this.selectedBuilding = "Farm";
+        this.placing = true;
+    }
+
+
+    createConflictSquares()
+    {
+        this.squareMarkers = [];
+        
+        for(let i = 0; i < 16; i++)
+        {
+
+                let square = this.Perseus.navigator.getSquare(this.selectedSprite.x , this.selectedSprite.y );
+                let coords = this.Perseus.navigator.getCoords(square.x + i % 4, square.y+ Math.floor(i / 4));
+                let newSquare = this.Perseus.game.add.sprite(coords.x, coords.y, 'navSquare');
+                newSquare.alpha = 0;
+                this.squareMarkers[i] = newSquare;
+        }
+    }
+
+    place(){
+        if(this.validToPlace == true)
+        {
             this.placing = false;
             this.building = true;
             this.selectedSprite.alpha = 0.75;
-            this.selectedSprite.x = x;
-            this.selectedSprite.y = y;
-             //I used wdith/4 after some testing because it got close to the building without getting trapped by it
-            this.selectedX = x - this.sprite.width / 4; 
-            this.selectedY = y - this.sprite.width / 4;
-    
+            this.selectedX = this.selectedSprite.x; 
+            this.selectedY = this.selectedSprite.y; 
+        }
     }
 
     attackTick()
@@ -170,8 +259,52 @@ class Worker extends Unit{
 
         if(this.placing)
         {
-            this.selectedSprite.x = this.game.input.x - this.sprite.width;
-            this.selectedSprite.y = this.game.input.y - this.sprite.height;
+
+            let selectedSquare = this.Perseus.navigator.getSquare(this.game.input.activePointer.x, this.game.input.activePointer.y);
+            let coords = this.Perseus.navigator.getCoords(selectedSquare.x, selectedSquare.y);
+            this.selectedSprite.x = coords.x - 64;
+            this.selectedSprite.y = coords.y - 64;
+
+            for(let i = 0; i < 16; i++)
+            {
+                    let square = this.Perseus.navigator.getSquare(this.selectedSprite.x , this.selectedSprite.y );
+                    let coords = this.Perseus.navigator.getCoords(square.x + i % 4, square.y+ Math.floor(i / 4));
+     
+                
+                    this.squareMarkers[i].x = coords.x;
+                    this.squareMarkers[i].y = coords.y;
+            }
+
+            let square = this.Perseus.navigator.getSquare(this.selectedSprite.x, this.selectedSprite.y,);
+            coords = this.Perseus.navigator.getCoords(square.x, square.y);
+
+            let conflicts = 0;
+
+            if(square.x > 0 && square.y > 0)
+            {
+                for(let i = 0; i < 4; i++)
+                {
+                    for (let j = 0; j < 4; j++)
+                    {
+                        let index = i + j*4
+                        if(this.Perseus.navigator.navmap[square.x+i][square.y+j] == 1){
+                            this.squareMarkers[index].alpha = .5;
+                            conflicts++;
+                        } else {
+                            this.squareMarkers[index].alpha = .0;
+                        }
+        
+                    }
+                }
+            }
+
+            if(conflicts > 0)
+            {
+                this.validToPlace = false;
+            }else{
+                this.validToPlace = true;
+            }
+            console.log(selectedSquare);
         }
 
         if(this.building)
@@ -185,9 +318,26 @@ class Worker extends Unit{
 
                 if(this.buildProgress > 1000)
                 {
+
                     if(this.selectedBuilding == "Fort")
                     {
-                        this.game.objects.push(new Fort(this.selectedSprite.x, this.selectedSprite.y, this.game));
+                        this.Perseus.objects.push(new Fort(this.faction, this.selectedSprite.x + 64, this.selectedSprite.y + 64, this.Perseus));
+                    }
+                    if(this.selectedBuilding == "Barracks")
+                    {
+                        this.Perseus.objects.push(new Barracks(this.faction, this.selectedSprite.x+64, this.selectedSprite.y+64, this.Perseus));
+                    }
+                    if(this.selectedBuilding == "ArcheryRange")
+                    {
+                        this.Perseus.objects.push(new ArcheryRange(this.faction, this.selectedSprite.x+64, this.selectedSprite.y+64, this.Perseus));
+                    }
+                    if(this.selectedBuilding == "WizardTower")
+                    {
+                        this.Perseus.objects.push(new WizardTower(this.faction, this.selectedSprite.x+64, this.selectedSprite.y+64, this.Perseus));
+                    }
+                    if(this.selectedBuilding == "Farm")
+                    {
+                        this.Perseus.objects.push(new Farm(this.faction, this.selectedSprite.x +64, this.selectedSprite.y +64, this.Perseus));
                     }
                     this.building = false;
                     this.selectedSprite.destroy();

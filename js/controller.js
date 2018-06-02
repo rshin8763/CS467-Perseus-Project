@@ -121,6 +121,7 @@ class Controller{
         this.cameraPan();
 
         if(this.state != 'pointerHold'){
+
             if(this.keys.A.isDown){
                 console.log('input attack command');
                 this.state = 'attack';
@@ -178,7 +179,12 @@ class Controller{
             }
         }
         if (this.state == 'default' && this.pointer.isDown){
+            if(this.selectedObjects.length > 0 && this.selectedObjects[0].placing)
+            {
+                this.selectedObjects[0].place();
+            }else{
             this.state = 'pointerHold';
+            }
         }
     }
 

@@ -13,13 +13,26 @@ class Barracks extends Building{
         this.PIKE = 2;
         this.buildSpeed = .25;
         this.type="Barracks";
+        this.SwordInfantryCosts = {
+            wood : 300,
+            gold : 700
+        };
+        this.PikemanCosts = {
+            wood : 600,
+            gold : 900
+        };
+
     }
 
     buildSword()
     {
         if(!this.building)
         {
-      
+        //TODO:  Move logic inside loop once resources are available
+            // if(this.Perseus.resources.wood > this.SwordInfantry.wood
+            //     && this.Persesus.resources.gold > this.SwordInfantry.gold)
+            //     {
+            //     }
             this.building = true;
             this.current = this.SWORD;
             this.buildProgress = 0;
@@ -30,7 +43,11 @@ class Barracks extends Building{
     {
         if(!this.building)
         {
-      
+        //TODO:  Move logic inside loop once resources are available
+            // if(this.Perseus.resources.wood > this.Pikeman.wood
+            //     && this.Persesus.resources.gold > this.Pikeman.gold)
+            //     {
+            //     }
             this.building = true;
             this.current = this.PIKE;
             this.buildProgress = 0;

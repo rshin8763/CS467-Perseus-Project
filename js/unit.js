@@ -70,6 +70,11 @@ class Unit extends GameObject{
         console.log("move!");
         this.dest = this.Perseus.navigator.getSquare(x, y);
         this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
+        if(!this.currentPath)
+        {
+            console.log("Unit can't move");
+            return;
+        }
         this.nextSquare = this.currentPath[0];
         this.destx = x;
         this.desty = y;

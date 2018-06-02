@@ -14,12 +14,21 @@ class WizardTower extends Building{
         this.ARCH = 3;
         this.buildSpeed = .25;
         this.type="Wizard Tower";
+        this.WizardCosts = {
+            wood : 0,
+            gold : 900
+        }
     }
 
     buildWizard()
     {
         if(!this.building)
         {
+            //TODO:  Move logic inside loop once resources are available
+            // if(this.Perseus.resources.wood > this.WizardCosts.wood
+            //     && this.Persesus.resources.gold > this.WizardCosts.gold)
+            //     {
+            //     }
       
             this.building = true;
             this.current = 'Wizard';

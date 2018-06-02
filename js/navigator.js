@@ -36,6 +36,15 @@ class Navigator {
 
     markOccupied(x,y)
     {
+        //Make sure that x,y is valid
+        if(x > this.xTiles || 
+           x < 0 ||
+           y > this.yTiles || 
+           y < 0)
+        {
+            return;
+        }
+
 
         this.navmap[x][y] = 1;
 
@@ -43,6 +52,15 @@ class Navigator {
 
     markNotOccupied(x,y)
     {
+        //Make sure that x,y is valid
+        if(x >= this.xTiles || 
+            x < 0 ||
+            y >= this.yTiles || 
+            y < 0)
+         {
+             return;
+         }
+
         this.navmap[x][y] = 0;
     }
 
