@@ -31,7 +31,14 @@ class Controller{
         } else if (this.state == 'attack'){
             /***********MICHAEL ADDED THIS************** */
                 //Get the empty squares around the object to be attacked
-                let emptySquares = this.Perseus.navigator.findAllEmpty(obj.x, obj.y);
+                let emptySquares = [];
+                let origin = {x:this.selectedObjects[0].x, y: this.selectedObjects[0].y};
+                if(obj.movable == false)
+                {    
+                    emptySquares = this.Perseus.navigator.findObjectBorder(obj, origin);
+                }else{
+                    emptySquares = this.Perseus.navigator.findAllEmpty(obj.x, obj.y, origin);
+                }
                 let limit;
                 //If there are more empty squares then attackers, the number of attackers is limiting. Otherwise, the number of empty squares is. 
                 if(this.selectedObjects.length < emptySquares.length)

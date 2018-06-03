@@ -13,6 +13,7 @@ class Building extends GameObject{
         this.current = null;
         this.units = {};
         this.Perseus.objects.push(this);
+        this.movable = false;
     }
 
     addSprite(buildingType){       
