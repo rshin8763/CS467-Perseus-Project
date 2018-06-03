@@ -36,7 +36,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://localhost/rts/fakeindex.html",
+            "url": "http://localhost/rts/unitExample4.html",
             "webRoot": "${workspaceFolder}"
         }
     ]

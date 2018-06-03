@@ -51,7 +51,7 @@ class ArcheryRange extends Building{
 
     spawnArcher()
     {
-        let coords = this.Perseus.navigator.getCoords(this.x + 3,this.y +3)
+        let coords = this.Perseus.navigator.getCoords(this.x + 4,this.y +4)
         this.Perseus.objects.push(new Archer(this.faction, coords.x, coords.y , this.Perseus));     
         
     }

@@ -217,17 +217,10 @@ class Worker extends Unit{
                 }
 
 
-                let targetDead = this.target.takeDamage(this.attk, this);
-                console.log(targetDead);
-                console.log(this);
+                this.target.takeDamage(this.attk, this);
                 this.cooldown = 200 / this.attkSpeed;
                 
-                if(targetDead)
-                {
-                    this.attacking = false;
-                    this.target = null;
-                    this.sprite.animations.stop();
-                }
+
             }
         }
     }

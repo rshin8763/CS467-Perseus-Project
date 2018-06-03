@@ -6,6 +6,7 @@ class SwordInfantry extends Unit {
         this.woodCost = 0;
         this.goldCost = 500;
         this.maxHP = 100;
+
         if (Math.random() >= 0.5){
             this.type="Swordsman";
             this.addSprite('swordsman');
@@ -41,7 +42,7 @@ class SwordInfantry extends Unit {
             {
                 this.cooldown--;
             }else{
-                if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
+                if(this.x < this.target.x)
                 {
                     this.sprite.animations.play('atk_right', true);
                 }else{
@@ -50,18 +51,10 @@ class SwordInfantry extends Unit {
                 }
 
 
-                let targetDead = this.target.takeDamage(this.attk, this);
-                console.log(targetDead);
-                console.log(this);
+                this.target.takeDamage(this.attk, this);
                 this.cooldown = 200 / this.attkSpeed;
                 
-                if(targetDead)
-                {
-                    this.attacking = false;
-                    this.target = null;
-                    this.stop();
-                    this.sprite.animations.stop();
-                }
+
             }
         }
     }

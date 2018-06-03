@@ -2,7 +2,12 @@ import {GameObject} from './gameObject.js'
 class Unit extends GameObject{
     constructor(x,y, faction, hp, attk, defense, attkSpeed, Perseus){
         super(true, Perseus);
+        if(Perseus.spriteGroup == null)
+        {
+            Perseus.spriteGroup = Perseus.game.add.group();
+        }
 
+        this.range = 1;
         let unitSquare = this.Perseus.navigator.getSquare(x,y);
         this.x = unitSquare.x;
         this.y = unitSquare.y;
@@ -28,7 +33,8 @@ class Unit extends GameObject{
         this.nudgeX = 0;
         this.currentPath = null;
         this.pathStep = 0;
-
+        this.attackMoving = false;
+        this.attackMoveDest = null;
         Perseus.navigator.units.push(this);
 
     }
@@ -63,6 +69,8 @@ class Unit extends GameObject{
             this.Perseus.controller.endWithSelect(this);
         }, this);
 
+        this.Perseus.spriteGroup.add(this.sprite)
+
     }
 
     move(x, y){
@@ -71,7 +79,7 @@ class Unit extends GameObject{
            this.destx = x - (this.sprite.width/2);
            this.desty = y - (this.sprite.width/2);
            */
-        console.log("Camera View:" + this.Perseus.game.camera.view.x + " , " + this.Perseus.game.camera.view.y);
+        console.log(this);
         this.dest = this.Perseus.navigator.getSquare(x, y);
         this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
         if(!this.currentPath)
@@ -92,6 +100,17 @@ class Unit extends GameObject{
         this.target = target;
         this.attackSquare = square;
         this.attacking = true;
+    }
+
+    attackMove(x,y)
+    {
+        console.log("Attack Moving!");
+        let square = this.Perseus.navigator.getSquare(x,y);
+        this.attackMoveDest = {x: square.x ,y: square.y};
+
+        this.attackMoving = true;
+        this.move(x,y);
+
     }
 
     takeDamage(damage, attacker)
@@ -124,7 +143,7 @@ class Unit extends GameObject{
             this.hpbar.destroy();
             this.attacking = false;
             this.moving = false;
-            return true; //Unit is dead
+            attacker.stopAttack();
         }
 
         this.hpbar.width = (this.hp / this.maxHP) * 64;
@@ -158,6 +177,13 @@ class Unit extends GameObject{
         
     }
 
+    stopAttack()
+    {
+        this.sprite.animations.stop();
+        this.attacking = false;
+        this.target = null;
+        
+    }
     stop()
     {
         this.moving = false;
@@ -176,6 +202,35 @@ class Unit extends GameObject{
         
         this.Perseus.navigator.checkCollision(this);
        
+
+        if(this.attackMoving)
+        {
+            if(this.y == this.attackMoveDest.y && this.x == this.attackMoveDest.x)
+            {
+                this.attackMoving = false;
+                this.moving = false;
+            } else{
+
+                if(!this.attacking)
+                {
+                    this.Perseus.objects.forEach((obj) =>{
+                        //If there is an enemy unit within three squares, attack it
+                        if(Math.abs(obj.x - this.x) < 3 && Math.abs(obj.y - this.y) < 3 && obj.faction != this.faction)
+                        {
+                            let emptySquare = this.Perseus.navigator.findEmpty(obj.x, obj.y);
+                            this.attack(obj, emptySquare);
+                            return;
+                        }else{
+                            if(!this.moving)
+                            {
+                                let coords = this.Perseus.navigator.getCoords(this.attackMoveDest.x, this.attackMoveDest.y);
+                                this.move(coords.x, coords.y);
+                            }
+                        }
+                    })
+                }
+            }
+        }
         if(this.attacking)
         {
             this.attackTick();
@@ -183,6 +238,7 @@ class Unit extends GameObject{
         }
         if(this.moving)
         {
+  
             
             let destCoords = this.Perseus.navigator.getCoords(this.dest.x, this.dest.y);
             let nextSquareCoords = this.Perseus.navigator.getCoords(this.nextSquare.x, this.nextSquare.y);
@@ -201,8 +257,10 @@ class Unit extends GameObject{
             if(this.sprite.y == destCoords.y && this.sprite.x == destCoords.x)
             {
 
+
                 this.x = this.dest.x;
                 this.y = this.dest.y;
+
                 this.stop();
                 this.sprite.animations.stop();
                 this.moving = false;
@@ -217,8 +275,7 @@ class Unit extends GameObject{
                 }
                 this.nextSquare = this.currentPath[this.pathStep];
                 this.Perseus.navigator.checkCollision(this);
-                console.log(this.currentPath);
-                console.log("Path Step:" + this.pathStep);
+
     
 
 

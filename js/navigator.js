@@ -220,8 +220,9 @@ class Navigator {
 
             //If the unit is moving we will check it's nextSquare (ie, where it's going). 
             //If it isn't moving, we'll check the square it's currently occupying
-            if(unit.moving == true)
+            if(unit.nextSquare != null && unit.moving == true)
             {
+                
                 ax = unit.nextSquare.x;
                 ay = unit.nextSquare.y;
             } else {

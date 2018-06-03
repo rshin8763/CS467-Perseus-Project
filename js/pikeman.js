@@ -41,7 +41,7 @@ class Pikeman extends Unit {
             {
                 this.cooldown--;
             }else{
-                if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
+                if(this.x < this.target.x )
                 {
                     this.sprite.animations.play('atk_right', true);
                 }else{
@@ -50,17 +50,10 @@ class Pikeman extends Unit {
                 }
 
 
-                let targetDead = this.target.takeDamage(this.attk, this);
-                console.log(targetDead);
-                console.log(this);
-                this.cooldown = 200 / this.attkSpeed;
+               this.target.takeDamage(this.attk, this);
+               this.cooldown = 200 / this.attkSpeed;
                 
-                if(targetDead)
-                {
-                    this.attacking = false;
-                    this.target = null;
-                    this.sprite.animations.stop();
-                }
+
             }
         }
     }
