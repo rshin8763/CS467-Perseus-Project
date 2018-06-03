@@ -86,67 +86,85 @@ class Worker extends Unit{
 
     buildFort()
     {
-        //TODO: Move logic inside this if statment once we have access to resource amounts
-        // if(this.Perseus.resources.wood > this.woodCosts.Fort 
-        //     && this.Perseus.resources.gold > this.goldCosts.Fort)
-        // {
-        // }
 
-        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort')
-        this.selectedBuilding = "Fort";
-        this.placing = true;
+        if(this.Perseus.Player.playerWood > this.woodCosts.Fort 
+            && this.Perseus.resources.playerGold > this.goldCosts.Fort)
+        {            
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort')
+            this.selectedBuilding = "Fort";
+            this.placing = true;
 
-        this.createConflictSquares();
+            UpdatePlayerBuildings(1, 'Fort');
+
+            this.createConflictSquares();
+        }
+
 
     }
 
     buildBarracks()
     {
-        //TODO: Move logic inside this if statment once we have access to resource amounts
-        // if(this.Perseus.resources.wood > this.woodCosts.Barracks 
-        //     && this.Perseus.resources.gold > this.goldCosts.Barracks)
-        // {
-        // }
 
-        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks')
-        this.selectedBuilding = "Barracks";
-        this.placing = true;
-        this.createConflictSquares();
+        if(this.Perseus.Player.playerWood  > this.woodCosts.Barracks 
+            && this.Perseus.Player.playerGold  > this.goldCosts.Barracks)
+        {            
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks')
+            this.selectedBuilding = "Barracks";
+            this.placing = true;
+
+            UpdatePlayerBuildings(1, 'Barracks');
+
+            this.createConflictSquares();
+        }
+
     }
     buildArcheryRange()
     {
-        //TODO: Move logic inside this if statment once we have access to resource amounts
-        // if(this.Perseus.resources.wood > this.woodCosts.ArcheryRange 
-        //     && this.Perseus.resources.gold > this.goldCosts.ArcheryRange)
-        // {
-        // }
 
-        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange')
-        this.selectedBuilding = "ArcheryRange";
-        this.placing = true;
-        this.createConflictSquares();
+        if(this.Perseus.Player.playerWood > this.woodCosts.ArcheryRange 
+            && this.Perseus.Player.playerGold > this.goldCosts.ArcheryRange)
+        {
+        
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange')
+            this.selectedBuilding = "ArcheryRange";
+            this.placing = true;
 
+            UpdatePlayerBuildings(1, 'ArcheryRange');
+
+            this.createConflictSquares();
+        }
     }
 
     buildWizardTower()
     {
-        //TODO: Move logic inside this if statment once we have access to resource amounts
-        // if(this.Perseus.resources.wood > this.woodCosts.WizardTower 
-        //     && this.Perseus.resources.gold > this.goldCosts.WizardTower)
-        // {
-        // }
+
+        if(this.Perseus.Player.playerWood > this.woodCosts.WizardTower 
+            && this.Perseus.Player.playerGold > this.goldCosts.WizardTower)
+        {
+        
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower')
             this.selectedBuilding = "WizardTower";
             this.placing = true;
+
+            UpdatePlayerBuildings(1, 'WizardTower');
+
             this.createConflictSquares();    
+        }
     }
 
     buildFarm()
     {
+        if(this.Perseus.Player.playerWood > this.woodCosts.Farm 
+            && this.Perseus.Player.playerGold > this.goldCosts.Farm)
+        {
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm')
+            this.selectedBuilding = "Farm";
+            this.placing = true;
 
-        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm')
-        this.selectedBuilding = "Farm";
-        this.placing = true;
+            UpdatePlayerBuildings(1, 'Farm');
+
+            this.createConflictSquares(); 
+        }
     }
 
 

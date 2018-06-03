@@ -71,7 +71,7 @@ class Unit extends GameObject{
            this.destx = x - (this.sprite.width/2);
            this.desty = y - (this.sprite.width/2);
            */
-        console.log("move!");
+        console.log("Camera View:" + this.Perseus.game.camera.view.x + " , " + this.Perseus.game.camera.view.y);
         this.dest = this.Perseus.navigator.getSquare(x, y);
         this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
         if(!this.currentPath)
