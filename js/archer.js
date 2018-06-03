@@ -49,10 +49,14 @@ class Archer extends Unit {
                     this.sprite.animations.play('atk_left', null, false, false);
 
                 }
-  
-                new Arrow(this.sprite.x, this.sprite.y + 32, this, this.target, this.Perseus, 60);
-                this.cooldown = 200 / this.attkSpeed;
-        
+
+                if(this.target.hp > 1)
+                {
+                    this.cooldown = 200 / this.attkSpeed;
+                    new Arrow(this.sprite.x, this.sprite.y + 32, this, this.target, this.Perseus, 60);
+                }else {
+                    this.stopAttack();
+                }
    
                 
 

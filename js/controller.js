@@ -164,7 +164,7 @@ class Controller{
             if (this.pointer.isDown == true){
                 this.selectedObjects.forEach((obj) => {
                     console.log('moving');
-                    obj.attackMove(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
+                    obj.move(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
                     this.state = 'default';
                 }, this);
             }

@@ -196,30 +196,40 @@ class Worker extends Unit{
 
     attackTick()
     {
-        // if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
-        if(this.x != this.attackSquare.x || this.y != attackSquare.y)
+        //if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
+        if(this.x != this.attackSquare.x || this.y != this.attackSquare.y)
         {
             let attackCoords = this.Perseus.navigator.getCoords(this.attackSquare.x, this.attackSquare.y);
             this.move(attackCoords.x, attackCoords.y);
         } else{
+            if(Math.abs(this.x - this.target.x) > this.range || Math.abs(this.y - this.target.y > this.range))
+            {
+                //This wont work for buildings, but they shouldn't move so it should't ever come up.
+                //It also isn't done as a group, so a group following somebody might stack.
+                let emptySquare = this.Perseus.navigator.findEmpty(this.target.x, this.target.y);
+                this.attack(this.target, emptySquare);
+                return;
+            }
             console.log(this.target);
             this.moving = false;
             if(this.cooldown > 0)
             {
                 this.cooldown--;
             }else{
-                if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
+                if(this.x < this.target.x)
                 {
                     this.sprite.animations.play('atk_right', true);
                 }else{
                     this.sprite.animations.play('atk_left',true);
-
                 }
 
-
-                this.target.takeDamage(this.attk, this);
+                if(this.target.hp > 1)
+                {
                 this.cooldown = 200 / this.attkSpeed;
-                
+                this.target.takeDamage(this.attk, this);
+                }else {
+                    this.stopAttack();
+                }
 
             }
         }
