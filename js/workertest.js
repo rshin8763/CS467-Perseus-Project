@@ -133,6 +133,11 @@ function create() {
     console.log(Perseus.objects);
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
+    let fort = new Fort('human', 500, 500, Perseus);
+    new Worker('human', 475, 475, Perseus );
+    new Worker('human', 475, 550, Perseus );
+
+    Perseus.navigator.findObjectBorder(fort);
     console.log(Perseus.navigator.navmap);
 
     // Perseus.navigator.markOccupied(4,4);

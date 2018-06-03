@@ -5,8 +5,7 @@ import {Barracks} from './barracks.js'
 import {ArcheryRange} from './archeryrange.js'
 import {WizardTower} from './wizardtower.js'
 import {Farm} from './farm.js'
-import {Unit} from './unit.js';
-import {Fort} from './fort.js';
+
 import {AI} from './ai.js';
 import {Player} from './player.js';
 
@@ -228,8 +227,14 @@ class Worker extends Unit{
     }
 
     moveTo(obj){
+        let border = this.Perseus.navigator.findObjectBorder(obj);
+
+        let rand = Math.floor(Math.random() * border.length);
+
         console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
-        this.move(obj.sprite.x+32, obj.sprite.y+32);
+    
+        let coords = this.Perseus.navigator.getCoords(border[rand].x, border[rand].y);
+        this.move(coords.x, coords.y);
     }
     update(){
         super.update();
@@ -362,7 +367,7 @@ class Worker extends Unit{
 
                     if(this.selectedBuilding == "Fort")
                     {
-                        this.Perseus.objects.push(new Fort(this.faction, this.selectedSprite.x + 64, this.selectedSprite.y + 64, this.Perseus));
+                        this.Perseus.objects.push(new Fort(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
                     }
                     if(this.selectedBuilding == "Barracks")
                     {
@@ -374,7 +379,7 @@ class Worker extends Unit{
                     }
                     if(this.selectedBuilding == "WizardTower")
                     {
-                        this.Perseus.objects.push(new WizardTower(this.faction, this.selectedSprite.x+64, this.selectedSprite.y+64, this.Perseus));
+                        this.Perseus.objects.push(new WizardTower(this.faction, this.selectedSprite.x, this.selectedSprite.ymovet, this.Perseus));
                     }
                     if(this.selectedBuilding == "Farm")
                     {

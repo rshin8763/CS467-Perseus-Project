@@ -230,8 +230,9 @@ class Navigator {
             }
 
             //Same for each unit it's checking against
-            if(u.moving == true)
+            if(u.moving == true )
             {
+
                 bx = u.nextSquare.x;
                 by = u.nextSquare.y;
             } else {
@@ -261,6 +262,110 @@ class Navigator {
         return false;
     }
 
+    findObjectBorder(obj)
+    {
+        let squares = [];
+        let width = obj.sprite.width/32;
+        let height = obj.sprite.height/32;
+
+        let x = obj.x;
+        let y = obj.y;
+        //North
+        for(let i = 0; i < width; i++)
+        {
+            if(this.navmap[x+i][y-1] != 1)
+            {
+                if(!this.isOccupied(x+i, y-1))
+                {
+                    squares.push({x :x+i, y: y-1});
+                }
+            }
+        }
+
+        //South
+        for(let i = 0; i < width; i++)
+        {
+            if(this.navmap[x+i][y+ height] != 1)
+            {
+                if(!this.isOccupied(x+i, y + height))
+                {
+                    squares.push({x :x+i, y: y + height});
+                }
+            }
+        }
+
+        //WEST
+        for(let i = 0; i < height; i++)
+        {
+            if(this.navmap[x-1][y+i] != 1)
+            {
+                if(!this.isOccupied(x-1, y+i))
+                {
+                    squares.push({x :x-1, y: y+i});
+                }
+            }
+        }
+
+        //EAST
+        for(let i = 0; i < height; i++)
+        {
+            if(this.navmap[x + width][y+i] != 1)
+            {
+                if(!this.isOccupied(x + width, y+i))
+                {
+                    squares.push({x :x + width, y: y+i});
+                }
+            }
+        }
+
+        //NorthWest
+        if(this.navmap[x-1][y-1] != 1)
+        {
+            if(!this.isOccupied(x-1, y-1))
+            {
+                squares.push({x : x-1, y : y-1});
+            }
+        }
+
+        //NorthEast
+        if(this.navmap[x + width][y-1] != 1)
+        {
+            if(!this.isOccupied(x + width, y-1))
+            {
+                squares.push({x : x + width, y : y-1});
+            }
+        }
+
+        //SouthWest
+        if(this.navmap[x-1][y + height] != 1)
+        {
+            if(!this.isOccupied(x-1, y + height))
+            {
+                squares.push({x : x-1, y : y + height});
+            }
+        }
+
+        //SouthEast
+        if(this.navmap[x + width][y + height] != 1)
+        {
+            if(!this.isOccupied(x + width, y + height))
+            {
+                squares.push({x : x + width, y : y + height});
+            }
+        }
+
+        return squares; 
+        /*******DEBUG STUFF**** */
+        // // let coords = this.getCoords(obj.x, obj.y);
+        // //     this.game.add.sprite(coords.x, coords.y, 'navSquare');
+        
+        //     squares.forEach((square)=>{
+        //     let coords = this.getCoords(square.x, square.y);
+        //     this.game.add.sprite(coords.x, coords.y, 'navSquare');
+       // });
+
+    
+    }
     //Find all the empty squares around a square
     findAllEmpty(x,y)
     {
@@ -362,7 +467,12 @@ class Navigator {
                 y--;
                 break;       
         }
-
+        if(x < 0 || y < 0 || x >= this.xTiles || y >= this.yTiles)
+        {
+            x=0;
+            y=0;
+            continue;
+        }
         }while(this.navmap[x][y] == 1)
 
         return {x : x, y: y};

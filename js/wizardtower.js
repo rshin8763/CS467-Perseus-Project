@@ -53,7 +53,8 @@ class WizardTower extends Building{
     spawnWizard()
     {
 
-        this.Perseus.objects.push(new Wizard(this.faction, this.x +3, this.y + 3 , this.Perseus));     
+        let coords = this.Perseus.navigator.getCoords(this.x + 3,this.y +3)
+        this.Perseus.objects.push(new Archer(this.faction, coords.x, coords.y , this.Perseus));      
         
     }
 

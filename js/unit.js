@@ -2,8 +2,12 @@ import {GameObject} from './gameObject.js'
 class Unit extends GameObject{
     constructor(x,y, faction, hp, attk, defense, attkSpeed, Perseus){
         super(true, Perseus);
-        this.x = x;
-        this.y = y;
+
+        let unitSquare = this.Perseus.navigator.getSquare(x,y);
+        this.x = unitSquare.x;
+        this.y = unitSquare.y;
+        this.centerX = x;
+        this.centerY = y;
         this.faction = faction;
         this.hp = hp;
         this.attk = attk;
@@ -73,6 +77,7 @@ class Unit extends GameObject{
         if(!this.currentPath)
         {
             console.log("Unit can't move");
+            this.moving=false;
             return;
         }
         this.nextSquare = this.currentPath[0];

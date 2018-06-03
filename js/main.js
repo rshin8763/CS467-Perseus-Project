@@ -35,7 +35,7 @@ function preload() {
     this.load.image('fort', 'assets/fort.png');
     this.load.image('ui', 'assets/ui/stoneMenu.png');
     this.load.image('hpbar', 'assets/healthbar.png');
-    this.load.image('navSquare', 'assets/navSquare64.png');
+    this.load.image('navSquare', 'assets/navSquare.png');
     
 
     Perseus.game.load.spritesheet('swordsman_human', 'assets/images/units/swordsman_human.png', 64, 64);
@@ -76,7 +76,7 @@ function create() {
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
-    Perseus.navigator = new Navigator(Perseus.game, 40, 40, 64);
+    Perseus.navigator = new Navigator(Perseus.game, 80, 80, 32);
 
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
     Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
@@ -105,9 +105,9 @@ function create() {
     //Create an objects array on the game object and add a soldier to it.
     Perseus.objects = [];
 
-    Perseus.objects.push(new SwordInfantry('human', 2, 2, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 4, 4, Perseus));
-    Perseus.objects.push(new Worker('human', 4,5,Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 500, 200, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 500, 400, Perseus));
+    Perseus.objects.push(new Worker('human', 400,500,Perseus));
 
 
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
@@ -180,6 +180,21 @@ function update(){
     Perseus.objects.forEach(function(obj){
         obj.update();
     });
+
+    
+    // for(let i = 0; i < 80; i++)
+    // {
+    //     for(let j = 0; j < 80; j++)
+    //     {
+    //         if(Perseus.navigator.navmap[i][j] == 1)
+    //         {
+    //             let coords = Perseus.navigator.getCoords(i, j);
+    //             Perseus.game.add.sprite(coords.x, coords.y, 'navSquare');
+    //         }
+
+    //     }
+    // }
+
 }
 
 /*****

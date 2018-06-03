@@ -7,14 +7,15 @@ class Tree extends GameObject{
         this.exhausted = false;
         this.addSprite(x,y);
         this.type = 'wood';
-        this.x = x;
-        this.y = y;
+        let square = this.Perseus.navigator.getSquare(x,y);
+        this.x = square.x;
+        this.y = square.y;
     }
 
     addSprite(x, y){    
         this.sprite = this.game.add.sprite(x, y, 'tree');
-        this.sprite.anchor.x = 0.5;
-        this.sprite.anchor.y = 0.5;
+        // this.sprite.anchor.x = 0.5;
+        // this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(function(){
             this.Perseus.controller.select(this);

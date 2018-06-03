@@ -41,7 +41,8 @@ class Fort extends Building{
             {
                 this.building = false;
                 this.buildProgress = 0;
-                this.spawnUnit(this.x + 129, this.y+ 64,this.current);
+                let coords = this.Perseus.navigator.getCoords(this.x + 4,this.y +4)
+                this.spawnWorker(coords.x, coords.y);
                 if(this.faction == 'orc') // UPDATES AI/PLAYER COUNTS BASED ON FACTION
                 {
                     this.Perseus.AI.UpdateAIBuildings(1, 'Fort');
@@ -56,13 +57,13 @@ class Fort extends Building{
         }
     }
 
-    spawnUnit(x,y, unitType)
+    spawnWorker(x,y)
     {
 
         let worker = new Worker(this.faction, x, y, this.Perseus)
-            this.Perseus.objects.push(worker);     
-            this.Perseus.selected = worker;
-            
+        this.Perseus.objects.push(worker);     
+        this.Perseus.selected = worker;
+        
 
     }
 
