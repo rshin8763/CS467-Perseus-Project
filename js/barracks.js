@@ -16,6 +16,10 @@ class Barracks extends Building{
         this.PIKE = 2;
         this.buildSpeed = .25;
         this.type="Barracks";
+        this.uiData = {
+            commandList: {B:"Build"},
+            buildList: {S: "Swordsperson", A: "Archer", P: "Pikemen"}  
+        };
         this.SwordInfantryCosts = {
             wood : 300,
             gold : 700
@@ -25,7 +29,6 @@ class Barracks extends Building{
             gold : 900
         };
         this.faction = faction;
-
     }
 
     buildSword()

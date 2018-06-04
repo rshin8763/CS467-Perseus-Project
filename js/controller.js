@@ -4,6 +4,8 @@ class Controller{
         this.Perseus = Perseus;
         this.game = Perseus.game;
         this.state = 'default';
+        this.commandState = 'default';
+
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.pointer = this.game.input.mousePointer;
         this.keys = {};
@@ -13,13 +15,17 @@ class Controller{
         this.keys.B = this.game.input.keyboard.addKey(Phaser.KeyCode.B);
         this.keys.F = this.game.input.keyboard.addKey(Phaser.KeyCode.F);
         this.keys.X = this.game.input.keyboard.addKey(Phaser.KeyCode.X);
+        this.keys.W = this.game.input.keyboard.addKey(Phaser.KeyCode.W);
+        this.keys.R = this.game.input.keyboard.addKey(Phaser.KeyCode.R);
         this.selectedObjects = [];
+        this.highestPrioritySelected = null;
         this.lastPointerState; 
         this.boxStartPos = {};
         this.boxEndPos = {};
         this.wasDown = false;
         this.boxSelect = true;
         this.selectionCircles = [];
+        this.cooldownTimer = 0;
     }
 
     select(obj){
@@ -27,7 +33,10 @@ class Controller{
             this.selectionCircles.forEach((elem)=> {elem.destroy();});
             this.selectedObjects = [];
             this.selectedObjects.push(obj);
+            this.highestPrioritySelected = obj;
+            console.log(this.highestPrioritySelected);
             obj.drawSelectionCircle();
+            this.Perseus.ui.updateCommandList(obj);
         } else if (this.state == 'attack'){
             /***********MICHAEL ADDED THIS************** */
                 //Get the empty squares around the object to be attacked
@@ -76,9 +85,12 @@ class Controller{
         this.selectionBox.drawRect(Math.min(this.boxStartPos.x, this.boxEndPos.x) + this.game.camera.x, Math.min(this.boxStartPos.y, this.boxEndPos.y)+ this.game.camera.y, Math.abs(this.boxEndPos.x-this.boxStartPos.x), Math.abs(this.boxEndPos.y-this.boxStartPos.y));
 
         this.selectedObjects = [];
+        this.highestPrioritySelected = null;
+        this.Perseus.ui.clearCommandList();
         this.selectionCircles.forEach((circle)=>{
             circle.destroy();
         });
+
         // Select objects
         this.Perseus.objects.forEach(function(obj){
             if(obj instanceof Unit){
@@ -90,12 +102,15 @@ class Controller{
                             || this.boxEndPos.y <= obj.sprite.y && obj.sprite.y <= this.boxStartPos.y){
                         console.log("this is inside foreach");
                         this.selectedObjects.push(obj);
+                        if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
                         console.log(this.selectedObjects);
                         obj.drawSelectionCircle();
                     }
                 }
             }
         }, this);
+
+        if (this.highestPrioritySelected != null) this.Perseus.ui.updateCommandList(this.highestPrioritySelected);
     }
 
     cameraPan(){
@@ -117,6 +132,19 @@ class Controller{
         }
     }
 
+    isViableCommand(string){
+        if (this.commandState == 'build'){
+            for (let prop in this.highestPrioritySelected.uiData.buildList){
+                if (prop == string) return true;
+            }
+        } else {
+            for (let prop in this.highestPrioritySelected.uiData.commandList){
+                if (prop == string) return true;
+            }
+        }
+        return false;
+    }
+
     update(){
         if(this.selectionBox){
             this.selectionBox.destroy();
@@ -127,33 +155,87 @@ class Controller{
 
         this.cameraPan();
 
-        if(this.state != 'pointerHold'){
-
+        if(this.state != 'pointerHold' || this.commandState != 'build'){
             if(this.keys.A.isDown){
-                console.log('input attack command');
-                this.state = 'attack';
+                if (this.isViableCommand('A')){
+                    console.log('input attack command');
+                    this.state = 'attack';
+                }
+            }
+            if(this.keys.M.isDown){
+                if (this.isViableCommand('M')){
+                    this.state = 'move';
+                    console.log('input move command');
+                }
+            }
+
+            if(this.keys.G.isDown){
+                if (this.isViableCommand('G')){
+                    this.state = 'gather';
+                    console.log('click on a resource');
+                }
+            }
+
+            if(this.keys.B.isDown){
+                if (this.isViableCommand('B')){
+                    this.commandState = 'build';
+                    this.Perseus.ui.updateBuildList(this.highestPrioritySelected);
+                }
             }
         }
-        if(this.keys.M.isDown){
-            this.state = 'move';
-            console.log('input move command');
-        }
-
-        if(this.keys.G.isDown){
-            this.state = 'gather';
-            console.log('click on a resource');
-        }
-
-        if(this.keys.B.isDown){
-            this.selectedObjects[0].buildWorker();
+        if(this.commandState == 'build'){
+            if (this.isViableCommand('W')){
+                if(this.keys.W.isDown) {
+                    if (this.cooldownTimer == 0){
+                        this.selectedObjects[0].buildWorker();
+                        //cooldown
+                        this.cooldownTimer = 10;
+                    }
+                }
+            }
+            if(this.keys.A.isDown) {
+                if (this.isViableCommand('A')){
+                    if (this.cooldownTimer == 0){
+                        if (this.selectedObjects[0].build('A')){
+                            this.state = 'place';
+                            //cooldown
+                            this.cooldownTimer = 10;
+                        }
+                    }
+                }
+            }
+            if(this.keys.F.isDown) {
+                if (this.isViableCommand('F')){
+                    if (this.cooldownTimer == 0){
+                        if(this.selectedObjects[0].build('F')){
+                            this.state = 'place';
+                            //cooldown
+                            this.cooldownTimer = 10;
+                        }
+                    }
+                }
+            }
+            if(this.keys.R.isDown) {
+                if (this.isViableCommand('R')){
+                    if (this.cooldownTimer == 0){
+                        if(this.selectedObjects[0].build('R')){
+                            this.state = 'place';
+                            //cooldown
+                            this.cooldownTimer = 10;
+                        }
+                    }
+                }
+            }
         }
         // Cancel command ( no right click yet)
         if (this.keys.X.isDown){
             this.state = 'default';
+            this.commandState = 'default';
             console.log('controller state is default');
+            this.Perseus.ui.updateCommandList(this.highestPrioritySelected);
         }
 
-        if (this.state == 'default'){
+        if (this.state == 'default' ){
             if (this.pointer.isDown == true){
                 console.log('starting selection box');
                 this.boxStartPos = this.pointer.positionDown; 
@@ -166,12 +248,20 @@ class Controller{
                     console.log('moving');
                     obj.move(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
                     this.state = 'default';
+                    this.commandState = 'default';
                 }, this);
             }
         } 
         if (this.state == 'attack'){
             //wait for click event
         } 
+        if (this.state == 'place'){
+            if (this.pointer.isDown == true){
+                this.highestPrioritySelected.place(this.pointer.positionDown.x, this.pointer.positionDown.y);
+                this.state = 'default';
+                this.commandState = 'default';
+            }
+        }
         if (this.state == 'pointerHold') {
             if (this.pointer.isDown == false){
                 console.log('finishing selection box');
@@ -179,6 +269,7 @@ class Controller{
                 console.log(this.boxEndPos);
                 this.selectInBox();
                 this.state = 'default';
+                this.commandState = 'default';
             } else {
                 //draw rectangle
                 this.boxEndPos = this.pointer.position;
@@ -190,16 +281,19 @@ class Controller{
             {
                 this.selectedObjects[0].place();
             }else{
-            this.state = 'pointerHold';
+                this.state = 'pointerHold';
             }
         }
+        if (this.cooldownTimer > 0 )this.cooldownTimer--;
     }
 
     endWithSelect(obj){
         this.update();
         this.selectedObjects.push(obj);
+        this.Perseus.ui.updateCommandList(obj);
         obj.drawSelectionCircle();
+        console.log("selected:", this.selectedObjects);
+        if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
     }
-
 }
 export {Controller}

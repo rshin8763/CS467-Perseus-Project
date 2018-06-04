@@ -5,6 +5,7 @@ import {Controller} from './controller.js';
 import {Fort} from './fort.js';
 import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
+import {Ui} from './ui.js';
 import {Worker} from './worker.js';
 import {Player} from './player.js';
 import {AI} from './ai.js';
@@ -24,7 +25,6 @@ var w = 800, h = 600;
 var menuBar, pause_button, saveButton, quitButton, newGameButton, resumeButton, mute_button;
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 
-
 function preload() {
     this.load.tilemap('demo', 'assets/tilemaps/map1.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.image('topbar', 'assets/topbar.png');
@@ -37,6 +37,8 @@ function preload() {
     this.load.image('hpbar', 'assets/healthbar.png');
     this.load.image('navSquare', 'assets/navSquare.png');
     
+
+    this.load.spritesheet('command_buttons', 'assets/ui/icons.png', 32, 32);
 
     Perseus.game.load.spritesheet('swordsman_human', 'assets/images/units/swordsman_human.png', 64, 64);
     Perseus.game.load.spritesheet('swordswoman_human', 'assets/images/units/swordswoman_human.png', 64, 64);
@@ -87,17 +89,6 @@ function create() {
 
     // Sets collision  TODO make it work with unit's move method.
     // This uses phaser arcade physics. Since we are using a navmap,
-    // TODO find a way to prarse collision layer tiles into navmap
-    Perseus.map.setCollisionByExclusion([], true, Perseus.collisionLayer, true);
-
-    //I added a 800x20 sprite that's just a blue bar
-    //let topbar = this.add.sprite(0, 0, 'topbar');
-    ////And set it fixed to Camera
-    //topbar.fixedToCamera = true;
-    // let style = { font: "12px Arial", fill: "#ffffff", align: "center" };
-    // this.barText = this.add.text(100, 0, "This number can change each update:", style);
-    // this.testText = "This number can change each update:";
-    // this.barText.fixedToCamera = true;
 
     //resizes the game world to match the layer dimensions
     Perseus.backgroundLayer.resizeWorld();
@@ -105,22 +96,24 @@ function create() {
     //Create an objects array on the game object and add a soldier to it.
     Perseus.objects = [];
 
-    Perseus.objects.push(new SwordInfantry('human', 500, 200, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 500, 400, Perseus));
-    Perseus.objects.push(new Worker('human', 400,500,Perseus));
+    // Create display groups to keep gui on top
+    // TODO add to gameSprites group for every sprite creation call in the unit files
+    Perseus.gameSprites = Perseus.game.add.group();
+    Perseus.uiGraphics = Perseus.game.add.group();
+    Perseus.gui = Perseus.game.add.group();
 
-
-    // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
+    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
     console.log(Perseus.navigator.navmap);
 
-
     // Perseus.navigator.markOccupied(300, 300);
-
 
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
+    Perseus.ui = new Ui(Perseus);
 
     // ------------------------------------------------------------------------
     // PLAYER
@@ -131,28 +124,6 @@ function create() {
     // AI
     Perseus.AI = new AI(Perseus);
     Perseus.AI.Main();
-
-    // ------------------------------------------------------------------------
-    // Create GUI bar
-    let bar = this.add.sprite(0,0,'ui');
-    bar.fixedToCamera = true;
-    bar.height = 600;
-    bar.width =  192;
-    Perseus.ui.bar = bar;
-
-    // Create GUI info box
-    let infoBox = this.add.graphics();
-    Perseus.ui.infoBox = infoBox;
-    infoBox.lineStyle(2, 0xFFFFFF, 1);
-    infoBox.drawRect(10,410,172,180);
-    infoBox.fixedToCamera = true;
-
-    // Create GUI command box
-    let commandBox = this.add.graphics();
-    Perseus.ui.commandBox = commandBox;
-    commandBox.lineStyle(2, 0xFFFFFF, 1);
-    commandBox.drawRect(10,210,172, 180);
-    commandBox.fixedToCamera = true;
 
     // ------------------------------------------------------------------------
     // PAUSE BUTTON, MUTE, MENU
@@ -170,7 +141,6 @@ function create() {
 
     console.log(Perseus.objects);
 }
-
 
 function update(){
 

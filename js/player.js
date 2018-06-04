@@ -24,8 +24,9 @@ class Player
 		this.Perseus = Perseus;
 		
 		// RESOURCES
-		this.playerGold = 0;
-		this.playerWood = 0;
+        // TODO change these later, for testing
+		this.playerGold = 1000;
+		this.playerWood = 1000;
 
 		// UNITS
 		this.playerWorkers = 0;
