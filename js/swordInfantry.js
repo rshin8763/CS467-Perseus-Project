@@ -15,7 +15,6 @@ class SwordInfantry extends Unit {
         }
 
         this.uiData = {
-            canBuild: false,
             commandList: {M: "Move", A: "Attack"},
             buildList:{}
         };

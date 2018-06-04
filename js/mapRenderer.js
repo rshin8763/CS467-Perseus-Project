@@ -20,12 +20,10 @@ class mapRenderer{
     //create a sprite from an object
     createFromTiledObject(element, Perseus) {
         if (element.type == 'tree'){
-            console.log('creating tree');
             Perseus.resources.push(new Tree(element.x+32, element.y+32, this.Perseus));
 
         }
         if (element.type == 'fort'){
-
             Perseus.objects.push(new Fort('human', element.x+64, element.y+64, this.Perseus));
 
         }

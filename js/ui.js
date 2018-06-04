@@ -75,11 +75,6 @@ class Ui
         // Clear grid
         this.clearCommandList();
 
-        // this.commandList = object.uiData.commandList;
-        // this.canBuild = object.uiData.canBuild;
-        // this.buildList = object.uiData.buildList;
-        // fill grid
-
         let count = 0;
         for (let prop in object.uiData.commandList){
             let x = count%3*64 + 16;
@@ -107,6 +102,15 @@ class Ui
                 button.frame = 7;
                 this.commandButtons.push(button);
             }
+        }
+    }
+
+    updateInfoBox(){
+        clearInfoBox();
+        if(this.Perseus.controller.selectedObjects.length == 0){
+            clearInfoBox();
+        } else if(this.Perseus.controller.selectedObjects.length == 1){
+        } else {
         }
     }
 }

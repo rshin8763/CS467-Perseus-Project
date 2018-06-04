@@ -27,7 +27,6 @@ class Worker extends Unit{
         }
 
         this.uiData = {
-            canBuild: true,
             commandList: {M: "Move", A: "Attack", G:"Gather", B:"Build"},
             buildList: {F: "Fort", B: "Barracks"}  
         };
@@ -69,8 +68,15 @@ class Worker extends Unit{
 
     }
 
+    attack(x,y){
+        super.attack(x,y);
+    }
+
     place(x, y){
-            console.log("Place called!")
+            console.log("Place called!");
+
+            //cancel gathering
+            this.gatherstate = 0;
             this.placing = false;
             this.building = true;
             this.selectedSprite.alpha = 0.75;
@@ -127,11 +133,13 @@ class Worker extends Unit{
 
     move(x,y){
         super.move(x,y);
+        this.gatherstate = 0;
         console.log(this.destx, this.desty);
     }
 
     moveTo(obj){
         console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
+        this.gatherstate = 0;
         this.move(obj.sprite.x+32, obj.sprite.y+32);
     }
     update(){
@@ -149,6 +157,7 @@ class Worker extends Unit{
                 this.gatherProgress += 1;
             } else {
                 this.gatherState = 3;
+                this.lastResource.takeDamage(5);
                 console.log('moving to fort');
                 this.moveTo(this.findNearestFort());
             }

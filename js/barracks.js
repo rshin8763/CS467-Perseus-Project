@@ -15,9 +15,8 @@ class Barracks extends Building{
         this.buildSpeed = .25;
         this.type="Barracks";
         this.uiData = {
-            canBuild: true,
             commandList: {B:"Build"},
-            buildList: {S: "Swordsperson"}  
+            buildList: {S: "Swordsperson", A: "Archer", P: "Pikemen"}  
         };
     }
 
