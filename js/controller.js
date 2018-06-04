@@ -29,9 +29,40 @@ class Controller{
             this.selectedObjects.push(obj);
             obj.drawSelectionCircle();
         } else if (this.state == 'attack'){
-            this.selectedObjects.forEach( (elem) => {
-                elem.attack(obj);
-            });
+            /***********MICHAEL ADDED THIS************** */
+                //Get the empty squares around the object to be attacked
+                let emptySquares = [];
+                let origin = {x:this.selectedObjects[0].x, y: this.selectedObjects[0].y};
+                if(obj.movable == false)
+                {    
+                    emptySquares = this.Perseus.navigator.findObjectBorder(obj, origin);
+                }else{
+                    emptySquares = this.Perseus.navigator.findAllEmpty(obj.x, obj.y, origin);
+                }
+                let limit;
+                //If there are more empty squares then attackers, the number of attackers is limiting. Otherwise, the number of empty squares is. 
+                if(this.selectedObjects.length < emptySquares.length)
+                {
+                    limit = this.selectedObjects.length;
+                }else{
+                    limit = emptySquares.length;
+                }
+
+                //Assign one attacker to each empty square.
+                for(let i = 0; i < limit; i++)
+                {
+                    //Don't move the unit if it's already within attack range
+                    if(Math.abs(this.selectedObjects[i].x - obj.x) <= 1 && Math.abs(this.selectedObjects[i].y - obj.y) <= 1 )
+                    {
+                        this.selectedObjects[i].attack(obj, {x: this.selectedObjects[i].x, y: this.selectedObjects[i].y});
+                    }else{
+                        this.selectedObjects[i].attack(obj, emptySquares[i]);
+                    }
+                }
+            /********************************************* */
+            // this.selectedObjects.forEach( (elem) => {
+            //     elem.attack(obj);
+            // });
             this.state = 'default';
         } else if (this.state == 'gather'){
             this.selectedObjects.forEach( (elem) => {
@@ -97,6 +128,7 @@ class Controller{
         this.cameraPan();
 
         if(this.state != 'pointerHold'){
+
             if(this.keys.A.isDown){
                 console.log('input attack command');
                 this.state = 'attack';
@@ -132,7 +164,7 @@ class Controller{
             if (this.pointer.isDown == true){
                 this.selectedObjects.forEach((obj) => {
                     console.log('moving');
-                    obj.move(this.pointer.positionDown.x, this.pointer.positionDown.y);
+                    obj.move(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
                     this.state = 'default';
                 }, this);
             }
@@ -154,7 +186,12 @@ class Controller{
             }
         }
         if (this.state == 'default' && this.pointer.isDown){
+            if(this.selectedObjects.length > 0 && this.selectedObjects[0].placing)
+            {
+                this.selectedObjects[0].place();
+            }else{
             this.state = 'pointerHold';
+            }
         }
     }
 

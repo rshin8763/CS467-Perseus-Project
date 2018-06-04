@@ -5,15 +5,26 @@ class Tree extends GameObject{
         this.sprite = null;
         this.resourceAmount = 1000;
         this.exhausted = false;
-        this.addSprite(x,y);
+        let square = this.Perseus.navigator.getSquare(x,y);
+        let coords = this.Perseus.navigator.getCoords(square.x, square.y);
+        this.addSprite(coords.x, coords.y);
         this.type = 'wood';
+        this.x = square.x;
+        this.y = square.y;
+
+        for(let i = 0; i < 2; i++)
+        {
+            for(let j = 0; j < 2; j++){
+                this.Perseus.navigator.markOccupied(this.x+i, this.y+j);
+            }
+        }
 
     }
 
     addSprite(x, y){    
         this.sprite = this.game.add.sprite(x, y, 'tree');
-        this.sprite.anchor.x = 0.5;
-        this.sprite.anchor.y = 0.5;
+        // this.sprite.anchor.x = 0.5;
+        // this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(function(){
             this.Perseus.controller.select(this);
@@ -24,8 +35,9 @@ class Tree extends GameObject{
         }, this);
     }
     takeDamage(rate){
-        resourceAmount -= rate;
-        if (resouceAmount <= 0) {
+        this.resourceAmount -= rate;
+        console.log("The current resource amount is: " + this.resourceAmount)
+        if (this.resourceAmount <= 0) {
             this.exhausted = true;
         }
     }

@@ -1,22 +1,22 @@
 import {Unit} from './unit.js';
-import {Arrow} from './arrow.js';
-class Archer extends Unit {
+import {Fireball} from './fireball.js';
+class Wizard extends Unit {
     constructor(faction, x, y, Perseus){
         super(x,y, faction, 100, 15, 10, 1, Perseus);
         this.woodCost = 100;
         this.goldCost = 500;
         this.maxHP = 100;
         this.range = 5;
-        this.arrow = false;
-        this.arrowSprite = null;
+        this.fireball = false;
+        this.fireballSprite = null;
         if (Math.random() >= 0.5){
-            this.type="Archer";
-            this.addSprite('archer_male');
+            this.type="Wizard";
+            this.addSprite('wizard_male');
 
 
         } else {
-            this.type="Archer";
-            this.addSprite('archer_female'); 
+            this.type="Wizard";
+            this.addSprite('wizard_female'); 
         }
 
         this.uiData = {
@@ -25,8 +25,8 @@ class Archer extends Unit {
             buildList:[]
         };
 
-        this.sprite.animations.add('atk_right', [247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259], 10, true);
-        this.sprite.animations.add('atk_left', [221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233], 10, true);
+        this.sprite.animations.add('atk_right', [39, 40, 41, 42, 43, 44, 45], 10, true);
+        this.sprite.animations.add('atk_left', [13, 14, 15, 16, 17, 18, 19], 10, true);
 
     }
 
@@ -53,16 +53,16 @@ class Archer extends Unit {
                 if(this.target.hp > 1)
                 {
                     this.cooldown = 200 / this.attkSpeed;
-                    new Arrow(this.sprite.x, this.sprite.y + 32, this, this.target, this.Perseus, 60);
+                    new Fireball(this.sprite.x, this.sprite.y + 32, this, this.target, this.Perseus, 60);
                 }else {
                     this.stopAttack();
                 }
-   
-                
+
+
 
             }
         }
     }
 
 }
-export {Archer};
+export {Wizard};
