@@ -3,12 +3,14 @@ import {Archer} from './archer.js';
 import {mapRenderer} from './mapRenderer.js';
 import {Controller} from './controller.js';
 import {Fort} from './fort.js';
+import {Barracks} from './barracks.js';
 import {Tree} from './tree.js';
 import {Navigator} from './navigator.js';
-import {Ui} from './ui.js';
 import {Worker} from './worker.js';
-import {Player} from './player.js';
-import {AI} from './ai.js';
+import {Wizard} from './wizard.js';
+import {WizardTower} from './wizardtower.js';
+import {ArcheryRange} from './archeryrange.js';
+import {Farm} from './farm.js';
 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
@@ -17,7 +19,14 @@ Perseus.graphics = {}
 // create the game, and pass it the configuration
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
+Perseus.resources.gold = 0;
+var stone = 0;
+Perseus.resources.wood = 0;
+var thisHealth = 100;
+var enemyHealth = 100;
+
 // RESOURCES TEXT OBJECTS
+var goldText, stoneText, woodText, thisHealthText, enemyHealthText;
 var buttonClick = false;
 
 // GENERAL DECLARATIONS
@@ -33,13 +42,14 @@ function preload() {
     this.load.image('gameTiles', 'assets/tilemaps/forestTiles.png');
     this.load.image('tree', 'assets/images/tree.png');
     this.load.image('barracks', 'assets/barracks.png');
+    this.load.image('wizardtower', 'assets/wizardtower.png');
+    this.load.image('archeryrange', 'assets/archeryrange.png');
+    this.load.image('farm', 'assets/farm.png');
     this.load.image('fort', 'assets/fort.png');
     this.load.image('ui', 'assets/ui/stoneMenu.png');
     this.load.image('hpbar', 'assets/healthbar.png');
     this.load.image('navSquare', 'assets/navSquare.png');
     
-
-    this.load.spritesheet('command_buttons', 'assets/ui/icons.png', 32, 32);
 
     Perseus.game.load.spritesheet('swordsman_human', 'assets/images/units/swordsman_human.png', 64, 64);
     Perseus.game.load.spritesheet('swordswoman_human', 'assets/images/units/swordswoman_human.png', 64, 64);
@@ -64,7 +74,8 @@ function preload() {
     Perseus.game.load.spritesheet('pikeman_female_orc', 'assets/images/units/pikeman_female_orc.png', 64, 64);
     Perseus.game.load.image('arrow_right', 'assets/arrow_right.png');
     Perseus.game.load.image('arrow_left', 'assets/arrow_left.png');
-
+    Perseus.game.load.image('fireball_right', 'assets/fireball_right.png');
+    Perseus.game.load.image('fireball_left', 'assets/fireball_left.png');
     // MENU BAR AND BUTTONS
     Perseus.game.load.image('menuBar', 'assets/images/menuBar.png');
     Perseus.game.load.image('saveButton', 'assets/images/saveButton.png');
@@ -74,15 +85,16 @@ function preload() {
 }
 
 function create() {
-
-
+    
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
     Perseus.navigator = new Navigator(Perseus.game, 80, 80, 32);
-
+    console.log(Perseus.navigator.getCoords(4,4));
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
     Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
+
+
 
     //create layer
     Perseus.backgroundLayer= Perseus.map.createLayer('backgroundLayer');
@@ -93,44 +105,103 @@ function create() {
     // TODO find a way to prarse collision layer tiles into navmap
     Perseus.map.setCollisionByExclusion([], true, Perseus.collisionLayer, true);
 
+    //I added a 800x20 sprite that's just a blue bar
+    //let topbar = this.add.sprite(0, 0, 'topbar');
+    ////And set it fixed to Camera
+    //topbar.fixedToCamera = true;
+    // let style = { font: "12px Arial", fill: "#ffffff", align: "center" };
+    // this.barText = this.add.text(100, 0, "This number can change each update:", style);
+    // this.testText = "This number can change each update:";
+    // this.barText.fixedToCamera = true;
+
     //resizes the game world to match the layer dimensions
     Perseus.backgroundLayer.resizeWorld();
 
     //Create an objects array on the game object and add a soldier to it.
     Perseus.objects = [];
 
-    // Create display groups to keep gui on top
-    // TODO add to gameSprites group for every sprite creation call in the unit files
-    Perseus.gameSprites = Perseus.game.add.group();
-    Perseus.uiGraphics = Perseus.game.add.group();
-    Perseus.gui = Perseus.game.add.group();
+    let worker = new Worker('human', 8, 6, Perseus);
+    Perseus.objects.push(worker);
+    Perseus.controller.selectedObjects.push(worker);
 
-    Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
+    worker.buildWizardTower();
 
+    // let farm = new Farm('human', 500, 200, Perseus);
+    // Perseus.objects.push(farm);
+
+
+    console.log(Perseus.objects);
+    // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
+
+    let fort = new Fort('human', 500, 500, Perseus);
+    new Worker('human', 475, 475, Perseus );
+    new Worker('human', 475, 550, Perseus );
+
+    Perseus.navigator.findObjectBorder(fort);
     console.log(Perseus.navigator.navmap);
 
+    // Perseus.navigator.markOccupied(4,4);
+    // Perseus.navigator.markOccupied(8, 6);
     // Perseus.navigator.markOccupied(300, 300);
+
 
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
-    Perseus.ui = new Ui(Perseus);
 
-    // ------------------------------------------------------------------------
-    // PLAYER
-    Perseus.Player = new Player(Perseus);
-    Perseus.Player.Main();
+    // Create GUI bar
+    let bar = this.add.sprite(0,0,'ui');
+    bar.fixedToCamera = true;
+    bar.height = 600;
+    bar.width =  192;
+    Perseus.ui.bar = bar;
 
-    // ------------------------------------------------------------------------
-    // AI
-    Perseus.AI = new AI(Perseus);
-    Perseus.AI.Main();
+    // Create GUI info box
+    let infoBox = this.add.graphics();
+    Perseus.ui.infoBox = infoBox;
+    infoBox.lineStyle(2, 0xFFFFFF, 1);
+    infoBox.drawRect(10,410,172,180);
+    infoBox.fixedToCamera = true;
+
+    // Create GUI command box
+    let commandBox = this.add.graphics();
+    Perseus.ui.commandBox = commandBox;
+    commandBox.lineStyle(2, 0xFFFFFF, 1);
+    commandBox.drawRect(10,210,172, 180);
+    commandBox.fixedToCamera = true;
+
+    // RESOURCE DATA BAR ------------------------------------------------------
+    menuBar = Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
+    menuBar.fixedToCamera = true;
+    menuBar.cameraOffset.setTo(0, 0);
+
+    // GOLD
+    goldText = Perseus.game.add.text(0, 0, 'Gold: 0', style);
+    goldText.fixedToCamera = true;
+    goldText.cameraOffset.setTo(100, 0);
+
+    // STONE
+    stoneText = Perseus.game.add.text(0, 0, 'Stone: 0',style);
+    stoneText.fixedToCamera = true;
+    stoneText.cameraOffset.setTo(200, 0);
+
+    // WOOD
+    woodText = Perseus.game.add.text(0, 0, 'Wood: 0', style);
+    woodText.fixedToCamera = true;
+    woodText.cameraOffset.setTo(300, 0);
+
+    // USER HEALTH
+    thisHealthText = Perseus.game.add.text(0, 0, 'Health: 100', style);
+    thisHealthText.fixedToCamera = true;
+    thisHealthText.cameraOffset.setTo(400, 0);
 
 
-    // ------------------------------------------------------------------------
-    // PAUSE BUTTON, MUTE, MENU
+    // USER HEALTH
+    enemyHealthText = Perseus.game.add.text(0, 0, 'Enemy Health: 100', style);
+    enemyHealthText.fixedToCamera = true;
+    enemyHealthText.cameraOffset.setTo(530, 0);
+
+    // PAUSE BUTTON, MUTE, MENU -----------------------------------------------
     var pause_button = Perseus.game.add.text(0, 0, 'Pause', style);
     pause_button.fixedToCamera = true;
     pause_button.cameraOffset.setTo(10, 0);
@@ -146,16 +217,17 @@ function create() {
     console.log(Perseus.objects);
 }
 
+
 function update(){
 
-    
     Perseus.controller.update();
     //Call the update function on each game object
     Perseus.objects.forEach(function(obj){
         obj.update();
+        //Make sure that sprites higher up on the map are rendered behind the lower sprites
+
     });
 
-    
     // for(let i = 0; i < 80; i++)
     // {
     //     for(let j = 0; j < 80; j++)
@@ -209,12 +281,78 @@ function unpause()
 }
 
 /*****
+ ** DESCRIPTION: ADDS GOLD AMOUNT SPECIFIED BY NUMBER TO CURRENT COUNT
+ ** UPDATES AMOUNT ON SCREEN
+ *****/
+function updateGold(x)
+{
+    Perseus.resources.gold = gold + x;
+    goldText.text = 'Gold: ' + gold;
+}
+
+/*****
+ ** DESCRIPTION: ADDS STONE AMOUNT SPECIFIED BY NUMBER TO CURRENT COUNT
+ ** UPDATES AMOUNT ON SCREEN
+ *****/
+function updateStone(x)
+{
+    stone = stone + x;
+    stoneText = 'Stone: ' + stone;
+}
+
+/*****
+ ** DESCRIPTION: ADDS WOOD AMOUNT SPECIFIED BY NUMBER TO CURRENT COUNT
+ ** UPDATES AMOUNT ON SCREEN
+ *****/
+Perseus.updateWood = function (x)
+{
+    Perseus.resources.wood = wood + x;
+    woodText.text = 'Wood: ' + wood;
+}
+
+/*****
+ ** DESCRIPTION: DETRACTS HEALTH AMOUNT FROM USER SPECIFIED BY NUMBER
+ ** UPDATES AMOUNT ON SCREEN; IF HEALTH IS <= 0, GAME ENDS
+ *****/
+function updateThisHealth(x)
+{
+    thisHealth = thisHealth - x;
+    thisHealthText = 'Health: ' + thisHealth;
+
+    // IMPLEMENTS GAME OVER FUNCTION
+    /*
+       if (thisHealth <= 0)
+       {
+       gameOver();
+       }
+       */
+}
+
+/*****
+ ** DESCRIPTION: DETRACTS HEALTH AMOUNT FROM ENEMY SPECIFIED BY NUMBER
+ ** UPDATES AMOUNT ON SCREEN. IF HEALTH IS <= 0, GAME ENDS
+ *****/
+function updateEnemyHealth(x)
+{
+    enemyHealth = enemyHealth - x;
+    enemyHealthText = 'Enemy Health: ' + enemyHealth;
+
+    // IMPLEMENTS GAME OVER FUNCTION
+    /*
+       if (enemyHealth <= 0)
+       {
+       gameOver();
+       }
+       */
+}
+
+/*****
  ** DESCRIPTION: SAVES THE CURRENT GAME STATE
  ** RETURNS NOTHING
  *****/
 function saveGame()
 {
-    Perseus.unpause();
+
 }
 
 /*****
@@ -224,7 +362,7 @@ function saveGame()
 function quitGame()
 {
 
-    Perseus.unpause();
+    //gameOver();
 }
 
 /*****
@@ -233,7 +371,6 @@ function quitGame()
  *****/
 function newGame()
 {
-    Perseus.unpause();
 }
 
 function muteMusic()

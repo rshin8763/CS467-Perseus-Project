@@ -6,8 +6,9 @@ class Resource  extends GameObject{
         this.resource = null;
         this.resourceAmount = 1000;
         this.exhausted = false;
-        this.x = x;
-        this.y = y;
+        let square = this.Perseus.navigator.getSquare(x,y);
+        this.x = square.x;
+        this.y = square.y;
     }
 
     takeDamage(rate){

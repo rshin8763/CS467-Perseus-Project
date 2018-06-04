@@ -1,11 +1,11 @@
-class Arrow{
+class Fireball{
     constructor(x,y, parent, target, Perseus, animWait){
         //Assign the correct sprite depending on which way the arrow will be flying
         if (target.sprite.x > x)
         {
-            this.sprite = Perseus.game.add.sprite(x + 32, y, 'arrow_right');
+            this.sprite = Perseus.game.add.sprite(x + 32, y, 'fireball_right');
         } else {
-            this.sprite = Perseus.game.add.sprite(x, y, 'arrow_left');
+            this.sprite = Perseus.game.add.sprite(x, y, 'fireball_left');
         }
 
         //Initialize some valies
@@ -55,7 +55,7 @@ class Arrow{
                     this.sprite.y -= Math.abs(this.target.sprite.y - this.sprite.y) / 60 + 1;
                 }
 
-                //If the arrow is clsoe to the target...
+                //If the fireball is clsoe to the target...
                 if(Math.abs(this.sprite.x - this.target.sprite.x) < (this.target.sprite.width/2))
                 {
                     if(Math.abs(this.sprite.y - this.target.sprite.y) < (this.target.sprite.height/2))  
@@ -63,7 +63,13 @@ class Arrow{
                         //Set active to false, destroy the sprite, and cause damage to the target
                         this.active = false;
                         this.sprite.destroy();
-                        this.target.takeDamage(35, this.parent);           
+                        //this.target.takeDamage(35, this.parent);
+                        this.Perseus.objects.forEach((obj) => {
+                            if(Math.abs(obj.x - this.target.x) <=1 && Math.abs(obj.y - this.target.y) <=1 && obj.faction != this.parent.faction )
+                            {
+                                obj.takeDamage(50, this.parent);
+                            }
+                        })           
                     }
                 }
             }else {
@@ -73,4 +79,4 @@ class Arrow{
     }
 }
 
-export {Arrow};
+export {Fireball};

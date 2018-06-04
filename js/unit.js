@@ -1,16 +1,25 @@
 import {GameObject} from './gameObject.js'
 class Unit extends GameObject{
-    constructor(faction, hp, attk, defense, attkSpeed, Perseus){
+    constructor(x,y, faction, hp, attk, defense, attkSpeed, Perseus){
         super(true, Perseus);
+        if(Perseus.spriteGroup == null)
+        {
+            Perseus.spriteGroup = Perseus.game.add.group();
+        }
+
+        this.range = 1;
+        let unitSquare = this.Perseus.navigator.getSquare(x,y);
+        this.x = unitSquare.x;
+        this.y = unitSquare.y;
+        this.centerX = x;
+        this.centerY = y;
         this.faction = faction;
         this.hp = hp;
         this.attk = attk;
         this.attkSpeed = attkSpeed;
         this.defense = defense;
         this.moving = false;
-        this.dest = null;
-        this.destx = null;
-        this.desty = null;
+        this.dest = {x: this.x, y: this.y};
         this.speed = 1;
         this.sprite = null;
         this.target = null;
@@ -18,88 +27,112 @@ class Unit extends GameObject{
         this.cooldown = 0;
         this.range=1;
         this.priority=0; // commandList priority. Mages will have spells visible when group selected with others.
+        this.hpbar = null; 
+        this.nudgeY = 0;
+        this.nudgeX = 0;
+        this.currentPath = null;
+        this.pathStep = 0;
+        this.attackMoving = false;
+        this.attackMoveDest = null;
+        Perseus.objects.push(this);
+        Perseus.navigator.units.push(this);
     }
 
-    addSprite(x, y, unitType){
+    addSprite(unitType){
         if(this.faction == 'orc')
         {
             unitType += '_orc';
         }else {
             unitType +='_human';
-        }    
-        this.sprite = this.game.add.sprite(x, y, unitType);
+        }
+        let coords = this.Perseus.navigator.getCoords(this.x, this.y);    
+        this.sprite = this.game.add.sprite(coords.x, coords.y, unitType);
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
 
         this.sprite.frame = 26;
         this.sprite.inputEnabled = true;
+        this.sprite.animations.add('wlk_up', [104, 105, 106, 107, 108, 109, 110, 111, 112], 10, true);
+        this.sprite.animations.add('wlk_down', [130, 131, 132, 133, 134, 135, 136, 137, 138], 10, true);
         this.sprite.animations.add('wlk_right', [143, 144, 145, 146, 147, 148, 149, 150, 151], 10, true);
         this.sprite.animations.add('wlk_left', [117, 118, 119, 120, 121, 122, 123, 124, 125], 10, true);
-
-
+ 
+        this.hpbar = this.game.add.sprite(coords.x,coords.y, 'hpbar');
+        this.hpbar.anchor.x = .5;
+        this.hpbar.anchor.y = 6;
         this.sprite.events.onInputDown.add(function(pointer){
             this.Perseus.controller.select(this);
-
-            // let node = {
-            //     x : this.game.getSquare(this.game.input.activePointer.x, this.game.input.activePointer.y).x,
-            //     y : this.game.getSquare(this.game.input.activePointer.x, this.game.input.activePointer.y).y,
-            //     h : 0,
-            //     g : 0,
-            //     parent: null
-            // };
-
-            // let target = {
-            //     x : 20,
-            //     y : 5,
-            //     h : 0,
-            //     g : 0,
-            //     parent: null
-            // };
-
-            // console.log(this.getNeightbors(node, target));
-
-            //NOTE(Michael): So for this I had a game.selected variable that held the one unit I was
-            //  selecting at the time. In the actual game we're going to want to have selected
-            //  be an array so that we can add multiple units.
-            // if(this.game.selected) {
-            //     if(this.game.selected.movable && this.game.input.activePointer.rightButton.isDown) {
-            //         this.game.selected.attack(this);
-            //     }else {
-            //         this.game.selected = this;
-            //     }
-            // } else {
-            //     this.game.selected = this;
-            // }
         }, this);
 
         this.sprite.events.onInputUp.add(function(pointer){
             this.Perseus.controller.endWithSelect(this);
         }, this);
 
+        this.Perseus.spriteGroup.add(this.sprite)
+
     }
 
     move(x, y){
-        /*
-           this.destx = x - (this.sprite.width/2);
-           this.desty = y - (this.sprite.width/2);
-           */
-        console.log("move!");
+
+        console.log(this);
         this.dest = this.Perseus.navigator.getSquare(x, y);
-        this.nextSquare = this.Perseus.navigator.findNextNode(this, this.dest);
-        this.destx = x;
-        this.desty = y;
+
+        //If the square is occupied, don't bother trying to move there
+        if(this.Perseus.navigator.navmap[this.dest.x][this.dest.y] == 1)
+        {
+            console.log("Can not move to location " + this.dest.x + " , " + this.dest.y);
+            this.dest.x = this.x;
+            this.dest.y = this.y;
+            return;
+        }
+
+        
+        this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
+        
+        //If there is no path, dont try to move to square
+        if(!this.currentPath)
+        {
+            console.log("Unit can't move");
+            this.moving=false;
+            return;
+        }
+        this.nextSquare = this.currentPath[0];
         this.moving = true;
     }
 
 
-    attack(target)
+    attack(target, square)
     {
         this.target = target;
+        this.attackSquare = square;
         this.attacking = true;
     }
 
-    takeDamage(damage)
+    attackMove(x,y)
     {
+        console.log("Attack Moving!");
+        let square = this.Perseus.navigator.getSquare(x,y);
+        this.attackMoveDest = {x: square.x ,y: square.y};
+
+        this.attackMoving = true;
+        this.move(x,y);
+
+    }
+
+    takeDamage(damage, attacker)
+    {
+        if(this.moving != true && this.attacking != true)
+        {
+            let atkSquare;
+            
+            if(attacker.type === "Archer" || attacker.type === "Wizard")
+            {
+                atkSquare = this.Perseus.navigator.findEmpty(attacker.x, attacker.y);
+            } else {
+                atkSquare = {x: this.x, y: this.y};
+            }
+            this.attack(attacker, atkSquare);
+        }
         this.hp -= (damage - this.defense);
         console.log(this.hp);
         if(this.hp < 1)
@@ -113,150 +146,194 @@ class Unit extends GameObject{
             }
 
             this.sprite.destroy();
-
-            return true; //Unit is dead
+            this.hpbar.destroy();
+            this.attacking = false;
+            this.moving = false;
+            attacker.stopAttack();
         }
+
+        this.hpbar.width = (this.hp / this.maxHP) * 64;
+
 
         return false; //Unit not dead
     }
-
-    checkColision(direction)
+    
+    checkCollision()
     {
-        let coord = {}
-
-        if(direction == "up")
-        {
-            coord.x = this.sprite.x;
-            coord.y = this.sprite.y - this.speed;
-
-        }
-        if(direction == "down")
-        {
-            coord.x = this.sprite.x;
-            coord.y = this.sprite.y + this.speed;
-
-        }
-        if(direction == "left")
-        {
-            coord.x =  this.sprite.x - this.speed;
-            coord.y = this.sprite.y;
-
-        }
-        if(direction == "right")
-        {
-
-            coord.x = this.sprite.x + this.speed;
-            coord.y = this.sprite.y;
-
-        }
+        let x = this.sprite.x;
+        let y = this.sprite.y;
+        let r = this.sprite.width;
 
         for(let i = 0; i < this.Perseus.objects.length; i++)
         {
-            if(this.Perseus.objects[i].movable == false)
+            if(this.Perseus.objects[i].isMovable == true)
             {
-                let obj = this.Perseus.objects[i].sprite;
-                if(coord.y + 64 > obj.y && coord.y +16 < obj.y + obj.height)
+                let dx = obj.sprite.x - x;
+                let dy = obj.sprite.y - y;
+
+                if(((dx * dx) + (dy*dy)) < r*r)
                 {
-                    if(coord.x + 48 > obj.x  && coord.x + 16 < obj.x + obj.width)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
+
             }
         }
 
         return false;
-
+        
     }
 
+    stopAttack()
+    {
+        this.sprite.animations.stop();
+        this.attacking = false;
+        this.target = null;
+        this.cooldown = 0;
+        
+    }
+    stop()
+    {
+        this.moving = false;
+       // this.attacking = false;
+        //this.currentPath = null;
+        this.pathStep = 0;
+        this.dest.x = this.x;
+        this.dest.y = this.y;
+        this.nextSquare = null;
+   
+        this.sprite.animations.stop();
+        
+    }
+    
+
     update(){
-        //Process movement if unit is moving
+        
+        this.Perseus.navigator.checkCollision(this);
+       
+
+        if(this.attackMoving)
+        {
+            if(this.y == this.attackMoveDest.y && this.x == this.attackMoveDest.x)
+            {
+                this.attackMoving = false;
+                this.moving = false;
+            } else{
+
+                if(!this.attacking)
+                {
+                    this.Perseus.objects.forEach((obj) =>{
+                        //If there is an enemy unit within three squares, attack it
+                        if(Math.abs(obj.x - this.x) < 3 && Math.abs(obj.y - this.y) < 3 && obj.faction != this.faction)
+                        {
+                            //Won't work for buildings. Possible TODO
+                            let emptySquare = this.Perseus.navigator.findEmpty(obj.x, obj.y);
+                            this.attack(obj, emptySquare);
+                            return;
+                        }else{
+                            if(!this.moving)
+                            {
+                                let coords = this.Perseus.navigator.getCoords(this.attackMoveDest.x, this.attackMoveDest.y);
+                                this.move(coords.x, coords.y);
+                            }
+                        }
+                    })
+                }
+            }
+        }
+        
         if(this.attacking)
         {
-            // if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width / 2))
-            // {
-            //     this.move(this.target.sprite.x, this.target.sprite.y)
-            // } else{
-            //     this.moving = false;
-            //     if(this.cooldown > 0)
-            //     {
-            //         this.cooldown--;
-            //     }else{
-            //         if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
-            //         {
-            //             this.sprite.animations.play('atk_right', true);
-            //         }else{
-            //             this.sprite.animations.play('atk_left',true);
-
-            //         }
-
-
-            //         let targetDead = this.target.takeDamage(this.attk);
-            //         console.log(targetDead);
-            //         console.log(this);
-            //         this.cooldown = 200 / this.attkSpeed;
-
-            //         if(targetDead)
-            //         {
-            //             this.attacking = false;
-            //             this.target = null;
-            //             this.sprite.animations.stop();
-            //         }
-            //     }
-            // }
-
-
             this.attackTick();
 
         }
-        if(this.moving)
-        {
-            let currentSquare = this.Perseus.navigator.getSquare(this.sprite.x + 32, this.sprite.y +32);
 
-            if(currentSquare.y == this.dest.y && currentSquare.x == this.dest.x)
-            {
-                this.sprite.animations.stop();
-                this.moving = false;
-            } else if(currentSquare.y == this.nextSquare.y && currentSquare.x == this.nextSquare.x) {
-                this.nextSquare = this.Perseus.navigator.findNextNode(this, this.dest);
-            }else{
+		if(this.moving)
+		{
+			if(this.nextSquare == null)
+			{
+				console.log(this);
+			}
 
-                if(currentSquare.x < this.nextSquare.x)
-                {
-                    this.sprite.x += this.speed;
-                    this.circle.x += this.speed;
-                    this.sprite.animations.play('wlk_right');
+			let destCoords = this.Perseus.navigator.getCoords(this.dest.x, this.dest.y);
+			let nextSquareCoords = this.Perseus.navigator.getCoords(this.nextSquare.x, this.nextSquare.y);
 
+			if(this.sprite.y == nextSquareCoords.y)
+			{
+				this.y = this.nextSquare.y;
+			}
 
-                }
-                if(currentSquare.x > this.nextSquare.x)
-                {
+			if(this.sprite.x == nextSquareCoords.x)
+			{
+				this.x = this.nextSquare.x;
+			}
 
-                    this.sprite.x -= this.speed;
-                    this.circle.x -= this.speed;
-                    this.sprite.animations.play('wlk_left');
+			if(this.sprite.y == destCoords.y && this.sprite.x == destCoords.x)
+			{
+				this.x = this.dest.x;
+				this.y = this.dest.y;
+				this.stop();
 
-                }
-                if(currentSquare.y < this.nextSquare.y)
-                {
+			} else if(this.sprite.y == nextSquareCoords.y && this.sprite.x == nextSquareCoords.x) {
+				this.pathStep++;
+				this.x = this.nextSquare.x;
+				this.y = this.nextSquare.y;
+				if(this.pathStep > this.currentPath.length -1)
+				{
+					this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
+					this.pathStep = 0;
+				}
+				if(this.currentPath == null)
+				{
+					console.log(this);
+				}
+				this.nextSquare = this.currentPath[this.pathStep];
+				this.Perseus.navigator.checkCollision(this);
 
-                    this.sprite.y += this.speed;
-                    this.circle.y += this.speed;
+			}else{
 
+				if(this.x < this.nextSquare.x)
+				{   
+					this.sprite.x += this.speed;
+					this.hpbar.x += this.speed;
+					this.circle.x += this.speed;
+					this.sprite.animations.play('wlk_right');
+				}
+				if(this.x > this.nextSquare.x)
+				{
 
-                }
-                if(currentSquare.y > this.nextSquare.y)
-                {
+					this.sprite.x -= this.speed;
+					this.hpbar.x -= this.speed;
+					this.circle.x -= this.speed;
+					this.sprite.animations.play('wlk_left');
 
-                    this.sprite.y -= this.speed;
-                    this.circle.y -= this.speed;
+				}
+				if(this.y < this.nextSquare.y)
+				{
+					if(this.x == this.nextSquare.x)
+					{
+						this.sprite.animations.play('wlk_down');
+					}
+					this.sprite.y += this.speed;
+					this.hpbar.y += this.speed;
+					this.circle.y += this.speed;
+				}
+				if(this.y > this.nextSquare.y)
+				{
 
-                }
-
-            }            
-        }
-    }
+					if(this.x == this.nextSquare.x)
+					{
+						this.sprite.animations.play('wlk_up');
+					}
+					this.sprite.y -= this.speed;
+					this.hpbar.y -= this.speed;
+					this.circle.y -= this.speed;
+				}
+			}            
+		}
+	}
 }
 
 export {Unit};
+
+
 
