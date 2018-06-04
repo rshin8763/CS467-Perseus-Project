@@ -24,8 +24,9 @@ class Player
 		this.Perseus = Perseus;
 		
 		// RESOURCES
-		this.playerGold = 0;
-		this.playerWood = 0;
+        // TODO change these later, for testing
+		this.playerGold = 1000;
+		this.playerWood = 1000;
 
 		// UNITS
 		this.playerWorkers = 0;
@@ -192,7 +193,7 @@ class Player
 	{
 		// ADD ONE FORT AND ONE WORKER
 		this.Perseus.objects.push(new Fort('human', 340, 300, this.Perseus));
-		this.Perseus.objects.push(new Worker('human', 300, 350, this.Perseus));
+		this.Perseus.objects.push(new Worker('human', 500, 450, this.Perseus));
 		this.playerWood = 30;
 		this.UpdatePlayerBuildings(1, 'Fort');
 	}

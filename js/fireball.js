@@ -55,7 +55,7 @@ class Fireball{
                     this.sprite.y -= Math.abs(this.target.sprite.y - this.sprite.y) / 60 + 1;
                 }
 
-                //If the arrow is clsoe to the target...
+                //If the fireball is clsoe to the target...
                 if(Math.abs(this.sprite.x - this.target.sprite.x) < (this.target.sprite.width/2))
                 {
                     if(Math.abs(this.sprite.y - this.target.sprite.y) < (this.target.sprite.height/2))  
@@ -65,7 +65,7 @@ class Fireball{
                         this.sprite.destroy();
                         //this.target.takeDamage(35, this.parent);
                         this.Perseus.objects.forEach((obj) => {
-                            if(Math.abs(obj.x - this.target.x) <=1 && Math.abs(obj.y - this.target.y) <=1 )
+                            if(Math.abs(obj.x - this.target.x) <=1 && Math.abs(obj.y - this.target.y) <=1 && obj.faction != this.parent.faction )
                             {
                                 obj.takeDamage(50, this.parent);
                             }

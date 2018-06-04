@@ -6,6 +6,7 @@ class SwordInfantry extends Unit {
         this.woodCost = 0;
         this.goldCost = 500;
         this.maxHP = 100;
+
         if (Math.random() >= 0.5){
             this.type="Swordsman";
             this.addSprite('swordsman');
@@ -17,20 +18,20 @@ class SwordInfantry extends Unit {
         }
 
         this.uiData = {
-            canBuild: false,
-            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
-            buildList:[]
+            commandList: {M: "Move", A: "Attack"},
+            buildList:{}
         };
 
         this.sprite.animations.add('atk_right', [195, 196, 197, 198, 199, 200], 10, true);
         this.sprite.animations.add('atk_left', [169, 170, 171, 172, 173, 174], 10, true);
+        this.priority = 2;
 
     }
 
     attackTick()
     {
-        // if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
-        if(this.x != this.attackSquare.x || this.y != this.attackSquare.y)
+        //if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
+         if(this.x != this.attackSquare.x || this.y != this.attackSquare.y)
         {
             let attackCoords = this.Perseus.navigator.getCoords(this.attackSquare.x, this.attackSquare.y);
             this.move(attackCoords.x, attackCoords.y);
@@ -41,7 +42,7 @@ class SwordInfantry extends Unit {
             {
                 this.cooldown--;
             }else{
-                if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
+                if(this.x < this.target.x)
                 {
                     this.sprite.animations.play('atk_right', true);
                 }else{
@@ -49,19 +50,15 @@ class SwordInfantry extends Unit {
 
                 }
 
-
-                let targetDead = this.target.takeDamage(this.attk, this);
-                console.log(targetDead);
-                console.log(this);
-                this.cooldown = 200 / this.attkSpeed;
-                
-                if(targetDead)
+                if(this.target.hp > 1)
                 {
-                    this.attacking = false;
-                    this.target = null;
-                    this.stop();
-                    this.sprite.animations.stop();
+                    this.cooldown = 200 / this.attkSpeed;
+                    this.target.takeDamage(this.attk, this);
+                } else {
+                    this.stopAttack();
                 }
+                
+
             }
         }
     }

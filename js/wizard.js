@@ -42,29 +42,24 @@ class Wizard extends Unit {
             {
                 this.cooldown--;
             }else{
-                if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
+                if(this.x < this.target.x)
                 {
                     this.sprite.animations.play('atk_right', null, false, false);
                 }else{
                     this.sprite.animations.play('atk_left', null, false, false);
 
                 }
-                if (this.Perseus.objects.includes(this.target))
+
+                if(this.target.hp > 1)
                 {
-                    new Fireball(this.sprite.x, this.sprite.y + 32, this, this.target, this.Perseus, 60);
                     this.cooldown = 200 / this.attkSpeed;
-                } else {
-                    this.attacking = false;
-                    this.target = null;
-                    this.sprite.animations.stop();
+                    new Fireball(this.sprite.x, this.sprite.y + 32, this, this.target, this.Perseus, 60);
+                }else {
+                    this.stopAttack();
                 }
 
-                // if(targetDead)
-                // {
-                //     this.attacking = false;
-                //     this.target = null;
-                //     this.sprite.animations.stop();
-                // }
+
+
             }
         }
     }
