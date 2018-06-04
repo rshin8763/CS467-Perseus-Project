@@ -62,7 +62,6 @@ class Ui
             let x = count%3*64 + 16;
             let y = Math.floor(count/3)*64 + 400;
             count++;
-
             let text = prop;
             let style = { font: "32px Arial", fill: "#ffffff", align: "center" };
             let button = this.Perseus.game.add.text(x+16,y+16,text,style);

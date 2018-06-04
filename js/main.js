@@ -90,8 +90,6 @@ function create() {
 
     // Sets collision  TODO make it work with unit's move method.
     // This uses phaser arcade physics. Since we are using a navmap,
-    // TODO find a way to prarse collision layer tiles into navmap
-    Perseus.map.setCollisionByExclusion([], true, Perseus.collisionLayer, true);
 
     //resizes the game world to match the layer dimensions
     Perseus.backgroundLayer.resizeWorld();
@@ -127,7 +125,6 @@ function create() {
     // AI
     Perseus.AI = new AI(Perseus);
     Perseus.AI.Main();
-
 
     // ------------------------------------------------------------------------
     // PAUSE BUTTON, MUTE, MENU

@@ -196,7 +196,7 @@ class Controller{
             if(this.keys.F.isDown) {
                 if (this.isViableCommand('F')){
                     if (this.cooldownTimer == 0){
-                        this.selectedObjects[0].build('Fort');
+                        this.selectedObjects[0].build('F');
                         this.state = 'place';
                         //cooldown
                         this.cooldownTimer = 10;
@@ -204,14 +204,14 @@ class Controller{
                 }
             }
             if(this.keys.R.isDown) {
-                if (this.isViableCommand('B')){
+                if (this.isViableCommand('R')){
                     // this.selectedObjects.forEach((obj) => {
                     //     console.log('moving');
                     //     obj.move(this.pointer.positionDown.x, this.pointer.positionDown.y);
                     //     this.state = 'default';
                     // }, this);
                     if (this.cooldownTimer == 0){
-                        this.selectedObjects[0].build('Fort');
+                        this.selectedObjects[0].build('B');
                         this.state = 'place';
                         //cooldown
                         this.cooldownTimer = 10;

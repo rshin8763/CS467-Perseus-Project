@@ -53,8 +53,7 @@ class Worker extends Unit{
 
         this.uiData = {
             commandList: {M: "Move", A: "Attack", G:"Gather", B:"Build"},
-            canBuild: true,
-            buildList:[{"F" : "Fort"}, {"B" : "Barracks"}, {"R" : "Archery Range"}, {"W" : "Wizard Tower"}, {"F" : "Farm"}]  
+            buildList:{F: "Fort", R: "Barracks", A: "Archery Range", W: "Wizard Tower", F: "Farm"}  
         };
 
         this.sprite.animations.add('work_right', [91, 92, 93, 94, 95, 96, 97, 98], 10, true);
@@ -81,13 +80,32 @@ class Worker extends Unit{
         return closest;
     }
 
+    build(str){
+        switch (str) {
+            case 'F':
+                this.buildFort();
+                break;
+            case 'R':
+                this.buildBarracks();
+                break;
+            case 'A':
+                this.buildArcheryRange();
+                break;
+            case 'W':
+                this.buildWizardTower();
+                break;
+            case 'F':
+                this.buildFarm();
+                break;
+        }
+    }
 
     buildFort()
     {
         if(this.Perseus.Player.playerWood > this.woodCosts.Fort 
                 && this.Perseus.resources.playerGold > this.goldCosts.Fort)
         {            
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort')
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort');
                 this.selectedBuilding = "Fort";
             this.placing = true;
             UpdatePlayerBuildings(1, 'Fort');
@@ -102,7 +120,7 @@ class Worker extends Unit{
         if(this.Perseus.Player.playerWood  > this.woodCosts.Barracks 
                 && this.Perseus.Player.playerGold  > this.goldCosts.Barracks)
         {            
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks')
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks');
                 this.selectedBuilding = "Barracks";
             this.placing = true;
 
@@ -118,7 +136,7 @@ class Worker extends Unit{
                 && this.Perseus.Player.playerGold > this.goldCosts.ArcheryRange)
         {
 
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange')
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange');
                 this.selectedBuilding = "ArcheryRange";
             this.placing = true;
 
@@ -135,7 +153,7 @@ class Worker extends Unit{
                 && this.Perseus.Player.playerGold > this.goldCosts.WizardTower)
         {
 
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower')
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower');
                 this.selectedBuilding = "WizardTower";
             this.placing = true;
 
@@ -150,7 +168,7 @@ class Worker extends Unit{
         if(this.Perseus.Player.playerWood > this.woodCosts.Farm 
                 && this.Perseus.Player.playerGold > this.goldCosts.Farm)
         {
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm')
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm');
                 this.selectedBuilding = "Farm";
             this.placing = true;
 
