@@ -83,19 +83,20 @@ class Worker extends Unit{
     build(str){
         switch (str) {
             case 'F':
-                this.buildFort();
+                console.log('Building Fort');
+                return this.buildFort();
                 break;
             case 'R':
-                this.buildBarracks();
+                return this.buildBarracks();
                 break;
             case 'A':
-                this.buildArcheryRange();
+                return this.buildArcheryRange();
                 break;
             case 'W':
-                this.buildWizardTower();
+                return this.buildWizardTower();
                 break;
             case 'F':
-                this.buildFarm();
+                return this.buildFarm();
                 break;
         }
     }
@@ -108,10 +109,13 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort');
                 this.selectedBuilding = "Fort";
             this.placing = true;
-            UpdatePlayerBuildings(1, 'Fort');
+            // UpdatePlayerBuildings(1, 'Fort');
             this.createConflictSquares();
+            return true;
+        } else {
+            console.log('not enough resources');
+            return false;
         }
-
 
     }
 
@@ -124,9 +128,13 @@ class Worker extends Unit{
                 this.selectedBuilding = "Barracks";
             this.placing = true;
 
-            UpdatePlayerBuildings(1, 'Barracks');
+            // UpdatePlayerBuildings(1, 'Barracks');
 
             this.createConflictSquares();
+            return true;
+        } else {
+            console.log('not enough resources');
+            return false;
         }
 
     }
@@ -140,9 +148,13 @@ class Worker extends Unit{
                 this.selectedBuilding = "ArcheryRange";
             this.placing = true;
 
-            UpdatePlayerBuildings(1, 'ArcheryRange');
+            // UpdatePlayerBuildings(1, 'ArcheryRange');
 
             this.createConflictSquares();
+            return true;
+        } else {
+            console.log('not enough resources');
+            return false;
         }
     }
 
@@ -157,9 +169,13 @@ class Worker extends Unit{
                 this.selectedBuilding = "WizardTower";
             this.placing = true;
 
-            UpdatePlayerBuildings(1, 'WizardTower');
+            // UpdatePlayerBuildings(1, 'WizardTower');
 
             this.createConflictSquares();    
+            return true;
+        } else {
+            console.log('not enough resources');
+            return false;
         }
     }
 
@@ -172,9 +188,13 @@ class Worker extends Unit{
                 this.selectedBuilding = "Farm";
             this.placing = true;
 
-            UpdatePlayerBuildings(1, 'Farm');
+            // UpdatePlayerBuildings(1, 'Farm');
 
             this.createConflictSquares(); 
+            return true;
+        } else {
+            console.log('not enough resources');
+            return false;
         }
     }
 
@@ -340,7 +360,6 @@ class Worker extends Unit{
 
         if(this.placing)
         {
-
             let selectedSquare = this.Perseus.navigator.getSquare(this.game.input.activePointer.x, this.game.input.activePointer.y);
             let coords = this.Perseus.navigator.getCoords(selectedSquare.x, selectedSquare.y);
             this.selectedSprite.x = coords.x - 64;

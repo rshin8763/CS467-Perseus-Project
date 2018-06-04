@@ -16,7 +16,7 @@ class Controller{
         this.keys.F = this.game.input.keyboard.addKey(Phaser.KeyCode.F);
         this.keys.X = this.game.input.keyboard.addKey(Phaser.KeyCode.X);
         this.keys.W = this.game.input.keyboard.addKey(Phaser.KeyCode.W);
-        this.keys.R = this.game.input.keyboard.addKey(Phaser.KeyCode.W);
+        this.keys.R = this.game.input.keyboard.addKey(Phaser.KeyCode.R);
         this.selectedObjects = [];
         this.highestPrioritySelected = null;
         this.lastPointerState; 
@@ -193,28 +193,36 @@ class Controller{
                     }
                 }
             }
+            if(this.keys.A.isDown) {
+                if (this.isViableCommand('A')){
+                    if (this.cooldownTimer == 0){
+                        if (this.selectedObjects[0].build('A')){
+                            this.state = 'place';
+                            //cooldown
+                            this.cooldownTimer = 10;
+                        }
+                    }
+                }
+            }
             if(this.keys.F.isDown) {
                 if (this.isViableCommand('F')){
                     if (this.cooldownTimer == 0){
-                        this.selectedObjects[0].build('F');
-                        this.state = 'place';
-                        //cooldown
-                        this.cooldownTimer = 10;
+                        if(this.selectedObjects[0].build('F')){
+                            this.state = 'place';
+                            //cooldown
+                            this.cooldownTimer = 10;
+                        }
                     }
                 }
             }
             if(this.keys.R.isDown) {
                 if (this.isViableCommand('R')){
-                    // this.selectedObjects.forEach((obj) => {
-                    //     console.log('moving');
-                    //     obj.move(this.pointer.positionDown.x, this.pointer.positionDown.y);
-                    //     this.state = 'default';
-                    // }, this);
                     if (this.cooldownTimer == 0){
-                        this.selectedObjects[0].build('B');
-                        this.state = 'place';
-                        //cooldown
-                        this.cooldownTimer = 10;
+                        if(this.selectedObjects[0].build('R')){
+                            this.state = 'place';
+                            //cooldown
+                            this.cooldownTimer = 10;
+                        }
                     }
                 }
             }
@@ -273,7 +281,7 @@ class Controller{
             {
                 this.selectedObjects[0].place();
             }else{
-            this.state = 'pointerHold';
+                this.state = 'pointerHold';
             }
         }
         if (this.cooldownTimer > 0 )this.cooldownTimer--;
@@ -287,6 +295,5 @@ class Controller{
         console.log("selected:", this.selectedObjects);
         if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
     }
-
 }
 export {Controller}

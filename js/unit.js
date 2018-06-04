@@ -295,7 +295,7 @@ class Unit extends GameObject{
 				{   
 					this.sprite.x += this.speed;
 					this.hpbar.x += this.speed;
-					this.circle.x += this.speed;
+					if(this.circle)this.circle.x += this.speed;
 					this.sprite.animations.play('wlk_right');
 				}
 				if(this.x > this.nextSquare.x)
@@ -303,7 +303,7 @@ class Unit extends GameObject{
 
 					this.sprite.x -= this.speed;
 					this.hpbar.x -= this.speed;
-					this.circle.x -= this.speed;
+					if(this.circle) this.circle.x -= this.speed;
 					this.sprite.animations.play('wlk_left');
 
 				}
@@ -315,7 +315,7 @@ class Unit extends GameObject{
 					}
 					this.sprite.y += this.speed;
 					this.hpbar.y += this.speed;
-					this.circle.y += this.speed;
+					if(this.circle) this.circle.y += this.speed;
 				}
 				if(this.y > this.nextSquare.y)
 				{
@@ -326,7 +326,7 @@ class Unit extends GameObject{
 					}
 					this.sprite.y -= this.speed;
 					this.hpbar.y -= this.speed;
-					this.circle.y -= this.speed;
+					if(this.circle) this.circle.y -= this.speed;
 				}
 			}            
 		}

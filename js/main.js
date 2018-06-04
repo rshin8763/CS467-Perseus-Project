@@ -25,7 +25,6 @@ var w = 800, h = 600;
 var menuBar, pause_button, saveButton, quitButton, newGameButton, resumeButton, mute_button;
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 
-
 function preload() {
     this.load.tilemap('demo', 'assets/tilemaps/map1.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.image('topbar', 'assets/topbar.png');
