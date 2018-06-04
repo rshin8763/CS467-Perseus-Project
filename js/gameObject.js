@@ -1,6 +1,14 @@
 class GameObject {
     constructor(movable, Perseus){
         this.Perseus = Perseus;
+        if(Perseus.idCounter == null)
+        {
+            Perseus.idCounter = 0;
+        }
+
+        this.tag = Perseus.idCounter;
+        Perseus.idCounter++;
+
         this.game = Perseus.game;
         this.movable = movable;
         this.circle = null;

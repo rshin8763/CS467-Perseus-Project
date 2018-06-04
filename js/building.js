@@ -13,6 +13,7 @@ class Building extends GameObject{
         this.current = null;
         this.units = {};
         this.Perseus.objects.push(this);
+        this.movable = false;
     }
 
     addSprite(buildingType){       
@@ -47,10 +48,27 @@ class Building extends GameObject{
 
     }
 
-    takeDamage(damage)
+    takeDamage(damage, attacker)
     {
-        //TODO: Implement
+        this.hp -= damage;
+
+        if(this.hp < 1)
+        {
+            attacker.stopAttack();
+
+        
+            this.sprite.destroy();
+
+            for(let i = 0; i < this.Perseus.objects.length; i++)
+            {
+                if(this.Perseus.objects[i] === this )
+                {
+                    this.Perseus.objects.splice(i, 1);
+                }
+            }
+        }
     }
+
     
 }
 

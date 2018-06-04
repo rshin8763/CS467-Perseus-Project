@@ -11,6 +11,7 @@ import {Wizard} from './wizard.js';
 import {WizardTower} from './wizardtower.js';
 import {ArcheryRange} from './archeryrange.js';
 import {Farm} from './farm.js';
+import {Player} from './player.js';
 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
@@ -118,16 +119,16 @@ function create() {
     //Create an objects array on the game object and add a soldier to it.
     Perseus.objects = [];
 
-    
-    Perseus.objects.push(new SwordInfantry('human', 8, 6, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 8, 7, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 8, 8, Perseus));
+    Perseus.Player = new Player(Perseus);
+    Perseus.objects.push(new SwordInfantry('human', 250, 175, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 250, 200, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
 
 
     
-    Perseus.objects.push(new SwordInfantry('orc', 10,6,Perseus));
-    Perseus.objects.push(new SwordInfantry('orc', 10,7,Perseus));
-    Perseus.objects.push(new Wizard('orc', 10,8,Perseus));
+    Perseus.objects.push(new SwordInfantry('orc', 300,175,Perseus));
+    Perseus.objects.push(new SwordInfantry('orc', 300,200,Perseus));
+    Perseus.objects.push(new Wizard('orc', 300,250,Perseus));
 
     let wizardTower = new WizardTower('human', 400, 400, Perseus);
     Perseus.objects.push(wizardTower);
@@ -149,12 +150,12 @@ function create() {
     // Perseus.objects.push(farm);
 
 
-    Perseus.objects[0].move(1800,1100);
-    Perseus.objects[1].move(20,1100);
-    Perseus.objects[2].move(2000,100);
-    Perseus.objects[3].move(1000,500);
-    Perseus.objects[4].move(1800,200);
-    Perseus.objects[5].move(180,1100);
+    // Perseus.objects[0].move(1800,1100);
+    // Perseus.objects[1].move(20,1100);
+    // Perseus.objects[2].move(2000,100);
+    // Perseus.objects[3].move(1000,500);
+    // Perseus.objects[4].move(1800,200);
+    // Perseus.objects[5].move(180,1100);
 
 
     console.log(Perseus.objects);
@@ -242,12 +243,24 @@ function create() {
 
 function update(){
 
+    // for(let i = 0; i < 80; i++)
+    // {
+    //     for(let j = 0; j < 80; j++)
+    //     {
+    //         if(Perseus.navigator.navmap[i][j] == 1)
+    //         {
+    //             let coords = Perseus.navigator.getCoords(i, j);
+    //             Perseus.game.add.sprite(coords.x, coords.y, 'navSquare');
+    //         }
+
+    //     }
+    // }
     Perseus.controller.update();
     //Call the update function on each game object
     Perseus.objects.forEach(function(obj){
         obj.update();
         //Make sure that sprites higher up on the map are rendered behind the lower sprites
-
+        Perseus.spriteGroup.sort('y', Phaser.Group.SORT_ASCENDING);
     });
 
 }

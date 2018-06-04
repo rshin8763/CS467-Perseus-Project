@@ -86,67 +86,85 @@ class Worker extends Unit{
 
     buildFort()
     {
-        //TODO: Move logic inside this if statment once we have access to resource amounts
-        // if(this.Perseus.resources.wood > this.woodCosts.Fort 
-        //     && this.Perseus.resources.gold > this.goldCosts.Fort)
-        // {
-        // }
 
-        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort')
-        this.selectedBuilding = "Fort";
-        this.placing = true;
+        if(this.Perseus.Player.playerWood > this.woodCosts.Fort 
+            && this.Perseus.resources.playerGold > this.goldCosts.Fort)
+        {            
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort')
+            this.selectedBuilding = "Fort";
+            this.placing = true;
 
-        this.createConflictSquares();
+            UpdatePlayerBuildings(1, 'Fort');
+
+            this.createConflictSquares();
+        }
+
 
     }
 
     buildBarracks()
     {
-        //TODO: Move logic inside this if statment once we have access to resource amounts
-        // if(this.Perseus.resources.wood > this.woodCosts.Barracks 
-        //     && this.Perseus.resources.gold > this.goldCosts.Barracks)
-        // {
-        // }
 
-        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks')
-        this.selectedBuilding = "Barracks";
-        this.placing = true;
-        this.createConflictSquares();
+        if(this.Perseus.Player.playerWood  > this.woodCosts.Barracks 
+            && this.Perseus.Player.playerGold  > this.goldCosts.Barracks)
+        {            
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks')
+            this.selectedBuilding = "Barracks";
+            this.placing = true;
+
+            UpdatePlayerBuildings(1, 'Barracks');
+
+            this.createConflictSquares();
+        }
+
     }
     buildArcheryRange()
     {
-        //TODO: Move logic inside this if statment once we have access to resource amounts
-        // if(this.Perseus.resources.wood > this.woodCosts.ArcheryRange 
-        //     && this.Perseus.resources.gold > this.goldCosts.ArcheryRange)
-        // {
-        // }
 
-        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange')
-        this.selectedBuilding = "ArcheryRange";
-        this.placing = true;
-        this.createConflictSquares();
+        if(this.Perseus.Player.playerWood > this.woodCosts.ArcheryRange 
+            && this.Perseus.Player.playerGold > this.goldCosts.ArcheryRange)
+        {
+        
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange')
+            this.selectedBuilding = "ArcheryRange";
+            this.placing = true;
 
+            UpdatePlayerBuildings(1, 'ArcheryRange');
+
+            this.createConflictSquares();
+        }
     }
 
     buildWizardTower()
     {
-        //TODO: Move logic inside this if statment once we have access to resource amounts
-        // if(this.Perseus.resources.wood > this.woodCosts.WizardTower 
-        //     && this.Perseus.resources.gold > this.goldCosts.WizardTower)
-        // {
-        // }
+
+        if(this.Perseus.Player.playerWood > this.woodCosts.WizardTower 
+            && this.Perseus.Player.playerGold > this.goldCosts.WizardTower)
+        {
+        
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower')
             this.selectedBuilding = "WizardTower";
             this.placing = true;
+
+            UpdatePlayerBuildings(1, 'WizardTower');
+
             this.createConflictSquares();    
+        }
     }
 
     buildFarm()
     {
+        if(this.Perseus.Player.playerWood > this.woodCosts.Farm 
+            && this.Perseus.Player.playerGold > this.goldCosts.Farm)
+        {
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm')
+            this.selectedBuilding = "Farm";
+            this.placing = true;
 
-        this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm')
-        this.selectedBuilding = "Farm";
-        this.placing = true;
+            UpdatePlayerBuildings(1, 'Farm');
+
+            this.createConflictSquares(); 
+        }
     }
 
 
@@ -178,38 +196,41 @@ class Worker extends Unit{
 
     attackTick()
     {
-        // if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
-        if(this.x != this.attackSquare.x || this.y != attackSquare.y)
+        //if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
+        if(this.x != this.attackSquare.x || this.y != this.attackSquare.y)
         {
             let attackCoords = this.Perseus.navigator.getCoords(this.attackSquare.x, this.attackSquare.y);
             this.move(attackCoords.x, attackCoords.y);
         } else{
+            if(Math.abs(this.x - this.target.x) > this.range || Math.abs(this.y - this.target.y > this.range))
+            {
+                //This wont work for buildings, but they shouldn't move so it should't ever come up.
+                //It also isn't done as a group, so a group following somebody might stack.
+                let emptySquare = this.Perseus.navigator.findEmpty(this.target.x, this.target.y);
+                this.attack(this.target, emptySquare);
+                return;
+            }
             console.log(this.target);
             this.moving = false;
             if(this.cooldown > 0)
             {
                 this.cooldown--;
             }else{
-                if(this.sprite.x < this.target.sprite.x - (this.sprite.width / 2))
+                if(this.x < this.target.x)
                 {
                     this.sprite.animations.play('atk_right', true);
                 }else{
                     this.sprite.animations.play('atk_left',true);
-
                 }
 
-
-                let targetDead = this.target.takeDamage(this.attk, this);
-                console.log(targetDead);
-                console.log(this);
-                this.cooldown = 200 / this.attkSpeed;
-                
-                if(targetDead)
+                if(this.target.hp > 1)
                 {
-                    this.attacking = false;
-                    this.target = null;
-                    this.sprite.animations.stop();
+                this.cooldown = 200 / this.attkSpeed;
+                this.target.takeDamage(this.attk, this);
+                }else {
+                    this.stopAttack();
                 }
+
             }
         }
     }

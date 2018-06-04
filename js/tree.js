@@ -5,11 +5,20 @@ class Tree extends GameObject{
         this.sprite = null;
         this.resourceAmount = 1000;
         this.exhausted = false;
-        this.addSprite(x,y);
-        this.type = 'wood';
         let square = this.Perseus.navigator.getSquare(x,y);
+        let coords = this.Perseus.navigator.getCoords(square.x, square.y);
+        this.addSprite(coords.x, coords.y);
+        this.type = 'wood';
         this.x = square.x;
         this.y = square.y;
+
+        for(let i = 0; i < 2; i++)
+        {
+            for(let j = 0; j < 2; j++){
+                this.Perseus.navigator.markOccupied(this.x+i, this.y+j);
+            }
+        }
+
     }
 
     addSprite(x, y){    
