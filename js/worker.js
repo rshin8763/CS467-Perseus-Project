@@ -5,8 +5,6 @@ import {Barracks} from './barracks.js'
 import {ArcheryRange} from './archeryrange.js'
 import {WizardTower} from './wizardtower.js'
 import {Farm} from './farm.js'
-import {Unit} from './unit.js';
-import {Fort} from './fort.js';
 import {AI} from './ai.js';
 import {Player} from './player.js';
 
