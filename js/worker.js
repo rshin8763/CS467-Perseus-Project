@@ -280,13 +280,11 @@ class Worker extends Unit{
     }
 
     moveTo(obj){
-        let border = this.Perseus.navigator.findObjectBorder(obj);
-
-        let rand = Math.floor(Math.random() * border.length);
+        let border = this.Perseus.navigator.findObjectBorder(obj, {x : this.x, y : this.y});
 
         console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
         this.gatherstate = 0;
-        let coords = this.Perseus.navigator.getCoords(border[rand].x, border[rand].y);
+        let coords = this.Perseus.navigator.getCoords(border[0].x, border[0].y);
         this.move(coords.x, coords.y);
     }
     update(){
