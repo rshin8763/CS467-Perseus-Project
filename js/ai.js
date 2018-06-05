@@ -10,6 +10,8 @@ import {Worker} from './worker.js';
 var objects, resources, enemyHealthText;
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 var i = 0;
+var MyBuildings = [];
+
 
 class AI
 {
@@ -89,6 +91,11 @@ class AI
 			this.AIPikemen = this.AIPikemen + x;
 			console.log("AI has " + this.AIPikemen + " pikemen");
 		}
+		else if (type == 'wizard' || type == 'Wizard')
+		{
+			this.AIWizards = this.AIWizards + x;
+			console.log("AI has " + this.AIWizards + " wizards");
+		}
 		else
 		{
 			console.log("You entered an invalid type: " + type);
@@ -98,7 +105,7 @@ class AI
 
 	/*-----------------------------------------------------------------------*/
 	// UPDATES AI BUILDINGS COUNT AND RESOURCES; INVALID INPUT RETURNS FALSE
-	UpdateAIBuildings(x, type)
+	UpdateAIBuildings(x, type, tag)
 	{
 		// CHECKS TO SEE IF ADDING A BUILDING OR SUBTRACTING
 		var addBuilding;
@@ -106,7 +113,7 @@ class AI
 		{
 			addBuilding = false;
 		}
-		else if (addBuilding == 1)
+		else if (x == 1)
 		{
 			addBuilding = true;
 		}
@@ -122,6 +129,7 @@ class AI
 			if(addBuilding == true)
 			{
 				this.UpdateAIResources(-30, 'wood');
+				this.AddBuilding('Fort');
 // AUTOMATICALLY SPAWN UNITS??????????
 			}
 			this.AIForts = this.AIForts + x;
@@ -131,10 +139,19 @@ class AI
 			if (addBuilding == true)
 			{
 				this.UpdateAIResources(-50, 'gold');
+				this.AddBuilding('Barracks', tag);
 // AUTOMATICALLY SPAWN UNITS?????
 
 			}
 			this.AIBarracks = this.AIBarracks + x;
+		}
+		else if (type == 'Wizard Tower' || type == 'wizard tower')
+		{
+			if (addBuilding == true)
+			{
+				this.UpdateAIResources(-100, 'gold');
+// AUTHOMATICALLY SPAWN UNITS??!??!?!?!
+			}
 		}
 		else // ERROR HANDLING
 		{
@@ -142,6 +159,32 @@ class AI
 			return false;
 		}
 		this.AIAllBuildings = this.AIAllBuildings + x;
+	}
+
+	/*-----------------------------------------------------------------------*/
+	AddBuilding(type, tag)
+	{
+		var newBuilding = {
+			kind: type,
+			corner: [false, false, false, false],
+			id: tag
+		};
+		MyBuildings.push(newBuilding);
+		/*var key;
+		for (key in MyBuildings)
+		{
+			console.log("This Building kind is: " + MyBuildings[key].kind);
+		}*/
+	}
+
+	/*-----------------------------------------------------------------------*/
+	CheckBuildingCorner(x, y)
+	{
+		if (MyBuildings[x].corner[y] == true)
+		{
+			return true;
+		}
+		return false;
 	}
 
  	/*-----------------------------------------------------------------------*/
@@ -152,6 +195,7 @@ class AI
 		this.Perseus.objects.push(new Worker('orc', 350, 350, this.Perseus));
 		this.forts = 1;
 		this.workers = 1;
+		this.UpdateAIBuildings(1, 'Fort');
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -213,59 +257,45 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
-	// Defense STATE: DEFEND THE BORDERS
-	DefenseState()
+	// 
+	StationStandingArmy()
 	{
-		// FRACTION OF ARMY DESIGNATED AS STANDING ARMY 
-
-		// IMMEDIATELY MOVE TOWARDS ANYONE WHO CROSSES BORDERS & ATTACK
-
-		// IF THEY LEAVE BORDERS, RESUME WORK
-
-		// DON'T PASS BORDERS
-
-		// ONLY USE ARMY DESIGNATED TO BE LEFT BEHIND
-
-		// PUT HIGHER PRECEDENCE ON THOSE IN PROXIMITY TO BUILDINGS
-
-	}
-
-	/*-----------------------------------------------------------------------*/
-	// ATTACK STATE: ATTACK THE ENEMY
-	AttackState()
-	{
-		// FRACTION OF ARMY DESIGNATED AS ATTACKING ARMY
-
-		// ATTACK BUILDINGS OF OTHER TEAM, NOT OWN
-
-		// FIGHT BACK WHEN ATTACKED
-	}
-
-	/*-----------------------------------------------------------------------*/
-	// EVENT SEQUENCES THAT TRIGGER THE THREE (IDLE, OFFENSE, ATTACK) STATES
-	EventSequencesLoop()
-	{
-		// SET TIMER FOR IDLE STATE TO BUILD CERTAIN NUMBER OF RESOURCES
-		this.GatherResources();
-		// ONCE TIMER ENDS, BUILD BUILDINGS
-
-
-		// SET TIMER FOR CERTAIN NUMBER OF ARMY MEMBERS
-		// IMMEDIATELY DESIGNATE STANDING AND ATTACKING ARMY
-		// SEND STANDING ARMY TO GUARD BORDERS
-		// AFTER CERTAIN NUMBER OF STANDING ARMY MEMBERS IS REACHED, ATTACK
-	}
-
-	CheckSafetyState()
-	{
-		// GO THROUGH LIST OF HUMAN OBJECTS
-		for (x in this.objects)
+		var thisObject = 0;
+		for (thisObject in this.objects)
 		{
-			
+			if(this.objects[thisObject].type == 'Archer')
+			{
+				if(this.objects[thisObject].faction == 'orc')
+				{
+					var	isOccupied = true;
+					var allOccupied = false;
+					var x = -1, y = 0, counter = 0;
+					while(isOccupied == true && allOccupied == false)
+					{
+						counter + 1;
+						x + 1;
+						if (x == this.AIAllBuildings)
+						{
+							y + 1;
+							x = 0;
+							if (counter > (4 * this.AIAllBuildings))
+							{
+								allOccupied = true;
+							}
+						}
+						isOccupied = this.CheckBuildingCorner(x, y);
+					}
+				}
+				if (allOccupied == true)
+				{
+					// SendToOffense(this.objects[thisObject].tag);
+				}
+				else
+				{
+					//OccupyCorner(x, y, this.objects[thisObject].tag);
+				}
+			}
 		}
-		// CHECK IF CURRENT COORDINATES ARE WITHIN BORDERS
-		// IF SO, START DEFENSE FUNCTION
-		// IF NOT, DO NOTHING 
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -300,7 +330,8 @@ class AI
 		enemyHealthText.cameraOffset.setTo(600, 0);
 
 		this.AddStartingSprites();
-		this.EventSequencesLoop();
+		//this.GatherResources();
+		this.UpdateAIBuildings(1, 'Barracks');
 	}
 }
 
