@@ -250,13 +250,25 @@ class Navigator {
     });
     }
 
-    isOccupied(x, y)
+    isOccupied(x, y, faction)
     {
         for(let i = 0; i < this.units.length; i++)
         {
+            
             if(x == this.units[i].x && y == this.units[i].y)
             {
-                return true;
+                if(faction == null || faction == this.units[i].faction)
+                {
+                    return true;
+                }
+            }
+
+            if(x == this.units[i].dest.x && y == this.units[i].dest.y)
+            {
+                if(faction == null || faction == this.units[i].faction)
+                {
+                    return true;
+                }            
             }
         }
         
