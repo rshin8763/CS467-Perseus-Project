@@ -58,6 +58,8 @@ var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 var i = 0;
 var number = 0;
 var buildSpotX = 1000, buildSpotY = 800, buildChanger = 150;
+var tagTracker = [];
+var newTags = [];
 
 
 class AI
@@ -86,6 +88,23 @@ class AI
 		this.AIBarracks = 0;
 		this.AITowers = 0;
 		this.AIAllBuildings = 0;
+	}
+
+	/*-----------------------------------------------------------------------*/
+	// 	RETREIVES PLAYER STATISTICS
+	GetAIStats()
+	{
+		console.log("Current Amounts for AI");
+		//console.log("Gold: " + this.AIGold);
+		//console.log("Wood: " + this.AIWorkers);
+		//console.log("Workers: " + this.AIWorkers);
+		//console.log("Pikemen: " + this.AIPikemen);
+		//console.log("Swordsman: " + this.AISwordInfantry);
+		//console.log("Archers: " + this.AIArchers);
+		console.log("Forts: " + this.AIForts);
+		console.log("Barracks: " + this.AIBarracks);
+		console.log("Wizard Towers: " + this.AITowers);
+		console.log("All Buildings: " + this.AIAllBuildings);
 	}
 
 /*****************************************************************************/
@@ -193,7 +212,7 @@ class AI
 		else if (x == 1)
 		{
 			addBuilding = true;
-			var tag = this.Perseus.idCounter-1;
+			var tag = this.Perseus.idCounter;
 		}
 		else
 		{
@@ -210,6 +229,11 @@ class AI
 				this.UpdateAIResources(-30, 'wood');
 				this.AddBuilding('Fort', tag);
 			}
+			else
+			{
+				this.AIForts--;
+				this.AIAllBuildings--;
+			}
 		}
 
 		// BARRACKS - COST: 50 WOOD, 20 GOLD
@@ -221,6 +245,11 @@ class AI
 				this.UpdateAIResources(-20, 'gold');
 				this.AddBuilding('barracks', tag);
 			}
+			else
+			{
+				this.AIBarracks--;
+				this.AIAllBuildings--;
+			}
 		}
 
 		// WIZARD TOWER - COST: 50 GOLD
@@ -229,7 +258,12 @@ class AI
 			if (addBuilding == true)
 			{
 				this.UpdateAIResources(-50, 'gold');
-				this.AddBuilding('wizard tower');
+				this.AddBuilding('wizard tower', tag);
+			}
+			else
+			{
+				this.AITowers--;
+				this.AIAllBuildings--;
 			}
 		}
 
@@ -363,40 +397,42 @@ class AI
 			console.log("This Building kind is: " + MyBuildings[key].kind);
 		}*/
 	}
-	/*-----------------------------------------------------------------------*/
-	// SPAWNS 1 BUILDING AND CORRESPONDING SPRITES
-	DeleteBuilding(idNumb)
-	{
-		// GET BUILDING TYPE FROM ID BY SORTING THROUGH ARRAY
-		// UPDATE BUILDING COUNTS
-		// UPDATE BUILDING ARRAY
-		// CHECK IF GAME OVER
-	}
 
 	/*-----------------------------------------------------------------------*/
 	// DELETES BUILDING ENTRY FROM MYBUILDINGS ARRAY
-	DeleteBuildingfromArray(tag)
+	DeleteBuilding(tag)
 	{
-		var x, y;
+		var x = 0, y;
+		// SORT THROUGH ARRAY & FIND MATCHING ID
 		for(x = 0; x < MyBuildings.length; x++)
 		{
 			if(MyBuildings[x].idNumber == tag)
 			{
-				if (x == (MyBuildings.length - 1))
+				console.log("A Building is being deleted!");
+				this.UpdateAIBuildings(-1, MyBuildings[x].kind);
+				while(x < MyBuildings.length)
 				{
-					MyBuildings.pop();
-				}
-				else
-				{
-					MyBuildings[x].kind = MyBuildings[x+1].kind;
-					for (y = 0; y < 5; y++)
+					// MOVE ALL ENTRIES OVER ONE TO REPLACE LOST
+					if (x == (MyBuildings.length - 1)) // IS LAST ONE
 					{
-						MyBuildings[x].corner[y] = MyBuildings[x+1].corner[y];
+						MyBuildings.pop();
 					}
-					MyBuildings[x].idNumber = MyBuildings[x+1].idNumber;
+					else // ISN'T LAST ENTRY, MOVE ALL DATA FROM RIGHT
+					{
+						MyBuildings[x].kind = MyBuildings[x+1].kind;
+						for (y = 0; y < 5; y++)
+						{
+							MyBuildings[x].corner[y] = MyBuildings[x+1].corner[y];
+						}
+						MyBuildings[x].idNumber = MyBuildings[x+1].idNumber;
+					}
+					x++;
 				}
-				
 			}
+		}
+		if (MyBuildings.length <= 0)
+		{
+			//console.log("Game over!");
 		}
 	}
 
@@ -505,7 +541,7 @@ class AI
 			this.AIArchers = this.AIArchers + x;
 			if(x == -1)
 			{
-				DeleteUnit(x, type)
+				DeleteUnit(x, type);
 			}
 			console.log("AI has " + this.AIArchers + " archers");
 		}
@@ -596,11 +632,24 @@ class AI
 
 	}
 
+
+
+
 	/*-----------------------------------------------------------------------*/
 	update()
 	{
-
 		
+		
+	}
+
+	printArray()
+	{
+		for(var m = 0; m < MyBuildings.length; m++)
+		{
+			console.log("Building Array Location: " + m);
+			console.log("id: " + MyBuildings[m].idNumber);
+			console.log("kind: " + MyBuildings[m].kind);
+		}
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -611,11 +660,13 @@ class AI
 		enemyHealthText.fixedToCamera = true;
 		enemyHealthText.cameraOffset.setTo(570, 3);
 
-		//this.AddStartingSprites();
 		//this.GatherResources();
 		this.UpdateAIBuildings(1, 'Barracks');
 		this.UpdateAIBuildings(1, 'Fort');
 		this.UpdateAIBuildings(1, 'Wizard Tower');
+		this.FillTagTracker();
+		//this.printArray();
+		console.log("Current Index: " + this.Perseus.idCounter);
 	}
 }
 

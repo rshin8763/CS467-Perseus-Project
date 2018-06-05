@@ -103,7 +103,7 @@ function create() {
     Perseus.uiGraphics = Perseus.game.add.group();
     Perseus.gui = Perseus.game.add.group();
 
-    console.log(Perseus.navigator.navmap);
+    //console.log(Perseus.navigator.navmap);
 
     // Perseus.navigator.markOccupied(300, 300);
 
@@ -142,7 +142,7 @@ function create() {
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
 
-    console.log(Perseus.objects);
+    //console.log(Perseus.objects);
 }
 
 function update(){

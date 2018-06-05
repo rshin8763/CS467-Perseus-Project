@@ -145,11 +145,6 @@ class Unit extends GameObject{
                     this.Perseus.objects.splice(i, 1);
                 }
             }
-
-            if(this.faction == 'orc')
-            {
-////////////////////////////////////////////////////////////
-            }
             this.sprite.destroy();
             this.hpbar.destroy();
             this.attacking = false;

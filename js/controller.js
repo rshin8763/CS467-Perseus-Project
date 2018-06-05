@@ -94,7 +94,7 @@ class Controller{
         // Select objects
         this.Perseus.objects.forEach(function(obj){
             if(obj instanceof Unit){
-                console.log(obj.sprite.x, obj.sprite.y);
+                //console.log(obj.sprite.x, obj.sprite.y);
                 // Put this logic in function.
                 if(this.boxStartPos.x <= obj.sprite.x  && obj.sprite.x <= this.boxEndPos.x 
                         || this.boxEndPos.x <= obj.sprite.x && obj.sprite.x <= this.boxStartPos.x){

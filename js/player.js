@@ -241,7 +241,7 @@ class Player
 	    towerText.cameraOffset.setTo(470, 3);
 
 	    this.AddStartingSprites();
-	    this.GetPlayerStats();
+	    //this.GetPlayerStats();
 	}
 }
 
