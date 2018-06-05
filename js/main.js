@@ -144,7 +144,7 @@ function create() {
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
 
-    //console.log(Perseus.objects);
+    console.log(Perseus.objects);
 }
 
 function update(){
