@@ -654,15 +654,9 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	UpdateRoles()
 	{
-
-	}
-
-	/*-----------------------------------------------------------------------*/
-	// SENDS ALL WORKERS TO GATHER RESOURCES
-	GatherResources()
-	{ 
 		
 	}
+	
 	/*-----------------------------------------------------------------------*/
 	// 
 	StationStandingArmy()
@@ -801,10 +795,7 @@ class AI
 		this.AddUnit('SwordInfantry');
 		this.AddUnit('Wizard');
 
-		//this.DeleteBuilding(tmp);
 
-		//this.printArrays();
-		//this.GetAIStats();
 	}
 }
 
