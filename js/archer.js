@@ -9,6 +9,8 @@ class Archer extends Unit {
         this.range = 5;
         this.arrow = false;
         this.arrowSprite = null;
+        this.priority = 2;
+
         if (Math.random() >= 0.5){
             this.type="Archer";
             this.addSprite('archer_male');
@@ -21,8 +23,8 @@ class Archer extends Unit {
 
         this.uiData = {
             canBuild: false,
-            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
-            buildList:[]
+            commandList: {M: "Move", A: "Attack"},
+            buildList:{}
         };
 
         this.sprite.animations.add('atk_right', [247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259], 10, true);

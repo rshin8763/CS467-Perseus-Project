@@ -13,9 +13,8 @@ class GameObject {
         this.movable = movable;
         this.circle = null;
         this.uiData = {
-            canBuild: false,
-            commandList:[],
-            buildList:[]
+            commandList:{},
+            buildList:{}
         };
     }
     drawSelectionCircle(){

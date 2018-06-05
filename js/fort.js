@@ -12,6 +12,10 @@ class Fort extends Building{
         this.type = "Fort";
         this.WORKER = 1;
         this.buildSpeed = 1;
+        this.uiData = {
+            commandList: {B:"Build"},
+            buildList: {W: "Worker"}  
+        };
         this.WorkerCosts = {
             wood : 0,
             gold : 400
