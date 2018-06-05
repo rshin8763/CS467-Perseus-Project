@@ -103,6 +103,10 @@ class Unit extends GameObject{
 
     attack(target, square)
     {
+	if(this.faction == target.faction)
+	{
+	    return;
+	}
         this.target = target;
         this.attackSquare = square;
         this.attacking = true;
