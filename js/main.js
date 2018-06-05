@@ -15,7 +15,7 @@ Perseus.graphics = {}
 // var Main = function() {};
 
 // create the game, and pass it the configuration
-Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+Perseus.game = new Phaser.Game(800, 550, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 // RESOURCES TEXT OBJECTS
 var buttonClick = false;
@@ -33,6 +33,7 @@ function preload() {
     this.load.image('tree', 'assets/images/tree.png');
     this.load.image('barracks', 'assets/barracks.png');
     this.load.image('fort', 'assets/fort.png');
+    this.load.image('wizardtower', 'assets/wizardtower.png');
     this.load.image('ui', 'assets/ui/stoneMenu.png');
     this.load.image('hpbar', 'assets/healthbar.png');
     this.load.image('navSquare', 'assets/navSquare.png');
@@ -102,10 +103,6 @@ function create() {
     Perseus.uiGraphics = Perseus.game.add.group();
     Perseus.gui = Perseus.game.add.group();
 
-    Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
-
     console.log(Perseus.navigator.navmap);
 
     // Perseus.navigator.markOccupied(300, 300);
@@ -114,6 +111,10 @@ function create() {
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
     Perseus.ui = new Ui(Perseus);
+
+    Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
+    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
     // ------------------------------------------------------------------------
     // PLAYER
@@ -127,15 +128,17 @@ function create() {
 
     // ------------------------------------------------------------------------
     // PAUSE BUTTON, MUTE, MENU
+
+
     var pause_button = Perseus.game.add.text(0, 0, 'Pause', style);
     pause_button.fixedToCamera = true;
-    pause_button.cameraOffset.setTo(10, 0);
+    pause_button.cameraOffset.setTo(10, 3);
     pause_button.inputEnabled = true;
     pause_button.events.onInputUp.add(pause);
 
     mute_button = Perseus.game.add.text(0, 0, 'Mute', style);
     mute_button.fixedToCamera = true;
-    mute_button.cameraOffset.setTo(700, 0);
+    mute_button.cameraOffset.setTo(755, 3);
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
 
@@ -150,6 +153,7 @@ function update(){
     Perseus.objects.forEach(function(obj){
         obj.update();
     });
+    Perseus.AI.update();
 
     
     // for(let i = 0; i < 80; i++)

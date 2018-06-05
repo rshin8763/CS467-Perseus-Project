@@ -1,4 +1,5 @@
-import {GameObject} from './gameObject.js'
+import {GameObject} from './gameObject.js';
+//import {AI} from './ai.js';
 class Unit extends GameObject{
     constructor(x,y, faction, hp, attk, defense, attkSpeed, Perseus){
         super(true, Perseus);
@@ -145,6 +146,10 @@ class Unit extends GameObject{
                 }
             }
 
+            if(this.faction == 'orc')
+            {
+////////////////////////////////////////////////////////////
+            }
             this.sprite.destroy();
             this.hpbar.destroy();
             this.attacking = false;

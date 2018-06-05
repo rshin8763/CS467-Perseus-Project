@@ -11,7 +11,7 @@ import {Barracks} from './barracks.js';
 
 /**** GLOBALS *****/
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
-var goldText, woodText, healthText, menuBar, fortText, barracksText;
+var goldText, woodText, healthText, menuBar, fortText, barracksText, towerText;
 /******************/
 
 class Player
@@ -37,6 +37,7 @@ class Player
 		// BUILDINGS
 		this.playerForts = 0;
 		this.playerBarracks = 0;
+		this.playerTowers = 0;
 		this.playerAllBuildings = 0;
 	}
 
@@ -213,25 +214,31 @@ class Player
 	    goldText = this.Perseus.game.add.text(0, 0, 'Gold: ' + this.playerGold,
 	     style);
 	    goldText.fixedToCamera = true;
-	    goldText.cameraOffset.setTo(200, 0);
+	    goldText.cameraOffset.setTo(70, 3);
 	    
 	    // WOOD COUNT DISPLAY
 	    woodText = this.Perseus.game.add.text(0, 0, 'Wood: ' + this.playerWood,
 	     style);
     	woodText.fixedToCamera = true;
-    	woodText.cameraOffset.setTo(300, 0);
+    	woodText.cameraOffset.setTo(170, 3);
 
     	// FORT COUNT DISPLAY
     	fortText = this.Perseus.game.add.text(0, 0,
     	 'Forts: ' + this.playerForts, style);
 	    fortText.fixedToCamera = true;
-	    fortText.cameraOffset.setTo(400, 0);
+	    fortText.cameraOffset.setTo(270, 3);
 
 	    // BARRACKS COUNT DISPLAY
     	barracksText = this.Perseus.game.add.text(0, 0,
     	 'Barracks: ' + this.playerForts, style);
 	    barracksText.fixedToCamera = true;
-	    barracksText.cameraOffset.setTo(500, 0);
+	    barracksText.cameraOffset.setTo(370, 3);
+
+	    // TOWER COUNT DISPLAY
+	    towerText = this.Perseus.game.add.text(0, 0,
+    	 'Towers: ' + this.playerTowers, style);
+	    towerText.fixedToCamera = true;
+	    towerText.cameraOffset.setTo(470, 3);
 
 	    this.AddStartingSprites();
 	    this.GetPlayerStats();

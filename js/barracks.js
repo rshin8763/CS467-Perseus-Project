@@ -29,6 +29,7 @@ class Barracks extends Building{
             gold : 900
         };
         this.faction = faction;
+        this.Perseus = Perseus;
     }
 
     buildSword()
@@ -72,7 +73,7 @@ class Barracks extends Building{
                 this.spawnUnit(coords.x, coords.y ,this.current);
                 if(this.faction == 'orc') // update orc or player buildings count;
                 {
-                    this.Perseus.AI.UpdateAIBuildings(1, 'Barracks');
+                    this.Perseus.AI.UpdateAIBuildings(1, 'Barracks', this.Perseus.idCounter - 1);
                 }
                 else
                 {
