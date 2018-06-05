@@ -75,7 +75,7 @@ class Unit extends GameObject{
 
     move(x, y){
 
-        console.log(this);
+        //console.log(this);
         this.dest = this.Perseus.navigator.getSquare(x, y);
 
         //If the square is occupied, don't bother trying to move there
@@ -251,7 +251,7 @@ class Unit extends GameObject{
 		{
 			if(this.nextSquare == null)
 			{
-				console.log(this);
+				//console.log(this);
 			}
 
 			let destCoords = this.Perseus.navigator.getCoords(this.dest.x, this.dest.y);
@@ -284,7 +284,7 @@ class Unit extends GameObject{
 				}
 				if(this.currentPath == null)
 				{
-					console.log(this);
+					//console.log(this);
 				}
 				this.nextSquare = this.currentPath[this.pathStep];
 				this.Perseus.navigator.checkCollision(this);

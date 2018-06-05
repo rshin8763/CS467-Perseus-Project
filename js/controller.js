@@ -292,7 +292,7 @@ class Controller{
         this.selectedObjects.push(obj);
         this.Perseus.ui.updateCommandList(obj);
         obj.drawSelectionCircle();
-        console.log("selected:", this.selectedObjects);
+        //console.log("selected:", this.selectedObjects);
         if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
     }
 }

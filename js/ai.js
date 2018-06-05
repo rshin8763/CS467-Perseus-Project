@@ -436,18 +436,11 @@ class AI
 		}
 	}
 
+	
+
 /*****************************************************************************/
 							// UNITS // 
 /*****************************************************************************/
-/*-----------------------------------------------------------------------*/
-	CheckBuildingCorner(x, y)
-	{
-		if (MyBuildings[x].corner[y] == true)
-		{
-			return true;
-		}
-		return false;
-	}
 
 	/*-----------------------------------------------------------------------*/
 	AddUnitToArray(type, idNumb, job)
@@ -632,13 +625,20 @@ class AI
 
 	}
 
+	CheckMissingID()
+	{
+		
+	}
 
-
+	Tester()
+	{
+		console.log("Hi I'm a test");
+	}
 
 	/*-----------------------------------------------------------------------*/
 	update()
 	{
-		
+		//this.CheckMissingID();
 		
 	}
 
@@ -664,7 +664,6 @@ class AI
 		this.UpdateAIBuildings(1, 'Barracks');
 		this.UpdateAIBuildings(1, 'Fort');
 		this.UpdateAIBuildings(1, 'Wizard Tower');
-		this.FillTagTracker();
 		//this.printArray();
 		console.log("Current Index: " + this.Perseus.idCounter);
 	}

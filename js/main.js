@@ -64,6 +64,8 @@ function preload() {
     Perseus.game.load.spritesheet('pikeman_female_orc', 'assets/images/units/pikeman_female_orc.png', 64, 64);
     Perseus.game.load.image('arrow_right', 'assets/arrow_right.png');
     Perseus.game.load.image('arrow_left', 'assets/arrow_left.png');
+    Perseus.game.load.image('fireball_right', 'assets/fireball_right.png');
+    Perseus.game.load.image('fireball_left', 'assets/fireball_left.png');
 
     // MENU BAR AND BUTTONS
     Perseus.game.load.image('menuBar', 'assets/images/menuBar.png');

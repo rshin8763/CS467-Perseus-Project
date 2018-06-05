@@ -241,7 +241,7 @@ class Worker extends Unit{
                 this.attack(this.target, emptySquare);
                 return;
             }
-            console.log(this.target);
+            //console.log(this.target);
             this.moving = false;
             if(this.cooldown > 0)
             {
@@ -276,7 +276,7 @@ class Worker extends Unit{
     move(x,y){
         super.move(x,y);
         this.gatherstate = 0;
-        console.log(this.destx, this.desty);
+        //console.log(this.destx, this.desty);
     }
 
     moveTo(obj){
