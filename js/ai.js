@@ -239,7 +239,7 @@ class AI
 			return false;
 		}
 		this.AIAllBuildings++;
-		enemyHealthText.text = 'Enemy Buildings: ' + this.AIAllBuildings;
+		this.Perseus.updateText('enemy');
 		buildSpotY -= 100;
 		buildSpotX -= 100;
 		return idNumb;
@@ -301,7 +301,7 @@ class AI
 				}
 			}
 		}
-		enemyHealthText.text = 'Enemy Buildings: ' + this.AIAllBuildings;
+		Perseus.updateText('enemy');
 		// CHECK TO SEE IF ITS A GAME OVER
 		if (MyBuildings.length <= 0)
 		{
@@ -654,9 +654,9 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	UpdateRoles()
 	{
-		
+
 	}
-	
+
 	/*-----------------------------------------------------------------------*/
 	// 
 	StationStandingArmy()
@@ -780,10 +780,6 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	Main()
 	{
-		enemyHealthText = this.Perseus.game.add.text(0, 0, 
-			'Enemy Buildings: ' + this.AIAllBuildings, style);
-		enemyHealthText.fixedToCamera = true;
-		enemyHealthText.cameraOffset.setTo(570, 3);
 
 		this.AddBuilding('Fort');
 		this.AddBuilding('Barracks');

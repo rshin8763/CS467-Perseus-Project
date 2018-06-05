@@ -65,7 +65,8 @@ class Player
 		if (type == 'wood' || type == 'Wood')
 		{
 			this.playerWood = this.playerWood + x;
-			woodText.text = 'Wood: ' + this.playerWood;
+			type = 'wood';
+			this.Perseus.updateText(type);
 			if (this.playerWood >= 40)
 			{
 				// ASK USER IF WANTS TO BUILD FORT
@@ -74,7 +75,7 @@ class Player
 		else if (type == 'gold' || type == 'Gold')
 		{
 			this.playerGold = this.playerGold + x;
-			goldText.text = 'Gold: ' + this.playerGold;
+			//goldText.text = 'Gold: ' + this.playerGold;
 			if (this.playerGold >= 50)
 			{
 				// ASK USER IF WANTS TO BUILD BARRACKS
@@ -152,8 +153,6 @@ class Player
 				}
 			}
 			this.playerForts = this.playerForts + x;
-			fortText.text = 'Forts: ' + this.playerForts;
-// DO FORTS AUTOMATICALLY SPAWN WORKERS????????
 		}
 		else if (type == 'barracks' || type == 'Barracks')
 		{
@@ -203,42 +202,6 @@ class Player
 	// MAIN FUNCTION FOR CALLING FUNCTIONS OUT OF TYPED ORDER :)
 	Main()
 	{
-		// MENU BAR
-	    menuBar = this.Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
-    	menuBar.fixedToCamera = true;
-    	menuBar.cameraOffset.setTo(0, 0);
-	    menuBar.fixedToCamera = true;
-   		menuBar.cameraOffset.setTo(0, 0);
-
-		// GOLD COUNT DISPLAY
-	    goldText = this.Perseus.game.add.text(0, 0, 'Gold: ' + this.playerGold,
-	     style);
-	    goldText.fixedToCamera = true;
-	    goldText.cameraOffset.setTo(70, 3);
-	    
-	    // WOOD COUNT DISPLAY
-	    woodText = this.Perseus.game.add.text(0, 0, 'Wood: ' + this.playerWood,
-	     style);
-    	woodText.fixedToCamera = true;
-    	woodText.cameraOffset.setTo(170, 3);
-
-    	// FORT COUNT DISPLAY
-    	fortText = this.Perseus.game.add.text(0, 0,
-    	 'Forts: ' + this.playerForts, style);
-	    fortText.fixedToCamera = true;
-	    fortText.cameraOffset.setTo(270, 3);
-
-	    // BARRACKS COUNT DISPLAY
-    	barracksText = this.Perseus.game.add.text(0, 0,
-    	 'Barracks: ' + this.playerForts, style);
-	    barracksText.fixedToCamera = true;
-	    barracksText.cameraOffset.setTo(370, 3);
-
-	    // TOWER COUNT DISPLAY
-	    towerText = this.Perseus.game.add.text(0, 0,
-    	 'Towers: ' + this.playerTowers, style);
-	    towerText.fixedToCamera = true;
-	    towerText.cameraOffset.setTo(470, 3);
 
 	    this.AddStartingSprites();
 	    //this.GetPlayerStats();
