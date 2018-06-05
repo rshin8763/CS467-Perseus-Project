@@ -54,6 +54,8 @@ class Building extends GameObject{
             attacker.stopAttack();
 
             this.Perseus.AI.DeleteBuilding(this.tag);
+            //this.Perseus.AI.printArrays();
+            //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
 
             for(let i = 0; i < this.Perseus.objects.length; i++)

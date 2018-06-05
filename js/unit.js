@@ -135,7 +135,7 @@ class Unit extends GameObject{
             this.attack(attacker, atkSquare);
         }
         this.hp -= (damage - this.defense);
-        console.log(this.hp);
+        //console.log(this.hp);
         if(this.hp < 1)
         {
             for(let i = 0; i < this.Perseus.objects.length; i++)
@@ -145,6 +145,9 @@ class Unit extends GameObject{
                     this.Perseus.objects.splice(i, 1);
                 }
             }
+            this.Perseus.AI.DeleteUnit(this.tag);
+            //this.Perseus.AI.printArrays();
+            //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
             this.hpbar.destroy();
             this.attacking = false;

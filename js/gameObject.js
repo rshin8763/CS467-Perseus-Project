@@ -19,7 +19,7 @@ class GameObject {
     }
     drawSelectionCircle(){
         this.circle = this.game.add.graphics();
-        console.log('drawing circle');
+        //console.log('drawing circle');
         this.circle.lineStyle(1, 0xFFFFFF, 1);
         this.circle.drawCircle(this.sprite.centerX,this.sprite.centerY, this.sprite.height);
         this.Perseus.controller.selectionCircles.push(this.circle);
