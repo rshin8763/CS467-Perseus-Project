@@ -73,8 +73,9 @@ class Worker extends Unit{
 
     }
     findNearestFort(){
-        let x = this.sprite.x;
-        let y = this.sprite.y;
+        
+        let x = this.x;
+        let y = this.y;
 
         let closest = null;
         let min = Number.MAX_SAFE_INTEGER;

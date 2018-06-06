@@ -25,6 +25,17 @@ class Fireball{
 
     update()
     {
+        if(this.target.hp < 1)
+        {
+            for(let i = 0; i < this.Perseus.objects.length; i++)
+            {
+                if(this.Perseus.objects[i] === this )
+                {
+                    this.Perseus.objects.splice(i, 1);
+                }
+            }
+            this.sprite.destroy();
+        }
         //While this arrow is active
         if(this.active)
         {
