@@ -83,7 +83,6 @@ function create() {
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
-    console.log(Perseus.map.width);
     Perseus.navigator = new Navigator(Perseus.game, Perseus.map.height, Perseus.map.width, 32);
 
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
@@ -106,15 +105,6 @@ function create() {
     Perseus.gameSprites = Perseus.game.add.group();
     Perseus.uiGraphics = Perseus.game.add.group();
     Perseus.gui = Perseus.game.add.group();
-
-    //console.log(Perseus.navigator.navmap);
-
-    // Perseus.navigator.markOccupied(300, 300);
-
-    //Create resources
-    Perseus.mapRenderer = new mapRenderer(Perseus);
-    Perseus.mapRenderer.createResources();
-    Perseus.ui = new Ui(Perseus);
 
     // ------------------------------------------------------------------------
     // PLAYER
@@ -181,6 +171,17 @@ function create() {
     mute_button.cameraOffset.setTo(755, 3);
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
+
+
+    //console.log(Perseus.navigator.navmap);
+
+    // Perseus.navigator.markOccupied(300, 300);
+
+    //Create resources
+    Perseus.mapRenderer = new mapRenderer(Perseus);
+    Perseus.mapRenderer.createResources();
+    Perseus.ui = new Ui(Perseus);
+
 
     Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
     Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));

@@ -218,7 +218,7 @@ class Controller{
             if (this.isViableCommand('W')){
                 if(this.keys.W.isDown) {
                     if (this.cooldownTimer == 0){
-                        this.selectedObjects[0].buildWorker();
+                        this.selectedObjects[0].build('W')
                         //cooldown
                         this.cooldownTimer = 10;
                     }
@@ -228,7 +228,6 @@ class Controller{
                 if (this.isViableCommand('A')){
                     if (this.cooldownTimer == 0){
                         if (this.selectedObjects[0].build('A')){
-                            this.state = 'place';
                             //cooldown
                             this.cooldownTimer = 10;
                         }
@@ -239,7 +238,6 @@ class Controller{
                 if (this.isViableCommand('F')){
                     if (this.cooldownTimer == 0){
                         if(this.selectedObjects[0].build('F')){
-                            this.state = 'place';
                             //cooldown
                             this.cooldownTimer = 10;
                         }
@@ -250,7 +248,6 @@ class Controller{
                 if (this.isViableCommand('R')){
                     if (this.cooldownTimer == 0){
                         if(this.selectedObjects[0].build('R')){
-                            this.state = 'place';
                             //cooldown
                             this.cooldownTimer = 10;
                         }

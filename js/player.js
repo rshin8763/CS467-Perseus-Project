@@ -1,12 +1,12 @@
-import {SwordInfantry} from './swordInfantry.js';
-import {Archer} from './archer.js';
-import {mapRenderer} from './mapRenderer.js';
-import {Controller} from './controller.js';
-import {Fort} from './fort.js';
-import {Tree} from './tree.js';
-import {Navigator} from './navigator.js';
-import {Worker} from './worker.js';
-import {Barracks} from './barracks.js';
+// import {SwordInfantry} from './swordInfantry.js';
+// import {Archer} from './archer.js';
+// import {mapRenderer} from './mapRenderer.js';
+// import {Controller} from './controller.js';
+// import {Fort} from './fort.js';
+// import {Tree} from './tree.js';
+// import {Navigator} from './navigator.js';
+// import {Worker} from './worker.js';
+// import {Barracks} from './barracks.js';
 
 
 /**** GLOBALS *****/
@@ -191,9 +191,6 @@ class Player
 	// ADDS STARTING WORKER AND FORT - TAKES AND RETURNS NOTHING
 	AddStartingSprites()
 	{
-		// ADD ONE FORT AND ONE WORKER
-		this.Perseus.objects.push(new Fort('human', 340, 300, this.Perseus));
-		this.Perseus.objects.push(new Worker('human', 500, 450, this.Perseus));
 		this.playerWood = 10030;
 		this.UpdatePlayerBuildings(1, 'Fort');
 	}

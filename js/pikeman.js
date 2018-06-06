@@ -2,7 +2,7 @@ import {Unit} from './unit.js';
 
 class Pikeman extends Unit {
     constructor(faction, x, y, Perseus){
-        super(x,y,faction, 100, 40, 15, 3, Perseus);
+        super(x,y,faction,'pikeman', 100, 40, 15, 3, Perseus);
         this.woodCost = 100;
         this.goldCost = 400;
         this.maxHP = 100;
