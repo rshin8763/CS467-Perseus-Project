@@ -45,7 +45,6 @@ class Navigator {
             return;
         }
 
-
         this.navmap[x][y] = 1;
 
     }

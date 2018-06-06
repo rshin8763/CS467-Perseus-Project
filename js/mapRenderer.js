@@ -22,15 +22,14 @@ class mapRenderer{
     //create a sprite from an object
     createFromTiledObject(element, Perseus) {
         if (element.type == 'tree'){
-            Perseus.resources.push(new Tree(element.x+32, element.y+32, this.Perseus));
-
+            Perseus.resources.push(new Tree(Math.floor(element.x), Math.floor(element.y), this.Perseus));
         }
         if (element.type == 'fort'){
-            Perseus.objects.push(new Fort('human', element.x+64, element.y+64, this.Perseus));
+            Perseus.objects.push(new Fort('human', Math.floor(element.x), Math.floor(element.y), this.Perseus));
 
         }
         if (element.type == 'enemyFort'){
-            Perseus.objects.push(new Fort('orc', element.x+64, element.y+64, this.Perseus));
+            Perseus.objects.push(new Fort('orc', Math.floor(element.x), Math.floor(element.y), this.Perseus));
 
         }
     }
@@ -38,32 +37,21 @@ class mapRenderer{
     createResources(layer){
         this.Perseus.resources = [];
 
+        // Set navmap for collision
+        for (let i = 0; i < this.Perseus.map.height; i++){
+            for (let j = 0; j < this.Perseus.map.width; j++){
+                let tile = this.Perseus.collisionLayer.layer.data[i][j];
+                if (tile.index != -1){
+                    this.Perseus.navigator.markOccupied(i,j);
+                }
+            }
+        }
+
         // TODO Change name to objectLayer
         let result = this.getObjects(this.Perseus.map, 'resourceLayer');
         result.forEach((obj)=>{
             this.createFromTiledObject(obj, this.Perseus)
         }, this);
-
-        //set navmap Rivers and Rock
-        let background;
-        this.Perseus.map.layers.forEach(function (layer){
-            if (layer.name == 'backgroundLayer') background = layer;
-        });
-
-        for (let i = 0; i < layer.height; i++){
-            for (let j = 0; j < layer.height; j++){
-                let tile = background.data[i*50+j];
-                // river
-                if (tile >= 200){
-                    //set no collision
-                    this.Perseus.navigator.markOccupied(i,j);
-                }
-                if (tile <= 14){
-                    //set as rock (able to build mines on)
-                }
-            }
-
-        }
     }
 }
 
