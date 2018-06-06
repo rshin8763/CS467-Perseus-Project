@@ -975,7 +975,7 @@ class AI
 	Main()
 	{
 		this.CreateResourcesArray();
-		this.AddBuilding('Fort');
+		/*this.AddBuilding('Fort');
 		this.AddBuilding('Barracks');
 		this.AddBuilding('Wizard Tower');
 		this.Perseus.updateText('Enemy');
@@ -985,9 +985,10 @@ class AI
 		this.AddUnit('Pikeman');
 		this.AddUnit('SwordInfantry');
 		this.AddUnit('Wizard');
-
-		//this.GetAIStats();
-		//this.printArrays();
+	*/
+		this.AddUnit('Worker');
+		this.GetAIStats();
+		this.printArrays();
 
 	}
 }

@@ -17,7 +17,7 @@ Perseus.graphics = {}
 // var Main = function() {};
 
 // create the game, and pass it the configuration
-Perseus.game = new Phaser.Game(800, 550, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+Perseus.game = new Phaser.Game(1200, 550, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 var goldText, woodText, fortText, barracksText, towerText, enemyHealthText;
 
 // RESOURCES TEXT OBJECTS
@@ -176,22 +176,16 @@ function create()
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
 
-<<<<<<< HEAD
     Perseus.Player = new Player(Perseus);
     Perseus.Player.Main();
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
     Perseus.AI = new AI(Perseus);
     Perseus.AI.Main();
-    // ------------------------------------------------------------------------
     Perseus.GameState = new GameState(Perseus);
-=======
+
+
     console.log(Perseus.objects);
-
     console.log(Perseus.resources);
-
     console.log(Perseus.navigator.navmap);
->>>>>>> fb8ac40f600076c8afc7831170c40c027d61256b
 }
 
 function update()

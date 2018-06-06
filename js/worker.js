@@ -301,20 +301,6 @@ class Worker extends Unit{
 
     update(){
         super.update();
-
-<<<<<<< HEAD
-        if (this.gatherState == 1)
-        {
-            if (this.moving == false)
-            {
-                this.gatherState = 2;
-            }
-        } 
-        if (this.gatherState == 2)
-        { //gathering at node
-            if (this.gatherProgress < 150)
-            {
-=======
         if (this.gatherState == 1){ // heading to resource node
             if (this.moving == false){
                 this.gatherState = 2;
@@ -322,7 +308,6 @@ class Worker extends Unit{
         } if (this.gatherState == 2){ //gathering at node
             if (this.gatherProgress < 150){
                 //TODO add animation
->>>>>>> fb8ac40f600076c8afc7831170c40c027d61256b
                 this.gatherProgress += 1;
             } 
             else 

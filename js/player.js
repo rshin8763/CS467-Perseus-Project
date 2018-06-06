@@ -673,7 +673,7 @@ class Player
 	Main()
 	{
 		this.CreateResourcesArray();
-	    this.AddBuilding('Fort');
+	    /*this.AddBuilding('Fort');
 		this.AddBuilding('Barracks');
 		this.AddBuilding('Wizard Tower');
 
@@ -681,8 +681,9 @@ class Player
 		this.AddUnit('Archer');
 		this.AddUnit('Pikeman');
 		this.AddUnit('SwordInfantry');
-		this.AddUnit('Wizard');
+		this.AddUnit('Wizard');*/
 		//this.printArrays();
+		this.AddUnit('worker');
 	}
 }
 
