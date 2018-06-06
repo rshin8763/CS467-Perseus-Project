@@ -21,8 +21,8 @@ class Wizard extends Unit {
         }
 
         this.uiData = {
-            commandList: {M : "Move", A : "Attack" }
-            buildList:{ }
+            commandList: {M : "Move", A : "Attack" },
+            buildList: {}
         };
 
         this.sprite.animations.add('atk_right', [39, 40, 41, 42, 43, 44, 45], 10, true);
