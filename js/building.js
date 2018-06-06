@@ -2,7 +2,7 @@ import {GameObject} from './gameObject.js'
 class Building extends GameObject{
     constructor(faction, hp, x, y, Perseus){
         super(false, Perseus);
-
+        this.Perseus = Perseus;
         this.faction = faction;
         this.hp = hp;
         this.x = this.Perseus.navigator.getSquare(x,y).x;
@@ -25,7 +25,6 @@ class Building extends GameObject{
         // this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
 
-
         for(let i = 0; i < 4; i++)
         {
             for(let j = 0; j < 4; j++){
@@ -40,8 +39,6 @@ class Building extends GameObject{
         this.sprite.events.onInputUp.add(function(){
             this.Perseus.controller.endWithSelect(this);
         }, this);
-
-
     }
 
     update(){
@@ -56,7 +53,9 @@ class Building extends GameObject{
         {
             attacker.stopAttack();
 
-        
+            this.Perseus.AI.DeleteBuilding(this.tag);
+            //this.Perseus.AI.printArrays();
+            //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
 
             for(let i = 0; i < this.Perseus.objects.length; i++)

@@ -32,7 +32,7 @@ class Ui
         let commandBox = this.Perseus.game.add.graphics();
         commandBox.lineStyle(2, 0xFFFFFF, 1);
         commandBox.drawRect(16,400,192,192);
-        console.log(commandBox.x);
+        //console.log(commandBox.x);
         commandBox.fixedToCamera = true;
         this.commandBox = commandBox;
         this.commandList = [];

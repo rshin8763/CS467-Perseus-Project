@@ -40,7 +40,7 @@ class Fort extends Building{
     update(){
         if(this.building)
         {
-            console.log(this.buildProgress);
+            //console.log(this.buildProgress);
             if(this.buildProgress >= 100)
             {
                 this.building = false;
