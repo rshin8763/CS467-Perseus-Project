@@ -34,20 +34,18 @@ class Unit extends GameObject{
         this.attackMoveDest = null;
         Perseus.objects.push(this);
         Perseus.navigator.units.push(this);
-        if (faction == 'human'){
-            this.Perseus.Player.UpdatePlayerUnits(1, unitType);
-        } else {
-            //update ai unitcount?
-        }
     }
 
     addSprite(unitType){
         if(this.faction == 'orc')
         {
             unitType += '_orc';
+            //update ai unitcount?
         }else {
             unitType +='_human';
+            this.Perseus.Player.UpdatePlayerUnits(1, unitType);
         }
+
         let coords = this.Perseus.navigator.getCoords(this.x, this.y);    
         this.sprite = this.game.add.sprite(coords.x, coords.y, unitType);
         this.sprite.anchor.x = 0.5;
