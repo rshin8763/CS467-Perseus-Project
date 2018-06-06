@@ -28,7 +28,7 @@ var menuBar, pause_button, saveButton, quitButton, newGameButton, resumeButton, 
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 
 function preload() {
-    this.load.tilemap('demo', 'assets/tilemaps/map1.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.tilemap('demo', 'assets/tilemaps/map2.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.image('topbar', 'assets/topbar.png');
     // TODO insert tiles url and creators
     this.load.image('gameTiles', 'assets/tilemaps/forestTiles.png');
@@ -90,7 +90,6 @@ function create() {
 
     //create layer
     Perseus.backgroundLayer= Perseus.map.createLayer('backgroundLayer');
-    Perseus.collisionLayer = Perseus.map.createLayer('collisionLayer');
 
     // Sets collision  TODO make it work with unit's move method.
     // This uses phaser arcade physics. Since we are using a navmap,
