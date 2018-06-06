@@ -36,7 +36,7 @@ class Pikeman extends Unit {
             let attackCoords = this.Perseus.navigator.getCoords(this.attackSquare.x, this.attackSquare.y);
             this.move(attackCoords.x, attackCoords.y);
         } else{
-            console.log(this.target);
+            //console.log(this.target);
             this.moving = false;
             if(this.cooldown > 0)
             {

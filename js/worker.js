@@ -240,7 +240,7 @@ class Worker extends Unit{
                 this.attack(this.target, emptySquare);
                 return;
             }
-            console.log(this.target);
+            //console.log(this.target);
             this.moving = false;
             if(this.cooldown > 0)
             {
@@ -275,13 +275,15 @@ class Worker extends Unit{
     move(x,y){
         super.move(x,y);
         this.gatherstate = 0;
-        console.log(this.destx, this.desty);
+        //console.log(this.destx, this.desty);
     }
 
     moveTo(obj){
         let border = this.Perseus.navigator.findObjectBorder(obj, {x : this.x, y : this.y});
 
-        console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
+        //let rand = Math.floor(Math.random() * border.length);
+      
+        //console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
         this.gatherstate = 0;
         let coords = this.Perseus.navigator.getCoords(border[0].x, border[0].y);
         this.move(coords.x, coords.y);
