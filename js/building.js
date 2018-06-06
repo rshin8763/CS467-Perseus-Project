@@ -1,4 +1,6 @@
 import {GameObject} from './gameObject.js' 
+import {Player} from './player.js'
+
 class Building extends GameObject{
     constructor(faction, hp, x, y, Perseus){
         super(false, Perseus);
