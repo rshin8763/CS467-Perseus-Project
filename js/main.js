@@ -9,6 +9,7 @@ import {Ui} from './ui.js';
 import {Worker} from './worker.js';
 import {Player} from './player.js';
 import {AI} from './ai.js';
+import {Wizard} from './wizard.js';
 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
@@ -115,10 +116,6 @@ function create() {
     Perseus.mapRenderer.createResources();
     Perseus.ui = new Ui(Perseus);
 
-    Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
-
     // ------------------------------------------------------------------------
     // PLAYER
     Perseus.Player = new Player(Perseus);
@@ -184,6 +181,11 @@ function create() {
     mute_button.cameraOffset.setTo(755, 3);
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
+
+    Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
+    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
+
 
     console.log(Perseus.objects);
 }

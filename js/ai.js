@@ -1,10 +1,6 @@
 import {SwordInfantry} from './swordInfantry.js';
 import {Archer} from './archer.js';
-import {mapRenderer} from './mapRenderer.js';
-import {Controller} from './controller.js';
 import {Fort} from './fort.js';
-import {Tree} from './tree.js';
-import {Navigator} from './navigator.js';
 import {Worker} from './worker.js';
 import {Pikeman} from './pikeman.js';
 import {WizardTower} from './wizardtower.js';
@@ -35,11 +31,11 @@ var MyWorkers = [];
 	// 		safe: true/false
 	//	};
 
-var BuildingPatrol = [];
+var Guards = [];
 	// 	Soldier = {
 	//		idNumber: "object.tag",
 	// 		BuildingID: buildingArrayID,
-	//		Corner: corner of building (1-4)
+	//		Corner: corner of building (1-4) = id of guard
 	//		busy: true/false
 	// 		safe: true/false
 	//	};
@@ -381,7 +377,7 @@ class AI
 				busy: false,
 				safe: true
 			};
-			BuildingPatrol.push(Soldier);
+			Guards.push(Soldier);
 
 			// ADD TO MY UNITS
 			thisUnit = {
@@ -596,24 +592,24 @@ class AI
 		}
 
 		// BUILDING PATROL
-		for(var x = 0; x < BuildingPatrol.length; x++)
+		for(var x = 0; x < Guards.length; x++)
 		{
-			if(BuildingPatrol[x].idNumber == tag)
+			if(Guards[x].idNumber == tag)
 			{
 				// MOVE ALL DATA OVER ONE TO REPLACE BUILDING LOST
-				while(x < BuildingPatrol.length)
+				while(x < Guards.length)
 				{
-					if (x == (BuildingPatrol.length - 1)) // IS LAST ONE
+					if (x == (Guards.length - 1)) // IS LAST ONE
 					{
-						BuildingPatrol.pop();
+						Guards.pop();
 					}
 					else
 					{
-						BuildingPatrol[x].Corner = BuildingPatrol[x+1].Corner;
-						BuildingPatrol[x].BuildingID = BuildingPatrol[x+1].BuildingID;
-						BuildingPatrol[x].idNumber = BuildingPatrol[x+1].idNumber;
-						BuildingPatrol[x].busy = BuildingPatrol[x+1].busy;
-						BuildingPatrol[x].safe = BuildingPatrol[x+1].safe;
+						Guards[x].Corner = Guards[x+1].Corner;
+						Guards[x].BuildingID = Guards[x+1].BuildingID;
+						Guards[x].idNumber = Guards[x+1].idNumber;
+						Guards[x].busy = Guards[x+1].busy;
+						Guards[x].safe = Guards[x+1].safe;
 					}
 					x++;
 				}
@@ -745,13 +741,13 @@ class AI
 			console.log("safe: " + MyWorkers[m].safe);
 		}
 
-		for(m = 0; m < BuildingPatrol.length; m++)
+		for(m = 0; m < Guards.length; m++)
 		{
 			console.log("Guards --------------");
 			console.log("Array Location: " + m);
-			console.log("id: " + BuildingPatrol[m].idNumber);
-			console.log("busy: " + BuildingPatrol[m].busy);
-			console.log("safe: " + BuildingPatrol[m].safe);
+			console.log("id: " + Guards[m].idNumber);
+			console.log("busy: " + Guards[m].busy);
+			console.log("safe: " + Guards[m].safe);
 		}
 
 		for(m = 0; m < BorderPatrol.length; m++)
