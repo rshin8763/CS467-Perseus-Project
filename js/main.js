@@ -197,6 +197,7 @@ function update()
     Perseus.objects.forEach(function(obj){
         obj.update();
     });
+
     //Perseus.AI.update();
 
     

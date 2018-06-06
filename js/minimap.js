@@ -12,5 +12,10 @@ Minimap {
     otherfunct(){
     }
 
+    drawPixel(){
+        graphics.lineStyle(0);
+        graphics.beginFill(colour, alpha);
+        graphics.drawRect(x, y, 2, 2);
+    }
 }
 export {Minimap}
