@@ -12,6 +12,10 @@ class Fort extends Building{
         this.type = "Fort";
         this.WORKER = 1;
         this.buildSpeed = 1;
+        this.uiData = {
+            commandList: {B:"Build"},
+            buildList: {W: "Worker"}  
+        };
         this.WorkerCosts = {
             wood : 0,
             gold : 400
@@ -36,7 +40,7 @@ class Fort extends Building{
     update(){
         if(this.building)
         {
-            console.log(this.buildProgress);
+            //console.log(this.buildProgress);
             if(this.buildProgress >= 100)
             {
                 this.building = false;

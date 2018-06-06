@@ -1,11 +1,9 @@
-import {GameObject} from './gameObject.js'
+import {GameObject} from './gameObject.js';
+//import {AI} from './ai.js';
 class Unit extends GameObject{
     constructor(x,y, faction, hp, attk, defense, attkSpeed, Perseus){
         super(true, Perseus);
-        if(Perseus.spriteGroup == null)
-        {
-            Perseus.spriteGroup = Perseus.game.add.group();
-        }
+        
 
         this.range = 1;
         let unitSquare = this.Perseus.navigator.getSquare(x,y);
@@ -26,6 +24,7 @@ class Unit extends GameObject{
         this.attacking = false;
         this.cooldown = 0;
         this.range=1;
+        this.priority=0; // commandList priority. Mages will have spells visible when group selected with others.
         this.hpbar = null; 
         this.nudgeY = 0;
         this.nudgeX = 0;
@@ -35,7 +34,6 @@ class Unit extends GameObject{
         this.attackMoveDest = null;
         Perseus.objects.push(this);
         Perseus.navigator.units.push(this);
-
     }
 
     addSprite(unitType){
@@ -68,13 +66,15 @@ class Unit extends GameObject{
             this.Perseus.controller.endWithSelect(this);
         }, this);
 
-        this.Perseus.spriteGroup.add(this.sprite)
+        this.Perseus.gameSprites.add(this.sprite);
+        this.Perseus.gameSprites.add(this.hpbar);
+
 
     }
 
     move(x, y){
 
-        console.log(this);
+        //console.log(this);
         this.dest = this.Perseus.navigator.getSquare(x, y);
 
         //If the square is occupied, don't bother trying to move there
@@ -103,6 +103,11 @@ class Unit extends GameObject{
 
     attack(target, square)
     {
+
+        if(this.faction == target.faction)
+        {
+            return;
+        }
         this.target = target;
         this.attackSquare = square;
         this.attacking = true;
@@ -134,7 +139,7 @@ class Unit extends GameObject{
             this.attack(attacker, atkSquare);
         }
         this.hp -= (damage - this.defense);
-        console.log(this.hp);
+        //console.log(this.hp);
         if(this.hp < 1)
         {
             for(let i = 0; i < this.Perseus.objects.length; i++)
@@ -144,7 +149,9 @@ class Unit extends GameObject{
                     this.Perseus.objects.splice(i, 1);
                 }
             }
-
+            this.Perseus.AI.DeleteUnit(this.tag);
+            //this.Perseus.AI.printArrays();
+            //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
             this.hpbar.destroy();
             this.attacking = false;
@@ -240,106 +247,100 @@ class Unit extends GameObject{
                 }
             }
         }
+        
         if(this.attacking)
         {
             this.attackTick();
 
         }
-        if(this.moving)
-        {
-            if(this.nextSquare == null)
-            {
-                console.log(this);
-            }
-            
-            let destCoords = this.Perseus.navigator.getCoords(this.dest.x, this.dest.y);
-            let nextSquareCoords = this.Perseus.navigator.getCoords(this.nextSquare.x, this.nextSquare.y);
 
-            if(this.sprite.y == nextSquareCoords.y)
-            {
-                this.y = this.nextSquare.y;
-            }
+		if(this.moving)
+		{
+			if(this.nextSquare == null)
+			{
+				//console.log(this);
+			}
 
-            if(this.sprite.x == nextSquareCoords.x)
-            {
-                this.x = this.nextSquare.x;
-            }
+			let destCoords = this.Perseus.navigator.getCoords(this.dest.x, this.dest.y);
+			let nextSquareCoords = this.Perseus.navigator.getCoords(this.nextSquare.x, this.nextSquare.y);
 
+			if(this.sprite.y == nextSquareCoords.y)
+			{
+				this.y = this.nextSquare.y;
+			}
 
-            if(this.sprite.y == destCoords.y && this.sprite.x == destCoords.x)
-            {
+			if(this.sprite.x == nextSquareCoords.x)
+			{
+				this.x = this.nextSquare.x;
+			}
 
+			if(this.sprite.y == destCoords.y && this.sprite.x == destCoords.x)
+			{
+				this.x = this.dest.x;
+				this.y = this.dest.y;
+				this.stop();
 
-                this.x = this.dest.x;
-                this.y = this.dest.y;
+			} else if(this.sprite.y == nextSquareCoords.y && this.sprite.x == nextSquareCoords.x) {
+				this.pathStep++;
+				this.x = this.nextSquare.x;
+				this.y = this.nextSquare.y;
+				if(this.pathStep > this.currentPath.length -1)
+				{
+					this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
+					this.pathStep = 0;
+				}
+				if(this.currentPath == null)
+				{
+					//console.log(this);
+				}
+				this.nextSquare = this.currentPath[this.pathStep];
+				this.Perseus.navigator.checkCollision(this);
 
-                this.stop();
-            } else if(this.sprite.y == nextSquareCoords.y && this.sprite.x == nextSquareCoords.x) {
-                this.pathStep++;
-                this.x = this.nextSquare.x;
-                this.y = this.nextSquare.y;
-                if(this.pathStep > this.currentPath.length -1)
-                {
-                    this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
-                    this.pathStep = 0;
-                }
-                if(this.currentPath == null)
-                {
-                    console.log(this);
-                }
-                this.nextSquare = this.currentPath[this.pathStep];
-                this.Perseus.navigator.checkCollision(this);
+			}else{
 
-    
+				if(this.x < this.nextSquare.x)
+				{   
+					this.sprite.x += this.speed;
+					this.hpbar.x += this.speed;
+					if(this.circle)this.circle.x += this.speed;
+					this.sprite.animations.play('wlk_right');
+				}
+				if(this.x > this.nextSquare.x)
+				{
 
+					this.sprite.x -= this.speed;
+					this.hpbar.x -= this.speed;
+					if(this.circle) this.circle.x -= this.speed;
+					this.sprite.animations.play('wlk_left');
 
-            }else{
+				}
+				if(this.y < this.nextSquare.y)
+				{
+					if(this.x == this.nextSquare.x)
+					{
+						this.sprite.animations.play('wlk_down');
+					}
+					this.sprite.y += this.speed;
+					this.hpbar.y += this.speed;
+					if(this.circle) this.circle.y += this.speed;
+				}
+				if(this.y > this.nextSquare.y)
+				{
 
-                if(this.x < this.nextSquare.x)
-                {   
-
-                        this.sprite.x += this.speed;
-                        this.hpbar.x += this.speed;
-                        this.sprite.animations.play('wlk_right');
-                }
-                if(this.x > this.nextSquare.x)
-                {
-
-                        this.sprite.x -= this.speed;
-                        this.hpbar.x -= this.speed;
-                        this.sprite.animations.play('wlk_left');
-                    
-                }
-                if(this.y < this.nextSquare.y)
-                {
-                         if(this.x == this.nextSquare.x)
-                        {
-                            this.sprite.animations.play('wlk_down');
-                        }
-                        this.sprite.y += this.speed;
-                        this.hpbar.y += this.speed;
-                    
-
-                }
-                if(this.y > this.nextSquare.y)
-                {
-
-                    if(this.x == this.nextSquare.x)
-                    {
-                        this.sprite.animations.play('wlk_up');
-                    }
-                    this.sprite.y -= this.speed;
-                    this.hpbar.y -= this.speed;
-
-                }
-
-
-           
-            }            
-        }
-
-    }
+					if(this.x == this.nextSquare.x)
+					{
+						this.sprite.animations.play('wlk_up');
+					}
+					this.sprite.y -= this.speed;
+					this.hpbar.y -= this.speed;
+					if(this.circle) this.circle.y -= this.speed;
+				}
+			}            
+		}
+	}
 }
 
 export {Unit};
+
+
 

@@ -18,13 +18,13 @@ class SwordInfantry extends Unit {
         }
 
         this.uiData = {
-            canBuild: false,
-            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
-            buildList:[]
+            commandList: {M: "Move", A: "Attack"},
+            buildList:{}
         };
 
         this.sprite.animations.add('atk_right', [195, 196, 197, 198, 199, 200], 10, true);
         this.sprite.animations.add('atk_left', [169, 170, 171, 172, 173, 174], 10, true);
+        this.priority = 2;
 
     }
 
@@ -36,7 +36,7 @@ class SwordInfantry extends Unit {
             let attackCoords = this.Perseus.navigator.getCoords(this.attackSquare.x, this.attackSquare.y);
             this.move(attackCoords.x, attackCoords.y);
         } else{
-            console.log(this.target);
+            //console.log(this.target);
             this.moving = false;
             if(this.cooldown > 0)
             {

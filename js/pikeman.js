@@ -17,14 +17,14 @@ class Pikeman extends Unit {
         }
 
         this.uiData = {
-            canBuild: false,
-            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
-            buildList:[]
+            commandList: {M: "Move", A: "Attack"},
+            buildList:{}
         };
         
 
         this.sprite.animations.add('atk_left', [65, 66, 67, 68, 69, 70], 10, true);
         this.sprite.animations.add('atk_right', [91, 92, 93, 94, 95, 96], 10, true);
+        this.priority = 2;
 
     }
 
@@ -36,7 +36,7 @@ class Pikeman extends Unit {
             let attackCoords = this.Perseus.navigator.getCoords(this.attackSquare.x, this.attackSquare.y);
             this.move(attackCoords.x, attackCoords.y);
         } else{
-            console.log(this.target);
+            //console.log(this.target);
             this.moving = false;
             if(this.cooldown > 0)
             {
