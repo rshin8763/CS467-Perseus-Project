@@ -42,7 +42,7 @@ class mapRenderer{
             for (let j = 0; j < this.Perseus.map.width; j++){
                 let tile = this.Perseus.collisionLayer.layer.data[i][j];
                 if (tile.index != -1){
-                    this.Perseus.navigator.markOccupied(i,j);
+                    this.Perseus.navigator.markOccupied(j,i);
                 }
             }
         }

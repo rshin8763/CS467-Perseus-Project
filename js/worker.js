@@ -29,19 +29,19 @@ class Worker extends Unit{
         this.priority = 1;
         this.validToPlace = true;
         this.woodCosts = {
-            Fort : 1500,
-            Barracks: 600,
-            ArcheryRange : 1200,
-            WizardTower : 1000,
+            Fort : 150,
+            Barracks: 100,
+            ArcheryRange : 120,
+            WizardTower : 100,
             Farm : 500
         }
 
         this.goldCosts = {
-            Fort : 2500,
+            Fort : 250,
             Barracks: 100,
-            ArcheryRange : 900,
-            WizardTower : 1500,
-            Farm : 700
+            ArcheryRange : 300,
+            WizardTower : 500,
+            Farm : 100
         }
         
         if(Math.random() >= 0.5){
@@ -60,6 +60,9 @@ class Worker extends Unit{
         this.sprite.animations.add('atk_left', [169, 170, 171, 172, 173, 174], 10, true);
     }
 
+    cancelPlacing(){
+        //Cancel placing
+    }
     findNearestFort(){
         let x = this.sprite.x;
         let y = this.sprite.y;
@@ -356,7 +359,7 @@ class Worker extends Unit{
 
         if(this.placing)
         {
-            let selectedSquare = this.Perseus.navigator.getSquare(this.game.input.activePointer.x, this.game.input.activePointer.y);
+            let selectedSquare = this.Perseus.navigator.getSquare(this.game.input.activePointer.x + this.game.camera.view.x, this.game.input.activePointer.y + this.game.camera.view.y);
             let coords = this.Perseus.navigator.getCoords(selectedSquare.x, selectedSquare.y);
             this.selectedSprite.x = coords.x - 64;
             this.selectedSprite.y = coords.y - 64;
