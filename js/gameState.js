@@ -1,6 +1,8 @@
 import {Player} from './player.js';
 import {AI} from './ai.js';
 
+var x;
+
 class GameState
 {
 	constructor(Perseus)
@@ -10,12 +12,17 @@ class GameState
 
 	LoadGame()
 	{
-		
+		console.log(x);
 	}
 
 	SaveCurrentState()
 	{
-
+		document.cookie = this.Perseus.AI.AIAllBuildings;
+		if(document.cookie)
+		{
+			x = document.cookie;
+			console.log(x);
+		}
 	}
 
 	Quit()
@@ -33,4 +40,4 @@ class GameState
 	
 }
 
-{export GameState}
+export {GameState}

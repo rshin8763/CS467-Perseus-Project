@@ -389,7 +389,6 @@ class AI
 			return false;
 		}
 		this.AIAllBuildings++;
-		this.Perseus.updateText('enemy');
 		buildSpotY -= 100;
 		buildSpotX -= 100;
 		return idNumb;
@@ -451,7 +450,7 @@ class AI
 				}
 			}
 		}
-		//this.Perseus.updateText('enemy');
+		this.Perseus.updateText('enemy');
 		// CHECK TO SEE IF ITS A GAME OVER
 		if (MyBuildings.length <= 0)
 		{
@@ -979,6 +978,7 @@ class AI
 		this.AddBuilding('Fort');
 		this.AddBuilding('Barracks');
 		this.AddBuilding('Wizard Tower');
+		this.Perseus.updateText('Enemy');
 
 		this.AddUnit('Worker');
 		this.AddUnit('Archer');

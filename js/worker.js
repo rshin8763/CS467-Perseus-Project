@@ -295,30 +295,42 @@ class Worker extends Unit{
         // heading to resource node
         // console.log(this.gatherState);
 
-        if (this.gatherState == 1){
-            if (this.moving == false){
+        if (this.gatherState == 1)
+        {
+            if (this.moving == false)
+            {
                 this.gatherState = 2;
             }
-        } if (this.gatherState == 2){ //gathering at node
-            if (this.gatherProgress < 150){
+        } 
+        if (this.gatherState == 2)
+        { //gathering at node
+            if (this.gatherProgress < 150)
+            {
                 this.gatherProgress += 1;
-            } else {
+            } 
+            else 
+            {
                 this.gatherState = 3;
+
                 this.lastResource.takeDamage(5);
                 this.moveTo(this.findNearestFort());
             }
-        } if (this.gatherState == 3){ // returning to fort
+        } 
+        if (this.gatherState == 3)
+        { // returning to fort
             if (this.moving == false)
             {
                 if (this.lastResource.type == 'wood')
                 {
                     if(this.faction == 'orc') // IF IS AI, UPDATE AI
                     {
+                        console.log("1");
                         this.Perseus.AI.UpdateStock(woodHarvest, 'wood');
                         this.lastResource.takeDamage(10);
                     }
                     else // ELSE IS PLAYER
                     {
+                        console.log("2");
                         this.Perseus.Player.UpdateStock(woodHarvest, 'wood');
                         this.lastResource.takeDamage(10);
                     }
@@ -345,10 +357,6 @@ class Worker extends Unit{
                 }
                 else
                 {
-                    if (this.faction == 'orc') // AI NEEDS TO STOP
-                    {
-                        //CHECK IF ANYONE IS ATTACKING
-                    }
                     this.gather(this.lastResource);
                 }
             }

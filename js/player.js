@@ -156,12 +156,12 @@ class Player
 		if (type == 'wood' || type == 'Wood')
 		{
 			this.playerWood = this.playerWood + x;
-			//this.Perseus.game.updateText(type, x);
+			this.Perseus.updateText(type);
 		}
 		else if (type == 'gold' || type == 'Gold')
 		{
 			this.playerGold = this.playerGold + x;
-			//this.Perseus.updateText(type);
+			this.Perseus.updateText(type);
 		}
 		else
 		{
@@ -352,6 +352,7 @@ class Player
 		this.playerAllBuildings++;
 		buildSpotY += 100;
 		buildSpotX += 100;
+		this.Perseus.updateText(type);
 		return idNumb;
 	}
 
