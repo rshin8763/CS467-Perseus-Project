@@ -183,6 +183,7 @@ function create() {
     mute_button.events.onInputUp.add(muteMusic);
 
     console.log(Perseus.objects);
+    console.log(Perseus.resources);
 }
 
 function update()
@@ -192,22 +193,6 @@ function update()
     Perseus.objects.forEach(function(obj){
         obj.update();
     });
-    //Perseus.AI.update();
-
-    
-    // for(let i = 0; i < 80; i++)
-    // {
-    //     for(let j = 0; j < 80; j++)
-    //     {
-    //         if(Perseus.navigator.navmap[i][j] == 1)
-    //         {
-    //             let coords = Perseus.navigator.getCoords(i, j);
-    //             Perseus.game.add.sprite(coords.x, coords.y, 'navSquare');
-    //         }
-
-    //     }
-    // }
-
 }
 
 /******************************************************************************/
