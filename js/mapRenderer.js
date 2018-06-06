@@ -34,7 +34,7 @@ class mapRenderer{
         }
     }
 
-    createResources(layer){
+    createResources(){
         this.Perseus.resources = [];
 
         // Set navmap for collision
