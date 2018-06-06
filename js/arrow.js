@@ -25,6 +25,17 @@ class Arrow{
 
     update()
     {
+        if(this.target.hp < 1 || this.parent.dead == true) //If the target is dead, or the parent is dead (ie sprite has been removed)
+        {
+            for(let i = 0; i < this.Perseus.objects.length; i++)
+            {
+                if(this.Perseus.objects[i] === this )
+                {
+                    this.Perseus.objects.splice(i, 1);
+                }
+            }
+            this.sprite.destroy();
+        }
         //While this arrow is active
         if(this.active)
         {

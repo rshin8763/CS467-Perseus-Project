@@ -1,4 +1,6 @@
-import {GameObject} from './gameObject.js' 
+import {GameObject} from './gameObject.js';
+// import {Player} from './player.js';
+
 class Building extends GameObject{
     constructor(faction, hp, x, y, Perseus){
         super(false, Perseus);
@@ -24,6 +26,12 @@ class Building extends GameObject{
         // this.sprite.anchor.x = 0.5;
         // this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
+
+        if (this.faction == 'human'){
+            // this.Perseus.Player.UpdatePlayerBuildings(1, buildingType);
+        } else {
+            //update ai buildingCount?
+        }
 
         for(let i = 0; i < 4; i++)
         {
@@ -74,5 +82,4 @@ class Building extends GameObject{
 
     
 }
-
 export {Building};
