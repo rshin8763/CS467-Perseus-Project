@@ -6,6 +6,7 @@ class Unit extends GameObject{
         
 
         this.range = 1;
+        this.dead=false;
         let unitSquare = this.Perseus.navigator.getSquare(x,y);
         this.x = unitSquare.x;
         this.y = unitSquare.y;
@@ -144,6 +145,7 @@ class Unit extends GameObject{
         //console.log(this.hp);
         if(this.hp < 1)
         {
+            this.dead=true;
             for(let i = 0; i < this.Perseus.objects.length; i++)
             {
                 if(this.Perseus.objects[i] === this )
@@ -156,6 +158,8 @@ class Unit extends GameObject{
             //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
             this.hpbar.destroy();
+            this.fireball=false;
+            this.arrow=false;
             this.attacking = false;
             this.moving = false;
             attacker.stopAttack();
