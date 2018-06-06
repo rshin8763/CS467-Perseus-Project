@@ -103,7 +103,7 @@ class Worker extends Unit{
     buildFort()
     {
         if(this.Perseus.Player.playerWood > this.woodCosts.Fort 
-                && this.Perseus.resources.playerGold > this.goldCosts.Fort)
+                && this.Perseus.Player.playerGold > this.goldCosts.Fort)
         {            
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort');
                 this.selectedBuilding = "Fort";
