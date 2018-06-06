@@ -82,9 +82,12 @@ class Player
 		this.Perseus = Perseus;
 		this.objects = this.Perseus.objects;
 		this.resources = this.Perseus.resources;
-		
-		this.playerGold = 0;
-		this.playerWood = 0;
+
+		// RESOURCES
+        // TODO change these later, for testing
+		this.playerGold = 10000;
+		this.playerWood = 10000;
+
 
 		// UNITS
 		this.playerWorkers = 0;

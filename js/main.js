@@ -29,7 +29,7 @@ var menuBar, pause_button, saveButton, quitButton, newGameButton, resumeButton, 
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 
 function preload() {
-    this.load.tilemap('demo', 'assets/tilemaps/map1.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.tilemap('demo', 'assets/tilemaps/map2.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.image('topbar', 'assets/topbar.png');
     // TODO insert tiles url and creators
     this.load.image('gameTiles', 'assets/tilemaps/forestTiles.png');
@@ -83,17 +83,17 @@ function create()
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
-    Perseus.navigator = new Navigator(Perseus.game, 80, 80, 32);
+    console.log(Perseus.map.width);
+    Perseus.navigator = new Navigator(Perseus.game, Perseus.map.height, Perseus.map.width, 32);
 
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
     Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
 
     //create layer
-    Perseus.backgroundLayer= Perseus.map.createLayer('backgroundLayer');
+    Perseus.backgroundLayer = Perseus.map.createLayer('backgroundLayer');
+    Perseus.dirtLayer = Perseus.map.createLayer('dirtLayer');
     Perseus.collisionLayer = Perseus.map.createLayer('collisionLayer');
-
-    // Sets collision  TODO make it work with unit's move method.
-    // This uses phaser arcade physics. Since we are using a navmap,
+    Perseus.rockLayer = Perseus.map.createLayer('rockLayer');
 
     //resizes the game world to match the layer dimensions
     Perseus.backgroundLayer.resizeWorld();
@@ -176,6 +176,7 @@ function create()
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
 
+<<<<<<< HEAD
     Perseus.Player = new Player(Perseus);
     Perseus.Player.Main();
     // ------------------------------------------------------------------------
@@ -184,6 +185,13 @@ function create()
     Perseus.AI.Main();
     // ------------------------------------------------------------------------
     Perseus.GameState = new GameState(Perseus);
+=======
+    console.log(Perseus.objects);
+
+    console.log(Perseus.resources);
+
+    console.log(Perseus.navigator.navmap);
+>>>>>>> fb8ac40f600076c8afc7831170c40c027d61256b
 }
 
 function update()

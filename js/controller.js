@@ -120,19 +120,19 @@ class Controller{
     cameraPan(){
         if(this.cursors.up.isDown || this.game.camera.height - this.pointer.position.y >= this.game.camera.height-32){
             let temp = this.game.camera.y; 
-            this.game.camera.y -= 10;
+            this.game.camera.y -= 15;
         }
         if(this.cursors.down.isDown || this.game.camera.height - this.pointer.position.y <= 32){
             let temp = this.game.camera.y;
-            this.game.camera.y += 10;
+            this.game.camera.y += 15;
         }
         if(this.cursors.left.isDown || (this.game.camera.width - this.pointer.position.x) >= this.game.camera.width-32 ){
             let temp = this.game.camera.x; 
-            this.game.camera.x -= 10;
+            this.game.camera.x -= 15;
         }
         if(this.cursors.right.isDown || (this.game.camera.width - this.pointer.position.x) <= 32 ){
             let temp = this.game.camera.x; 
-            this.game.camera.x += 10;
+            this.game.camera.x += 15;
         }
     }
 
@@ -153,6 +153,23 @@ class Controller{
     input(state){
         this.state = state;
         // this.ui.writeToScreen('Choose a target');
+        switch (state){
+            case 'A':
+                this.state = 'attack';
+                break;
+            case 'B':
+                this.state = 'default';
+                this.commandState = 'build';
+                this.Perseus.ui.updateBuildList(this.highestPrioritySelected);
+                break;
+            case 'G':
+                this.state = 'gather';
+                break;
+            case 'M':
+                this.state = 'move';
+                this.Perseus.ui.updateBuildList(this.highestPrioritySelected);
+                break;
+        }
     }
 
     update(){
@@ -243,6 +260,10 @@ class Controller{
         }
         // Cancel command ( no right click yet)
         if (this.keys.X.isDown){
+            this.selectedObjects.forEach((obj)=>{
+                if (obj instanceof Worker)
+                    obj.cancelPlacing();
+            });
             this.state = 'default';
             this.commandState = 'default';
             //console.log('controller state is default');
@@ -260,8 +281,7 @@ class Controller{
             if (this.pointer.isDown == true){
                 this.selectedObjects.forEach((obj) => {
                     if (obj instanceof Unit){
-                    //console.log('moving');
-                    obj.move(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
+                        obj.move(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
                     }
                 }, this);
 
@@ -311,7 +331,7 @@ class Controller{
             this.Perseus.ui.updateCommandList(obj);
             obj.drawSelectionCircle();
             console.log("selected:", this.selectedObjects);
-        if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
+            if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
         }
     }
 }
