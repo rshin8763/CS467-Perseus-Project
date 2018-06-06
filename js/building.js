@@ -1,4 +1,4 @@
-import {GameObject} from './gameObject.js' 
+import {GameObject} from './gameObject.js'
 import {Player} from './player.js'
 
 class Building extends GameObject{
@@ -82,5 +82,4 @@ class Building extends GameObject{
 
     
 }
-
 export {Building};

@@ -1,4 +1,5 @@
 import {GameObject} from './gameObject.js';
+import {Player} from './player.js'
 //import {AI} from './ai.js';
 class Unit extends GameObject{
     constructor(x,y, faction, hp, attk, defense, attkSpeed, Perseus){
