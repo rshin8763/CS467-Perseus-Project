@@ -2,10 +2,7 @@ import {GameObject} from './gameObject.js'
 class Unit extends GameObject{
     constructor(x,y, faction, hp, attk, defense, attkSpeed, Perseus){
         super(true, Perseus);
-        if(Perseus.spriteGroup == null)
-        {
-            Perseus.spriteGroup = Perseus.game.add.group();
-        }
+        
 
         this.range = 1;
         let unitSquare = this.Perseus.navigator.getSquare(x,y);
@@ -68,7 +65,9 @@ class Unit extends GameObject{
             this.Perseus.controller.endWithSelect(this);
         }, this);
 
-        this.Perseus.spriteGroup.add(this.sprite)
+        this.Perseus.gameSprites.add(this.sprite);
+        this.Perseus.gameSprites.add(this.hpbar);
+
 
     }
 
