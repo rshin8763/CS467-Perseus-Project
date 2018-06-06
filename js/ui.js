@@ -1,3 +1,5 @@
+import {Player} from './player.js'
+
 class Ui
 {
     constructor(Perseus){

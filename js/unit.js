@@ -1,6 +1,4 @@
 import {GameObject} from './gameObject.js';
-// import {Player} from './player.js';
-
 //import {AI} from './ai.js';
 class Unit extends GameObject{
     constructor(x,y, faction, hp, attk, defense, attkSpeed, Perseus){
@@ -42,10 +40,11 @@ class Unit extends GameObject{
         if(this.faction == 'orc')
         {
             unitType += '_orc';
+            //update ai unitcount?
         }else {
             unitType +='_human';
-            this.Perseus.Player.UpdatePlayerUnits(1,unitType);
         }
+
         let coords = this.Perseus.navigator.getCoords(this.x, this.y);    
         this.sprite = this.game.add.sprite(coords.x, coords.y, unitType);
         this.sprite.anchor.x = 0.5;
