@@ -182,11 +182,6 @@ function create() {
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
 
-    Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
-
-
     console.log(Perseus.objects);
 }
 
@@ -284,27 +279,27 @@ function newGame()
 
 Perseus.updateText = function (type)
 {
-    if(type == 'wood')
+    if(type == 'wood' || type == 'Wood')
     {
         woodText = 'Wood: ' + Perseus.Player.playerWood;
     }
-    else if (type == 'gold') 
+    else if (type == 'gold' || type == 'Gold') 
     {
         goldText.text = 'Gold: ' + Perseus.Player.playerGold;
     }
-    else if (type == 'fort')
+    else if (type == 'fort' || type == 'Fort')
     {
         fortText.text = 'Forts: ' + Perseus.Player.playerForts;
     }
-    else if (type == 'barracks')
+    else if (type == 'barracks' || type == 'Barracks')
     {
         barracksText.text = 'Barracks: ' + Perseus.Player.playerBarracks;
     }
-    else if (type == 'tower')
+    else if (type == 'wizard tower' || 'Wizard Tower')
     {
         towerText.text = 'Tower: ' + Perseus.Player.playerTowers;
     }
-    else if (type == 'enemy')
+    else if (type == 'enemy' || 'Enemy')
     {
         enemyHealthText = 'Enemy Buildings: ' + Perseus.AI.AIAllBuildings;
     }
