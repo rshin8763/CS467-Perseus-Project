@@ -9,6 +9,7 @@ class Wizard extends Unit {
         this.range = 5;
         this.fireball = false;
         this.fireballSprite = null;
+        this.priority = 2;
         if (Math.random() >= 0.5){
             this.type="Wizard";
             this.addSprite('wizard_male');
@@ -20,9 +21,8 @@ class Wizard extends Unit {
         }
 
         this.uiData = {
-            canBuild: false,
-            commandList:[{"M" : "Move"}, {"A" : "Attack"}],
-            buildList:[]
+            commandList: {M : "Move", A : "Attack" },
+            buildList: {}
         };
 
         this.sprite.animations.add('atk_right', [39, 40, 41, 42, 43, 44, 45], 10, true);

@@ -1,4 +1,5 @@
 import {Unit} from './unit.js'
+import {Worker} from './worker.js'
 class Controller{
     constructor(Perseus){
         this.Perseus = Perseus;
@@ -75,7 +76,9 @@ class Controller{
             this.state = 'default';
         } else if (this.state == 'gather'){
             this.selectedObjects.forEach( (elem) => {
-                elem.gather(obj);
+                if (elem instanceof Worker ) {
+                    elem.gather(obj);
+                }
             });
             this.state = 'default';
         }
@@ -97,10 +100,11 @@ class Controller{
                 //console.log(obj.sprite.x, obj.sprite.y);
                 // Put this logic in function.
                 if(this.boxStartPos.x <= obj.sprite.x  && obj.sprite.x <= this.boxEndPos.x 
-                        || this.boxEndPos.x <= obj.sprite.x && obj.sprite.x <= this.boxStartPos.x){
+                    || this.boxEndPos.x <= obj.sprite.x && obj.sprite.x <= this.boxStartPos.x){
                     if (this.boxStartPos.y <= obj.sprite.y && obj.sprite.y <= this.boxEndPos.y
-                            || this.boxEndPos.y <= obj.sprite.y && obj.sprite.y <= this.boxStartPos.y){
+                        || this.boxEndPos.y <= obj.sprite.y && obj.sprite.y <= this.boxStartPos.y){
                         //console.log("this is inside foreach");
+
                         this.selectedObjects.push(obj);
                         if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
                         //console.log(this.selectedObjects);
@@ -133,6 +137,7 @@ class Controller{
     }
 
     isViableCommand(string){
+        if (this.selectedObjects.length == 0) return false;
         if (this.commandState == 'build'){
             for (let prop in this.highestPrioritySelected.uiData.buildList){
                 if (prop == string) return true;
@@ -143,6 +148,11 @@ class Controller{
             }
         }
         return false;
+    }
+
+    input(state){
+        this.state = state;
+        // this.ui.writeToScreen('Choose a target');
     }
 
     update(){
@@ -158,12 +168,14 @@ class Controller{
         if(this.state != 'pointerHold' || this.commandState != 'build'){
             if(this.keys.A.isDown){
                 if (this.isViableCommand('A')){
+                    this.Perseus.ui.highlightButton('A');
                     //console.log('input attack command');
                     this.state = 'attack';
                 }
             }
             if(this.keys.M.isDown){
                 if (this.isViableCommand('M')){
+                    this.Perseus.ui.highlightButton('M');
                     this.state = 'move';
                     //console.log('input move command');
                 }
@@ -171,6 +183,7 @@ class Controller{
 
             if(this.keys.G.isDown){
                 if (this.isViableCommand('G')){
+                    this.Perseus.ui.highlightButton('G');
                     this.state = 'gather';
                     //console.log('click on a resource');
                 }
@@ -178,6 +191,7 @@ class Controller{
 
             if(this.keys.B.isDown){
                 if (this.isViableCommand('B')){
+                    this.Perseus.ui.highlightButton('B');
                     this.commandState = 'build';
                     this.Perseus.ui.updateBuildList(this.highestPrioritySelected);
                 }
@@ -245,11 +259,14 @@ class Controller{
         if (this.state == 'move'){
             if (this.pointer.isDown == true){
                 this.selectedObjects.forEach((obj) => {
+                    if (obj instanceof Unit){
                     //console.log('moving');
                     obj.move(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
-                    this.state = 'default';
-                    this.commandState = 'default';
+                    }
                 }, this);
+
+                this.state = 'default';
+                this.commandState = 'default';
             }
         } 
         if (this.state == 'attack'){
@@ -289,11 +306,14 @@ class Controller{
 
     endWithSelect(obj){
         this.update();
-        this.selectedObjects.push(obj);
-        this.Perseus.ui.updateCommandList(obj);
-        obj.drawSelectionCircle();
-        //console.log("selected:", this.selectedObjects);
+        if (this.selectedObjects.length == 0 || obj instanceof Unit){
+            this.selectedObjects.push(obj);
+            this.Perseus.ui.updateCommandList(obj);
+            obj.drawSelectionCircle();
+            console.log("selected:", this.selectedObjects);
         if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
+        }
     }
 }
 export {Controller}
+

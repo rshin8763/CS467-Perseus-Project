@@ -36,7 +36,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://localhost/rts/unitExample1.html",
+            "url": "http://localhost/rts/index.html",
             "webRoot": "${workspaceFolder}"
         }
     ]
