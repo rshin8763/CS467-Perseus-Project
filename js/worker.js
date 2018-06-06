@@ -8,6 +8,7 @@ import {Farm} from './farm.js'
 import {AI} from './ai.js';
 import {Player} from './player.js';
 
+var woodHarvest = 10, goldMined = 10;
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
@@ -300,7 +301,6 @@ class Worker extends Unit{
 
     update(){
         super.update();
-
         if (this.gatherState == 1){ // heading to resource node
             if (this.moving == false){
                 this.gatherState = 2;
@@ -309,24 +309,31 @@ class Worker extends Unit{
             if (this.gatherProgress < 150){
                 //TODO add animation
                 this.gatherProgress += 1;
-            } else {
+            } 
+            else 
+            {
                 this.gatherState = 3;
+
                 this.lastResource.takeDamage(5);
                 this.moveTo(this.findNearestFort());
             }
-        } if (this.gatherState == 3){ // returning to fort
+        } 
+        if (this.gatherState == 3)
+        { // returning to fort
             if (this.moving == false)
             {
                 if (this.lastResource.type == 'wood')
                 {
                     if(this.faction == 'orc') // IF IS AI, UPDATE AI
                     {
-                        this.Perseus.AI.UpdateAIResources(10, 'wood');
+                        console.log("1");
+                        this.Perseus.AI.UpdateStock(woodHarvest, 'wood');
                         this.lastResource.takeDamage(10);
                     }
                     else // ELSE IS PLAYER
                     {
-                        this.Perseus.Player.UpdatePlayerResources(10, 'wood');
+                        console.log("2");
+                        this.Perseus.Player.UpdateStock(woodHarvest, 'wood');
                         this.lastResource.takeDamage(10);
                     }
 
@@ -335,12 +342,12 @@ class Worker extends Unit{
                 {
                     if(this.faction == 'orc') // 
                     {
-                        this.Perseus.AI.UpdateAIResources(10, 'gold');
+                        this.Perseus.AI.UpdateStock(goldMined, 'gold');
                         this.lastResource.takeDamage(10);
                     }
                     else
                     {
-                        this.Perseus.Player.UpdatePlayerResources(10, 'gold');
+                        this.Perseus.Player.UpdateStock(goldMined, 'gold');
                         this.lastResource.takeDamage(10);
                     }
                 }
@@ -352,10 +359,6 @@ class Worker extends Unit{
                 }
                 else
                 {
-                    if (this.faction == 'orc') // AI NEEDS TO STOP
-                    {
-                        //CHECK IF ANYONE IS ATTACKING
-                    }
                     this.gather(this.lastResource);
                 }
             }
