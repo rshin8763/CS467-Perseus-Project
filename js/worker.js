@@ -204,7 +204,6 @@ class Worker extends Unit{
 
         for(let i = 0; i < 16; i++)
         {
-
             let square = this.Perseus.navigator.getSquare(this.selectedSprite.x , this.selectedSprite.y );
             let coords = this.Perseus.navigator.getCoords(square.x + i % 4, square.y+ Math.floor(i / 4));
             let newSquare = this.Perseus.game.add.sprite(coords.x, coords.y, 'navSquare');
@@ -287,6 +286,7 @@ class Worker extends Unit{
         let coords = this.Perseus.navigator.getCoords(border[0].x, border[0].y);
         this.move(coords.x, coords.y);
     }
+
     update(){
         super.update();
         // heading to resource node
@@ -296,18 +296,15 @@ class Worker extends Unit{
             if (this.moving == false){
                 this.gatherState = 2;
             }
-            //gathering at node
-        } if (this.gatherState == 2){
+        } if (this.gatherState == 2){ //gathering at node
             if (this.gatherProgress < 150){
                 this.gatherProgress += 1;
             } else {
                 this.gatherState = 3;
                 this.lastResource.takeDamage(5);
-                console.log('moving to fort');
                 this.moveTo(this.findNearestFort());
             }
-            // returning to fort
-        } if (this.gatherState == 3){
+        } if (this.gatherState == 3){ // returning to fort
             if (this.moving == false)
             {
                 if (this.lastResource.type == 'wood')
