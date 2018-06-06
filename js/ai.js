@@ -17,7 +17,7 @@ var MyResources = [];
 	//		depleated:
 	//		xCoor:
 	//		yCoor:
-	//	}
+	//	};
 var MyBuildings = [];
 	//	Building = {
 	//		kind: "type",
@@ -141,6 +141,7 @@ class AI
 /*****************************************************************************/
 							// RESOURCES // 
 /*****************************************************************************/
+
 	/*-----------------------------------------------------------------------*/
 	CreateResourcesArray()
 	{
@@ -152,12 +153,40 @@ class AI
 			{
 				thisResource = {
 					idNumber: this.resources[x].tag,
-					type: this.resources[x].type,
+					kind: this.resources[x].type,
 					depleated: this.resources[x].exhausted,
 					xCoor: this.resources[x].x,
 					yCoor: this.resources[x].y
 				}
 				MyResources.push(thisResource);
+			}
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	DeleteResource(tag)
+	{
+		for(var x = 0; x < MyResources.length; x++)
+		{
+			if(MyResources[x].idNumber == tag)
+			{
+				// MOVE ALL DATA OVER ONE TO REPLACE BUILDING LOST
+				while(x < MyResources.length)
+				{
+					if (x == (MyResources.length - 1)) // IS LAST ONE
+					{
+						MyResources.pop();
+					}
+					else
+					{
+						MyResources[x].idNumber = MyResources[x+1].idNumber;
+						MyResources[x].kind = MyResources[x+1].kind;
+						MyResources[x].depleated = MyResources[x+1].depleated;
+						MyResources[x].xCoor = MyResources[x+1].xCoor;
+						MyResources[x].yCoor = MyResources[x+1].yCoor;
+					}
+					x++;
+				}
 			}
 		}
 	}
@@ -906,7 +935,7 @@ class AI
 		{
 			console.log("Index: " + x);
 			console.log("idNumber: " + MyResources[x].idNumber);
-			console.log("type: " + MyResources[x].type);
+			console.log("type: " + MyResources[x].kind);
 			console.log("depleated: " + MyResources[x].depleated);
 			console.log("xCoor: " + MyResources[x].xCoor);
 			console.log("yCoor: " + MyResources[x].yCoor);
@@ -946,7 +975,7 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	Main()
 	{
-
+		this.CreateResourcesArray();
 		//this.AddBuilding('Fort');
 		//this.AddBuilding('Barracks');
 		//this.AddBuilding('Wizard Tower');
@@ -958,8 +987,7 @@ class AI
 		//this.AddUnit('Wizard');
 
 		//this.GetAIStats();
-		this.CreateResourcesArray();
-		this.printArrays();
+		//this.printArrays();
 
 	}
 }

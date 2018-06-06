@@ -23,6 +23,14 @@ var MyUnits = [];
 	//		idNumber:
 	//		kind:
 	//	};
+var MyResources = [];
+	// Resource = {
+	//		idNumber:
+	//		type:
+	//		depleated:
+	//		xCoor:
+	//		yCoor:
+	//	};
 var buildSpotX = 450, buildSpotY = 50, buildChanger = 150;
 var spawnSpotX = 300, spawnSpotY = 200, spawnChanger = 50;
 var objects, resources;
@@ -97,7 +105,53 @@ class Player
 /*****************************************************************************/
 
 	/*-----------------------------------------------------------------------*/
-	UpdateResources(x, type)
+	CreateResourcesArray()
+	{
+		var x = 0;
+		var thisResource;
+		for (var key in this.resources)
+		{
+			thisResource = {
+				idNumber: this.resources[x].tag,
+				kind: this.resources[x].type,
+				depleated: this.resources[x].exhausted,
+				xCoor: this.resources[x].x,
+				yCoor: this.resources[x].y
+			}
+			MyResources.push(thisResource);
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	DeleteResource(tag)
+	{
+		for(var x = 0; x < MyResources.length; x++)
+		{
+			if(MyResources[x].idNumber == tag)
+			{
+				// MOVE ALL DATA OVER ONE TO REPLACE BUILDING LOST
+				while(x < MyResources.length)
+				{
+					if (x == (MyResources.length - 1)) // IS LAST ONE
+					{
+						MyResources.pop();
+					}
+					else
+					{
+						MyResources[x].idNumber = MyResources[x+1].idNumber;
+						MyResources[x].kind = MyResources[x+1].kind;
+						MyResources[x].depleated = MyResources[x+1].depleated;
+						MyResources[x].xCoor = MyResources[x+1].xCoor;
+						MyResources[x].yCoor = MyResources[x+1].yCoor;
+					}
+					x++;
+				}
+			}
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	UpdateStock(x, type)
 	{
 		if (type == 'wood' || type == 'Wood')
 		{
@@ -251,8 +305,8 @@ class Player
 
 			// UPDATE RESOURCES & ADD WORKERS
 			this.AddUnit('worker');
-			this.UpdateResources(-FortCosts.wood, 'wood');
-			this.UpdateResources(-FortCosts.gold, 'gold');
+			this.UpdateStock(-FortCosts.wood, 'wood');
+			this.UpdateStock(-FortCosts.gold, 'gold');
 		}
 
 		// BARRACKS
@@ -269,8 +323,8 @@ class Player
 			this.AddUnit('Archer');
 			this.AddUnit('pikeman');
 			this.AddUnit('SwordInfantry');
-			this.UpdateResources(-BarracksCosts.wood, 'wood');
-			this.UpdateResources(-BarracksCosts.gold, 'gold');
+			this.UpdateStock(-BarracksCosts.wood, 'wood');
+			this.UpdateStock(-BarracksCosts.gold, 'gold');
 		}
 
 		// WIZARD TOWER
@@ -285,8 +339,8 @@ class Player
 			// UPDATE RESOURCES + ADD TWO WIZARDS
 			this.AddUnit('Wizard');
 			this.AddUnit('Wizard');
-			this.UpdateResources(-WizardTowerCosts.wood, 'wood');
-			this.UpdateResources(-WizardTowerCosts.gold, 'gold');
+			this.UpdateStock(-WizardTowerCosts.wood, 'wood');
+			this.UpdateStock(-WizardTowerCosts.gold, 'gold');
 		}
 
 		// ERROR HANDLING
@@ -401,8 +455,8 @@ class Player
 			};
 			MyUnits.push(thisUnit);
 
-			this.UpdateResources(-WorkerCost.wood, 'wood');
-			this.UpdateResources(-WorkerCost.gold, 'gold');
+			this.UpdateStock(-WorkerCost.wood, 'wood');
+			this.UpdateStock(-WorkerCost.gold, 'gold');
 		}
 
 		// ARCHER - GUARDS BUILDINGS
@@ -420,8 +474,8 @@ class Player
 			MyUnits.push(thisUnit);
 
 			// UPDATE RESOURCES
-			this.UpdateResources(-ArcherCost.wood, 'wood');
-			this.UpdateResources(-ArcherCost.gold, 'gold');
+			this.UpdateStock(-ArcherCost.wood, 'wood');
+			this.UpdateStock(-ArcherCost.gold, 'gold');
 		}
 
 		// SWORDINFANTRY - ATTACKS THE INNOCENT
@@ -439,8 +493,8 @@ class Player
 			MyUnits.push(thisUnit);
 			
 			// UPDATE RESOURCES
-			this.UpdateResources(-SwordInfantryCost.wood, 'wood');
-			this.UpdateResources(-SwordInfantryCost.gold, 'gold');
+			this.UpdateStock(-SwordInfantryCost.wood, 'wood');
+			this.UpdateStock(-SwordInfantryCost.gold, 'gold');
 		}
 
 		// PIKEMAN - ATTACKS THE ARMED
@@ -457,8 +511,8 @@ class Player
 			MyUnits.push(thisUnit);
 
 			// UPDATE RESOURCES
-			this.UpdateResources(-PikemanCost.wood, 'wood');
-			this.UpdateResources(-PikemanCost.gold, 'gold');
+			this.UpdateStock(-PikemanCost.wood, 'wood');
+			this.UpdateStock(-PikemanCost.gold, 'gold');
 		}
 
 		// WIZARD - ATTACKS BUILDINGS
@@ -476,8 +530,8 @@ class Player
 			MyUnits.push(thisUnit);
 
 			// UPDATE RESOURCES
-			this.UpdateResources(-WizardCost.wood, 'wood');
-			this.UpdateResources(-WizardCost.gold, 'gold');
+			this.UpdateStock(-WizardCost.wood, 'wood');
+			this.UpdateStock(-WizardCost.gold, 'gold');
 		}
 		else
 		{
@@ -577,6 +631,16 @@ class Player
 			console.log("kind: " + MyUnits[m].kind);
 		}
 
+		console.log("Resources --------------");
+		for (var x = 0; x < MyResources.length; x++)
+		{
+			console.log("Index: " + x);
+			console.log("idNumber: " + MyResources[x].idNumber);
+			console.log("type: " + MyResources[x].kind);
+			console.log("depleated: " + MyResources[x].depleated);
+			console.log("xCoor: " + MyResources[x].xCoor);
+			console.log("yCoor: " + MyResources[x].yCoor);
+		}
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -613,6 +677,8 @@ class Player
 		//this.AddUnit('Pikeman');
 		//this.AddUnit('SwordInfantry');
 		//this.AddUnit('Wizard');
+		this.CreateResourcesArray();
+		this.printArrays();
 	}
 }
 
