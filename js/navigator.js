@@ -212,43 +212,64 @@ class Navigator {
     //Check for collisions with this unit
     checkCollision(unit){
     
-    //Check each other unit of which the navigator is aware 
-    this.units.forEach((u) =>{
-        if(!(Object.is(unit, u)))
-        {
-            let ax, ay, bx, by;
-
-            //If the unit is moving we will check it's nextSquare (ie, where it's going). 
-            //If it isn't moving, we'll check the square it's currently occupying
-            if(unit.nextSquare != null && unit.moving == true)
+        //Check each other unit of which the navigator is aware 
+        this.units.forEach((u) =>{
+            if(!(Object.is(unit, u)))
             {
-                
-                ax = unit.nextSquare.x;
-                ay = unit.nextSquare.y;
-            } else {
-                ax = unit.x;
-                ay = unit.y;
-            }
+                let ax, ay, bx, by;
 
-            //Same for each unit it's checking against
-            if(u.moving == true )
-            {
+                //If the unit is moving we will check it's nextSquare (ie, where it's going). 
+                //If it isn't moving, we'll check the square it's currently occupying
+                if(unit.nextSquare != null && unit.moving == true)
+                {
+                    
+                    ax = unit.nextSquare.x;
+                    ay = unit.nextSquare.y;
+                } else {
+                    ax = unit.x;
+                    ay = unit.y;
+                }
 
-                bx = u.nextSquare.x;
-                by = u.nextSquare.y;
-            } else {
-                bx = u.x;
-                by = u.y;
-            }
+                //Same for each unit it's checking against
+                if(u.moving == true )
+                {
 
-            //If there is a collision, resolve it.
-            if(ax == bx && ay == by)
-            {
-                this.resolveCollision(unit, u);
+                    bx = u.nextSquare.x;
+                    by = u.nextSquare.y;
+                } else {
+                    bx = u.x;
+                    by = u.y;
+                }
+
+                //If there is a collision, resolve it.
+                if(ax == bx && ay == by)
+                {
+                    this.resolveCollision(unit, u);
+                }
             }
-        }
-    });
+        });
     }
+
+    setIsRock(x,y)
+    {
+        if(x < 0 || y < 0 || x >= this.xTiles || y >= this.yTiles)
+        {
+            return;
+        }
+
+        this.navmap[x][y] = 2;
+    }
+
+    checkIsRock(x,y)
+    {
+        if(x < 0 || y < 0 || x >= this.xTiles || y >= this.yTiles)
+        {
+            return false;
+        }else{
+            return this.navmap[x][y] == 2;
+        }
+    }
+
 
     isOccupied(x, y, faction)
     {
