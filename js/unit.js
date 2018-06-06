@@ -104,6 +104,7 @@ class Unit extends GameObject{
 
     attack(target, square)
     {
+
         if(this.faction == target.faction)
         {
             return;
