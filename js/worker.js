@@ -421,19 +421,19 @@ class Worker extends Unit{
                     }
                     if(this.selectedBuilding == "Barracks")
                     {
-                        this.Perseus.objects.push(new Barracks(this.faction, this.selectedSprite.x+64, this.selectedSprite.y+64, this.Perseus));
+                        this.Perseus.objects.push(new Barracks(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
                     }
                     if(this.selectedBuilding == "ArcheryRange")
                     {
-                        this.Perseus.objects.push(new ArcheryRange(this.faction, this.selectedSprite.x+64, this.selectedSprite.y+64, this.Perseus));
+                        this.Perseus.objects.push(new ArcheryRange(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
                     }
                     if(this.selectedBuilding == "WizardTower")
                     {
-                        this.Perseus.objects.push(new WizardTower(this.faction, this.selectedSprite.x, this.selectedSprite.ymovet, this.Perseus));
+                        this.Perseus.objects.push(new WizardTower(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
                     }
                     if(this.selectedBuilding == "Farm")
                     {
-                        this.Perseus.objects.push(new Farm(this.faction, this.selectedSprite.x +64, this.selectedSprite.y +64, this.Perseus));
+                        this.Perseus.objects.push(new Farm(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
                     }
                     this.building = false;
                     this.selectedSprite.destroy();

@@ -137,6 +137,7 @@ class Controller{
     }
 
     isViableCommand(string){
+        if (this.selectedObjects.length == 0) return false;
         if (this.commandState == 'build'){
             for (let prop in this.highestPrioritySelected.uiData.buildList){
                 if (prop == string) return true;
@@ -147,6 +148,11 @@ class Controller{
             }
         }
         return false;
+    }
+
+    input(state){
+        this.state = state;
+        // this.ui.writeToScreen('Choose a target');
     }
 
     update(){
@@ -162,12 +168,14 @@ class Controller{
         if(this.state != 'pointerHold' || this.commandState != 'build'){
             if(this.keys.A.isDown){
                 if (this.isViableCommand('A')){
+                    this.Perseus.ui.highlightButton('A');
                     //console.log('input attack command');
                     this.state = 'attack';
                 }
             }
             if(this.keys.M.isDown){
                 if (this.isViableCommand('M')){
+                    this.Perseus.ui.highlightButton('M');
                     this.state = 'move';
                     //console.log('input move command');
                 }
@@ -175,6 +183,7 @@ class Controller{
 
             if(this.keys.G.isDown){
                 if (this.isViableCommand('G')){
+                    this.Perseus.ui.highlightButton('G');
                     this.state = 'gather';
                     //console.log('click on a resource');
                 }
@@ -182,6 +191,7 @@ class Controller{
 
             if(this.keys.B.isDown){
                 if (this.isViableCommand('B')){
+                    this.Perseus.ui.highlightButton('B');
                     this.commandState = 'build';
                     this.Perseus.ui.updateBuildList(this.highestPrioritySelected);
                 }
@@ -306,3 +316,4 @@ class Controller{
     }
 }
 export {Controller}
+
