@@ -61,8 +61,11 @@ class Ui
     updateBuildList(object){
         this.clearCommandList();
 
-        console.log(object);
+        if (object == null)
+            return;
+
         let count = 0;
+
         console.log(object.uiData);
         for (let prop in object.uiData.buildList){
             let x = count%3*64 + 16;
@@ -88,6 +91,8 @@ class Ui
     updateCommandList(object){
         // Clear grid
         this.clearCommandList();
+        if (object == null)
+            return;
 
         let count = 0;
         for (let prop in object.uiData.commandList){
@@ -112,19 +117,19 @@ class Ui
             if (prop == 'A'){
                 button.frame = 0;
                 button.action = 'A'
-                this.commandButtons.push(button);
+                    this.commandButtons.push(button);
             } else if (prop == 'B') {
                 button.frame = 18;
                 button.action = 'B'
-                this.commandButtons.push(button);
+                    this.commandButtons.push(button);
             } else if (prop == 'G') {
                 button.frame = 9;
                 button.action = 'G'
-                this.commandButtons.push(button);
+                    this.commandButtons.push(button);
             } else if (prop == 'M') {
                 button.frame = 7;
                 button.action = 'M'
-                this.commandButtons.push(button);
+                    this.commandButtons.push(button);
             }
         }
     }
