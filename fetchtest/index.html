@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+    
+    //This function creates an object and sends it to the server as JSON
+    function sendData()
+    {
+        //Get data from the inputs on the page
+        var data = document.getElementById('data').value;
+        var moreData = document.getElementById('moreData').value;
+
+        //Create an object using that data
+        var testData = {
+                data : data,
+                moreData : moreData
+        };
+
+        //Turn the data into a JSON string
+        var testString = JSON.stringify(testData);
+
+        //Send it to save.php
+        fetch("http://localhost/fetchtest/save.php",
+        {
+        headers: {
+            "Content-Type":"application/json"
+        },
+        method: "POST",
+        body: testString
+        })
+        .then(function(res){ return res.json() })
+        .then(function(data){ console.log(data); })
+
+
+
+    }
+
+    //This function retreives a file from the server
+    function getData()
+    {
+
+        //Get the file
+        fetch("http://localhost/fetchtest/test.txt")
+        .then(function(res){return res.json();})
+        .then(function(data){alert(JSON.stringify(data))})  //Print out the file. This weird double then is just how the Fetch API works, but that data object will contain all the info from the file
+        .catch((err)=>{alert(err);});
+    }
+        </script>
+
+        <input type="text" id="data" placeholder="data">
+        <input type="text" id="moreData" placeholder="More Data">
+        <button onclick="sendData()">Send</button>
+        <button onclick="getData()">Receive</button>
+    
+</body>
+</html>

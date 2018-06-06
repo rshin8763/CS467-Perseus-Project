@@ -1,4 +1,5 @@
-import {GameObject} from './gameObject.js'
+import {GameObject} from './gameObject.js';
+//import {AI} from './ai.js';
 class Unit extends GameObject{
     constructor(x,y, faction, hp, attk, defense, attkSpeed, Perseus){
         super(true, Perseus);
@@ -74,7 +75,7 @@ class Unit extends GameObject{
 
     move(x, y){
 
-        console.log(this);
+        //console.log(this);
         this.dest = this.Perseus.navigator.getSquare(x, y);
 
         //If the square is occupied, don't bother trying to move there
@@ -103,6 +104,11 @@ class Unit extends GameObject{
 
     attack(target, square)
     {
+
+        if(this.faction == target.faction)
+        {
+            return;
+        }
         this.target = target;
         this.attackSquare = square;
         this.attacking = true;
@@ -134,7 +140,7 @@ class Unit extends GameObject{
             this.attack(attacker, atkSquare);
         }
         this.hp -= (damage - this.defense);
-        console.log(this.hp);
+        //console.log(this.hp);
         if(this.hp < 1)
         {
             for(let i = 0; i < this.Perseus.objects.length; i++)
@@ -144,7 +150,9 @@ class Unit extends GameObject{
                     this.Perseus.objects.splice(i, 1);
                 }
             }
-
+            this.Perseus.AI.DeleteUnit(this.tag);
+            //this.Perseus.AI.printArrays();
+            //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
             this.hpbar.destroy();
             this.attacking = false;
@@ -251,7 +259,7 @@ class Unit extends GameObject{
 		{
 			if(this.nextSquare == null)
 			{
-				console.log(this);
+				//console.log(this);
 			}
 
 			let destCoords = this.Perseus.navigator.getCoords(this.dest.x, this.dest.y);
@@ -284,7 +292,7 @@ class Unit extends GameObject{
 				}
 				if(this.currentPath == null)
 				{
-					console.log(this);
+					//console.log(this);
 				}
 				this.nextSquare = this.currentPath[this.pathStep];
 				this.Perseus.navigator.checkCollision(this);

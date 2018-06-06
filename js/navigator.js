@@ -526,7 +526,7 @@ class Navigator {
     //Figure out how to move two units who are in conflict
     resolveCollision(unit1, unit2)
     {
-        console.log("Collision between " + unit1.type + " and " + unit2.type);
+        //console.log("Collision between " + unit1.type + " and " + unit2.type);
 
         //Both units are stopped on top of eachother so move one of them
         if(unit1.moving == false && unit2.moving == false)

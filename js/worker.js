@@ -5,7 +5,6 @@ import {Barracks} from './barracks.js'
 import {ArcheryRange} from './archeryrange.js'
 import {WizardTower} from './wizardtower.js'
 import {Farm} from './farm.js'
-
 import {AI} from './ai.js';
 import {Player} from './player.js';
 
@@ -205,7 +204,6 @@ class Worker extends Unit{
 
         for(let i = 0; i < 16; i++)
         {
-
             let square = this.Perseus.navigator.getSquare(this.selectedSprite.x , this.selectedSprite.y );
             let coords = this.Perseus.navigator.getCoords(square.x + i % 4, square.y+ Math.floor(i / 4));
             let newSquare = this.Perseus.game.add.sprite(coords.x, coords.y, 'navSquare');
@@ -242,7 +240,7 @@ class Worker extends Unit{
                 this.attack(this.target, emptySquare);
                 return;
             }
-            console.log(this.target);
+            //console.log(this.target);
             this.moving = false;
             if(this.cooldown > 0)
             {
@@ -277,19 +275,20 @@ class Worker extends Unit{
     move(x,y){
         super.move(x,y);
         this.gatherstate = 0;
-        console.log(this.destx, this.desty);
+        //console.log(this.destx, this.desty);
     }
 
     moveTo(obj){
-        let border = this.Perseus.navigator.findObjectBorder(obj);
+        let border = this.Perseus.navigator.findObjectBorder(obj, {x : this.x, y : this.y});
 
-        let rand = Math.floor(Math.random() * border.length);
-
-        console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
+        //let rand = Math.floor(Math.random() * border.length);
+      
+        //console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
         this.gatherstate = 0;
-        let coords = this.Perseus.navigator.getCoords(border[rand].x, border[rand].y);
+        let coords = this.Perseus.navigator.getCoords(border[0].x, border[0].y);
         this.move(coords.x, coords.y);
     }
+
     update(){
         super.update();
         // heading to resource node
@@ -299,18 +298,15 @@ class Worker extends Unit{
             if (this.moving == false){
                 this.gatherState = 2;
             }
-            //gathering at node
-        } if (this.gatherState == 2){
+        } if (this.gatherState == 2){ //gathering at node
             if (this.gatherProgress < 150){
                 this.gatherProgress += 1;
             } else {
                 this.gatherState = 3;
                 this.lastResource.takeDamage(5);
-                console.log('moving to fort');
                 this.moveTo(this.findNearestFort());
             }
-            // returning to fort
-        } if (this.gatherState == 3){
+        } if (this.gatherState == 3){ // returning to fort
             if (this.moving == false)
             {
                 if (this.lastResource.type == 'wood')

@@ -11,7 +11,7 @@ import {Barracks} from './barracks.js';
 
 /**** GLOBALS *****/
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
-var goldText, woodText, healthText, menuBar, fortText, barracksText;
+var goldText, woodText, healthText, menuBar, fortText, barracksText, towerText;
 /******************/
 
 class Player
@@ -37,6 +37,7 @@ class Player
 		// BUILDINGS
 		this.playerForts = 0;
 		this.playerBarracks = 0;
+		this.playerTowers = 0;
 		this.playerAllBuildings = 0;
 	}
 
@@ -64,7 +65,8 @@ class Player
 		if (type == 'wood' || type == 'Wood')
 		{
 			this.playerWood = this.playerWood + x;
-			woodText.text = 'Wood: ' + this.playerWood;
+			type = 'wood';
+			this.Perseus.updateText(type);
 			if (this.playerWood >= 40)
 			{
 				// ASK USER IF WANTS TO BUILD FORT
@@ -73,7 +75,7 @@ class Player
 		else if (type == 'gold' || type == 'Gold')
 		{
 			this.playerGold = this.playerGold + x;
-			goldText.text = 'Gold: ' + this.playerGold;
+			//goldText.text = 'Gold: ' + this.playerGold;
 			if (this.playerGold >= 50)
 			{
 				// ASK USER IF WANTS TO BUILD BARRACKS
@@ -151,8 +153,6 @@ class Player
 				}
 			}
 			this.playerForts = this.playerForts + x;
-			fortText.text = 'Forts: ' + this.playerForts;
-// DO FORTS AUTOMATICALLY SPAWN WORKERS????????
 		}
 		else if (type == 'barracks' || type == 'Barracks')
 		{
@@ -202,39 +202,9 @@ class Player
 	// MAIN FUNCTION FOR CALLING FUNCTIONS OUT OF TYPED ORDER :)
 	Main()
 	{
-		// MENU BAR
-	    menuBar = this.Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
-    	menuBar.fixedToCamera = true;
-    	menuBar.cameraOffset.setTo(0, 0);
-	    menuBar.fixedToCamera = true;
-   		menuBar.cameraOffset.setTo(0, 0);
-
-		// GOLD COUNT DISPLAY
-	    goldText = this.Perseus.game.add.text(0, 0, 'Gold: ' + this.playerGold,
-	     style);
-	    goldText.fixedToCamera = true;
-	    goldText.cameraOffset.setTo(200, 0);
-	    
-	    // WOOD COUNT DISPLAY
-	    woodText = this.Perseus.game.add.text(0, 0, 'Wood: ' + this.playerWood,
-	     style);
-    	woodText.fixedToCamera = true;
-    	woodText.cameraOffset.setTo(300, 0);
-
-    	// FORT COUNT DISPLAY
-    	fortText = this.Perseus.game.add.text(0, 0,
-    	 'Forts: ' + this.playerForts, style);
-	    fortText.fixedToCamera = true;
-	    fortText.cameraOffset.setTo(400, 0);
-
-	    // BARRACKS COUNT DISPLAY
-    	barracksText = this.Perseus.game.add.text(0, 0,
-    	 'Barracks: ' + this.playerForts, style);
-	    barracksText.fixedToCamera = true;
-	    barracksText.cameraOffset.setTo(500, 0);
 
 	    this.AddStartingSprites();
-	    this.GetPlayerStats();
+	    //this.GetPlayerStats();
 	}
 }
 

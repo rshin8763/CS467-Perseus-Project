@@ -11,7 +11,7 @@ class mapRenderer{
     getObjects(map, layer) {
         var result = new Array();
         map.objects[layer].forEach(function(element){
-            console.log(element);
+            //console.log(element);
             if(element.type != '') {
                 result.push(element);
             }      

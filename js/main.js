@@ -9,6 +9,7 @@ import {Ui} from './ui.js';
 import {Worker} from './worker.js';
 import {Player} from './player.js';
 import {AI} from './ai.js';
+import {Wizard} from './wizard.js';
 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
@@ -16,6 +17,7 @@ Perseus.graphics = {}
 
 // create the game, and pass it the configuration
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var goldText, woodText, fortText, barracksText, towerText, enemyHealthText;
 
 // RESOURCES TEXT OBJECTS
 var buttonClick = false;
@@ -33,6 +35,7 @@ function preload() {
     this.load.image('tree', 'assets/images/tree.png');
     this.load.image('barracks', 'assets/barracks.png');
     this.load.image('fort', 'assets/fort.png');
+    this.load.image('wizardtower', 'assets/wizardtower.png');
     this.load.image('ui', 'assets/ui/stoneMenu.png');
     this.load.image('hpbar', 'assets/healthbar.png');
     this.load.image('navSquare', 'assets/navSquare.png');
@@ -63,6 +66,8 @@ function preload() {
     Perseus.game.load.spritesheet('pikeman_female_orc', 'assets/images/units/pikeman_female_orc.png', 64, 64);
     Perseus.game.load.image('arrow_right', 'assets/arrow_right.png');
     Perseus.game.load.image('arrow_left', 'assets/arrow_left.png');
+    Perseus.game.load.image('fireball_right', 'assets/fireball_right.png');
+    Perseus.game.load.image('fireball_left', 'assets/fireball_left.png');
 
     // MENU BAR AND BUTTONS
     Perseus.game.load.image('menuBar', 'assets/images/menuBar.png');
@@ -102,11 +107,7 @@ function create() {
     Perseus.uiGraphics = Perseus.game.add.group();
     Perseus.gui = Perseus.game.add.group();
 
-    Perseus.objects.push(new SwordInfantry('human', 250, 250, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
-
-    console.log(Perseus.navigator.navmap);
+    //console.log(Perseus.navigator.navmap);
 
     // Perseus.navigator.markOccupied(300, 300);
 
@@ -127,29 +128,76 @@ function create() {
 
     // ------------------------------------------------------------------------
     // PAUSE BUTTON, MUTE, MENU
+    // MENU BAR
+    menuBar = Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
+    menuBar.fixedToCamera = true;
+    menuBar.cameraOffset.setTo(0, 0);
+    menuBar.fixedToCamera = true;
+    menuBar.cameraOffset.setTo(0, 0);
+
+    // GOLD COUNT DISPLAY
+    goldText = Perseus.game.add.text(0, 0, 'Gold: ' + Perseus.Player.playerGold,
+     style);
+    goldText.fixedToCamera = true;
+    goldText.cameraOffset.setTo(70, 3);
+    
+    // WOOD COUNT DISPLAY
+    woodText = Perseus.game.add.text(0, 0, 'Wood: ' + Perseus.Player.playerWood,
+     style);
+    woodText.fixedToCamera = true;
+    woodText.cameraOffset.setTo(170, 3);
+
+    // FORT COUNT DISPLAY
+    fortText = Perseus.game.add.text(0, 0,
+     'Forts: ' + Perseus.Player.playerForts, style);
+    fortText.fixedToCamera = true;
+    fortText.cameraOffset.setTo(270, 3);
+
+    // BARRACKS COUNT DISPLAY
+    barracksText = Perseus.game.add.text(0, 0,
+     'Barracks: ' + Perseus.Player.playerBarracks, style);
+    barracksText.fixedToCamera = true;
+    barracksText.cameraOffset.setTo(370, 3);
+
+    // TOWER COUNT DISPLAY
+    towerText = Perseus.game.add.text(0, 0,
+     'Towers: ' + Perseus.Player.playerTowers, style);
+    towerText.fixedToCamera = true;
+    towerText.cameraOffset.setTo(470, 3);
+
+    enemyHealthText = Perseus.game.add.text(0, 0, 
+            'Enemy Buildings: ' + Perseus.AI.AIAllBuildings, style);
+        enemyHealthText.fixedToCamera = true;
+        enemyHealthText.cameraOffset.setTo(570, 3);
+
     var pause_button = Perseus.game.add.text(0, 0, 'Pause', style);
     pause_button.fixedToCamera = true;
-    pause_button.cameraOffset.setTo(10, 0);
+    pause_button.cameraOffset.setTo(10, 3);
     pause_button.inputEnabled = true;
     pause_button.events.onInputUp.add(pause);
 
     mute_button = Perseus.game.add.text(0, 0, 'Mute', style);
     mute_button.fixedToCamera = true;
-    mute_button.cameraOffset.setTo(700, 0);
+    mute_button.cameraOffset.setTo(755, 3);
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
+
+    Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
+    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
+    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
+
 
     console.log(Perseus.objects);
 }
 
-function update(){
-
-    
+function update()
+{    
     Perseus.controller.update();
     //Call the update function on each game object
     Perseus.objects.forEach(function(obj){
         obj.update();
     });
+    //Perseus.AI.update();
 
     
     // for(let i = 0; i < 80; i++)
@@ -167,69 +215,32 @@ function update(){
 
 }
 
-/*****
- ** DESCRIPTION: PAUSES THE GAME STATE
- ** ADDS RESUME, SAVE, QUIT, AND NEW GAME BUTTONS TO THE GAME STATE
- *****/
+/******************************************************************************/
+
 function pause()
 {
-    // ADD MENU BUTTONS
-    resumeButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 50,
-            'resumeButton', unpause, this, 2, 1, 0);
-
-    saveButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 160,
-            'saveButton', saveGame, this, 2, 1, 0);
-
-    quitButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 268,
-            'quitButton', quitGame, this, 2, 1, 0);
-
-    newGameButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 376,
-            'newGameButton', newGame, this, 2, 1, 0);
-    Perseus.game.paused = true;
-}
-
-/*****
- ** DESCRIPTION: UNPAUSES THE GAME STATE
- ** DESTROYS RESUME, SAVE, QUIT, AND NEW GAME BUTTONS FROM THE GAME STATE
- *****/
-function unpause()
-{
-    if(Perseus.game.paused)
+    // ERROR HANDLING: GAME IS ALREADY PAUSED
+    if (Perseus.game.paused) 
     {
-        Perseus.game.paused = false;
-        saveButton.destroy();
-        quitButton.destroy();
-        newGameButton.destroy();
-        resumeButton.destroy();
+        // do nothing
     }
-}
+    else
+    {
+        // ADD MENU BUTTONS
+        resumeButton = Perseus.game.add.button(Perseus.game.camera.x + 20, Perseus.game.camera.y + 50,
+                'resumeButton', unpause, this, 2, 1, 0);
 
-/*****
- ** DESCRIPTION: SAVES THE CURRENT GAME STATE
- ** RETURNS NOTHING
- *****/
-function saveGame()
-{
-    Perseus.unpause();
-}
+        saveButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 160,
+                'saveButton', saveGame, this, 2, 1, 0);
 
-/*****
- ** DESCRIPTION: QUITS THE CURRENT GAME STATE
- ** IMMEDIATELY LOADS MAIN MENU
- *****/
-function quitGame()
-{
+        quitButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 268,
+                'quitButton', quitGame, this, 2, 1, 0);
 
-    Perseus.unpause();
-}
-
-/*****
- ** DESCRIPTION: RESTARTS THE GAME FROM SCRATCH
- ** RETURNS NOTHING
- *****/
-function newGame()
-{
-    Perseus.unpause();
+        newGameButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 376,
+                'newGameButton', newGame, this, 2, 1, 0);
+        Perseus.game.paused = true;
+    }
+    
 }
 
 function muteMusic()
@@ -243,7 +254,68 @@ function muteMusic()
         music.mute = true;
     }
 
+}
+
+function unpause()
+{
+    if(Perseus.game.paused)
+    {
+        Perseus.game.paused = false;
+        saveButton.destroy();
+        quitButton.destroy();
+        newGameButton.destroy();
+        resumeButton.destroy();
+    }
+}
+
+function saveGame()
+{
+    unpause();
+}
+function quitGame()
+{
+    unpause();
+}
+
+function newGame()
+{
+    unpause();
+}
+
+Perseus.updateText = function (type)
+{
+    if(type == 'wood')
+    {
+        woodText = 'Wood: ' + Perseus.Player.playerWood;
+    }
+    else if (type == 'gold') 
+    {
+        goldText.text = 'Gold: ' + Perseus.Player.playerGold;
+    }
+    else if (type == 'fort')
+    {
+        fortText.text = 'Forts: ' + Perseus.Player.playerForts;
+    }
+    else if (type == 'barracks')
+    {
+        barracksText.text = 'Barracks: ' + Perseus.Player.playerBarracks;
+    }
+    else if (type == 'tower')
+    {
+        towerText.text = 'Tower: ' + Perseus.Player.playerTowers;
+    }
+    else if (type == 'enemy')
+    {
+        enemyHealthText = 'Enemy Buildings: ' + Perseus.AI.AIAllBuildings;
+    }
+    else
+    {
+        console.log("You tried to update a UI text and failed.");
+    }
 };
+
+/******************************************************************************/
+
 
 // Perseus.game.state.add('Main', Main);
 // Perseus.game.state.add('Boot', Boot);bvg
