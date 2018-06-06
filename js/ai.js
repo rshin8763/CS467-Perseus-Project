@@ -451,7 +451,7 @@ class AI
 				}
 			}
 		}
-		Perseus.updateText('enemy');
+		//this.Perseus.updateText('enemy');
 		// CHECK TO SEE IF ITS A GAME OVER
 		if (MyBuildings.length <= 0)
 		{
@@ -976,15 +976,15 @@ class AI
 	Main()
 	{
 		this.CreateResourcesArray();
-		//this.AddBuilding('Fort');
-		//this.AddBuilding('Barracks');
-		//this.AddBuilding('Wizard Tower');
+		this.AddBuilding('Fort');
+		this.AddBuilding('Barracks');
+		this.AddBuilding('Wizard Tower');
 
-		//this.AddUnit('Worker');
-		//this.AddUnit('Archer');
-		//this.AddUnit('Pikeman');
-		//this.AddUnit('SwordInfantry');
-		//this.AddUnit('Wizard');
+		this.AddUnit('Worker');
+		this.AddUnit('Archer');
+		this.AddUnit('Pikeman');
+		this.AddUnit('SwordInfantry');
+		this.AddUnit('Wizard');
 
 		//this.GetAIStats();
 		//this.printArrays();

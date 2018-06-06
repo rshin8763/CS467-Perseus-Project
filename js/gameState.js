@@ -8,11 +8,27 @@ class GameState
 		this.Perseus = Perseus;
 	}
 
-	GameOver()
+	LoadGame()
+	{
+		
+	}
+
+	SaveCurrentState()
+	{
+
+	}
+
+	Quit()
 	{
 		// declare who the winner is
 		// ask player if wants to play again
 		// restart on click
+	}
+
+	Restart()
+	{
+
+
 	}
 	
 }

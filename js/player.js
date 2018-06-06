@@ -156,7 +156,7 @@ class Player
 		if (type == 'wood' || type == 'Wood')
 		{
 			this.playerWood = this.playerWood + x;
-			//this.Perseus.updateText(type);
+			//this.Perseus.game.updateText(type, x);
 		}
 		else if (type == 'gold' || type == 'Gold')
 		{
@@ -668,17 +668,17 @@ class Player
 	/*-----------------------------------------------------------------------*/
 	Main()
 	{
-	    //this.AddBuilding('Fort');
-		//this.AddBuilding('Barracks');
-		//this.AddBuilding('Wizard Tower');
-
-		//this.AddUnit('Worker');
-		//this.AddUnit('Archer');
-		//this.AddUnit('Pikeman');
-		//this.AddUnit('SwordInfantry');
-		//this.AddUnit('Wizard');
 		this.CreateResourcesArray();
-		this.printArrays();
+	    this.AddBuilding('Fort');
+		this.AddBuilding('Barracks');
+		this.AddBuilding('Wizard Tower');
+
+		this.AddUnit('Worker');
+		this.AddUnit('Archer');
+		this.AddUnit('Pikeman');
+		this.AddUnit('SwordInfantry');
+		this.AddUnit('Wizard');
+		//this.printArrays();
 	}
 }
 

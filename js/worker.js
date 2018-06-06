@@ -8,6 +8,7 @@ import {Farm} from './farm.js'
 import {AI} from './ai.js';
 import {Player} from './player.js';
 
+var woodHarvest = 10, goldMined = 10;
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
@@ -313,12 +314,12 @@ class Worker extends Unit{
                 {
                     if(this.faction == 'orc') // IF IS AI, UPDATE AI
                     {
-                        this.Perseus.AI.UpdateAIResources(10, 'wood');
+                        this.Perseus.AI.UpdateStock(woodHarvest, 'wood');
                         this.lastResource.takeDamage(10);
                     }
                     else // ELSE IS PLAYER
                     {
-                        this.Perseus.Player.UpdatePlayerResources(10, 'wood');
+                        this.Perseus.Player.UpdateStock(woodHarvest, 'wood');
                         this.lastResource.takeDamage(10);
                     }
 
@@ -327,12 +328,12 @@ class Worker extends Unit{
                 {
                     if(this.faction == 'orc') // 
                     {
-                        this.Perseus.AI.UpdateAIResources(10, 'gold');
+                        this.Perseus.AI.UpdateStock(goldMined, 'gold');
                         this.lastResource.takeDamage(10);
                     }
                     else
                     {
-                        this.Perseus.Player.UpdatePlayerResources(10, 'gold');
+                        this.Perseus.Player.UpdateStock(goldMined, 'gold');
                         this.lastResource.takeDamage(10);
                     }
                 }

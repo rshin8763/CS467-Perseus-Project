@@ -207,7 +207,7 @@ function pause()
     else
     {
         // ADD MENU BUTTONS
-        resumeButton = Perseus.game.add.button(Perseus.game.camera.x + 20, Perseus.game.camera.y + 50,
+        resumeButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 50,
                 'resumeButton', unpause, this, 2, 1, 0);
 
         saveButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 160,
@@ -262,27 +262,29 @@ function newGame()
     unpause();
 }
 
-Perseus.updateText = function (type)
+var wood = 0;
+Perseus.updateText = function (type, x)
 {
     if(type == 'wood' || type == 'Wood')
     {
-        woodText = 'Wood: ' + Perseus.Player.playerWood;
+        woodText.text = 'Wood: ' + x;
+        console.log("Hi I'm here");
     }
     else if (type == 'gold' || type == 'Gold') 
     {
-        goldText.text = 'Gold: ' + Perseus.Player.playerGold;
+        goldText = 'Gold: ' + Perseus.Player.playerGold;
     }
     else if (type == 'fort' || type == 'Fort')
     {
-        fortText.text = 'Forts: ' + Perseus.Player.playerForts;
+        fortText = 'Forts: ' + Perseus.Player.playerForts;
     }
     else if (type == 'barracks' || type == 'Barracks')
     {
-        barracksText.text = 'Barracks: ' + Perseus.Player.playerBarracks;
+        barracksText = 'Barracks: ' + Perseus.Player.playerBarracks;
     }
     else if (type == 'wizard tower' || 'Wizard Tower')
     {
-        towerText.text = 'Tower: ' + Perseus.Player.playerTowers;
+        towerText = 'Tower: ' + Perseus.Player.playerTowers;
     }
     else if (type == 'enemy' || 'Enemy')
     {
