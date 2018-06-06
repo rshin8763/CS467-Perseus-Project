@@ -72,13 +72,14 @@ class Worker extends Unit{
 
     }
     findNearestFort(){
-        let x = this.sprite.x;
-        let y = this.sprite.y;
+        
+        let x = this.x;
+        let y = this.y;
 
         let closest = null;
         let min = Number.MAX_SAFE_INTEGER;
         this.Perseus.objects.forEach((obj)=>{
-            if (obj instanceof Fort){
+            if (obj instanceof Fort && obj.faction == this.faction){
                 //get distance
                 if (Math.hypot(x-obj.x, y-obj.y) < min){
                     min = Math.hypot(x-obj.x, y-obj.y) < min;
