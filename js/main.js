@@ -17,7 +17,7 @@ Perseus.graphics = {}
 // var Main = function() {};
 
 // create the game, and pass it the configuration
-Perseus.game = new Phaser.Game(1200, 550, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+Perseus.game = new Phaser.Game(1180, 770, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 var goldText, woodText, fortText, barracksText, towerText, enemyHealthText;
 
 // RESOURCES TEXT OBJECTS
