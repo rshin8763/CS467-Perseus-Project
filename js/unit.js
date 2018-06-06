@@ -34,6 +34,11 @@ class Unit extends GameObject{
         this.attackMoveDest = null;
         Perseus.objects.push(this);
         Perseus.navigator.units.push(this);
+        if (faction == 'human'){
+            this.Perseus.Player.UpdatePlayerUnits(1, unitType);
+        } else {
+            //update ai unitcount?
+        }
     }
 
     addSprite(unitType){
