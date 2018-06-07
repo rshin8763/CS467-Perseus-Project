@@ -25,16 +25,6 @@ class Building extends GameObject{
         // this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
 
-<<<<<<< HEAD
-        if (this.faction == 'human'){
-            //this.Perseus.Player.AddBuilding(1, buildingType);
-        } else {
-            //update ai buildingCount?
-            this.drawEnemyCircle();
-        }
-
-=======
->>>>>>> master
         for(let i = 0; i < 4; i++)
         {
             for(let j = 0; j < 4; j++){

@@ -86,11 +86,8 @@ function create()
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
-<<<<<<< HEAD
-    Perseus.navigator = new Navigator(Perseus.game, Perseus.map.height, Perseus.map.width, 32);
-=======
+
     Perseus.navigator = new Navigator(Perseus.game, Perseus.map.width, Perseus.map.height, 32);
->>>>>>> master
 
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
     Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
@@ -113,81 +110,6 @@ function create()
     Perseus.uiGraphics = Perseus.game.add.group();
     Perseus.gui = Perseus.game.add.group();
   
-<<<<<<< HEAD
-    // PAUSE BUTTON, MUTE, MENU
-    // MENU BAR
-    menuBar = Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
-    menuBar.fixedToCamera = true;
-    menuBar.cameraOffset.setTo(0, 0);
-    menuBar.fixedToCamera = true;
-    menuBar.cameraOffset.setTo(0, 0);
-
-    // GOLD COUNT DISPLAY
-    goldText = Perseus.game.add.text(0, 0, 'Gold: ' + 0,
-     style);
-    goldText.fixedToCamera = true;
-    goldText.cameraOffset.setTo(70, 3);
-    
-    // WOOD COUNT DISPLAY
-    woodText = Perseus.game.add.text(0, 0, 'Wood: ' + 0,
-     style);
-    woodText.fixedToCamera = true;
-    woodText.cameraOffset.setTo(170, 3);
-    //updateText('gold');
-
-    // FORT COUNT DISPLAY
-    fortText = Perseus.game.add.text(0, 0,
-     'Forts: ' + 0, style);
-    fortText.fixedToCamera = true;
-    fortText.cameraOffset.setTo(270, 3);
-
-    // BARRACKS COUNT DISPLAY
-    barracksText = Perseus.game.add.text(0, 0,
-     'Barracks: ' + 0, style);
-    barracksText.fixedToCamera = true;
-    barracksText.cameraOffset.setTo(370, 3);
-
-    // TOWER COUNT DISPLAY
-    towerText = Perseus.game.add.text(0, 0,
-     'Towers: ' + 0, style);
-    towerText.fixedToCamera = true;
-    towerText.cameraOffset.setTo(470, 3);
-
-    enemyHealthText = Perseus.game.add.text(0, 0, 
-            'Enemy Buildings: ' + 0, style);
-        enemyHealthText.fixedToCamera = true;
-        enemyHealthText.cameraOffset.setTo(570, 3);
-
-    var pause_button = Perseus.game.add.text(0, 0, 'Pause', style);
-    pause_button.fixedToCamera = true;
-    pause_button.cameraOffset.setTo(10, 3);
-    pause_button.inputEnabled = true;
-    pause_button.events.onInputUp.add(pause);
-
-    mute_button = Perseus.game.add.text(0, 0, 'Mute', style);
-    mute_button.fixedToCamera = true;
-    mute_button.cameraOffset.setTo(755, 3);
-    mute_button.inputEnabled = true;
-    mute_button.events.onInputUp.add(muteMusic);
-
-
-    /*************************************************************************/
-    // LOAD MAIN MENU - load music earlier ^ than mute button ^^^^^^^^
-    // LOAD SAVED GAME OR NEW GAME DEPENDING ON ANSWERS
-    // LOAD EASY OR HARD AI DEPENDING ON ANSWERS
-
-
-    /*************************************************************************/
-    Perseus.Player = new Player(Perseus);
-    Perseus.Player.Main();
-    Perseus.AI = new AI(Perseus);
-    Perseus.AI.Main();
-    Perseus.GameState = new GameState(Perseus);
-
-    Perseus.mapRenderer = new mapRenderer(Perseus);
-    Perseus.mapRenderer.createResources();
-    Perseus.ui = new Ui(Perseus);
-=======
     // ------------------------------------------------------------------------
     // PLAYER
     //
@@ -201,67 +123,10 @@ function create()
   
    Perseus.GameState = new GameState(Perseus);
 
-        //// ------------------------------------------------------------------------
-    //// PAUSE BUTTON, MUTE, MENU
-    //// MENU BAR
-    //menuBar = Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
-    //menuBar.fixedToCamera = true;
-    //menuBar.cameraOffset.setTo(0, 0);
-    //menuBar.fixedToCamera = true;
-    //menuBar.cameraOffset.setTo(0, 0);
-
-    //// GOLD COUNT DISPLAY
-    //goldText = Perseus.game.add.text(0, 0, 'Gold: ' + 0,
-     //style);
-    //goldText.fixedToCamera = true;
-    //goldText.cameraOffset.setTo(70, 3);
-    
-    //// WOOD COUNT DISPLAY
-    //woodText = Perseus.game.add.text(0, 0, 'Wood: ' + 0,
-     //style);
-    //woodText.fixedToCamera = true;
-    //woodText.cameraOffset.setTo(170, 3);
-    ////updateText('gold');
-
-    //// FORT COUNT DISPLAY
-    //fortText = Perseus.game.add.text(0, 0,
-     //'Forts: ' + 0, style);
-    //fortText.fixedToCamera = true;
-    //fortText.cameraOffset.setTo(270, 3);
-
-    //// BARRACKS COUNT DISPLAY
-    //barracksText = Perseus.game.add.text(0, 0,
-     //'Barracks: ' + 0, style);
-    //barracksText.fixedToCamera = true;
-    //barracksText.cameraOffset.setTo(370, 3);
-
-    //// TOWER COUNT DISPLAY
-    //towerText = Perseus.game.add.text(0, 0,
-     //'Towers: ' + 0, style);
-    //towerText.fixedToCamera = true;
-    //towerText.cameraOffset.setTo(470, 3);
-
-    //enemyHealthText = Perseus.game.add.text(0, 0, 
-        //    'Enemy Buildings: ' + 0, style);
-        //enemyHealthText.fixedToCamera = true;
-        //enemyHealthText.cameraOffset.setTo(570, 3);
-
-    //var pause_button = Perseus.game.add.text(0, 0, 'Pause', style);
-    //pause_button.fixedToCamera = true;
-    //pause_button.cameraOffset.setTo(10, 3);
-    //pause_button.inputEnabled = true;
-    //pause_button.events.onInputUp.add(pause);
-
-    //mute_button = Perseus.game.add.text(0, 0, 'Mute', style);
-    //mute_button.fixedToCamera = true;
-    //mute_button.cameraOffset.setTo(755, 3);
-    //mute_button.inputEnabled = true;
-    //mute_button.events.onInputUp.add(muteMusic);
-
 
     //console.log(Perseus.navigator.navmap);
 
-    // Perseus.navigator.markOccupied(300, 300);
+    Perseus.navigator.markOccupied(300, 300);
 
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
@@ -274,7 +139,6 @@ function create()
     Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
     Perseus.resources.push(new Mine(300, 450, 'human', Perseus));
->>>>>>> master
 
     console.log(Perseus.objects);
     console.log(Perseus.resources);
@@ -362,36 +226,6 @@ function newGame()
     Perseus.GameState.LoadGame();
 }
 
-Perseus.updateText = function(kind)
-{
-    if(kind == 'wood' || kind == 'Wood')
-    {
-        woodText.setText('Wood: ' + Perseus.Player.playerWood);
-    }
-    else if (kind == 'gold' || kind == 'Gold') 
-    {
-        goldText.setText('Gold: ' + Perseus.Player.playerGold);
-    }
-    else if (kind == 'fort' || kind == 'Fort')
-    {
-        fortText.setText('Forts: ' + Perseus.Player.playerForts);
-    }
-    else if (kind == 'barracks' || kind == 'Barracks')
-    {
-        barracksText.setText('Barracks: ' + Perseus.Player.playerBarracks);
-    }
-    else if (kind == 'wizard tower' || kind == 'Wizard Tower')
-    {
-        towerText.setText('Tower: ' + Perseus.Player.playerTowers);
-    }
-    else if (kind == 'enemy' || kind == 'Enemy')
-    {
-        enemyHealthText.setText('Enemy Buildings: ' + Perseus.AI.AIAllBuildings);
-    }
-    else
-    {
-        console.log("You tried to update a UI text and failed.");
-    }
-}
+
 
 /******************************************************************************/

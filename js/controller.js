@@ -229,8 +229,6 @@ class Controller{
                 if (this.isViableCommand('A')){
                     if (this.cooldownTimer == 0){
                         if (this.selectedObjects[0].build('A')){
-<<<<<<< HEAD
-=======
                             //cooldown
                             this.cooldownTimer = 10;
                         }
@@ -251,7 +249,6 @@ class Controller{
                 if (this.isViableCommand('S')){
                     if (this.cooldownTimer == 0){
                         if (this.selectedObjects[0].build('S')){
->>>>>>> master
                             //cooldown
                             this.cooldownTimer = 10;
                         }

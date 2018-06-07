@@ -36,10 +36,7 @@ class GameObject {
             this.Perseus.controller.selectionCircles.push(this.circle);
         }
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> master
+    
     drawEnemyCircle(){
         this.circle = this.game.add.graphics();
         this.circle.lineStyle(1, 0xFF0000, 1);

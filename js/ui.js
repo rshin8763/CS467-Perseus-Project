@@ -204,7 +204,7 @@ class Ui
     pause()
     {
         // ERROR HANDLING: GAME IS ALREADY PAUSED
-        if (this.Perseus.game.paused) 
+        if (this.Perseus.paused) 
         {
             // do nothing
         }

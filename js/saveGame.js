@@ -55,10 +55,6 @@ class SaveGame
 	constructor(Perseus)
 	{
 		this.Perseus = Perseus;
-<<<<<<< HEAD
-		this.objects = this.Perseus.objects;
-=======
->>>>>>> master
 	}
 /*****************************************************************************/
 							// SAVE // 
@@ -91,13 +87,7 @@ class SaveGame
 		var Building;
 		for (var key in this.Perseus.AI.MyBuildings)
 		{
-<<<<<<< HEAD
-			console.log("The name is: " + this.Perseus.AI.MyBuildings[key].kind);
-			console.log("The hp is: " + this.HPLookup(this.Perseus.AI.MyBuildings[key].idNumber));
-=======
-			console.log("The name is: " + this.Perseus.AI.MyBuildings[key].kind)
-			//console.log("The hp is: " + this.Perseus.AI.MyBuildings[key].Unit.hp);
->>>>>>> master
+
 		}
 	}
 
@@ -107,18 +97,6 @@ class SaveGame
 	}
 
 /*****************************************************************************/
-<<<<<<< HEAD
-							// HELPERS // 
-/*****************************************************************************/
-	HPLookup(tag)
-	{
-		var thisHp = this.objects[tag].hp;
-		return thisHp;
-	}
-
-/*****************************************************************************/
-=======
->>>>>>> master
 							// LOAD // 
 /*****************************************************************************/
 

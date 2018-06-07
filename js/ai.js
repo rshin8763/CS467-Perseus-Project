@@ -395,7 +395,7 @@ class AI
 		this.AIAllBuildings++;
 		buildSpotY -= 100;
 		buildSpotX -= 100;
-		this.Perseus.updateText('Enemy');
+		//this.Perseus.updateText('Enemy');
 		return idNumb;
 	}
 

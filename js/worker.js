@@ -123,13 +123,7 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort');
             this.selectedBuilding = "Fort";
             this.placing = true;
-<<<<<<< HEAD
-            this.Perseus.Controller.state = 'place';
-            // UpdatePlayerBuildings(1, 'Fort');
-=======
             this.Perseus.controller.state = 'place';
-
->>>>>>> master
             this.createConflictSquares();
             return true;
         } else {
@@ -147,14 +141,7 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks');
             this.selectedBuilding = "Barracks";
             this.placing = true;
-<<<<<<< HEAD
-            this.Perseus.Controller.state = 'place';
-
-            // UpdatePlayerBuildings(1, 'Barracks');
-=======
             this.Perseus.controller.state = 'place';
->>>>>>> master
-
             this.createConflictSquares();
             return true;
         } else {
@@ -172,11 +159,7 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange');
             this.selectedBuilding = "ArcheryRange";
             this.placing = true;
-<<<<<<< HEAD
-            this.Perseus.Controller.state = 'place';
-=======
             this.Perseus.controller.state = 'place';
->>>>>>> master
 
             // UpdatePlayerBuildings(1, 'ArcheryRange');
 
@@ -198,11 +181,7 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower');
             this.selectedBuilding = "WizardTower";
             this.placing = true;
-<<<<<<< HEAD
-            this.Perseus.Controller.state = 'place';
-=======
             this.Perseus.controller.state = 'place';
->>>>>>> master
 
             // UpdatePlayerBuildings(1, 'WizardTower');
 
@@ -222,11 +201,8 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm');
             this.selectedBuilding = "Farm";
             this.placing = true;
-<<<<<<< HEAD
-            this.Perseus.Controller.state = 'place';
-=======
             this.Perseus.controller.state = 'place';
->>>>>>> master
+
 
             // UpdatePlayerBuildings(1, 'Farm');
 
