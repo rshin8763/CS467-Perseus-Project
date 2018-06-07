@@ -51,5 +51,7 @@ class GameObject {
         this.circle.lineStyle(1, 0xFF0000, 1);
         this.circle.drawCircle(this.sprite.centerX,this.sprite.centerY, this.sprite.height);
     }
+    update(){
+    }
 }
 export {GameObject}

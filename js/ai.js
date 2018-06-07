@@ -450,7 +450,7 @@ class AI
 				}
 			}
 		}
-		this.Perseus.updateText('enemy');
+		this.Perseus.ui.updateText('enemy');
 		// CHECK TO SEE IF ITS A GAME OVER
 		if (MyBuildings.length <= 0)
 		{

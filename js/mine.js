@@ -1,16 +1,14 @@
 import {GameObject} from './gameObject.js'
-class Mine extends GameObject{
+import {Resource} from './resource.js'
+class Mine extends Resource{
     constructor(faction, x, y, Perseus){
-        super(false, faction, Perseus);
+        super(faction, 'gold', Perseus);
         this.sprite = null;
-        this.resourceAmount = 100;
-        this.exhausted = false;
         let square = this.Perseus.navigator.getSquare(x,y);
         let coords = this.Perseus.navigator.getCoords(square.x, square.y);
-        this.addSprite(coords.x, coords.y);
-        this.type = 'gold';
         this.x = square.x;
         this.y = square.y;
+        this.addSprite(coords.x, coords.y);
 
         for(let i = 0; i < 2; i++)
         {
@@ -38,10 +36,8 @@ class Mine extends GameObject{
     }
 
     loseResource(rate){
-        this.resourceAmount -= rate;
-        console.log("The current resource amount is: " + this.resourceAmount)
-        if (this.resourceAmount <= 0) {
-            this.exhausted = true;
+        super.loseResource(rate);
+        if (this.exhausted == true){
             this.sprite.frame = 0;
         }
     }
