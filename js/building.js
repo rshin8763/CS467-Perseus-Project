@@ -2,9 +2,8 @@ import {GameObject} from './gameObject.js';
 
 class Building extends GameObject{
     constructor(faction, hp, x, y, Perseus){
-        super(false, Perseus);
+        super(false, faction, Perseus);
         this.Perseus = Perseus;
-        this.faction = faction;
         this.hp = hp;
         this.x = this.Perseus.navigator.getSquare(x,y).x;
         this.y = this.Perseus.navigator.getSquare(x,y).y;
@@ -26,6 +25,7 @@ class Building extends GameObject{
         // this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
 
+<<<<<<< HEAD
         if (this.faction == 'human'){
             //this.Perseus.Player.AddBuilding(1, buildingType);
         } else {
@@ -33,6 +33,8 @@ class Building extends GameObject{
             this.drawEnemyCircle();
         }
 
+=======
+>>>>>>> master
         for(let i = 0; i < 4; i++)
         {
             for(let j = 0; j < 4; j++){

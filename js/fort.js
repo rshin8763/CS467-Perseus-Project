@@ -31,15 +31,15 @@ class Fort extends Building{
 
     buildWorker()
     {
-            //TODO:  Move logic inside loop once resources are available
-            // if(this.Perseus.resources.wood > this.WorkerCosts.wood
-            //     && this.Persesus.resources.gold > this.WorkerCosts.gold)
-            //     {
-            //     }
-        if(!this.building)
+        if(this.Perseus.Player.playerWood >= this.WorkerCosts.wood
+                && this.Perseus.Player.playerGold >= this.WorkerCosts.gold)
         {
-            this.building = true;
-            this.buildProgress = 0;
+            if(!this.building)
+            {
+                this.building = true;
+                this.buildProgress = 0;
+                this.Perseus.Player.reduceResources(this.WorkerCosts.wood, this.WorkerCosts.gold);
+            }
         }
     }
 
@@ -52,14 +52,14 @@ class Fort extends Building{
                 this.building = false;
                 this.buildProgress = 0;
                 let coords = this.Perseus.navigator.getCoords(this.x + 4,this.y +4)
-                this.spawnWorker(coords.x, coords.y);
+                    this.spawnWorker(coords.x, coords.y);
                 if(this.faction == 'orc') // UPDATES AI/PLAYER COUNTS BASED ON FACTION
                 {
-                    this.Perseus.AI.UpdateAIBuildings(1, 'Fort');
+                    // this.Perseus.AI.UpdateAIBuildings(1, 'Fort');
                 }
                 else
                 {
-                    this.Perseus.Player.UpdatePlayerBuildings(1, 'Fort');
+                    // this.Perseus.Player.UpdatePlayerBuildings(1, 'Fort');
                 }
             } else {
                 this.buildProgress += this.buildSpeed;
@@ -69,16 +69,10 @@ class Fort extends Building{
 
     spawnWorker(x,y)
     {
-
         let worker = new Worker(this.faction, x, y, this.Perseus)
-        this.Perseus.objects.push(worker);     
+            this.Perseus.objects.push(worker);     
         this.Perseus.selected = worker;
-        
-
     }
-
-
-
 }
 
 export {Fort}
