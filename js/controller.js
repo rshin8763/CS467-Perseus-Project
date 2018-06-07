@@ -225,6 +225,15 @@ class Controller{
                     }
                 }
             }
+            if (this.isViableCommand('M')){
+                if(this.keys.M.isDown) {
+                    if (this.cooldownTimer == 0){
+                        this.selectedObjects[0].build('M')
+                            //cooldown
+                            this.cooldownTimer = 10;
+                    }
+                }
+            }
             if(this.keys.A.isDown) {
                 if (this.isViableCommand('A')){
                     if (this.cooldownTimer == 0){

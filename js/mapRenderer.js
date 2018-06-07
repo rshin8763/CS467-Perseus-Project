@@ -1,6 +1,6 @@
-import {Tree} from './tree.js'
-import {Fort} from './fort.js'
-import {Navigator} from './navigator.js'
+import {Tree} from './tree.js';
+import {Fort} from './fort.js';
+import {Navigator} from './navigator.js';
 
 class mapRenderer{
     constructor(Perseus){
@@ -43,6 +43,14 @@ class mapRenderer{
                 let tile = this.Perseus.collisionLayer.layer.data[i][j];
                 if (tile.index != -1){
                     this.Perseus.navigator.markOccupied(j,i);
+                }
+            }
+        }
+        for (let i = 0; i < this.Perseus.map.height; i++){
+            for (let j = 0; j < this.Perseus.map.width; j++){
+                let tile = this.Perseus.rockLayer.layer.data[i][j];
+                if (tile.index != -1){
+                    this.Perseus.navigator.setIsRock(j,i);
                 }
             }
         }
