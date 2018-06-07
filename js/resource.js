@@ -4,7 +4,7 @@ class Resource  extends GameObject{
         super(false, Perseus);
         this.sprite = null;
         this.resource = null;
-        this.resourceAmount = 1000;
+        this.resourceAmount = 100;
         this.exhausted = false;
         let square = this.Perseus.navigator.getSquare(x,y);
         this.x = square.x;

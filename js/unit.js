@@ -33,12 +33,12 @@ class Unit extends GameObject{
         this.attackMoving = false;
         this.attackMoveDest = null;
 
-        if (faction == 'human'){
-            Perseus.Player.UpdatePlayerUnits(1,type);
-        } else { 
-            // ai stuff here
-            //TODO
-        }
+        //if (faction == 'human'){
+        //    Perseus.Player.UpdatePlayerUnits(1,type);
+        //} else { 
+        //    // ai stuff here
+        //    //TODO
+        //}
 
         Perseus.objects.push(this);
         Perseus.navigator.units.push(this);

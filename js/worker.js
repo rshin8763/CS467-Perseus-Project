@@ -122,7 +122,7 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort');
             this.selectedBuilding = "Fort";
             this.placing = true;
-            this.Perseus.Controller.state = 'place';
+            this.Perseus.controller.state = 'place';
             // UpdatePlayerBuildings(1, 'Fort');
             this.createConflictSquares();
             return true;
@@ -141,7 +141,7 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks');
             this.selectedBuilding = "Barracks";
             this.placing = true;
-            this.Perseus.Controller.state = 'place';
+            this.Perseus.controller.state = 'place';
 
             // UpdatePlayerBuildings(1, 'Barracks');
 
@@ -162,7 +162,7 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange');
             this.selectedBuilding = "ArcheryRange";
             this.placing = true;
-            this.Perseus.Controller.state = 'place';
+            this.Perseus.controller.state = 'place';
 
             // UpdatePlayerBuildings(1, 'ArcheryRange');
 
@@ -184,7 +184,7 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower');
             this.selectedBuilding = "WizardTower";
             this.placing = true;
-            this.Perseus.Controller.state = 'place';
+            this.Perseus.controller.state = 'place';
 
             // UpdatePlayerBuildings(1, 'WizardTower');
 
@@ -204,7 +204,7 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm');
             this.selectedBuilding = "Farm";
             this.placing = true;
-            this.Perseus.Controller.state = 'place';
+            this.Perseus.controller.state = 'place';
 
             // UpdatePlayerBuildings(1, 'Farm');
 

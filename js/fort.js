@@ -55,11 +55,11 @@ class Fort extends Building{
                 this.spawnWorker(coords.x, coords.y);
                 if(this.faction == 'orc') // UPDATES AI/PLAYER COUNTS BASED ON FACTION
                 {
-                    this.Perseus.AI.UpdateAIBuildings(1, 'Fort');
+                    // this.Perseus.AI.UpdateAIBuildings(1, 'Fort');
                 }
                 else
                 {
-                    this.Perseus.Player.UpdatePlayerBuildings(1, 'Fort');
+                    // this.Perseus.Player.UpdatePlayerBuildings(1, 'Fort');
                 }
             } else {
                 this.buildProgress += this.buildSpeed;
