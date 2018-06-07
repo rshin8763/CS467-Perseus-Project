@@ -239,6 +239,15 @@ class Worker extends Unit{
             this.selectedSprite.alpha = 0.75;
             this.selectedX = this.selectedSprite.x; 
             this.selectedY = this.selectedSprite.y; 
+            let square = this.Perseus.navigator.getSquare(this.selectedSprite.x, this.selectedSprite.y);
+            for(let i = 0; i < 4; i++)
+            {
+                for(let j = 0; j < 4; j++){
+                    this.Perseus.navigator.markOccupied(square.x+i, square.y+j);
+                }
+            }
+            //unmark the top left square so the worker can stand there while building
+            this.Perseus.navigator.markNotOccupied(square.x, square.y)
         }
     }
 
