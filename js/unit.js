@@ -157,7 +157,7 @@ class Unit extends GameObject{
                     this.Perseus.objects.splice(i, 1);
                 }
             }
-            this.Perseus.AI.DeleteUnit(this.tag);
+            
             //this.Perseus.AI.printArrays();
             //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
@@ -167,6 +167,7 @@ class Unit extends GameObject{
             this.attacking = false;
             this.moving = false;
             attacker.stopAttack();
+            this.Perseus.AI.DeleteUnit(this);
         }
 
         this.hpbar.width = (this.hp / this.maxHP) * 64;

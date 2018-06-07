@@ -56,8 +56,6 @@ class Building extends GameObject{
         if(this.hp < 1)
         {
             attacker.stopAttack();
-
-            this.Perseus.AI.DeleteBuilding(this.tag);
             //this.Perseus.AI.printArrays();
             //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
@@ -69,6 +67,7 @@ class Building extends GameObject{
                     this.Perseus.objects.splice(i, 1);
                 }
             }
+            this.Perseus.AI.DeleteBuilding(this);
         }
     }
 

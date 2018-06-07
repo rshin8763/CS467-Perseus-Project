@@ -119,8 +119,6 @@ function create()
 
     // ------------------------------------------------------------------------
     // AI
-    Perseus.AI = new AI(Perseus);
-    Perseus.AI.Main();
   
    Perseus.GameState = new GameState(Perseus);
 
@@ -132,17 +130,20 @@ function create()
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
+
+    Perseus.AI = new AI(Perseus);
+    Perseus.AI.Main();
     Perseus.ui = new Ui(Perseus);
 
 
     Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
     Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
     Perseus.objects.push(new Archer('human', 300, 300, Perseus));
-
+    Perseus.objects.push(new Worker('human', 300, 300, Perseus));
     Perseus.resources.push(new Mine(300, 450, 'human', Perseus));
 
     console.log(Perseus.objects);
-    console.log(Perseus.resources);
+    //console.log(Perseus.resources);
     console.log(Perseus.navigator.navmap);
 
     /***************************************/
@@ -158,6 +159,7 @@ function update()
     Perseus.objects.forEach(function(obj){
         obj.update();
     });
+    Perseus.AI.update();
 }
 
 /******************************************************************************/

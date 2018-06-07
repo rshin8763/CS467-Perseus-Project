@@ -341,13 +341,11 @@ class Worker extends Unit{
                 {
                     if(this.faction == 'orc') // IF IS AI, UPDATE AI
                     {
-                        console.log("1");
                         this.Perseus.AI.UpdateStock(woodHarvest, 'wood');
                         this.lastResource.takeDamage(10);
                     }
                     else // ELSE IS PLAYER
                     {
-                        console.log("2");
                         this.Perseus.Player.UpdateStock(woodHarvest, 'wood');
                         this.lastResource.takeDamage(10);
                     }
