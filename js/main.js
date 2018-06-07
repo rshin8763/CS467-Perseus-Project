@@ -83,6 +83,7 @@ function create()
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
+    console.log(Perseus.map.width);
     Perseus.navigator = new Navigator(Perseus.game, Perseus.map.height, Perseus.map.width, 32);
 
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
@@ -105,18 +106,19 @@ function create()
     Perseus.gameSprites = Perseus.game.add.group();
     Perseus.uiGraphics = Perseus.game.add.group();
     Perseus.gui = Perseus.game.add.group();
-  
-    // ------------------------------------------------------------------------
-    // PLAYER
-    Perseus.Player = new Player(Perseus);
-    Perseus.Player.Main();
 
-    // ------------------------------------------------------------------------
-    // AI
-    Perseus.AI = new AI(Perseus);
-    Perseus.AI.Main();
-  
-   Perseus.GameState = new GameState(Perseus);
+    //console.log(Perseus.navigator.navmap);
+
+    // Perseus.navigator.markOccupied(300, 300);
+
+    //Create resources
+    Perseus.mapRenderer = new mapRenderer(Perseus);
+    Perseus.mapRenderer.createResources();
+    Perseus.ui = new Ui(Perseus);
+
+    console.log(Perseus.objects);
+    console.log(Perseus.resources);
+
         // ------------------------------------------------------------------------
     // PAUSE BUTTON, MUTE, MENU
     // MENU BAR
@@ -174,20 +176,12 @@ function create()
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
 
+    Perseus.Player = new Player(Perseus);
+    Perseus.Player.Main();
+    Perseus.AI = new AI(Perseus);
+    Perseus.AI.Main();
+    Perseus.GameState = new GameState(Perseus);
 
-    //console.log(Perseus.navigator.navmap);
-
-    // Perseus.navigator.markOccupied(300, 300);
-
-    //Create resources
-    Perseus.mapRenderer = new mapRenderer(Perseus);
-    Perseus.mapRenderer.createResources();
-    Perseus.ui = new Ui(Perseus);
-
-
-    Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
     console.log(Perseus.objects);
     console.log(Perseus.resources);

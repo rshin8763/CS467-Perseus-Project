@@ -16,16 +16,10 @@ class WizardTower extends Building{
         this.type="Wizard Tower";
         this.WizardCosts = {
             wood : 0,
-            gold : 200
+            gold : 900
         }
     }
 
-    build(str){
-        switch(str){
-            case 'W':
-                return this.buildWizard();
-        }
-    }
     buildWizard()
     {
         if(!this.building)

@@ -1,13 +1,12 @@
+import {SwordInfantry} from './swordInfantry.js';
+import {Archer} from './archer.js';
+import {Fort} from './fort.js';
+import {Worker} from './worker.js';
+import {Pikeman} from './pikeman.js';
+import {WizardTower} from './wizardtower.js';
+import {Wizard} from './wizard.js';
+import {Barracks} from './barracks.js';
 
-// import {SwordInfantry} from './swordInfantry.js';
-// import {Archer} from './archer.js';
-// import {mapRenderer} from './mapRenderer.js';
-// import {Controller} from './controller.js';
-// import {Fort} from './fort.js';
-// import {Tree} from './tree.js';
-// import {Navigator} from './navigator.js';
-// import {Worker} from './worker.js';
-// import {Barracks} from './barracks.js';
 
 /*****************************************************************************/
 							// GLOBALS // 

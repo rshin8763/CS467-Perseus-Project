@@ -1,9 +1,10 @@
 import {GameObject} from './gameObject.js';
 //import {AI} from './ai.js';
 class Unit extends GameObject{
-    constructor(x,y, faction, type, hp, attk, defense, attkSpeed, Perseus){
+    constructor(x,y, faction, hp, attk, defense, attkSpeed, Perseus){
         super(true, Perseus);
         
+
         this.range = 1;
         this.dead=false;
         let unitSquare = this.Perseus.navigator.getSquare(x,y);
@@ -32,14 +33,6 @@ class Unit extends GameObject{
         this.pathStep = 0;
         this.attackMoving = false;
         this.attackMoveDest = null;
-
-        if (faction == 'human'){
-            Perseus.Player.UpdatePlayerUnits(1,type);
-        } else { 
-            // ai stuff here
-            //TODO
-        }
-
         Perseus.objects.push(this);
         Perseus.navigator.units.push(this);
     }
@@ -64,7 +57,7 @@ class Unit extends GameObject{
         this.sprite.animations.add('wlk_down', [130, 131, 132, 133, 134, 135, 136, 137, 138], 10, true);
         this.sprite.animations.add('wlk_right', [143, 144, 145, 146, 147, 148, 149, 150, 151], 10, true);
         this.sprite.animations.add('wlk_left', [117, 118, 119, 120, 121, 122, 123, 124, 125], 10, true);
-
+ 
         this.hpbar = this.game.add.sprite(coords.x,coords.y, 'hpbar');
         this.hpbar.anchor.x = .5;
         this.hpbar.anchor.y = 6;
@@ -79,10 +72,6 @@ class Unit extends GameObject{
         this.Perseus.gameSprites.add(this.sprite);
         this.Perseus.gameSprites.add(this.hpbar);
 
-        if(this.faction == 'orc')
-        {
-            this.drawEnemyCircle();
-        }
 
     }
 
@@ -100,9 +89,9 @@ class Unit extends GameObject{
             return;
         }
 
-
+        
         this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
-
+        
         //If there is no path, dont try to move to square
         if(!this.currentPath)
         {
@@ -143,7 +132,7 @@ class Unit extends GameObject{
         if(this.moving != true && this.attacking != true)
         {
             let atkSquare;
-
+            
             if(attacker.type === "Archer" || attacker.type === "Wizard")
             {
                 atkSquare = this.Perseus.navigator.findEmpty(attacker.x, attacker.y);
@@ -181,7 +170,7 @@ class Unit extends GameObject{
 
         return false; //Unit not dead
     }
-
+    
     checkCollision()
     {
         let x = this.sprite.x;
@@ -204,7 +193,7 @@ class Unit extends GameObject{
         }
 
         return false;
-
+        
     }
 
     stopAttack()
@@ -213,27 +202,27 @@ class Unit extends GameObject{
         this.attacking = false;
         this.target = null;
         this.cooldown = 0;
-
+        
     }
     stop()
     {
         this.moving = false;
-        // this.attacking = false;
+       // this.attacking = false;
         //this.currentPath = null;
         this.pathStep = 0;
         this.dest.x = this.x;
         this.dest.y = this.y;
         this.nextSquare = null;
-
+   
         this.sprite.animations.stop();
-
+        
     }
-
+    
 
     update(){
-
+        
         this.Perseus.navigator.checkCollision(this);
-
+       
 
         if(this.attackMoving)
         {
@@ -264,97 +253,97 @@ class Unit extends GameObject{
                 }
             }
         }
-
+        
         if(this.attacking)
         {
             this.attackTick();
 
         }
 
-        if(this.moving)
-        {
-            if(this.nextSquare == null)
-            {
-                //console.log(this);
-            }
+		if(this.moving)
+		{
+			if(this.nextSquare == null)
+			{
+				//console.log(this);
+			}
 
-            let destCoords = this.Perseus.navigator.getCoords(this.dest.x, this.dest.y);
-            let nextSquareCoords = this.Perseus.navigator.getCoords(this.nextSquare.x, this.nextSquare.y);
+			let destCoords = this.Perseus.navigator.getCoords(this.dest.x, this.dest.y);
+			let nextSquareCoords = this.Perseus.navigator.getCoords(this.nextSquare.x, this.nextSquare.y);
 
-            if(this.sprite.y == nextSquareCoords.y)
-            {
-                this.y = this.nextSquare.y;
-            }
+			if(this.sprite.y == nextSquareCoords.y)
+			{
+				this.y = this.nextSquare.y;
+			}
 
-            if(this.sprite.x == nextSquareCoords.x)
-            {
-                this.x = this.nextSquare.x;
-            }
+			if(this.sprite.x == nextSquareCoords.x)
+			{
+				this.x = this.nextSquare.x;
+			}
 
-            if(this.sprite.y == destCoords.y && this.sprite.x == destCoords.x)
-            {
-                this.x = this.dest.x;
-                this.y = this.dest.y;
-                this.stop();
+			if(this.sprite.y == destCoords.y && this.sprite.x == destCoords.x)
+			{
+				this.x = this.dest.x;
+				this.y = this.dest.y;
+				this.stop();
 
-            } else if(this.sprite.y == nextSquareCoords.y && this.sprite.x == nextSquareCoords.x) {
-                this.pathStep++;
-                this.x = this.nextSquare.x;
-                this.y = this.nextSquare.y;
-                if(this.pathStep > this.currentPath.length -1)
-                {
-                    this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
-                    this.pathStep = 0;
-                }
-                if(this.currentPath == null)
-                {
-                    //console.log(this);
-                }
-                this.nextSquare = this.currentPath[this.pathStep];
-                this.Perseus.navigator.checkCollision(this);
+			} else if(this.sprite.y == nextSquareCoords.y && this.sprite.x == nextSquareCoords.x) {
+				this.pathStep++;
+				this.x = this.nextSquare.x;
+				this.y = this.nextSquare.y;
+				if(this.pathStep > this.currentPath.length -1)
+				{
+					this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
+					this.pathStep = 0;
+				}
+				if(this.currentPath == null)
+				{
+					//console.log(this);
+				}
+				this.nextSquare = this.currentPath[this.pathStep];
+				this.Perseus.navigator.checkCollision(this);
 
-            }else{
+			}else{
 
-                if(this.x < this.nextSquare.x)
-                {   
-                    this.sprite.x += this.speed;
-                    this.hpbar.x += this.speed;
-                    if(this.circle)this.circle.x += this.speed;
-                    this.sprite.animations.play('wlk_right');
-                }
-                if(this.x > this.nextSquare.x)
-                {
+				if(this.x < this.nextSquare.x)
+				{   
+					this.sprite.x += this.speed;
+					this.hpbar.x += this.speed;
+					if(this.circle)this.circle.x += this.speed;
+					this.sprite.animations.play('wlk_right');
+				}
+				if(this.x > this.nextSquare.x)
+				{
 
-                    this.sprite.x -= this.speed;
-                    this.hpbar.x -= this.speed;
-                    if(this.circle) this.circle.x -= this.speed;
-                    this.sprite.animations.play('wlk_left');
+					this.sprite.x -= this.speed;
+					this.hpbar.x -= this.speed;
+					if(this.circle) this.circle.x -= this.speed;
+					this.sprite.animations.play('wlk_left');
 
-                }
-                if(this.y < this.nextSquare.y)
-                {
-                    if(this.x == this.nextSquare.x)
-                    {
-                        this.sprite.animations.play('wlk_down');
-                    }
-                    this.sprite.y += this.speed;
-                    this.hpbar.y += this.speed;
-                    if(this.circle) this.circle.y += this.speed;
-                }
-                if(this.y > this.nextSquare.y)
-                {
+				}
+				if(this.y < this.nextSquare.y)
+				{
+					if(this.x == this.nextSquare.x)
+					{
+						this.sprite.animations.play('wlk_down');
+					}
+					this.sprite.y += this.speed;
+					this.hpbar.y += this.speed;
+					if(this.circle) this.circle.y += this.speed;
+				}
+				if(this.y > this.nextSquare.y)
+				{
 
-                    if(this.x == this.nextSquare.x)
-                    {
-                        this.sprite.animations.play('wlk_up');
-                    }
-                    this.sprite.y -= this.speed;
-                    this.hpbar.y -= this.speed;
-                    if(this.circle) this.circle.y -= this.speed;
-                }
-            }            
-        }
-    }
+					if(this.x == this.nextSquare.x)
+					{
+						this.sprite.animations.play('wlk_up');
+					}
+					this.sprite.y -= this.speed;
+					this.hpbar.y -= this.speed;
+					if(this.circle) this.circle.y -= this.speed;
+				}
+			}            
+		}
+	}
 }
 
 export {Unit};
