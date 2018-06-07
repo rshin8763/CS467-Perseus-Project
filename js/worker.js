@@ -75,7 +75,7 @@ class Worker extends Unit{
         this.selectedX = null;
         this.selectedY = null;
         this.buildProgress = 0;
-        this.gatherstate = 0;
+        this.gatherState = 0;
         this.building = false;
         this.placing = false;
 
@@ -134,7 +134,7 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort' + "_" + this.faction);
             this.selectedBuilding = "Fort";
             this.placing = true;
-            this.gatherstate = 0;
+            this.gatherState = 0;
             this.Perseus.controller.state = 'place';
 
             this.createConflictSquares();
@@ -156,7 +156,7 @@ class Worker extends Unit{
             this.selectedSprite.width = 64;
             this.selectedBuilding = "Mine";
             this.placing = true;
-            this.gatherstate = 0;
+            this.gatherState = 0;
             this.Perseus.controller.state = 'place';
 
             this.createMineConflictSquares();
@@ -175,7 +175,7 @@ class Worker extends Unit{
         {            
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks' + "_" + this.faction);
             this.selectedBuilding = "Barracks";
-            this.gatherstate = 0;
+            this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
 
@@ -195,7 +195,7 @@ class Worker extends Unit{
 
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange' + "_" + this.faction);
             this.selectedBuilding = "ArcheryRange";
-            this.gatherstate = 0;
+            this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
 
@@ -215,7 +215,7 @@ class Worker extends Unit{
 
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower' + "_" + this.faction);
             this.selectedBuilding = "WizardTower";
-            this.gatherstate = 0;
+            this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
 
@@ -234,7 +234,7 @@ class Worker extends Unit{
         {
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm' + "_" + this.faction);
             this.selectedBuilding = "Farm";
-            this.gatherstate = 0;
+            this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
 
@@ -277,7 +277,7 @@ class Worker extends Unit{
     place(){
         if(this.validToPlace == true)
         {
-            this.gatherstate = 0;
+            this.gatherState = 0;
             this.placing = false;
             this.building = true;
             this.selectedSprite.alpha = 0.75;
@@ -358,7 +358,7 @@ class Worker extends Unit{
 
     move(x,y){
         super.move(x,y);
-        this.gatherstate = 0;
+        this.gatherState = 0;
         //console.log(this.destx, this.desty);
     }
 
@@ -368,7 +368,7 @@ class Worker extends Unit{
         //let rand = Math.floor(Math.random() * border.length);
 
         //console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
-        this.gatherstate = 0;
+        this.gatherState = 0;
         let coords = this.Perseus.navigator.getCoords(border[0].x, border[0].y);
         this.move(coords.x, coords.y);
     }
