@@ -29,7 +29,7 @@ class mapRenderer{
 
         }
         if (element.type == 'enemyFort'){
-            Perseus.objects.push(new Fort('orc', Math.floor(element.x), Math.floor(element.y), this.Perseus));
+            //Perseus.objects.push(new Fort('orc', Math.floor(element.x), Math.floor(element.y), this.Perseus));
 
         }
     }

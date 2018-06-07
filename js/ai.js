@@ -6,6 +6,7 @@ import {Pikeman} from './pikeman.js';
 import {WizardTower} from './wizardtower.js';
 import {Wizard} from './wizard.js';
 import {Barracks} from './barracks.js';
+import {ArcheryRange} from './archeryrange.js';
 
 /*****************************************************************************/
 							// GLOBALS // 
@@ -68,13 +69,16 @@ var objects, resources, enemyHealthText;
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 var i = 0;
 var number = 0;
-var buildSpotX = 1000, buildSpotY = 1000, buildChanger = 150;
 var spawnSpotX = 1070, spawnSpotY = 970, spawnChanger = 50;
 var freebie = true;
 var xBorder = 0, yBorder = 0;
 
 // BUILDING COSTS
 var FortCosts = {
+	wood: 100,
+	gold: 0
+};
+var ArcheryRangeCosts = {
 	wood: 100,
 	gold: 0
 };
@@ -133,6 +137,7 @@ class AI
 
 		// BUILDINGS
 		this.AIForts = 0;
+		this.AIArcheryRanges = 0;
 		this.AIBarracks = 0;
 		this.AITowers = 0;
 		this.AIAllBuildings = 0;
@@ -256,6 +261,19 @@ class AI
 			return false;
 		}
 
+		// ARCHERY RANGE
+		else if (type == 'Archery Range' || type == 'archery range')
+		{
+			if (this.AIWood >= ArcheryRangeCosts.wood)
+			{
+				if(this.AIGold >= ArcheryRangeCosts.gold)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		// WORKER
 		else if (type == 'worker' || type == 'Worker')
 		{
@@ -342,7 +360,7 @@ class AI
 		{
 			// UPDATE BUILDINGS
 			this.Perseus.objects.push(
-				new Fort('orc', buildSpotX, buildSpotY, this.Perseus));
+				new Fort('orc', 1400, 1400, this.Perseus));
 			this.AIForts++;
 			this.AddBuildingtoArray(type, idNumb);
 
@@ -352,18 +370,32 @@ class AI
 			this.UpdateStock(-FortCosts.gold, 'gold');
 		}
 
+		// ARCHERY RANGE
+		else if (type == 'Archery Range' || type == 'archery range')
+		{
+			// ADD BARRACKS AND UPDATE BUILDINGS
+			this.Perseus.objects.push(
+				new ArcheryRange('orc', 1400, 1500, this.Perseus));
+			this.AIArcheryRanges++;
+			this.AddBuildingtoArray(type, idNumb);
+
+			// UPDATE RESOURCES + ADD TWO WIZARDS
+			this.AddUnit('Archer');
+			this.AddUnit('Archer');
+			this.UpdateStock(-WizardTowerCosts.wood, 'wood');
+			this.UpdateStock(-WizardTowerCosts.gold, 'gold');
+		}
+
 		// BARRACKS
 		else if (type == 'Barracks' || type == 'barracks')
 		{
 			// ADD BARRACKS AND UPDATE BUILDINGS
 			this.Perseus.objects.push(
-				new Barracks('orc', buildSpotX, buildSpotY, this.Perseus));
+				new Barracks('orc', 1500, 1400, this.Perseus));
 			this.AIBarracks++;
 			this.AddBuildingtoArray(type, idNumb);
 
 			// UPDATE RESOURCES + ADD TWO ARCHERS, 1 PIKEMAN, & 1 SWORDINFANTRY
-			this.AddUnit('Archer');
-			this.AddUnit('Archer');
 			this.AddUnit('pikeman');
 			this.AddUnit('SwordInfantry');
 			this.UpdateStock(-BarracksCosts.wood, 'wood');
@@ -375,7 +407,7 @@ class AI
 		{
 			// ADD BARRACKS AND UPDATE BUILDINGS
 			this.Perseus.objects.push(
-				new WizardTower('orc', buildSpotX, buildSpotY, this.Perseus));
+				new WizardTower('orc', 1200, 1400, this.Perseus));
 			this.AITowers++;
 			this.AddBuildingtoArray(type, idNumb);
 
@@ -429,6 +461,10 @@ class AI
 				{
 					this.AIBarracks--;
 				}
+				else if (type == 'Archery Range' || type == 'archery range')
+				{
+					this.AIArcheryRanges--;
+				}
 				else
 				{
 					this.AITowers--;
@@ -455,7 +491,7 @@ class AI
 				}
 			}
 		}
-		this.Perseus.updateText('enemy');
+		//this.Perseus.updateText('enemy');
 		// CHECK TO SEE IF ITS A GAME OVER
 		if (this.MyBuildings.length <= 0)
 		{
@@ -804,6 +840,8 @@ class AI
 /*****************************************************************************/
 							// STRATEGY // 
 /*****************************************************************************/
+// DEFENSE - BORDER PATROL
+// OFFENSE - ATTACK
 
 	/*-----------------------------------------------------------------------*/
 	UpdateRoles()
@@ -874,9 +912,10 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	printArrays()
 	{
+		console.log("Buildings --------------");
 		for(var m = 0; m < this.MyBuildings.length; m++)
 		{
-			console.log("Buildings --------------");
+			
 			console.log(" Array Location: " + m);
 			console.log("id: " + this.MyBuildings[m].idNumber);
 			console.log("kind: " + this.MyBuildings[m].kind);
@@ -886,45 +925,45 @@ class AI
 			}
 		}
 
+		console.log("Units --------------");
 		for(m = 0; m < this.MyUnits.length; m++)
 		{
-			console.log("Units --------------");
 			console.log("Array Location: " + m);
 			console.log("id: " + this.MyUnits[m].idNumber);
 			console.log("kind: " + this.MyUnits[m].kind);
 			console.log("job: " + this.MyUnits[m].job);
 		}
 
+		console.log("Workers --------------");
 		for(m = 0; m < MyWorkers.length; m++)
 		{
-			console.log("Workers --------------");
 			console.log("Array Location: " + m);
 			console.log("id: " + MyWorkers[m].idNumber);
 			console.log("occupation: " + MyWorkers[m].occupation);
 			console.log("safe: " + MyWorkers[m].safe);
 		}
 
+		console.log("Guards --------------");
 		for(m = 0; m < Guards.length; m++)
 		{
-			console.log("Guards --------------");
 			console.log("Array Location: " + m);
 			console.log("id: " + Guards[m].idNumber);
 			console.log("busy: " + Guards[m].busy);
 			console.log("safe: " + Guards[m].safe);
 		}
 
+		console.log("Patrol --------------");
 		for(m = 0; m < BorderPatrol.length; m++)
 		{
-			console.log("Patrol --------------");
 			console.log("Array Location: " + m);
 			console.log("id: " + BorderPatrol[m].idNumber);
 			console.log("busy: " + BorderPatrol[m].busy);
 			console.log("safe: " + BorderPatrol[m].safe);
 		}
 
+		console.log("Army --------------");
 		for(m = 0; m < Army.length; m++)
 		{
-			console.log("Army --------------");
 			console.log("Array Location: " + m);
 			console.log("id: " + Army[m].idNumber);
 			console.log("kind: " + Army[m].kind);
@@ -959,18 +998,11 @@ class AI
 		console.log("Wizards: " + this.AIWizards);
 		console.log("Archers: " + this.AIArchers);
 		console.log("Forts: " + this.AIForts);
+		console.log("Archery Ranges: " + this.AIArcheryRanges);
 		console.log("Barracks: " + this.AIBarracks);
 		console.log("Wizard Towers: " + this.AITowers);
 		console.log("All Buildings: " + this.AIAllBuildings);
 	}
-
-	// Resource = {
-	//		idNumber:
-	//		type:
-	//		depleated:
-	//		xCoor:
-	//		yCoor:
-	//	}
 
 /*****************************************************************************/
 							// MAIN // 
@@ -983,15 +1015,11 @@ class AI
 		this.AddBuilding('Fort');
 		this.AddBuilding('Barracks');
 		this.AddBuilding('Wizard Tower');
+		this.AddBuilding('Archery Range');
 
-		this.AddUnit('Worker');
-		this.AddUnit('Archer');
-		this.AddUnit('Pikeman');
-		this.AddUnit('SwordInfantry');
-		this.AddUnit('Wizard');
-		this.AddUnit('Worker');
-		//this.GetAIStats();
-		//this.printArrays();
+
+		this.GetAIStats();
+		this.printArrays();
 		
 	}
 }

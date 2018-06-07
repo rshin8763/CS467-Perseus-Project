@@ -18,7 +18,7 @@ var Perseus = Perseus || {};
 Perseus.graphics = {}
 
 // create the game, and pass it the configuration
-Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+Perseus.game = new Phaser.Game(1150, 750, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 var goldText, woodText, fortText, barracksText, towerText, enemyHealthText;
 
 // RESOURCES TEXT OBJECTS
@@ -40,7 +40,8 @@ function preload() {
     this.load.image('wizardtower', 'assets/wizardtower.png');
     this.load.image('ui', 'assets/ui/stoneMenu.png');
     this.load.image('hpbar', 'assets/healthbar.png');
-    this.load.image('navSquare', 'assets/navSquare.png');
+    this.load.image('navSquare', 'assets/navSquare.png')
+    this.load.image('archeryrange', 'assets/archeryrange.png');
     
 
     this.load.spritesheet('command_buttons', 'assets/ui/icons.png', 32, 32);

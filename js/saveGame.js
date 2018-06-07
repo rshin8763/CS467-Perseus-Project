@@ -87,7 +87,7 @@ class SaveGame
 		var Building;
 		for (var key in this.Perseus.AI.MyBuildings)
 		{
-
+			
 		}
 	}
 
