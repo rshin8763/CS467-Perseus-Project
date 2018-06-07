@@ -73,7 +73,9 @@ var spawnSpotX = 1400, spawnSpotY = 1300, spawnChanger = 50;
 var freebie = true;
 var xBorder = 0, yBorder = 0;
 var bordersSafe = true;
-var timer = 100;
+var timerTick = 200;
+var timer = timerTick;
+var safe = true;
 
 // BUILDING COSTS
 var FortCosts = {
@@ -372,6 +374,7 @@ class AI
 		// ADDS TO BOTH GLOBAL AND AI ARRAYS, THEN UPDATES ROLES
 		this.MyUnits.push(thisUnit);
 		this.Perseus.objects.push(thisUnit);
+		this.UpdateStaticRoles();
 		this.UpdateRoles();
 	}
 
@@ -596,14 +599,14 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	UpdateRoles()
 	{
-		var counter = 0;
+
+
 		// MY GUARDS
 		for (let i = 0; i < this.MyUnits.length; i++)
 		{
 			if (this.MyUnits[i].type == 'Archer')
 			{
-				this.MyUnits[i].move(800 + counter, 1100);
-				counter += 800;
+				this.MyUnits[i].move(800, 1100);
 			}
 		}
 		//console.log("I'm updating");
@@ -614,14 +617,22 @@ class AI
 
 	}
 
+	UpdateStaticRoles()
+	{
+
+	}
+
 	/*-----------------------------------------------------------------------*/
 	UpdateTimer()
 	{
+		// TIMER STARTS AT 800
 		timer -= 1;
 		if (timer == 1)
 		{
-			timer += 400;
+			timer += timerTick;
+			this.UpdateRoles();
 		}
+		//console.log(timer);
 	}
 
 	/*-----------------------------------------------------------------------*/
