@@ -123,7 +123,7 @@ class Worker extends Unit{
             this.selectedBuilding = "Fort";
             this.placing = true;
             this.Perseus.controller.state = 'place';
-            // UpdatePlayerBuildings(1, 'Fort');
+
             this.createConflictSquares();
             return true;
         } else {
@@ -142,8 +142,6 @@ class Worker extends Unit{
             this.selectedBuilding = "Barracks";
             this.placing = true;
             this.Perseus.controller.state = 'place';
-
-            // UpdatePlayerBuildings(1, 'Barracks');
 
             this.createConflictSquares();
             return true;
@@ -455,6 +453,7 @@ class Worker extends Unit{
                         this.Perseus.objects.push(new Farm(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
                     }
                     this.building = false;
+                    this.Perseus.Player.reduceResources(this.woodCosts[this.selectedBuilding], this.goldCosts[this.selectedBuilding]);
                     this.selectedSprite.destroy();
                     this.selectedX = null;
                     this.selectedY = null;

@@ -40,41 +40,41 @@ import {Building} from './building.js';
 //var objects, resources;
 //var freebie = true;
 
-// BUILDING COSTS
-var FortCosts = {
-    wood: 100,
-    gold: 0
-};
-var BarracksCosts = {
-    wood: 100,
-    gold: 100
-};
-var WizardTowerCosts = {
-    wood: 200,
-    gold: 200
-};
+// // BUILDING COSTS
+// var FortCosts = {
+//     wood: 100,
+//     gold: 0
+// };
+// var BarracksCosts = {
+//     wood: 100,
+//     gold: 100
+// };
+// var WizardTowerCosts = {
+//     wood: 200,
+//     gold: 200
+// };
 
-// UNIT COSTS
-var WorkerCost = {
-    wood: 50,
-    gold: 0
-};
-var ArcherCost = {
-    wood: 50,
-    gold: 10
-};
-var PikemanCost = {
-    gold: 10,
-    wood: 0
-};
-var SwordInfantryCost = {
-    wood: 30,
-    gold: 30
-};
-var WizardCost = {
-    wood: 0,
-    gold: 70
-};
+// // UNIT COSTS
+// var WorkerCost = {
+//     wood: 50,
+//     gold: 0
+// };
+// var ArcherCost = {
+//     wood: 50,
+//     gold: 10
+// };
+// var PikemanCost = {
+//     gold: 10,
+//     wood: 0
+// };
+// var SwordInfantryCost = {
+//     wood: 30,
+//     gold: 30
+// };
+// var WizardCost = {
+//     wood: 0,
+//     gold: 70
+// };
 
 class Player
 {
@@ -112,6 +112,16 @@ class Player
     hasLost(){
         if (this.buildings.length == 0) return true;
         else return false;
+    }
+
+    reduceResources(woodcost, goldcost){
+        this.playerWood -= woodcost;
+        this.playerGold -= goldcost;
+
+        console.log(this.playerWood);
+
+        this.Perseus.ui.updateText('wood');
+        this.Perseus.ui.updateText('gold');
     }
 
     addObject(obj){
