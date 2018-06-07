@@ -18,4 +18,4 @@ class Resource  extends GameObject{
         }
     }
 }
-export {Resource };
+export {Resource};

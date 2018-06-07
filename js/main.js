@@ -11,10 +11,10 @@ import {Player} from './player.js';
 import {AI} from './ai.js';
 import {Wizard} from './wizard.js';
 import {GameState} from './gameState.js';
+import {SaveGame} from './saveGame.js';
 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
-// var Main = function() {};
 
 // create the game, and pass it the configuration
 Perseus.game = new Phaser.Game(1180, 770, Phaser.AUTO, '', { preload: preload, create: create, update: update });
@@ -83,7 +83,6 @@ function create()
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
-    console.log(Perseus.map.width);
     Perseus.navigator = new Navigator(Perseus.game, Perseus.map.height, Perseus.map.width, 32);
 
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
@@ -106,20 +105,7 @@ function create()
     Perseus.gameSprites = Perseus.game.add.group();
     Perseus.uiGraphics = Perseus.game.add.group();
     Perseus.gui = Perseus.game.add.group();
-
-    //console.log(Perseus.navigator.navmap);
-
-    // Perseus.navigator.markOccupied(300, 300);
-
-    //Create resources
-    Perseus.mapRenderer = new mapRenderer(Perseus);
-    Perseus.mapRenderer.createResources();
-    Perseus.ui = new Ui(Perseus);
-
-    console.log(Perseus.objects);
-    console.log(Perseus.resources);
-
-        // ------------------------------------------------------------------------
+  
     // PAUSE BUTTON, MUTE, MENU
     // MENU BAR
     menuBar = Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
@@ -176,12 +162,23 @@ function create()
     mute_button.inputEnabled = true;
     mute_button.events.onInputUp.add(muteMusic);
 
+
+    /*************************************************************************/
+    // LOAD MAIN MENU - load music earlier ^ than mute button ^^^^^^^^
+    // LOAD SAVED GAME OR NEW GAME DEPENDING ON ANSWERS
+    // LOAD EASY OR HARD AI DEPENDING ON ANSWERS
+
+
+    /*************************************************************************/
     Perseus.Player = new Player(Perseus);
     Perseus.Player.Main();
     Perseus.AI = new AI(Perseus);
     Perseus.AI.Main();
     Perseus.GameState = new GameState(Perseus);
 
+    Perseus.mapRenderer = new mapRenderer(Perseus);
+    Perseus.mapRenderer.createResources();
+    Perseus.ui = new Ui(Perseus);
 
     console.log(Perseus.objects);
     console.log(Perseus.resources);
@@ -252,7 +249,8 @@ function unpause()
 
 function saveGame()
 {
-    Perseus.GameState.SaveCurrentState();
+    Perseus.SaveGame = new SaveGame(Perseus);
+    Perseus.SaveGame.SaveCurrentState();
 }
 function quitGame()
 {
@@ -297,10 +295,3 @@ Perseus.updateText = function(kind)
 }
 
 /******************************************************************************/
-
-
-// Perseus.game.state.add('Main', Main);
-// Perseus.game.state.add('Boot', Boot);bvg
-// Perseus.game.state.add('MainMenu', MainMenu);
-// Perseus.game.state.start('Boot');
-

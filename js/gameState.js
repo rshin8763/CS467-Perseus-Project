@@ -1,6 +1,3 @@
-import {Player} from './player.js';
-import {AI} from './ai.js';
-
 var x;
 
 class GameState
@@ -12,17 +9,7 @@ class GameState
 
 	LoadGame()
 	{
-		console.log(x);
-	}
-
-	SaveCurrentState()
-	{
-		document.cookie = this.Perseus.AI.AIAllBuildings;
-		if(document.cookie)
-		{
-			x = document.cookie;
-			console.log(x);
-		}
+		
 	}
 
 	Quit()

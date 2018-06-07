@@ -2,9 +2,9 @@ import {Unit} from './unit.js';
 import {Arrow} from './arrow.js';
 class Archer extends Unit {
     constructor(faction, x, y, Perseus){
-        super(x,y, faction, 100, 15, 10, 1, Perseus);
+        super(x,y, faction, 'archer', 100, 15, 10, 1, Perseus);
         this.woodCost = 100;
-        this.goldCost = 500;
+        this.goldCost = 50;
         this.maxHP = 100;
         this.range = 5;
         this.arrow = false;
@@ -14,7 +14,6 @@ class Archer extends Unit {
         if (Math.random() >= 0.5){
             this.type="Archer";
             this.addSprite('archer_male');
-
 
         } else {
             this.type="Archer";
