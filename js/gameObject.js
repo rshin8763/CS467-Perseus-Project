@@ -34,8 +34,8 @@ class GameObject {
                 this.circle = this.game.add.graphics();
                 this.circle.lineStyle(1, 0x00FF00, 1);
                 this.circle.drawCircle(this.sprite.centerX,this.sprite.centerY, this.sprite.height);
-                // this.Perseus.gameSprites.add(this.circle);
-                this.Perseus.uiGraphics.add(this.circl);
+                this.Perseus.gameSprites.add(this.circle);
+                // this.Perseus.uiGraphics.add(this.circl);
 
             }
         }
