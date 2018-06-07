@@ -48,7 +48,9 @@ function preload() {
     this.load.image('archeryrange_orc', 'assets/archeryrange_orc.png');
 
     this.load.image('ui', 'assets/ui/stoneMenu.png');
-    this.load.image('hpbar', 'assets/healthbar.png');
+    this.load.image('hpbar_human', 'assets/healthbar.png');
+    this.load.image('hpbar_orc', 'assets/healthbar_orc.png');
+
     this.load.image('navSquare', 'assets/navSquare.png');
     
 

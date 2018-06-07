@@ -3,8 +3,8 @@ import {Fireball} from './fireball.js';
 class Wizard extends Unit {
     constructor(faction, x, y, Perseus){
         super(x,y, faction, 'wizard', 100, 15, 10, 1, Perseus);
-        this.woodCost = 100;
-        this.goldCost = 500;
+        this.woodCost = 0;
+        this.goldCost = 700;
         this.maxHP = 100;
         this.range = 5;
         this.fireball = false;
