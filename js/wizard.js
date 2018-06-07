@@ -30,6 +30,7 @@ class Wizard extends Unit {
 
     }
 
+
     attackTick()
     {
         if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width / 2) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y)  > (this.sprite.width / 2) * this.range )

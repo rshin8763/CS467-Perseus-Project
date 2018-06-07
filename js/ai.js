@@ -10,7 +10,14 @@ import {Barracks} from './barracks.js';
 /*****************************************************************************/
 							// GLOBALS // 
 /*****************************************************************************/
-
+var MyResources = [];
+	// Resource = {
+	//		idNumber:
+	//		type:
+	//		depleated:
+	//		xCoor:
+	//		yCoor:
+	//	};
 var MyBuildings = [];
 	//	Building = {
 	//		kind: "type",
@@ -63,7 +70,8 @@ var i = 0;
 var number = 0;
 var buildSpotX = 1000, buildSpotY = 1000, buildChanger = 150;
 var spawnSpotX = 1070, spawnSpotY = 970, spawnChanger = 50;
-var freebies = true;
+var freebie = true;
+var xBorder = 0, yBorder = 0;
 
 // BUILDING COSTS
 var FortCosts = {
@@ -130,30 +138,61 @@ class AI
 		this.AIAllBuildings = 0;
 	}
 
-	/*-----------------------------------------------------------------------*/
-	// 	RETREIVES PLAYER STATISTICS
-	GetAIStats()
-	{
-		console.log("Current Amounts for AI");
-		console.log("Gold: " + this.AIGold);
-		console.log("Wood: " + this.AIWood);
-		console.log("Workers: " + this.AIWorkers);
-		console.log("Pikemen: " + this.AIPikemen);
-		console.log("Swordsman: " + this.AISwordInfantry);
-		console.log("Wizards: " + this.AIWizards);
-		console.log("Archers: " + this.AIArchers);
-		console.log("Forts: " + this.AIForts);
-		console.log("Barracks: " + this.AIBarracks);
-		console.log("Wizard Towers: " + this.AITowers);
-		console.log("All Buildings: " + this.AIAllBuildings);
-	}
-
 /*****************************************************************************/
 							// RESOURCES // 
 /*****************************************************************************/
 
 	/*-----------------------------------------------------------------------*/
-	UpdateAIResources(x, type)
+	CreateResourcesArray()
+	{
+		var x = 0;
+		var thisResource;
+		for (var key in this.resources)
+		{
+			if(this.resources[x].x > xBorder && this.resources[x].y > yBorder)
+			{
+				thisResource = {
+					idNumber: this.resources[x].tag,
+					kind: this.resources[x].type,
+					depleated: this.resources[x].exhausted,
+					xCoor: this.resources[x].x,
+					yCoor: this.resources[x].y
+				}
+				MyResources.push(thisResource);
+			}
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	DeleteResource(tag)
+	{
+		for(var x = 0; x < MyResources.length; x++)
+		{
+			if(MyResources[x].idNumber == tag)
+			{
+				// MOVE ALL DATA OVER ONE TO REPLACE BUILDING LOST
+				while(x < MyResources.length)
+				{
+					if (x == (MyResources.length - 1)) // IS LAST ONE
+					{
+						MyResources.pop();
+					}
+					else
+					{
+						MyResources[x].idNumber = MyResources[x+1].idNumber;
+						MyResources[x].kind = MyResources[x+1].kind;
+						MyResources[x].depleated = MyResources[x+1].depleated;
+						MyResources[x].xCoor = MyResources[x+1].xCoor;
+						MyResources[x].yCoor = MyResources[x+1].yCoor;
+					}
+					x++;
+				}
+			}
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	UpdateStock(x, type)
 	{
 		if (type == 'wood' || type == 'Wood')
 		{
@@ -167,6 +206,121 @@ class AI
 		else
 		{
 			console.log("You tried to update the AI Resources and failed.");
+			return false;
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	CheckFunds(type)
+	{
+		// FORT
+		if (type == 'Fort' || type == 'fort')
+		{
+			if (this.AIWood >= FortCosts.wood)
+			{
+				if(this.AIGold >= FortCosts.gold)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// BARRACKS
+		else if (type == 'Barracks' || type == 'barracks')
+		{
+			if (this.AIWood >= BarracksCosts.wood)
+			{
+				if(this.AIGold >= BarracksCosts.gold)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// WIZARD TOWER
+		else if (type == 'Wizard Tower' || type == 'wizard tower')
+		{
+			if (this.AIWood >= WizardTowerCosts.wood)
+			{
+				if(this.AIGold >= WizardTowerCosts.gold)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// WORKER
+		else if (type == 'worker' || type == 'Worker')
+		{
+			if (this.AIWood >= WorkerCost.wood)
+			{
+				if(this.AIGold >= WorkerCost.gold)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// ARCHER
+		else if (type == 'archer' || type == 'Archer')
+		{
+			if (this.AIWood >= ArcherCost.wood)
+			{
+				if(this.AIGold >= ArcherCost.gold)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// SWORDINFANTRY
+		else if (type == 'swordInfantry' || type == 'SwordInfantry')
+		{
+			if (this.AIWood >= SwordInfantryCost.wood)
+			{
+				if(this.AIGold >= SwordInfantryCost.gold)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// PIKEMAN
+		else if (type == 'pikeman' || type == 'Pikeman')
+		{
+			if (this.AIWood >= PikemanCost.wood)
+			{
+				if(this.AIGold >= PikemanCost.gold)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// WIZARD - ATTACKS BUILDINGS
+		else if (type == 'wizard' || type == 'Wizard')
+		{
+			if (this.AIWood >= WizardCost.wood)
+			{
+				if(this.AIGold >= WizardCost.gold)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// ERROR HANDLING
+		else
+		{
+			console.log("You tried to measure your funds and failed.");
 			return false;
 		}
 	}
@@ -190,8 +344,8 @@ class AI
 
 			// UPDATE RESOURCES & ADD WORKERS
 			this.AddUnit('worker');
-			this.UpdateAIResources(-FortCosts.wood, 'wood');
-			this.UpdateAIResources(-FortCosts.gold, 'gold');
+			this.UpdateStock(-FortCosts.wood, 'wood');
+			this.UpdateStock(-FortCosts.gold, 'gold');
 		}
 
 		// BARRACKS
@@ -208,8 +362,8 @@ class AI
 			this.AddUnit('Archer');
 			this.AddUnit('pikeman');
 			this.AddUnit('SwordInfantry');
-			this.UpdateAIResources(-BarracksCosts.wood, 'wood');
-			this.UpdateAIResources(-BarracksCosts.gold, 'gold');
+			this.UpdateStock(-BarracksCosts.wood, 'wood');
+			this.UpdateStock(-BarracksCosts.gold, 'gold');
 		}
 
 		// WIZARD TOWER
@@ -224,8 +378,8 @@ class AI
 			// UPDATE RESOURCES + ADD TWO WIZARDS
 			this.AddUnit('Wizard');
 			this.AddUnit('Wizard');
-			this.UpdateAIResources(-WizardTowerCosts.wood, 'wood');
-			this.UpdateAIResources(-WizardTowerCosts.gold, 'gold');
+			this.UpdateStock(-WizardTowerCosts.wood, 'wood');
+			this.UpdateStock(-WizardTowerCosts.gold, 'gold');
 		}
 
 		// ERROR HANDLING
@@ -235,7 +389,6 @@ class AI
 			return false;
 		}
 		this.AIAllBuildings++;
-		this.Perseus.updateText('enemy');
 		buildSpotY -= 100;
 		buildSpotX -= 100;
 		return idNumb;
@@ -246,7 +399,7 @@ class AI
 	{
 		var thisBuilding = {
 			kind: type,
-			corner: [false, false, false, false],
+			corner: [-1, -1, -1, -1],
 			idNumber: idNumb
 		};
 		MyBuildings.push(thisBuilding);
@@ -297,7 +450,7 @@ class AI
 				}
 			}
 		}
-		Perseus.updateText('enemy');
+		this.Perseus.updateText('enemy');
 		// CHECK TO SEE IF ITS A GAME OVER
 		if (MyBuildings.length <= 0)
 		{
@@ -358,8 +511,8 @@ class AI
 			};
 			MyUnits.push(thisUnit);
 
-			this.UpdateAIResources(-WorkerCost.wood, 'wood');
-			this.UpdateAIResources(-WorkerCost.gold, 'gold');
+			this.UpdateStock(-WorkerCost.wood, 'wood');
+			this.UpdateStock(-WorkerCost.gold, 'gold');
 		}
 
 		// ARCHER - GUARDS BUILDINGS
@@ -388,8 +541,8 @@ class AI
 			MyUnits.push(thisUnit);
 
 			// UPDATE RESOURCES
-			this.UpdateAIResources(-ArcherCost.wood, 'wood');
-			this.UpdateAIResources(-ArcherCost.gold, 'gold');
+			this.UpdateStock(-ArcherCost.wood, 'wood');
+			this.UpdateStock(-ArcherCost.gold, 'gold');
 		}
 
 		// SWORDINFANTRY - ATTACKS THE INNOCENT
@@ -413,8 +566,8 @@ class AI
 			MyUnits.push(thisUnit);
 			
 			// UPDATE RESOURCES
-			this.UpdateAIResources(-SwordInfantryCost.wood, 'wood');
-			this.UpdateAIResources(-SwordInfantryCost.gold, 'gold');
+			this.UpdateStock(-SwordInfantryCost.wood, 'wood');
+			this.UpdateStock(-SwordInfantryCost.gold, 'gold');
 		}
 
 		// PIKEMAN - ATTACKS THE ARMED
@@ -441,8 +594,8 @@ class AI
 			MyUnits.push(thisUnit);
 
 			// UPDATE RESOURCES
-			this.UpdateAIResources(-PikemanCost.wood, 'wood');
-			this.UpdateAIResources(-PikemanCost.gold, 'gold');
+			this.UpdateStock(-PikemanCost.wood, 'wood');
+			this.UpdateStock(-PikemanCost.gold, 'gold');
 		}
 
 		// WIZARD - ATTACKS BUILDINGS
@@ -468,8 +621,8 @@ class AI
 			MyUnits.push(thisUnit);
 
 			// UPDATE RESOURCES
-			this.UpdateAIResources(-WizardCost.wood, 'wood');
-			this.UpdateAIResources(-WizardCost.gold, 'gold');
+			this.UpdateStock(-WizardCost.wood, 'wood');
+			this.UpdateStock(-WizardCost.gold, 'gold');
 		}
 		else
 		{
@@ -709,6 +862,11 @@ class AI
 
 	/*-----------------------------------------------------------------------*/
 
+/*****************************************************************************/
+							// DEBUGGING // 
+/*****************************************************************************/
+	
+	/*-----------------------------------------------------------------------*/
 	printArrays()
 	{
 		for(var m = 0; m < MyBuildings.length; m++)
@@ -771,22 +929,66 @@ class AI
 			console.log("At War: " + Army[m].atWar);
 		}
 
+		console.log("Resources --------------");
+		for (var x = 0; x < MyResources.length; x++)
+		{
+			console.log("Index: " + x);
+			console.log("idNumber: " + MyResources[x].idNumber);
+			console.log("type: " + MyResources[x].kind);
+			console.log("depleated: " + MyResources[x].depleated);
+			console.log("xCoor: " + MyResources[x].xCoor);
+			console.log("yCoor: " + MyResources[x].yCoor);
+		}
+
 	}
+
+	/*-----------------------------------------------------------------------*/
+	GetAIStats()
+	{
+		console.log("Current Amounts for AI");
+		console.log("Gold: " + this.AIGold);
+		console.log("Wood: " + this.AIWood);
+		console.log("Workers: " + this.AIWorkers);
+		console.log("Pikemen: " + this.AIPikemen);
+		console.log("Swordsman: " + this.AISwordInfantry);
+		console.log("Wizards: " + this.AIWizards);
+		console.log("Archers: " + this.AIArchers);
+		console.log("Forts: " + this.AIForts);
+		console.log("Barracks: " + this.AIBarracks);
+		console.log("Wizard Towers: " + this.AITowers);
+		console.log("All Buildings: " + this.AIAllBuildings);
+	}
+
+	// Resource = {
+	//		idNumber:
+	//		type:
+	//		depleated:
+	//		xCoor:
+	//		yCoor:
+	//	}
+
+/*****************************************************************************/
+							// MAIN // 
+/*****************************************************************************/
 
 	/*-----------------------------------------------------------------------*/
 	Main()
 	{
-
-		this.AddBuilding('Fort');
+		this.CreateResourcesArray();
+		/*this.AddBuilding('Fort');
 		this.AddBuilding('Barracks');
 		this.AddBuilding('Wizard Tower');
+		this.Perseus.updateText('Enemy');
 
 		this.AddUnit('Worker');
 		this.AddUnit('Archer');
 		this.AddUnit('Pikeman');
 		this.AddUnit('SwordInfantry');
 		this.AddUnit('Wizard');
-
+	*/
+		this.AddUnit('Worker');
+		this.GetAIStats();
+		this.printArrays();
 
 	}
 }
