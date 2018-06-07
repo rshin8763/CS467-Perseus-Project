@@ -71,12 +71,8 @@ class Unit extends GameObject{
         }, this);
 
         this.Perseus.gameSprites.add(this.sprite);
-        this.Perseus.gameSprites.add(this.hpbar);
-
-        if(this.faction == 'orc')
-        {
-            this.drawEnemyCircle();
-        }
+        // this.Perseus.gameSprites.add(this.hpbar);
+        this.Perseus.uiGraphics.add(this.hpbar);
 
     }
 
