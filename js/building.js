@@ -60,7 +60,7 @@ class Building extends GameObject{
     takeDamage(damage, attacker)
     {
         this.hp -= damage;
-
+        console.log("The hp is now " + this.hp);
         if(this.hp < 1)
         {
             attacker.stopAttack();

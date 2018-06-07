@@ -990,9 +990,9 @@ class AI
 		this.AddUnit('SwordInfantry');
 		this.AddUnit('Wizard');
 		this.AddUnit('Worker');
-		this.GetAIStats();
-		this.printArrays();
-
+		//this.GetAIStats();
+		//this.printArrays();
+		
 	}
 }
 

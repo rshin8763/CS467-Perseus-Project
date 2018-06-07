@@ -55,16 +55,21 @@ class SaveGame
 	constructor(Perseus)
 	{
 		this.Perseus = Perseus;
-		this.objects = objects;
+		this.objects = this.Perseus.objects;
 	}
 /*****************************************************************************/
 							// SAVE // 
 /*****************************************************************************/
+	
+	/*-----------------------------------------------------------------------*/
+	// MAP RESOURCES
 	SaveMapResources()
 	{
 
 	}
 
+	/*-----------------------------------------------------------------------*/
+	// PLAYER
 	SavePlayerBuildings()
 	{
 
@@ -75,14 +80,31 @@ class SaveGame
 
 	}
 
+	/*-----------------------------------------------------------------------*/
+	// AI
 	SaveAIBuildings()
 	{
-
+		var name, hp;
+		var Building;
+		for (var key in this.Perseus.AI.MyBuildings)
+		{
+			console.log("The name is: " + this.Perseus.AI.MyBuildings[key].kind);
+			console.log("The hp is: " + this.HPLookup(this.Perseus.AI.MyBuildings[key].idNumber));
+		}
 	}
 
 	SaveAIUnits()
 	{
 
+	}
+
+/*****************************************************************************/
+							// HELPERS // 
+/*****************************************************************************/
+	HPLookup(tag)
+	{
+		var thisHp = this.objects[tag].hp;
+		return thisHp;
 	}
 
 /*****************************************************************************/
