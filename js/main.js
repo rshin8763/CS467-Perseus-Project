@@ -113,17 +113,12 @@ function create()
     Perseus.objects = [];
 
     // Create display groups to keep gui on top
-    // TODO add to gameSprites group for every sprite creation call in the unit files
     Perseus.gameSprites = Perseus.game.add.group();
-    Perseus.uiGraphics = Perseus.game.add.group();
     Perseus.gui = Perseus.game.add.group();
   
     // ------------------------------------------------------------------------
     // PLAYER
-    //
     Perseus.Player = new Player(Perseus);
-    // Perseus.Player.Main();
-
     // ------------------------------------------------------------------------
     // AI
     Perseus.AI = new AI(Perseus);
@@ -148,8 +143,6 @@ function create()
     console.log(Perseus.objects);
     console.log(Perseus.resources);
     console.log(Perseus.navigator.navmap);
-
-
 }
 
 function update()

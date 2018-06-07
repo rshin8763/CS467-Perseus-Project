@@ -144,6 +144,7 @@ class Ui
             if (elem.action == command){
                 elem.tint = 0x00ff00;
             }
+            else elem.tint = 0xffffff;
         });
     }
 
