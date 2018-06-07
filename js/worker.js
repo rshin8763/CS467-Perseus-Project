@@ -29,6 +29,7 @@ class Worker extends Unit{
         this.lastResource = null;
         this.priority = 1;
         this.validToPlace = true;
+
         this.woodCosts = {
             Fort : 150,
             Barracks: 100,

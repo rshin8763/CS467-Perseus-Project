@@ -14,6 +14,12 @@ class WizardTower extends Building{
         this.ARCH = 3;
         this.buildSpeed = .25;
         this.type="Wizard Tower";
+
+        this.uiData = {
+            commandList: {B:"Build"},
+            buildList: {W: "Wizard"}  
+        };
+
         this.WizardCosts = {
             wood : 0,
             gold : 200
@@ -30,15 +36,15 @@ class WizardTower extends Building{
     {
         if(!this.building)
         {
-            //TODO:  Move logic inside loop once resources are available
-            // if(this.Perseus.resources.wood > this.WizardCosts.wood
-            //     && this.Persesus.resources.gold > this.WizardCosts.gold)
-            //     {
-            //     }
-      
-            this.building = true;
-            this.current = 'Wizard';
-            this.buildProgress = 0;
+            if(this.Perseus.Player.playerWood >= this.WizardCosts.wood
+                    && this.Perseus.Player.playerGold >= this.WizardCosts.gold)
+            {
+                this.building = true;
+                this.current = 'Wizard';
+                this.buildProgress = 0;
+                this.Perseus.Player.reduceResources(this.WizardCosts.wood, this.WizardCosts.gold);
+            }
+
         }
     }
 
@@ -60,10 +66,8 @@ class WizardTower extends Building{
     {
 
         let coords = this.Perseus.navigator.getCoords(this.x + 4,this.y +4)
-        this.Perseus.objects.push(new Wizard(this.faction, coords.x, coords.y , this.Perseus));      
-        
+            this.Perseus.objects.push(new Wizard(this.faction, coords.x, coords.y , this.Perseus));      
+
     }
-
 }  
-
 export {WizardTower}

@@ -17,6 +17,8 @@ class Controller{
         this.keys.F = this.game.input.keyboard.addKey(Phaser.KeyCode.F);
         this.keys.X = this.game.input.keyboard.addKey(Phaser.KeyCode.X);
         this.keys.W = this.game.input.keyboard.addKey(Phaser.KeyCode.W);
+        this.keys.S = this.game.input.keyboard.addKey(Phaser.KeyCode.S);
+        this.keys.P = this.game.input.keyboard.addKey(Phaser.KeyCode.P);
         this.keys.R = this.game.input.keyboard.addKey(Phaser.KeyCode.R);
         this.selectedObjects = [];
         this.highestPrioritySelected = null;
@@ -227,6 +229,26 @@ class Controller{
                 if (this.isViableCommand('A')){
                     if (this.cooldownTimer == 0){
                         if (this.selectedObjects[0].build('A')){
+                            //cooldown
+                            this.cooldownTimer = 10;
+                        }
+                    }
+                }
+            }
+            if(this.keys.P.isDown) {
+                if (this.isViableCommand('P')){
+                    if (this.cooldownTimer == 0){
+                        if (this.selectedObjects[0].build('P')){
+                            //cooldown
+                            this.cooldownTimer = 10;
+                        }
+                    }
+                }
+            }
+            if(this.keys.S.isDown) {
+                if (this.isViableCommand('S')){
+                    if (this.cooldownTimer == 0){
+                        if (this.selectedObjects[0].build('S')){
                             //cooldown
                             this.cooldownTimer = 10;
                         }
