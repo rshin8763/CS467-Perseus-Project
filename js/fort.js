@@ -11,23 +11,17 @@ class Fort extends Building{
         this.faction = faction;
         this.type = "Fort";
         this.WORKER = 1;
-        this.buildSpeed = .25;
+        this.buildSpeed = 1;
         this.uiData = {
             commandList: {B:"Build"},
             buildList: {W: "Worker"}  
         };
         this.WorkerCosts = {
-            wood : 50,
-            gold : 0
+            wood : 0,
+            gold : 400
         }
     }
 
-    build(str){
-        switch(str){
-            case 'W':
-                return this.buildWorker();
-        }
-    }
 
     buildWorker()
     {

@@ -20,14 +20,6 @@ class ArcheryRange extends Building{
         }
     }
 
-    build(str){
-        switch(str){
-            case 'A':
-                return this.buildArcher();
-        }
-    }
-    
-
     buildArcher()
     {
         if(!this.building)

@@ -21,23 +21,15 @@ class Barracks extends Building{
             buildList: {S: "Swordsperson", A: "Archer", P: "Pikemen"}  
         };
         this.SwordInfantryCosts = {
-            wood : 30,
-            gold : 70
+            wood : 300,
+            gold : 700
         };
         this.PikemanCosts = {
-            wood : 60,
-            gold : 90
+            wood : 600,
+            gold : 900
         };
         this.faction = faction;
         this.Perseus = Perseus;
-    }
-    build(str){
-        switch(str){
-            case 'S':
-                return this.buildSword();
-            case 'P':
-                return this.buildPike();
-        }
     }
 
     buildSword()
