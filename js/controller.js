@@ -33,42 +33,43 @@ class Controller{
         if (this.state == 'default'){
             this.selectionCircles.forEach((elem)=> {elem.destroy();});
             this.selectedObjects = [];
-            this.selectedObjects.push(obj);
-            this.highestPrioritySelected = obj;
-            //console.log(this.highestPrioritySelected);
-            obj.drawSelectionCircle();
-            this.Perseus.ui.updateCommandList(obj);
+            if(obj.faction == 'human'){
+                this.selectedObjects.push(obj);
+                this.highestPrioritySelected = obj;
+                obj.drawSelectionCircle();
+                this.Perseus.ui.updateCommandList(obj);
+            }
         } else if (this.state == 'attack'){
             /***********MICHAEL ADDED THIS************** */
-                //Get the empty squares around the object to be attacked
-                let emptySquares = [];
-                let origin = {x:this.selectedObjects[0].x, y: this.selectedObjects[0].y};
-                if(obj.movable == false)
-                {    
-                    emptySquares = this.Perseus.navigator.findObjectBorder(obj, origin);
-                }else{
-                    emptySquares = this.Perseus.navigator.findAllEmpty(obj.x, obj.y, origin);
-                }
-                let limit;
-                //If there are more empty squares then attackers, the number of attackers is limiting. Otherwise, the number of empty squares is. 
-                if(this.selectedObjects.length < emptySquares.length)
-                {
-                    limit = this.selectedObjects.length;
-                }else{
-                    limit = emptySquares.length;
-                }
+            //Get the empty squares around the object to be attacked
+            let emptySquares = [];
+            let origin = {x:this.selectedObjects[0].x, y: this.selectedObjects[0].y};
+            if(obj.movable == false)
+            {    
+                emptySquares = this.Perseus.navigator.findObjectBorder(obj, origin);
+            }else{
+                emptySquares = this.Perseus.navigator.findAllEmpty(obj.x, obj.y, origin);
+            }
+            let limit;
+            //If there are more empty squares then attackers, the number of attackers is limiting. Otherwise, the number of empty squares is. 
+            if(this.selectedObjects.length < emptySquares.length)
+            {
+                limit = this.selectedObjects.length;
+            }else{
+                limit = emptySquares.length;
+            }
 
-                //Assign one attacker to each empty square.
-                for(let i = 0; i < limit; i++)
+            //Assign one attacker to each empty square.
+            for(let i = 0; i < limit; i++)
+            {
+                //Don't move the unit if it's already within attack range
+                if(Math.abs(this.selectedObjects[i].x - obj.x) <= 1 && Math.abs(this.selectedObjects[i].y - obj.y) <= 1 )
                 {
-                    //Don't move the unit if it's already within attack range
-                    if(Math.abs(this.selectedObjects[i].x - obj.x) <= 1 && Math.abs(this.selectedObjects[i].y - obj.y) <= 1 )
-                    {
-                        this.selectedObjects[i].attack(obj, {x: this.selectedObjects[i].x, y: this.selectedObjects[i].y});
-                    }else{
-                        this.selectedObjects[i].attack(obj, emptySquares[i]);
-                    }
+                    this.selectedObjects[i].attack(obj, {x: this.selectedObjects[i].x, y: this.selectedObjects[i].y});
+                }else{
+                    this.selectedObjects[i].attack(obj, emptySquares[i]);
                 }
+            }
             /********************************************* */
             // this.selectedObjects.forEach( (elem) => {
             //     elem.attack(obj);
@@ -84,6 +85,7 @@ class Controller{
         }
     }
 
+
     selectInBox(){
         this.selectionBox.drawRect(Math.min(this.boxStartPos.x, this.boxEndPos.x) + this.game.camera.x, Math.min(this.boxStartPos.y, this.boxEndPos.y)+ this.game.camera.y, Math.abs(this.boxEndPos.x-this.boxStartPos.x), Math.abs(this.boxEndPos.y-this.boxStartPos.y));
 
@@ -97,18 +99,15 @@ class Controller{
         // Select objects
         this.Perseus.objects.forEach(function(obj){
             if(obj instanceof Unit){
-                //console.log(obj.sprite.x, obj.sprite.y);
-                // Put this logic in function.
-                if(this.boxStartPos.x <= obj.sprite.x  && obj.sprite.x <= this.boxEndPos.x 
-                    || this.boxEndPos.x <= obj.sprite.x && obj.sprite.x <= this.boxStartPos.x){
-                    if (this.boxStartPos.y <= obj.sprite.y && obj.sprite.y <= this.boxEndPos.y
-                        || this.boxEndPos.y <= obj.sprite.y && obj.sprite.y <= this.boxStartPos.y){
-                        //console.log("this is inside foreach");
-
-                        this.selectedObjects.push(obj);
-                        if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
-                        //console.log(this.selectedObjects);
-                        obj.drawSelectionCircle();
+                if(obj.faction == 'human'){
+                    if(this.boxStartPos.x + this.game.camera.x <= obj.sprite.x  && obj.sprite.x <= this.boxEndPos.x + this.game.camera.x 
+                            || this.boxEndPos.x + this.game.camera.x <= obj.sprite.x && obj.sprite.x <= this.boxStartPos.x + this.game.camera.x ){
+                        if (this.boxStartPos.y + this.game.camera.y <= obj.sprite.y && obj.sprite.y <= this.boxEndPos.y + this.game.camera.y 
+                                || this.boxEndPos.y + this.game.camera.y <= obj.sprite.y && obj.sprite.y <= this.boxStartPos.y + this.game.camera.y){
+                            this.selectedObjects.push(obj);
+                            if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
+                            obj.drawSelectionCircle();
+                        }
                     }
                 }
             }
@@ -219,8 +218,8 @@ class Controller{
                 if(this.keys.W.isDown) {
                     if (this.cooldownTimer == 0){
                         this.selectedObjects[0].build('W')
-                        //cooldown
-                        this.cooldownTimer = 10;
+                            //cooldown
+                            this.cooldownTimer = 10;
                     }
                 }
             }
@@ -324,11 +323,13 @@ class Controller{
     endWithSelect(obj){
         this.update();
         if (this.selectedObjects.length == 0 || obj instanceof Unit){
-            this.selectedObjects.push(obj);
-            this.Perseus.ui.updateCommandList(obj);
-            obj.drawSelectionCircle();
-            console.log("selected:", this.selectedObjects);
-            if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
+            if(obj.faction == 'human'){
+                this.selectedObjects.push(obj);
+                this.Perseus.ui.updateCommandList(obj);
+                obj.drawSelectionCircle();
+                console.log("selected:", this.selectedObjects);
+                if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
+            }
         }
     }
 }
