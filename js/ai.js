@@ -7,68 +7,20 @@ import {WizardTower} from './wizardtower.js';
 import {Wizard} from './wizard.js';
 import {Barracks} from './barracks.js';
 import {ArcheryRange} from './archeryrange.js';
+import {Navigator} from './navigator.js';
 
 /*****************************************************************************/
 							// GLOBALS // 
 /*****************************************************************************/
 var MyResources = [];
-	// Resource = {
-	//		idNumber:
-	//		type:
-	//		depleated:
-	//		xCoor:
-	//		yCoor:
-	//	};
-// var this.MyBuildings = [];
-	//	Building = {
-	//		kind: "type",
-	//		corners: 1: true/false, 2: true/false, 3: true/false, 4: true/false,
-	//		idNumber: object.tag
-	//	};
-
-// var MyUnits = [];
-	// 	Unit = {
-	//		idNumber:
-	//		kind:
-	//		job:
-	//	};
 var MyWorkers = [];
-	// 	Worker = {
-	//		idNumber: "object.tag",
-	// 		occupation: "mine" or "chop",
-	// 		safe: true/false
-	//	};
-
-var Guards = [];
-	// 	Soldier = {
-	//		idNumber: "object.tag",
-	// 		BuildingID: buildingArrayID,
-	//		Corner: corner of building (1-4) = id of guard
-	//		busy: true/false
-	// 		safe: true/false
-	//	};
-
-var BorderPatrol = [];
-	// 	Soldier = {
-	//		idNumber: "object.tag",
-	// 		busy: true/false,
-	// 		safe: true/false
-	//	};
-
-var Army = [];
-	// 	Soldier = {
-	//		idNumber: "object.tag",
-	//		kind: wizard or pikeman
-	// 		Goal: either: 'worker', 'building', or 'army',
-	//		busy: true/false,
-	// 		safe: true/false,
-	//		atWar: true/false
-	//	};
+var MyArchers = [];
+var MySwordInfantry = [];
+var MyPikemen = [];
+var MyWizards = [];
 
 var objects, resources, enemyHealthText;
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
-var i = 0;
-var number = 0;
 var spawnSpotX = 1400, spawnSpotY = 1300, spawnChanger = 50;
 var freebie = true;
 var xBorder = 0, yBorder = 0;
@@ -325,6 +277,7 @@ class AI
 		if (type == 'worker' || type == 'Worker')
 		{
 			thisUnit = new Worker('orc', spawnSpotX, spawnSpotY, this.Perseus);
+			MyWorkers.push(thisUnit);
 			this.AIWorkers++;
 			this.UpdateStock(-WorkerCost.wood, 'wood');
 			this.UpdateStock(-WorkerCost.gold, 'gold');
@@ -334,6 +287,7 @@ class AI
 		else if (type == 'archer' || type == 'Archer')
 		{
 			thisUnit = new Archer('orc', spawnSpotX, spawnSpotY, this.Perseus);
+			MyArchers.push(thisUnit);
 			this.AIArchers++;
 			this.UpdateStock(-ArcherCost.wood, 'wood');
 			this.UpdateStock(-ArcherCost.gold, 'gold');
@@ -344,6 +298,7 @@ class AI
 		{
 			thisUnit = new SwordInfantry('orc', spawnSpotX, spawnSpotY, this.Perseus);
 			this.AISwordInfantry++;
+			MySwordInfantry.push(thisUnit);
 			this.UpdateStock(-SwordInfantryCost.wood, 'wood');
 			this.UpdateStock(-SwordInfantryCost.gold, 'gold');
 		}
@@ -353,6 +308,7 @@ class AI
 		{
 			thisUnit = new Pikeman('orc', spawnSpotX, spawnSpotY, this.Perseus);
 			this.AIPikemen++;
+			MyPikemen.push(thisUnit);
 			this.UpdateStock(-PikemanCost.wood, 'wood');
 			this.UpdateStock(-PikemanCost.gold, 'gold');
 		}
@@ -362,6 +318,7 @@ class AI
 		{
 			thisUnit = new Wizard('orc', spawnSpotX, spawnSpotY, this.Perseus);
 			this.AIWizards++;
+			MyWizards.push(thisUnit);
 			this.UpdateStock(-WizardCost.wood, 'wood');
 			this.UpdateStock(-WizardCost.gold, 'gold');
 		}
@@ -393,30 +350,65 @@ class AI
 		// WORKER
 		if (type == 'worker' || type == 'Worker')
 		{
+			for (let i = 0; i < this.MyWorkers.length; i++)
+			{
+				if (this.MyWorkers[i] == obj)
+				{
+					this.MyWorkers.splice(i, 1);
+				}
+			}
 			this.AIWorkers--;
 		}
 
 		// ARCHER
 		else if (type == 'archer' || type == 'Archer')
 		{
+			for (let i = 0; i < this.MyArchers.length; i++)
+			{
+				if (this.MyArchers[i] == obj)
+				{
+					this.MyArchers.splice(i, 1);
+				}
+			}
 			this.AIArchers--;
 		}
 
 		// SWORDINFANTRY
 		else if (type == 'swordInfantry' || type == 'SwordInfantry')
 		{
+			for (let i = 0; i < this.MySwordInfantry.length; i++)
+			{
+				if (this.MySwordInfantry[i] == obj)
+				{
+					this.MySwordInfantry.splice(i, 1);
+				}
+			}
 			this.AISwordInfantry--;
 		}
 
 		// PIKEMAN
 		else if (type == 'pikeman' || type == 'Pikeman')
 		{
+			for (let i = 0; i < this.MyPikemen.length; i++)
+			{
+				if (this.MyPikemen[i] == obj)
+				{
+					this.MyPikemen.splice(i, 1);
+				}
+			}
 			this.AIPikemen--;
 		}
 
 		// WIZARDS
 		else if (type == 'wizard' || type == 'Wizard')
 		{
+			for (let i = 0; i < this.MyWizards.length; i++)
+			{
+				if (this.MyWizards[i] == obj)
+				{
+					this.MyWizards.splice(i, 1);
+				}
+			}
 			this.AIWizards--;
 		}
 
@@ -599,14 +591,29 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	UpdateRoles()
 	{
-
-
+		let unit = null;
+		var counter = true;
+		let coords1 = this.Perseus.navigator.getCoords(800, 1000);
+		let coords2 = this.Perseus.navigator.getCoords(800, 1000);
 		// MY GUARDS
 		for (let i = 0; i < this.MyUnits.length; i++)
 		{
-			if (this.MyUnits[i].type == 'Archer')
+			unit = this.MyUnits[i];
+			if (unit.type == 'Archer')
 			{
-				this.MyUnits[i].move(800, 1100);
+				if (unit.x == unit.dest.x && unit.y == unit.dest.y)
+				{
+					if (counter == true)
+					{
+
+					}
+					//console.log(coords);
+				}
+				else
+				{
+					unit.move(800, 1000);
+				}
+				
 			}
 		}
 		//console.log("I'm updating");
@@ -630,7 +637,7 @@ class AI
 		if (timer == 1)
 		{
 			timer += timerTick;
-			this.UpdateRoles();
+			//this.UpdateRoles();
 		}
 		//console.log(timer);
 	}
@@ -655,6 +662,21 @@ class AI
 
 		console.log("Units --------------");
 		console.log(this.MyUnits);
+
+		console.log("Workers --------------");
+		console.log(MyWorkers);
+
+		console.log("Archers --------------");
+		console.log(MyArchers);
+
+		console.log("SwordInfantry --------------");
+		console.log(MySwordInfantry);
+
+		console.log("Pikemen --------------");
+		console.log(MyPikemen);
+
+		console.log("Wizards --------------");
+		console.log(MyWizards);
 	}
 
 	/*-----------------------------------------------------------------------*/
