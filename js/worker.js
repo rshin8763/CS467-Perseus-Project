@@ -403,13 +403,11 @@ class Worker extends Unit{
                     {
                         console.log("1");
                         this.Perseus.AI.UpdateStock(woodHarvest, 'wood');
-                        this.lastResource.loseResource(1);
                     }
                     else // ELSE IS PLAYER
                     {
                         console.log("2");
                         this.Perseus.Player.UpdateStock(woodHarvest, 'wood');
-                        this.lastResource.loseResource(1);
                     }
 
                 } 
@@ -418,12 +416,10 @@ class Worker extends Unit{
                     if(this.faction == 'orc') // 
                     {
                         this.Perseus.AI.UpdateStock(goldMined, 'gold');
-                        this.lastResource.loseResource(1);
                     }
                     else
                     {
                         this.Perseus.Player.UpdateStock(goldMined, 'gold');
-                        this.lastResource.loseResource(1);
                     }
                 }
                 // CHECKS TO SEE IF RESOURCE IS EXHAUSTED
@@ -560,7 +556,7 @@ class Worker extends Unit{
                     }
                     if(this.selectedBuilding == "Mine")
                     {
-                        this.Perseus.resources.push(new Mine(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        this.Perseus.objects.push(new Mine(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
                     }
                     if(this.selectedBuilding == "ArcheryRange")
                     {
