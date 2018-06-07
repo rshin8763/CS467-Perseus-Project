@@ -1,7 +1,7 @@
 import {GameObject} from './gameObject.js'
 class Resource  extends GameObject{
     constructor(x, y, Perseus){
-        super(false, Perseus);
+        super(false, faction, Perseus);
         this.sprite = null;
         this.resource = null;
         this.resourceAmount = 100;

@@ -1,7 +1,7 @@
 import {GameObject} from './gameObject.js'
 class Tree extends GameObject{
     constructor(x, y, Perseus){
-        super(false, Perseus);
+        super(false, 'neither', Perseus);
         this.sprite = null;
         this.resourceAmount = 1000;
         this.exhausted = false;
@@ -34,6 +34,7 @@ class Tree extends GameObject{
             this.Perseus.controller.endWithSelect(this);
         }, this);
     }
+
     takeDamage(rate){
         this.resourceAmount -= rate;
         console.log("The current resource amount is: " + this.resourceAmount)

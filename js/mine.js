@@ -1,7 +1,7 @@
 import {GameObject} from './gameObject.js'
 class Mine extends GameObject{
-    constructor(x, y, Perseus){
-        super(false, Perseus);
+    constructor(x, y, faction, Perseus){
+        super(false, faction, Perseus);
         this.sprite = null;
         this.resourceAmount = 100;
         this.exhausted = false;
@@ -23,6 +23,7 @@ class Mine extends GameObject{
 
     addSprite(x, y){    
         this.sprite = this.game.add.sprite(x, y, 'mine');
+        this.sprite.frame = 1;
         this.sprite.scale.setTo(0.6666, 0.6666);
         // this.sprite.anchor.x = 0.5;
         // this.sprite.anchor.y = 0.5;
@@ -40,6 +41,7 @@ class Mine extends GameObject{
         console.log("The current resource amount is: " + this.resourceAmount)
         if (this.resourceAmount <= 0) {
             this.exhausted = true;
+            this.sprite.frame = 0;
         }
     }
 }
