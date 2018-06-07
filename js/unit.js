@@ -72,11 +72,7 @@ class Unit extends GameObject{
 
         this.Perseus.gameSprites.add(this.sprite);
         this.Perseus.gameSprites.add(this.hpbar);
-
-        if(this.faction == 'orc')
-        {
-            this.drawEnemyCircle();
-        }
+        // this.Perseus.uiGraphics.add(this.hpbar);
 
     }
 
@@ -171,7 +167,6 @@ class Unit extends GameObject{
         }
 
         this.hpbar.width = (this.hp / this.maxHP) * 64;
-
 
         return false; //Unit not dead
     }

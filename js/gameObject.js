@@ -30,13 +30,22 @@ class GameObject {
     }
     drawSelectionCircle(){
         if (this.faction == 'human'){
-            this.circle = this.game.add.graphics();
-            this.circle.lineStyle(1, 0x00FF00, 1);
-            this.circle.drawCircle(this.sprite.centerX,this.sprite.centerY, this.sprite.height);
-            this.Perseus.controller.selectionCircles.push(this.circle);
+            if (this.circle == null){
+                this.circle = this.game.add.graphics();
+                this.circle.lineStyle(1, 0x00FF00, 1);
+                this.circle.drawCircle(this.sprite.centerX,this.sprite.centerY, this.sprite.height);
+                this.Perseus.gameSprites.add(this.circle);
+                // this.Perseus.uiGraphics.add(this.circl);
+
+            }
         }
     }
 
+    undrawCircle(){
+        if (this.circle)
+            this.circle.destroy();
+        this.circle = null;
+    }
     drawEnemyCircle(){
         this.circle = this.game.add.graphics();
         this.circle.lineStyle(1, 0xFF0000, 1);

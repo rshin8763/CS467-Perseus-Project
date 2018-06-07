@@ -27,13 +27,12 @@ class Controller{
         this.boxEndPos = {};
         this.wasDown = false;
         this.boxSelect = true;
-        this.selectionCircles = [];
         this.cooldownTimer = 0;
     }
 
     select(obj){
         if (this.state == 'default'){
-            this.selectionCircles.forEach((elem)=> {elem.destroy();});
+            this.selectedObjects.forEach((elem)=>{elem.undrawCircle();});
             this.selectedObjects = [];
             if(obj.faction == 'human'){
                 this.selectedObjects.push(obj);
@@ -91,12 +90,10 @@ class Controller{
     selectInBox(){
         this.selectionBox.drawRect(Math.min(this.boxStartPos.x, this.boxEndPos.x) + this.game.camera.x, Math.min(this.boxStartPos.y, this.boxEndPos.y)+ this.game.camera.y, Math.abs(this.boxEndPos.x-this.boxStartPos.x), Math.abs(this.boxEndPos.y-this.boxStartPos.y));
 
+        this.selectedObjects.forEach((elem)=>{elem.undrawCircle();});
         this.selectedObjects = [];
         this.highestPrioritySelected = null;
         this.Perseus.ui.clearCommandList();
-        this.selectionCircles.forEach((circle)=>{
-            circle.destroy();
-        });
 
         // Select objects
         this.Perseus.objects.forEach(function(obj){
@@ -107,7 +104,8 @@ class Controller{
                         if (this.boxStartPos.y + this.game.camera.y <= obj.sprite.y && obj.sprite.y <= this.boxEndPos.y + this.game.camera.y 
                                 || this.boxEndPos.y + this.game.camera.y <= obj.sprite.y && obj.sprite.y <= this.boxStartPos.y + this.game.camera.y){
                             this.selectedObjects.push(obj);
-                            if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
+                            if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) 
+                                this.highestPrioritySelected = obj;
                             obj.drawSelectionCircle();
                         }
                     }
@@ -359,7 +357,9 @@ class Controller{
                 this.Perseus.ui.updateCommandList(obj);
                 obj.drawSelectionCircle();
                 console.log("selected:", this.selectedObjects);
-                if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) this.highestPrioritySelected = obj;
+                if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) 
+                    this.highestPrioritySelected = obj;
+                
             }
         }
     }
