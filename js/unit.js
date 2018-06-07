@@ -172,7 +172,6 @@ class Unit extends GameObject{
 
         this.hpbar.width = (this.hp / this.maxHP) * 64;
 
-
         return false; //Unit not dead
     }
 

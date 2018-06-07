@@ -15,6 +15,7 @@ class Building extends GameObject{
         this.units = {};
         this.Perseus.objects.push(this);
         this.movable = false;
+        this.hpbar = null;
     }
 
     addSprite(buildingType){       
@@ -22,6 +23,11 @@ class Building extends GameObject{
         let y = this.y;
         let coords = this.Perseus.navigator.getCoords(x,y);
         this.sprite = this.game.add.sprite(coords.x, coords.y, buildingType + "_" + this.faction);
+
+        this.hpbar = this.game.add.sprite(coords.x,coords.y, 'hpbar');
+        this.hpbar.anchor.x = -.5;
+        this.hpbar.anchor.y = 2;
+        console.log(this.hpbar)
         // this.sprite.anchor.x = 0.5;
         // this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
@@ -42,6 +48,7 @@ class Building extends GameObject{
         }, this);
 
         this.Perseus.gameSprites.add(this.sprite);
+        this.Perseus.gameSprites.add(this.hpbar);
 
         
     }
@@ -62,6 +69,7 @@ class Building extends GameObject{
             //this.Perseus.AI.printArrays();
             //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
+            this.hpbar.destroy();
 
             for(let i = 0; i < this.Perseus.objects.length; i++)
             {
@@ -71,6 +79,8 @@ class Building extends GameObject{
                 }
             }
         }
+
+        this.hpbar.width = (this.hp / this.maxHP) * 64;
     }
 
     
