@@ -3,7 +3,7 @@ class Tree extends GameObject{
     constructor(x, y, Perseus){
         super(false, 'neither', Perseus);
         this.sprite = null;
-        this.resourceAmount = 500;
+        this.resourceAmount = 100;
         this.exhausted = false;
         let square = this.Perseus.navigator.getSquare(x,y);
         let coords = this.Perseus.navigator.getCoords(square.x, square.y);
@@ -35,7 +35,7 @@ class Tree extends GameObject{
         }, this);
     }
 
-    takeDamage(rate){
+    loseResource(rate){
         this.resourceAmount -= rate;
 
         console.log("The current resource amount is: " + this.resourceAmount)

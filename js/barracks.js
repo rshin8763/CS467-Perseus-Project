@@ -21,8 +21,8 @@ class Barracks extends Building{
             buildList: {S: "Swordsperson", P: "Pikemen"}  
         };
         this.SwordInfantryCosts = {
-            wood : 30,
-            gold : 70
+            wood : 50,
+            gold : 50
         };
         this.PikemanCosts = {
             wood : 60,
