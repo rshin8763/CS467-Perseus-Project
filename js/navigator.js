@@ -298,8 +298,8 @@ class Navigator {
     findObjectBorder(obj, origin)
     {
         let squares = [];
-        let width = obj.sprite.width/32;
-        let height = obj.sprite.height/32;
+        let width = Math.floor(obj.sprite.width/32);
+        let height = Math.floor(obj.sprite.height/32);
 
         let x = obj.x;
         let y = obj.y;

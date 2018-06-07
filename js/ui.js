@@ -98,7 +98,7 @@ class Ui
         this.pause_button.fixedToCamera = true;
         this.pause_button.cameraOffset.setTo(10, 3);
         this.pause_button.inputEnabled = true;
-        this.pause_button.events.onInputUp.add(this.pause);
+        this.pause_button.events.onInputUp.add(function(){this.pause()}, this);
         this.ui.add(this.pause_button);
 
         this.mute_button = this.Perseus.game.add.text(0, 0, 'Mute', style);
@@ -106,6 +106,7 @@ class Ui
         this.mute_button.cameraOffset.setTo(755, 3);
         this.mute_button.inputEnabled = true;
         this.mute_button.events.onInputUp.add(this.muteMusic);
+        // this.pause_button.events.onInputUp.add(()=>{this.pause}, this);
         this.ui.add(this.mute_button);
 
     }
@@ -203,7 +204,7 @@ class Ui
 
     pause()
     {
-        // ERROR HANDLING: GAME IS ALREADY PAUSED
+        console.log('hello?');
         if (this.Perseus.game.paused) 
         {
             // do nothing
@@ -211,16 +212,16 @@ class Ui
         else
         {
             // ADD MENU BUTTONS
-            resumeButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 50,
+            this.resumeButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 50,
                     'resumeButton', this.unpause, this, 2, 1, 0);
 
-            saveButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 160,
+            this.saveButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 160,
                     'saveButton', this.saveGame, this, 2, 1, 0);
 
-            quitButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 268,
+            this.quitButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 268,
                     'quitButton', this.quitGame, this, 2, 1, 0);
 
-            newGameButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 376,
+            this.newGameButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 376,
                     'newGameButton', this.newGame, this, 2, 1, 0);
             this.Perseus.game.paused = true;
         }
@@ -245,10 +246,10 @@ class Ui
         if(this.Perseus.game.paused)
         {
             this.Perseus.game.paused = false;
-            saveButton.destroy();
-            quitButton.destroy();
-            newGameButton.destroy();
-            resumeButton.destroy();
+            this.saveButton.destroy();
+            this.quitButton.destroy();
+            this.newGameButton.destroy();
+            this.resumeButton.destroy();
         }
     }
 

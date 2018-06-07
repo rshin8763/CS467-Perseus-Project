@@ -63,8 +63,8 @@ class Worker extends Unit{
     }
 
     cancelPlacing(){
-        this.selectedSprite.destroy();
-        //
+        if(this.selectedSprite)
+            this.selectedSprite.destroy();
         this.selectedX = null;
         this.selectedY = null;
         this.buildProgress = 0;
