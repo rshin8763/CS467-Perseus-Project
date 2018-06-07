@@ -3,9 +3,8 @@ import {GameObject} from './gameObject.js';
 
 class Building extends GameObject{
     constructor(faction, hp, x, y, Perseus){
-        super(false, Perseus);
+        super(false, faction, Perseus);
         this.Perseus = Perseus;
-        this.faction = faction;
         this.hp = hp;
         this.x = this.Perseus.navigator.getSquare(x,y).x;
         this.y = this.Perseus.navigator.getSquare(x,y).y;

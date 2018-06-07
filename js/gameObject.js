@@ -1,6 +1,9 @@
+
 class GameObject {
-    constructor(movable, Perseus){
+    constructor(movable, faction, Perseus){
         this.Perseus = Perseus;
+        this.faction = faction;
+
         if(Perseus.idCounter == null)
         {
             Perseus.idCounter = 0;
@@ -8,6 +11,14 @@ class GameObject {
 
         this.tag = Perseus.idCounter;
         Perseus.idCounter++;
+
+        if(faction == 'human'){
+            this.Perseus.Player.addObject(this);
+        }
+
+        if(faction == 'orc'){
+            // this.Perseus.enemy.addObject(this);
+        }
 
         this.game = Perseus.game;
         this.movable = movable;
