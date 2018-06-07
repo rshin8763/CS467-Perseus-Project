@@ -142,9 +142,9 @@ function create()
     Perseus.objects.push(new Worker('human', 300, 300, Perseus));
     Perseus.resources.push(new Mine(300, 450, 'human', Perseus));
 
-    console.log(Perseus.objects);
+    //console.log(Perseus.objects);
     //console.log(Perseus.resources);
-    console.log(Perseus.navigator.navmap);
+    //console.log(Perseus.navigator.navmap);
 
     /***************************************/
     // save game testing

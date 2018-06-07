@@ -596,64 +596,17 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	UpdateRoles()
 	{
-		/*var i, type, tag;
-		for (var b in this.resources)
-		{
-
-		}
-		// MY WORKERS
-		for (i = 0; i < this.MyUnits.length; i++)
-		{
-			tag = this.MyUnits[i].tag;
-			console.log("the tag is" + tag);
-			if (type == 'worker' || type == 'Worker')
-			{
-				this.objects[tag].gather(this.GetNearestResource());
-				console.log("1");
-			}
-		}*/
-		/*for (i in this.MyUnits)
-		{
-			if(this.MyUnits[i].type == 'Worker')
-			{
-				this.MyUnits[i].gather(this.GetNearestResource());
-			}
-
-		}*/
-		/*for (i in this.objects)
-		{
-			if(this.objects[i].type == 'worker')
-			{
-				if (this.objects[i].faction == 'orc')
-				{
-					for (var b in resources)
-					{
-						this.objects[i].gather(resources[b]);
-					}
-				}
-			}
-		}*/
-
+		var counter = 0;
 		// MY GUARDS
 		for (let i = 0; i < this.MyUnits.length; i++)
 		{
 			if (this.MyUnits[i].type == 'Archer')
 			{
-				if(timer == 100)
-				{
-					this.MyUnits[i].move(800, 200);
-				}
-				else if (timer == 2)
-				{
-					this.MyUnits[i].move(400, 400);
-				}
-				else
-				{
-					// do nothing
-				}
+				this.MyUnits[i].move(800 + counter, 1100);
+				counter += 800;
 			}
 		}
-		console.log("I'm updating");
+		//console.log("I'm updating");
 
 		// MY PATROL
 
@@ -667,16 +620,14 @@ class AI
 		timer -= 1;
 		if (timer == 1)
 		{
-			timer += 100;
+			timer += 400;
 		}
-		console.log(timer);
 	}
 
 	/*-----------------------------------------------------------------------*/
 	update()
 	{
 		this.UpdateTimer();
-		this.UpdateRoles();
 	}
 
 	/*-----------------------------------------------------------------------*/
