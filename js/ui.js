@@ -1,3 +1,5 @@
+var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
+
 import {Player} from './player.js'
 
 class Ui
@@ -9,6 +11,15 @@ class Ui
         this.infoBox;
         this.textBox;
         this.commandBox;
+        this.woodText;
+        this.goldText;
+        this.pause_button;
+        this.mute_button;
+        this.saveButton;
+        this.quitButton;
+        this.newGameButton;
+        this.resumeButton;
+        this.enemyHealthText;
         // this.minimap = new Minimap(Perseus);
         this.commandButtons = [];
         this.initialize();
@@ -52,6 +63,51 @@ class Ui
                 this.ui.add(tile);
             }
         }
+
+        // ------------------------------------------------------------------------
+        // PAUSE BUTTON, MUTE, MENU
+        // MENU BAR
+        this.menuBar = this.Perseus.game.add.sprite(0, 0, 'menuBar'); // ADD MENU
+        this.menuBar.fixedToCamera = true;
+        this.ui.add(this.menuBar);
+
+        // GOLD COUNT DISPLAY
+        this.goldText = this.Perseus.game.add.text(0, 0, 'Gold: ' + 0,
+                style);
+        this.goldText.fixedToCamera = true;
+        this.goldText.cameraOffset.setTo(70, 3);
+        this.ui.add(this.goldText);
+        this.updateText('gold');
+
+        // WOOD COUNT DISPLAY
+        this.woodText = this.Perseus.game.add.text(0, 0, 'Wood: ' + 0,
+                style);
+        this.woodText.fixedToCamera = true;
+        this.woodText.cameraOffset.setTo(170, 3);
+        this.ui.add(this.woodText);
+        this.updateText('wood');
+
+        //Enemy Building Count
+        this.enemyHealthText = this.Perseus.game.add.text(0, 0, 
+                'Enemy Buildings: ' + 0, style);
+        this.enemyHealthText.fixedToCamera = true;
+        this.enemyHealthText.cameraOffset.setTo(270, 3);
+        this.ui.add(this.enemyHealthText);
+
+        this.pause_button = this.Perseus.game.add.text(0, 0, 'Pause', style);
+        this.pause_button.fixedToCamera = true;
+        this.pause_button.cameraOffset.setTo(10, 3);
+        this.pause_button.inputEnabled = true;
+        this.pause_button.events.onInputUp.add(this.pause);
+        this.ui.add(this.pause_button);
+
+        this.mute_button = this.Perseus.game.add.text(0, 0, 'Mute', style);
+        this.mute_button.fixedToCamera = true;
+        this.mute_button.cameraOffset.setTo(755, 3);
+        this.mute_button.inputEnabled = true;
+        this.mute_button.events.onInputUp.add(this.muteMusic);
+        this.ui.add(this.mute_button);
+
     }
 
     clearCommandList(){
@@ -144,5 +200,103 @@ class Ui
         } else {
         }
     }
+
+    pause()
+    {
+        // ERROR HANDLING: GAME IS ALREADY PAUSED
+        if (this.Perseus.game.paused) 
+        {
+            // do nothing
+        }
+        else
+        {
+            // ADD MENU BUTTONS
+            resumeButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 50,
+                    'resumeButton', this.unpause, this, 2, 1, 0);
+
+            saveButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 160,
+                    'saveButton', this.saveGame, this, 2, 1, 0);
+
+            quitButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 268,
+                    'quitButton', this.quitGame, this, 2, 1, 0);
+
+            newGameButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 376,
+                    'newGameButton', this.newGame, this, 2, 1, 0);
+            this.Perseus.game.paused = true;
+        }
+
+    }
+
+    muteMusic()
+    {
+        if(music.mute == true)
+        {
+            music.mute = false;
+        }
+        else
+        {
+            music.mute = true;
+        }
+
+    }
+
+    unpause()
+    {
+        if(this.Perseus.game.paused)
+        {
+            this.Perseus.game.paused = false;
+            saveButton.destroy();
+            quitButton.destroy();
+            newGameButton.destroy();
+            resumeButton.destroy();
+        }
+    }
+
+    saveGame()
+    {
+        this.Perseus.GameState.SaveCurrentState();
+    }
+    quitGame()
+    {
+        this.unpause();
+    }
+
+    newGame()
+    {
+        this.Perseus.GameState.LoadGame();
+    }
+
+    updateText(kind)
+    {
+        if(kind == 'wood' || kind == 'Wood')
+        {
+            this.woodText.setText('Wood: ' + this.Perseus.Player.playerWood);
+        }
+        else if (kind == 'gold' || kind == 'Gold') 
+        {
+            this.goldText.setText('Gold: ' + this.Perseus.Player.playerGold);
+        }
+        // else if (kind == 'fort' || kind == 'Fort')
+        // {
+        //     fortText.setText('Forts: ' + this.Perseus.Player.playerForts);
+        // }
+        // else if (kind == 'barracks' || kind == 'Barracks')
+        // {
+        //     barracksText.setText('Barracks: ' + this.Perseus.Player.playerBarracks);
+        // }
+        // else if (kind == 'wizard tower' || kind == 'Wizard Tower')
+        // {
+        //     towerText.setText('Tower: ' + this.Perseus.Player.playerTowers);
+        // }
+        else if (kind == 'enemy' || kind == 'Enemy')
+        {
+            this.enemyHealthText.setText('Enemy Buildings: ' + this.Perseus.AI.AIAllBuildings);
+        }
+        else
+        {
+            console.log("You tried to update a UI text and failed.");
+        }
+    }
 }
+
 export {Ui}

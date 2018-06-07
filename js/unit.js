@@ -2,8 +2,9 @@ import {GameObject} from './gameObject.js';
 //import {AI} from './ai.js';
 class Unit extends GameObject{
     constructor(x,y, faction, type, hp, attk, defense, attkSpeed, Perseus){
-        super(true, Perseus);
+        super(true, faction, Perseus);
         
+        this.id = type;
         this.range = 1;
         this.dead=false;
         let unitSquare = this.Perseus.navigator.getSquare(x,y);
@@ -11,7 +12,6 @@ class Unit extends GameObject{
         this.y = unitSquare.y;
         this.centerX = x;
         this.centerY = y;
-        this.faction = faction;
         this.hp = hp;
         this.attk = attk;
         this.attkSpeed = attkSpeed;
@@ -33,12 +33,6 @@ class Unit extends GameObject{
         this.attackMoving = false;
         this.attackMoveDest = null;
 
-        //if (faction == 'human'){
-        //    Perseus.Player.UpdatePlayerUnits(1,type);
-        //} else { 
-        //    // ai stuff here
-        //    //TODO
-        //}
 
         Perseus.objects.push(this);
         Perseus.navigator.units.push(this);

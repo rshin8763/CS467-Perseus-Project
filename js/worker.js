@@ -29,6 +29,7 @@ class Worker extends Unit{
         this.lastResource = null;
         this.priority = 1;
         this.validToPlace = true;
+
         this.woodCosts = {
             Fort : 150,
             Barracks: 100,
@@ -235,6 +236,15 @@ class Worker extends Unit{
             this.selectedSprite.alpha = 0.75;
             this.selectedX = this.selectedSprite.x; 
             this.selectedY = this.selectedSprite.y; 
+            let square = this.Perseus.navigator.getSquare(this.selectedSprite.x, this.selectedSprite.y);
+            for(let i = 0; i < 4; i++)
+            {
+                for(let j = 0; j < 4; j++){
+                    this.Perseus.navigator.markOccupied(square.x+i, square.y+j);
+                }
+            }
+            //unmark the top left square so the worker can stand there while building
+            this.Perseus.navigator.markNotOccupied(square.x, square.y)
         }
     }
 
@@ -452,6 +462,7 @@ class Worker extends Unit{
                         this.Perseus.objects.push(new Farm(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
                     }
                     this.building = false;
+                    this.Perseus.Player.reduceResources(this.woodCosts[this.selectedBuilding], this.goldCosts[this.selectedBuilding]);
                     this.selectedSprite.destroy();
                     this.selectedX = null;
                     this.selectedY = null;

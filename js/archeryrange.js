@@ -14,9 +14,14 @@ class ArcheryRange extends Building{
         this.ARCH = 3;
         this.buildSpeed = .25;
         this.type="Archery Range";
+
+        this.uiData = {
+            commandList: {B:"Build"},
+            buildList: {A: "Wizard"}  
+        };
         this.ArcherCosts = {
-            wood : 500,
-            gold : 500
+            wood : 150,
+            gold : 50
         }
     }
 
@@ -32,14 +37,14 @@ class ArcheryRange extends Building{
     {
         if(!this.building)
         {
-            //TODO:  Move logic inside loop once resources are available
-            // if(this.Perseus.resources.wood > this.ArcherCosts.wood
-            //     && this.Persesus.resources.gold > this.ArcherCosts.gold)
-            //     {
-            //     }
-            this.building = true;
-            this.current = 'Archer';
-            this.buildProgress = 0;
+            if(this.Perseus.Player.playerWood >= this.ArcherCosts.wood
+                    && this.Perseus.Player.playerGold >= this.ArcherCosts.gold)
+            {
+                this.building = true;
+                this.current = 'Archer';
+                this.buildProgress = 0;
+                this.Perseus.Player.reduceResources(this.ArcherCosts.wood, this.ArcherCosts.gold);
+            }
         }
     }
 
@@ -51,6 +56,7 @@ class ArcheryRange extends Building{
                 this.building = false;
                 this.buildProgress =0;
                 this.spawnArcher();
+
             } else {
                 this.buildProgress += this.buildSpeed;
             }
@@ -60,8 +66,8 @@ class ArcheryRange extends Building{
     spawnArcher()
     {
         let coords = this.Perseus.navigator.getCoords(this.x + 4,this.y +4)
-        this.Perseus.objects.push(new Archer(this.faction, coords.x, coords.y , this.Perseus));     
-        
+            this.Perseus.objects.push(new Archer(this.faction, coords.x, coords.y , this.Perseus));     
+
     }
 
 }  

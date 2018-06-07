@@ -18,7 +18,7 @@ class Barracks extends Building{
         this.type="Barracks";
         this.uiData = {
             commandList: {B:"Build"},
-            buildList: {S: "Swordsperson", A: "Archer", P: "Pikemen"}  
+            buildList: {S: "Swordsperson", P: "Pikemen"}  
         };
         this.SwordInfantryCosts = {
             wood : 30,
@@ -31,6 +31,7 @@ class Barracks extends Building{
         this.faction = faction;
         this.Perseus = Perseus;
     }
+
     build(str){
         switch(str){
             case 'S':
@@ -44,14 +45,14 @@ class Barracks extends Building{
     {
         if(!this.building)
         {
-        //TODO:  Move logic inside loop once resources are available
-            // if(this.Perseus.resources.wood > this.SwordInfantry.wood
-            //     && this.Persesus.resources.gold > this.SwordInfantry.gold)
-            //     {
-            //     }
-            this.building = true;
-            this.current = this.SWORD;
-            this.buildProgress = 0;
+            if(this.Perseus.Player.playerWood >= this.SwordInfantryCosts.wood
+                    && this.Perseus.Player.playerGold >= this.SwordInfantryCosts.gold)
+            {
+                this.building = true;
+                this.current = this.SWORD;
+                this.buildProgress = 0;
+                this.Perseus.Player.reduceResources(this.SwordInfantryCosts.wood, this.SwordInfantryCosts.gold);
+            }
         }
     }
 
@@ -59,14 +60,14 @@ class Barracks extends Building{
     {
         if(!this.building)
         {
-        //TODO:  Move logic inside loop once resources are available
-            // if(this.Perseus.resources.wood > this.Pikeman.wood
-            //     && this.Persesus.resources.gold > this.Pikeman.gold)
-            //     {
-            //     }
-            this.building = true;
-            this.current = this.PIKE;
-            this.buildProgress = 0;
+            if(this.Perseus.Player.playerWood >= this.PikemanCosts.wood
+                    && this.Perseus.Player.playerGold >= this.PikemanCosts.gold)
+            {
+                this.building = true;
+                this.current = this.PIKE;
+                this.buildProgress = 0;
+                this.Perseus.Player.reduceResources(this.PikemanCosts.wood, this.PikemanCosts.gold);
+            }
         }
     }
 
@@ -78,14 +79,13 @@ class Barracks extends Building{
                 this.building = false;
                 this.buildProgress =0;
                 let coords = this.Perseus.navigator.getCoords(this.x + 4,this.y +4)
-                this.spawnUnit(coords.x, coords.y ,this.current);
+                    this.spawnUnit(coords.x, coords.y ,this.current);
                 if(this.faction == 'orc') // update orc or player buildings count;
                 {
                     this.Perseus.AI.UpdateAIBuildings(1, 'Barracks', this.Perseus.idCounter - 1);
                 }
                 else
                 {
-                    this.Perseus.Player.UpdatePlayerBuildings(1, 'Barracks');
                 }
             } else {
                 this.buildProgress += this.buildSpeed;
