@@ -131,7 +131,7 @@ class Worker extends Unit{
         if(this.Perseus.Player.playerWood >= this.woodCosts.Fort 
                 && this.Perseus.Player.playerGold > this.goldCosts.Fort)
         {            
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort');
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort' + "_" + this.faction);
             this.selectedBuilding = "Fort";
             this.placing = true;
             this.gatherstate = 0;
@@ -173,7 +173,7 @@ class Worker extends Unit{
         if(this.Perseus.Player.playerWood  >= this.woodCosts.Barracks 
                 && this.Perseus.Player.playerGold  >= this.goldCosts.Barracks)
         {            
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks');
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks' + "_" + this.faction);
             this.selectedBuilding = "Barracks";
             this.gatherstate = 0;
             this.placing = true;
@@ -193,7 +193,7 @@ class Worker extends Unit{
                 && this.Perseus.Player.playerGold >= this.goldCosts.ArcheryRange)
         {
 
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange');
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange' + "_" + this.faction);
             this.selectedBuilding = "ArcheryRange";
             this.gatherstate = 0;
             this.placing = true;
@@ -213,7 +213,7 @@ class Worker extends Unit{
                 && this.Perseus.Player.playerGold >= this.goldCosts.WizardTower)
         {
 
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower');
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower' + "_" + this.faction);
             this.selectedBuilding = "WizardTower";
             this.gatherstate = 0;
             this.placing = true;
@@ -232,7 +232,7 @@ class Worker extends Unit{
         if(this.Perseus.Player.playerWood >= this.woodCosts.Farm 
                 && this.Perseus.Player.playerGold >= this.goldCosts.Farm)
         {
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm');
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm' + "_" + this.faction);
             this.selectedBuilding = "Farm";
             this.gatherstate = 0;
             this.placing = true;

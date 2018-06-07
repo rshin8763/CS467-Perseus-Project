@@ -35,9 +35,18 @@ function preload() {
     // TODO insert tiles url and creators
     this.load.image('gameTiles', 'assets/tilemaps/forestTiles.png');
     this.load.image('tree', 'assets/images/tree.png');
-    this.load.image('barracks', 'assets/barracks.png');
-    this.load.image('fort', 'assets/fort.png');
-    this.load.image('wizardtower', 'assets/wizardtower.png');
+    this.load.image('barracks_human', 'assets/barracks.png');
+    this.load.image('barracks_orc', 'assets/barracks_orc.png');
+
+    this.load.image('fort_human', 'assets/fort.png');
+    this.load.image('fort_orc', 'assets/fort_orc.png');
+
+    this.load.image('wizardtower_human', 'assets/wizardtower.png');
+    this.load.image('wizardtower_orc', 'assets/wizardtower_orc.png');
+
+    this.load.image('archeryrange_human', 'assets/archeryrange.png');
+    this.load.image('archeryrange_orc', 'assets/archeryrange_orc.png');
+
     this.load.image('ui', 'assets/ui/stoneMenu.png');
     this.load.image('hpbar', 'assets/healthbar.png');
     this.load.image('navSquare', 'assets/navSquare.png');
@@ -133,10 +142,14 @@ function create()
     // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
+    Perseus.Player.playerWood = 5000;
+    Perseus.Player.playerGold = 5000;
 
     console.log(Perseus.objects);
     console.log(Perseus.resources);
     console.log(Perseus.navigator.navmap);
+
+
 }
 
 function update()

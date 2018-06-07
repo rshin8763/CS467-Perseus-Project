@@ -21,7 +21,7 @@ class Building extends GameObject{
         let x = this.x;
         let y = this.y;
         let coords = this.Perseus.navigator.getCoords(x,y);
-        this.sprite = this.game.add.sprite(coords.x, coords.y, buildingType);
+        this.sprite = this.game.add.sprite(coords.x, coords.y, buildingType + "_" + this.faction);
         // this.sprite.anchor.x = 0.5;
         // this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
