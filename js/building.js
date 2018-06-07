@@ -1,5 +1,4 @@
 import {GameObject} from './gameObject.js';
-import {Player} from './player.js';
 
 class Building extends GameObject{
     constructor(faction, hp, x, y, Perseus){
@@ -28,7 +27,7 @@ class Building extends GameObject{
         this.sprite.inputEnabled = true;
 
         if (this.faction == 'human'){
-            this.Perseus.Player.UpdatePlayerBuildings(1, buildingType);
+            //this.Perseus.Player.AddBuilding(1, buildingType);
         } else {
             //update ai buildingCount?
             this.drawEnemyCircle();

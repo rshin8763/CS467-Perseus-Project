@@ -34,7 +34,7 @@ class Unit extends GameObject{
         this.attackMoveDest = null;
 
         if (faction == 'human'){
-            Perseus.Player.UpdatePlayerUnits(1,type);
+            //Perseus.Player.UpdatePlayerUnits(1,type);
         } else { 
             // ai stuff here
             //TODO

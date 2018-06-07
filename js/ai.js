@@ -18,14 +18,14 @@ var MyResources = [];
 	//		xCoor:
 	//		yCoor:
 	//	};
-var MyBuildings = [];
+// var this.MyBuildings = [];
 	//	Building = {
 	//		kind: "type",
 	//		corners: 1: true/false, 2: true/false, 3: true/false, 4: true/false,
 	//		idNumber: object.tag
 	//	};
 
-var MyUnits = [];
+// var MyUnits = [];
 	// 	Unit = {
 	//		idNumber:
 	//		kind:
@@ -136,6 +136,10 @@ class AI
 		this.AIBarracks = 0;
 		this.AITowers = 0;
 		this.AIAllBuildings = 0;
+
+		// ARRAYS
+		this.MyBuildings = [];
+		this.MyUnits = [];
 	}
 
 /*****************************************************************************/
@@ -403,7 +407,7 @@ class AI
 			corner: [-1, -1, -1, -1],
 			idNumber: idNumb
 		};
-		MyBuildings.push(thisBuilding);
+		this.MyBuildings.push(thisBuilding);
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -411,11 +415,11 @@ class AI
 	{
 		var x = 0, y;
 		// SORT THROUGH ARRAY & FIND MATCHING ID - UPDATE VALUES
-		for(x = 0; x < MyBuildings.length; x++)
+		for(x = 0; x < this.MyBuildings.length; x++)
 		{
-			if(MyBuildings[x].idNumber == tag)
+			if(this.MyBuildings[x].idNumber == tag)
 			{
-				var type = MyBuildings[x].kind;
+				var type = this.MyBuildings[x].kind;
 				if (type == 'Fort' || type == 'fort')
 				{
 					this.AIForts--;
@@ -432,20 +436,20 @@ class AI
 				this.AIAllBuildings--;
 
 				// MOVE ALL DATA OVER ONE TO REPLACE BUILDING LOST
-				while(x < MyBuildings.length)
+				while(x < this.MyBuildings.length)
 				{
-					if (x == (MyBuildings.length - 1)) // IS LAST ONE
+					if (x == (this.MyBuildings.length - 1)) // IS LAST ONE
 					{
-						MyBuildings.pop();
+						this.MyBuildings.pop();
 					}
 					else
 					{
-						MyBuildings[x].kind = MyBuildings[x+1].kind;
+						this.MyBuildings[x].kind = this.MyBuildings[x+1].kind;
 						for (y = 0; y < 5; y++)
 						{
-							MyBuildings[x].corner[y] = MyBuildings[x+1].corner[y];
+							this.MyBuildings[x].corner[y] = this.MyBuildings[x+1].corner[y];
 						}
-						MyBuildings[x].idNumber = MyBuildings[x+1].idNumber;
+						this.MyBuildings[x].idNumber = this.MyBuildings[x+1].idNumber;
 					}
 					x++;
 				}
@@ -453,7 +457,7 @@ class AI
 		}
 		this.Perseus.updateText('enemy');
 		// CHECK TO SEE IF ITS A GAME OVER
-		if (MyBuildings.length <= 0)
+		if (this.MyBuildings.length <= 0)
 		{
 			//console.log("Game over!");
 		}
@@ -489,7 +493,7 @@ class AI
 				kind: 'worker',
 				job: 'harvest'
 			};
-			MyUnits.push(thisUnit);
+			this.MyUnits.push(thisUnit);
 			spawnSpotY -= 70;
 
 			// GOLD MINER - ADD TO MYWORKERS
@@ -510,7 +514,7 @@ class AI
 				kind: 'worker',
 				job: 'Harvest'
 			};
-			MyUnits.push(thisUnit);
+			this.MyUnits.push(thisUnit);
 
 			this.UpdateStock(-WorkerCost.wood, 'wood');
 			this.UpdateStock(-WorkerCost.gold, 'gold');
@@ -539,7 +543,7 @@ class AI
 				kind: 'archer',
 				job: 'Guard'
 			};
-			MyUnits.push(thisUnit);
+			this.MyUnits.push(thisUnit);
 
 			// UPDATE RESOURCES
 			this.UpdateStock(-ArcherCost.wood, 'wood');
@@ -564,7 +568,7 @@ class AI
 				kind: 'swordInfantry',
 				job: 'Patrol'
 			};
-			MyUnits.push(thisUnit);
+			this.MyUnits.push(thisUnit);
 			
 			// UPDATE RESOURCES
 			this.UpdateStock(-SwordInfantryCost.wood, 'wood');
@@ -592,7 +596,7 @@ class AI
 				kind: 'pikeman',
 				job: 'Warfare'
 			};
-			MyUnits.push(thisUnit);
+			this.MyUnits.push(thisUnit);
 
 			// UPDATE RESOURCES
 			this.UpdateStock(-PikemanCost.wood, 'wood');
@@ -619,7 +623,7 @@ class AI
 				kind: 'wizard',
 				job: 'Warfare'
 			};
-			MyUnits.push(thisUnit);
+			this.MyUnits.push(thisUnit);
 
 			// UPDATE RESOURCES
 			this.UpdateStock(-WizardCost.wood, 'wood');
@@ -639,11 +643,11 @@ class AI
 	DeleteUnit(tag)
 	{
 		// SORT THROUGH ARRAY & FIND MATCHING ID - UPDATE VALUES
-		for(var x = 0; x < MyUnits.length; x++)
+		for(var x = 0; x < this.MyUnits.length; x++)
 		{
-			if(MyUnits[x].idNumber == tag)
+			if(this.MyUnits[x].idNumber == tag)
 			{
-				var type = MyUnits[x].kind;
+				var type = this.MyUnits[x].kind;
 
 				// WORKER
 				if (type == 'worker' || type == 'Worker')
@@ -683,17 +687,17 @@ class AI
 				}
 
 				// MOVE ALL DATA OVER ONE TO REPLACE BUILDING LOST
-				while(x < MyUnits.length)
+				while(x < this.MyUnits.length)
 				{
-					if (x == (MyUnits.length - 1)) // IS LAST ONE
+					if (x == (this.MyUnits.length - 1)) // IS LAST ONE
 					{
-						MyUnits.pop();
+						this.MyUnits.pop();
 					}
 					else
 					{
-						MyUnits[x].kind = MyUnits[x+1].kind;
-						MyUnits[x].job = MyUnits[x+1].job;
-						MyUnits[x].idNumber = MyUnits[x+1].idNumber;
+						this.MyUnits[x].kind = this.MyUnits[x+1].kind;
+						this.MyUnits[x].job = this.MyUnits[x+1].job;
+						this.MyUnits[x].idNumber = this.MyUnits[x+1].idNumber;
 					}
 					x++;
 				}
@@ -870,25 +874,25 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	printArrays()
 	{
-		for(var m = 0; m < MyBuildings.length; m++)
+		for(var m = 0; m < this.MyBuildings.length; m++)
 		{
 			console.log("Buildings --------------");
 			console.log(" Array Location: " + m);
-			console.log("id: " + MyBuildings[m].idNumber);
-			console.log("kind: " + MyBuildings[m].kind);
+			console.log("id: " + this.MyBuildings[m].idNumber);
+			console.log("kind: " + this.MyBuildings[m].kind);
 			for (var s = 0; s < 4; s++)
 			{
-				console.log("corners: " + MyBuildings[m].corner[s]);
+				console.log("corners: " + this.MyBuildings[m].corner[s]);
 			}
 		}
 
-		for(m = 0; m < MyUnits.length; m++)
+		for(m = 0; m < this.MyUnits.length; m++)
 		{
 			console.log("Units --------------");
 			console.log("Array Location: " + m);
-			console.log("id: " + MyUnits[m].idNumber);
-			console.log("kind: " + MyUnits[m].kind);
-			console.log("job: " + MyUnits[m].job);
+			console.log("id: " + this.MyUnits[m].idNumber);
+			console.log("kind: " + this.MyUnits[m].kind);
+			console.log("job: " + this.MyUnits[m].job);
 		}
 
 		for(m = 0; m < MyWorkers.length; m++)

@@ -55,6 +55,7 @@ class SaveGame
 	constructor(Perseus)
 	{
 		this.Perseus = Perseus;
+		this.objects = objects;
 	}
 /*****************************************************************************/
 							// SAVE // 
@@ -70,6 +71,16 @@ class SaveGame
 	}
 
 	SavePlayerUnits()
+	{
+
+	}
+
+	SaveAIBuildings()
+	{
+
+	}
+
+	SaveAIUnits()
 	{
 
 	}
