@@ -9,7 +9,7 @@ class Barracks extends Building{
 
 
     constructor(faction, x,y,Perseus){
-        super(faction, 1000, x, y, Perseus);
+        super(faction, 200, x, y, Perseus);
 
         this.addSprite('barracks');
         this.SWORD = 1;
