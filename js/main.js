@@ -86,7 +86,7 @@ function create()
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
-    Perseus.navigator = new Navigator(Perseus.game, Perseus.map.height, Perseus.map.width, 32);
+    Perseus.navigator = new Navigator(Perseus.game, Perseus.map.width, Perseus.map.height, 32);
 
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
     Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
