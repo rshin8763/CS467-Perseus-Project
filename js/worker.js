@@ -122,8 +122,9 @@ class Worker extends Unit{
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort');
             this.selectedBuilding = "Fort";
             this.placing = true;
+            this.gatherstate = 0;
             this.Perseus.controller.state = 'place';
-            // UpdatePlayerBuildings(1, 'Fort');
+
             this.createConflictSquares();
             return true;
         } else {
@@ -140,10 +141,9 @@ class Worker extends Unit{
         {            
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks');
             this.selectedBuilding = "Barracks";
+            this.gatherstate = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
-
-            // UpdatePlayerBuildings(1, 'Barracks');
 
             this.createConflictSquares();
             return true;
@@ -161,10 +161,9 @@ class Worker extends Unit{
 
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange');
             this.selectedBuilding = "ArcheryRange";
+            this.gatherstate = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
-
-            // UpdatePlayerBuildings(1, 'ArcheryRange');
 
             this.createConflictSquares();
             return true;
@@ -176,17 +175,15 @@ class Worker extends Unit{
 
     buildWizardTower()
     {
-
         if(this.Perseus.Player.playerWood > this.woodCosts.WizardTower 
                 && this.Perseus.Player.playerGold > this.goldCosts.WizardTower)
         {
 
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower');
             this.selectedBuilding = "WizardTower";
+            this.gatherstate = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
-
-            // UpdatePlayerBuildings(1, 'WizardTower');
 
             this.createConflictSquares();    
             return true;
@@ -203,10 +200,9 @@ class Worker extends Unit{
         {
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm');
             this.selectedBuilding = "Farm";
+            this.gatherstate = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
-
-            // UpdatePlayerBuildings(1, 'Farm');
 
             this.createConflictSquares(); 
             return true;
@@ -314,14 +310,15 @@ class Worker extends Unit{
                 this.gatherState = 2;
             }
         } if (this.gatherState == 2){ //gathering at node
-            if (this.gatherProgress < 150){
+            if (this.gatherProgress < 300){
                 //TODO add animation
+                this.sprite.animations.play('work_right');
                 this.gatherProgress += 1;
             } 
             else 
             {
                 this.gatherState = 3;
-
+                this.sprite.animations.stop();
                 this.lastResource.takeDamage(5);
                 this.moveTo(this.findNearestFort());
             }
