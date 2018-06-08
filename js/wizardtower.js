@@ -45,6 +45,9 @@ class WizardTower extends Building{
                 this.Perseus.Player.reduceResources(this.WizardCosts.wood, this.WizardCosts.gold);
             }
 
+        } else {
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.WizardCosts.wood, this.WizardCosts.gold), 100, '#ff0000');   
         }
     }
 

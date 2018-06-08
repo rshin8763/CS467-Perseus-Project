@@ -137,17 +137,17 @@ function create()
 
 
     Perseus.objects.push(new Worker ('human', 700, 300, Perseus));
+    Perseus.objects.push(new Worker ('human', 764, 300, Perseus));
     // Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
     // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
-    Perseus.Player.playerWood = 5000;
-    Perseus.Player.playerGold = 5000;
+    Perseus.Player.playerWood = 0;
+    Perseus.Player.playerGold = 0;
 
     console.log(Perseus.objects);
     console.log(Perseus.resources);
     console.log(Perseus.navigator.navmap);
-    Perseus.prompter.drawToScreen('TEXT PROMPTER!! ', 100, '#00ff00');
 }
 
 function update()

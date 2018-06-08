@@ -44,7 +44,11 @@ class ArcheryRange extends Building{
                 this.current = 'Archer';
                 this.buildProgress = 0;
                 this.Perseus.Player.reduceResources(this.ArcherCosts.wood, this.ArcherCosts.gold);
+            } else {
+                if(this.faction == 'human')
+                    this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.ArcherCosts.wood, this.ArcherCosts.gold), 100, '#ff0000');   
             }
+                
         }
     }
 

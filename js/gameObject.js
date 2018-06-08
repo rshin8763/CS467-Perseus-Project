@@ -53,5 +53,8 @@ class GameObject {
     }
     update(){
     }
+    createResourceCostMsg(woodCost, goldCost){
+        return ('Need ' + woodCost + ' wood and ' + goldCost + ' gold!')
+    }
 }
 export {GameObject}

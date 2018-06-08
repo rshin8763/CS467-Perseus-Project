@@ -84,6 +84,7 @@ class Unit extends GameObject{
         //If the square is occupied, don't bother trying to move there
         if(this.Perseus.navigator.navmap[this.dest.x][this.dest.y] == 1)
         {
+            this.Perseus.prompter.drawToScreen('Cannot move to that location!', 20, '#ff0000')   
             console.log("Can not move to location " + this.dest.x + " , " + this.dest.y);
             this.dest.x = this.x;
             this.dest.y = this.y;

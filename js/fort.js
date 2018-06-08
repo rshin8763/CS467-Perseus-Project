@@ -40,6 +40,9 @@ class Fort extends Building{
                 this.buildProgress = 0;
                 this.Perseus.Player.reduceResources(this.WorkerCosts.wood, this.WorkerCosts.gold);
             }
+        } else {
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.WorkerCosts.wood, this.WorkerCosts.gold), 100, '#ff0000');   
         }
     }
 
