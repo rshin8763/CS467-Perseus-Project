@@ -224,13 +224,8 @@ class Ui
 
     pause()
     {
-<<<<<<< HEAD
-        // ERROR HANDLING: GAME IS ALREADY PAUSED
-        if (this.Perseus.paused) 
-=======
         console.log('hello?');
         if (this.Perseus.game.paused) 
->>>>>>> master
         {
             // do nothing
         }

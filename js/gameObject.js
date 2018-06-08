@@ -40,16 +40,12 @@ class GameObject {
             }
         }
     }
-<<<<<<< HEAD
-    
-=======
 
     undrawCircle(){
         if (this.circle)
             this.circle.destroy();
         this.circle = null;
     }
->>>>>>> master
     drawEnemyCircle(){
         this.circle = this.game.add.graphics();
         this.circle.lineStyle(1, 0xFF0000, 1);

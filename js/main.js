@@ -48,16 +48,13 @@ function preload() {
     this.load.image('archeryrange_orc', 'assets/archeryrange_orc.png');
 
     this.load.image('ui', 'assets/ui/stoneMenu.png');
-<<<<<<< HEAD
-    this.load.image('hpbar', 'assets/healthbar.png');
-    this.load.image('navSquare', 'assets/navSquare.png')
+
     this.load.image('archeryrange', 'assets/archeryrange.png');
-=======
+
     this.load.image('hpbar_human', 'assets/healthbar.png');
     this.load.image('hpbar_orc', 'assets/healthbar_orc.png');
 
     this.load.image('navSquare', 'assets/navSquare.png');
->>>>>>> master
     
 
     this.load.spritesheet('command_buttons', 'assets/ui/icons.png', 32, 32);
@@ -132,15 +129,6 @@ function create()
     // AI
   
    Perseus.GameState = new GameState(Perseus);
-
-<<<<<<< HEAD
-
-    //console.log(Perseus.navigator.navmap);
-
-    Perseus.navigator.markOccupied(300, 300);
-
-=======
->>>>>>> master
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
@@ -148,23 +136,13 @@ function create()
     Perseus.AI = new AI(Perseus);
     Perseus.AI.Main();
     Perseus.ui = new Ui(Perseus);
-
-
-<<<<<<< HEAD
-    Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
-    Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    Perseus.objects.push(new Archer('human', 300, 300, Perseus));
-    Perseus.objects.push(new Worker('human', 300, 300, Perseus));
-    Perseus.resources.push(new Mine(300, 450, 'human', Perseus));
-=======
-    Perseus.objects.push(new Worker ('human', 700, 300, Perseus));
+    //Perseus.objects.push(new Worker ('human', 700, 300, Perseus));
     // Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
     // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
+    Perseus.objects.push(new Mine('human', 300, 300, Perseus));
 
     Perseus.Player.playerWood = 5000;
     Perseus.Player.playerGold = 5000;
->>>>>>> master
 
     //console.log(Perseus.objects);
     //console.log(Perseus.resources);

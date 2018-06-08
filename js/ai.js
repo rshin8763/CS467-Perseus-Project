@@ -8,6 +8,7 @@ import {Wizard} from './wizard.js';
 import {Barracks} from './barracks.js';
 import {ArcheryRange} from './archeryrange.js';
 import {Navigator} from './navigator.js';
+import {Tree} from './tree.js';
 
 /*****************************************************************************/
 							// GLOBALS // 
@@ -136,19 +137,40 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
-	GetNearestResource()
+	GetNearestTree()
+	{
+        let closest = null;
+        let min = Number.MAX_SAFE_INTEGER;
+        this.Perseus.objects.forEach((obj)=>{
+            if (obj instanceof Tree)
+            {
+                if (Math.hypot(43-obj.x, 43-obj.y) < min){
+                    min = Math.hypot(43-obj.x, 43-obj.y) < min;
+                    closest = obj;
+                }
+            }
+        });
+        console.log('found tree ', closest);
+        return closest;
+	}
+
+	/*-----------------------------------------------------------------------*/
+	GetNearestMine()
 	{
 		let closest = null;
         let min = Number.MAX_SAFE_INTEGER;
-        for (var thisResource in this.resources)
-        {
-        	if (Math.hypot(1400-thisResource.x, 1400-thisResource.y) < min)
+        this.Perseus.objects.forEach((obj)=>{
+            if (obj instanceof Tree)
+            {
+                //get distance
+                if (Math.hypot(43-obj.x, 43-obj.y) < min)
                 {
-                    min = Math.hypot(1400-thisResource.x, 1400-thisResource.y) < min;
-                    closest = thisResource;
+                    min = Math.hypot(43-obj.x, 43-obj.y) < min;
+                    closest = obj;
                 }
-        }
-        console.log('found ' + closest);
+            }
+        });
+        console.log('found tree ', closest);
         return closest;
 	}	
 /*****************************************************************************/
@@ -224,6 +246,7 @@ class AI
 		this.AIAllBuildings++;
 		this.Perseus.objects.push(thisBuilding);
 		this.MyBuildings.push(thisBuilding);
+		this.UpdateStaticRoles();
 		//this.Perseus.updateText('Enemy');
 		return thisBuilding.tag;
 	}
@@ -261,6 +284,7 @@ class AI
 		{
 			//console.log("Game over!");
 		}
+		this.UpdateStaticRoles();
 	}
 
 /*****************************************************************************/
@@ -420,7 +444,7 @@ class AI
 			console.log("Error in trying to delete unit. Type unidentifiable.");
 			return false;
 		}
-		//this.UpdateRoles();
+		this.UpdateStaticRoles();
 	}
 
 /*****************************************************************************/
@@ -591,40 +615,17 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
-	UpdateRoles()
-	{
-		let unit = null;
-		var counter = true;
-		let coords1 = this.Perseus.navigator.getCoords(800, 1000);
-		let coords2 = this.Perseus.navigator.getCoords(800, 1000);
-		// MY GUARDS
-		for (let i = 0; i < this.MyUnits.length; i++)
-		{
-			unit = this.MyUnits[i];
-			if (unit.type == 'Archer')
-			{
-				if (unit.x == unit.dest.x && unit.y == unit.dest.y)
-				{
-
-				}
-				else
-				{
-					unit.move(800, 1000);
-				}
-				
-			}
-		}
-		//console.log("I'm updating");
-
-		// MY PATROL
-
-		// MY ARMY
-
-	}
-
-	/*-----------------------------------------------------------------------*/
 	UpdateStaticRoles()
 	{
+		// WORKERS STATIC ROLES IS TO GATHER
+		let thisUnit = null;
+		for(let i = 0; i < MyWorkers.length; i++)
+		{
+			thisUnit = MyWorkers[i];
+			thisUnit.gather(this.GetNearestTree());
+			console.log(this.GetNearestTree());
+		}
+
 		let unit = null;
 		for(let i = 0; i < MyArchers.length; i++)
 		{
@@ -650,7 +651,7 @@ class AI
 		if (timer == 1)
 		{
 			timer += timerTick;
-			this.UpdateRoles();
+			//this.UpdateRoles();
 		}
 		//console.log(timer);
 	}
@@ -719,9 +720,9 @@ class AI
 	{
 		//this.AddBuilding('Wizard Tower');
 		//this.AddBuilding('Barracks');
-		//this.AddBuilding('Fort');
-		this.AddBuilding('Archery Range');
-
+		this.AddBuilding('Fort');
+		//this.AddBuilding('Archery Range');
+		this.GetNearestTree();
 		//this.GetAIStats();
 		this.printArrays();
 		//this.UpdateStaticRoles();

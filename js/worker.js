@@ -235,13 +235,6 @@ class Worker extends Unit{
             this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
-
-<<<<<<< HEAD
-
-            // UpdatePlayerBuildings(1, 'Farm');
-
-=======
->>>>>>> master
             this.createConflictSquares(); 
             return true;
         } else {
