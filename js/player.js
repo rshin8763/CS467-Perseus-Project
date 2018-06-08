@@ -783,9 +783,9 @@ class Player
     //    //this.AddBuilding('Barracks');
     //    //this.AddBuilding('Wizard Tower');
 
-        let worker1 = new Worker ('human', 700, 300, this.Perseus);
+        let worker1 = new Worker ('human', 800, 350, this.Perseus);
         this.addObject(worker1);
-        let worker2 = new Worker ('human', 700, 300, this.Perseus);
+        let worker2 = new Worker ('human', 700, 350, this.Perseus);
         this.addObject(worker2);
     //    //this.AddUnit('Archer');
     //    //this.AddUnit('Pikeman');

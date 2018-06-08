@@ -25,56 +25,68 @@ var MyWizards = [];
 var ArcherCircleCoord = [];
 var PikemenLineCoord = [];
 var SwordInfantryWatch = [];
+var WizardPatrol = [];
 
 var spawnSpotX = 1700, spawnSpotY = 950, spawnChanger = -20;
 var intruder = false;
 
-var timerTick = 50;
+var timerTick = 150;
 var timer = timerTick;
 var safe = true;
 
+////////////////// ORGANIZE BY GOALS ////////
+
 // BUILDING COSTS
-var GoldMineCosts = {
-	wood: 10,
-	gold: 0
-};
-var FortCosts = {
-	wood: 10,
-	gold: 20
-};
-var ArcheryRangeCosts = {
+// UNIT COSTS
+
+var WorkerCost = {
 	wood: 100,
-	gold: 10
-};
-var BarracksCosts = {
-	wood: 10,
-	gold: 10
-};
-var WizardTowerCosts = {
-	wood: 500,
-	gold: 10
+	gold: 100
 };
 
-// UNIT COSTS
-var WorkerCost = {
-	wood: 10,
-	gold: 10
+var GoldMineCosts = {
+	wood: 150,
+	gold: 150
 };
+
+var ArcheryRangeCosts = {
+	wood: 200,
+	gold: 200
+};
+
 var ArcherCost = {
-	wood: 10,
-	gold: 50
+	wood: 250,
+	gold: 250
 };
+
+var BarracksCosts = {
+	wood: 300,
+	gold: 300
+};
+
 var PikemanCost = {
-	wood: 10,
-	gold: 10
+	wood: 350,
+	gold: 350
 };
+
 var SwordInfantryCost = {
-	wood: 10,
-	gold: 10
+	wood: 400,
+	gold: 400
 };
+
+var WizardTowerCosts = {
+	wood: 450,
+	gold: 450
+};
+
 var WizardCost = {
-	wood: 10,
-	gold: 10
+	wood: 500,
+	gold: 500
+};
+
+var FortCosts = {
+	wood: 600,
+	gold: 600
 };
 
 class AI
@@ -126,13 +138,20 @@ class AI
 		{
 			this.AIWood += x;
 			goal = this.CheckGoals();
-			this.CheckFunds(goal);
+			if(goal != false)
+			{
+				this.CheckFunds(goal);
+			}
 		}
 		else if (type == 'gold' || type == 'Gold')
 		{
 			this.AIGold +=x;
 			goal = this.CheckGoals();
-			this.CheckFunds(goal);
+			if(goal != false)
+			{
+				this.CheckFunds(goal);
+			}
+			
 		}
 		else
 		{
@@ -244,6 +263,8 @@ class AI
 
 			// UPDATE RESOURCES + 1 PIKEMAN, & 1 SWORDINFANTRY
 			this.AddUnit('Pikeman');
+			this.AddUnit('Pikeman');
+			this.AddUnit('SwordInfantry');
 			this.AddUnit('SwordInfantry');
 			this.AIBarracks++;
 		}
@@ -641,7 +662,7 @@ class AI
 			return 'Archery Range';
 		}
 
-		else if(this.AIArchers < 3)
+		else if(this.AIArchers < 2)
 		{
 			return 'archer';
 		}
@@ -654,7 +675,7 @@ class AI
 		{
 			return 'pikeman';
 		}
-		else if(this.AISwordInfantry < 3)
+		else if(this.AISwordInfantry < 2)
 		{
 			return 'SwordInfantry';
 		}
@@ -662,9 +683,13 @@ class AI
 		{
 			return 'Wizard Tower';
 		}
-		else
+		else if(this.AIWizards < 2)
 		{
 			return 'wizard';
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -741,6 +766,20 @@ class AI
 			y: 1500
 		}
 		SwordInfantryWatch.push(thisCoord);
+
+		// WIZARD PATROL
+		thisCoord = {
+			x: 1700,
+			y: 1300
+		}
+		WizardPatrol.push(thisCoord);
+
+		thisCoord = {
+			x: 1250, 
+			y: 1300
+		}
+		WizardPatrol.push(thisCoord);
+		console.log(WizardPatrol);
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -800,6 +839,127 @@ class AI
 			unit = MySwordInfantry[i];
 			unit.move(SwordInfantryWatch[i].x, SwordInfantryWatch[i].y);
 		}
+
+		// PIKEMEN STATIC SWORDS STATIC STANDING LOCATION
+		unit = null;
+		for(let i = 0; i < MyWizards.length; i++)
+		{
+			unit = MyWizards[i];
+			unit.move(WizardPatrol[i].x, WizardPatrol[i].y);
+		}
+		intruder = false;
+	}
+
+	/*-----------------------------------------------------------------------*/
+	SendAttackUnit(thisUnit)
+	{
+		var takenCareOf = false;
+		var type = thisUnit.type;
+
+		console.log(thisUnit);
+		for(let i = 0; i < this.MyUnits; i++)
+		{
+			if(this.MyUnits[i].target == thisUnit)
+			{
+				return true;
+			}
+		}
+		if (thisUnit.hp > 0)
+		{
+			if(thisUnit.attacking == false && thisUnit.attackMoving == false)
+			{
+				if(this.MyUnits.length > 0)
+				{
+					// WORKER
+					if (type == 'worker' || type == 'Worker')
+					{
+						for (let i = 0; i < MyWorkers.length; i++)
+						{
+							if(MyWorkers.attacking == false)
+							{
+								MyWorkers[i].attack(thisUnit, {x: thisUnit.x, y: thisUnit.y});
+								return true;
+							}
+						}
+						type = 'archer';
+					}
+
+					// ARCHER
+					if (type == 'archer' || type == 'Archer')
+					{
+						for (let i = 0; i < MyArchers.length; i++)
+						{
+							if (MyArchers[i].attacking == false)
+							{
+								MyArchers[i].attack(thisUnit, {x: thisUnit.x, y: thisUnit.y});
+								return true;
+							}
+						}
+						type = 'swordInfantry';
+					}
+
+					// SWORDINFANTRY
+					if (type == 'swordInfantry' || type == 'SwordInfantry')
+					{
+						for (let i = 0; i < MySwordInfantry.length; i++)
+						{
+							if (MySwordInfantry[i].attacking == false)
+							{
+								MySwordInfantry[i].attack(thisUnit, {x: thisUnit.x, y: thisUnit.y});
+								return true;
+							}
+						}
+						type = 'pikeman';
+					}
+
+					// PIKEMAN
+					if (type == 'pikeman' || type == 'Pikeman')
+					{
+						for (let i = 0; i < MyPikemen.length; i++)
+						{
+							if (MyPikemen[i].attacking == false)
+							{
+								MyPikemen[i].attack(thisUnit, {x: thisUnit.x, y: thisUnit.y});
+								return true;
+							}
+						}
+						type = 'wizard';
+					}
+
+					// WIZARDS
+					if (type == 'wizard' || type == 'Wizard')
+					{
+						for (let i = 0; i < MyWizards.length; i++)
+						{
+							if (MyWizards[i].attacking == false)
+							{
+								MyWizards[i].attack(thisUnit, {x: thisUnit.x, y: thisUnit.y});
+								return true;
+							}
+						}
+					}
+
+					//SendRandomAttackUnit(intruder);
+					for(let m = 0; m < this.MyUnits.length; m++)
+					{
+						if(this.MyUnits[i].attacking == false && this.MyUnits.attackMoving == false)
+						{
+							if(this.MyUnits[i].type != 'worker' || this.MyUnits[i].type != 'Worker')
+							{
+								this.MyUnits[i].attack(thisUnit, {x: thisUnit.x, y: thisUnit.y});
+								return true;
+							}
+						}
+					}
+				}
+				// ERROR HANDLING
+				else
+				{
+					console.log("Tried to send attack unit and failed!");
+					return false;
+				}
+			}
+		}
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -810,16 +970,33 @@ class AI
 		for (let i = 0; i < this.Perseus.Player.units.length; i++)
 		{
 			thisUnit = this.Perseus.Player.units[i];
-			console.log("regular location: " + thisUnit.y);
-			//console.log(thisUnit);
 			if (thisUnit.y > 25)
 			{
+				if (thisUnit.attacking == false || thisUnit.attackMoving == false)
+				{
+					for(let i = 0; i < this.MyUnits; i++)
+					{
+						if(this.MyUnits[i].target == thisUnit)
+						{
+							intruder = false;
+						}
+						else
+						{
+							this.SendAttackUnit(this.Perseus.Player.units[i]);
+						}
+					}
+
+					intruder = false;
+				}
+			}
+			if (thisUnit.attacking == true || thisUnit.attackMoving == true)
+			{
 				intruder = true;
-				console.log("INTRUDER ALERT!!");
-				console.log("INTRUDER LOCATION: " + thisUnit.y);
-				//SendAttackUnit(thisUnit);
 			}
 		}
+
+		if(intruder == false)
+		{
 			// MOVES ARCHERS
 			let unit = null;
 			let thisX = null;
@@ -880,6 +1057,33 @@ class AI
 					}
 				}
 			}
+
+			// WIZARD LINE
+			for (let i = 0; i < MyWizards.length; i++)
+			{
+				unit = MyWizards[i];
+				if(unit.x == unit.dest.x && unit.y == unit.dest.y)
+				{
+					for (let m = 0; m < WizardPatrol.length; m++)
+					{
+						thisX = this.Perseus.navigator.getSquare(
+							WizardPatrol[m].x, WizardPatrol[m].y);
+						if(unit.x == thisX.x && unit.y == thisX.y)
+						{
+							if(m == WizardPatrol.length - 1)
+							{
+								let s = 0;
+								unit.move(WizardPatrol[s].x, WizardPatrol[s].y);
+							}
+							else
+							{
+								unit.move(WizardPatrol[m+1].x, WizardPatrol[m+1].y);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -959,28 +1163,10 @@ class AI
 	Main()
 	{
 		this.CreateMovementMap();
-		//this.AddBuilding('Fort');
-		this.AIGold = 0;
-		this.AIWood = 0;
-		//this.AddBuilding('Archery Range');
+		this.AddBuilding('Fort');
 		this.AddBuilding('Archery Range');
 		this.AddBuilding('Barracks');
-		this.AddUnit('swordInfantry');
-		this.AddUnit('swordInfantry');
-		this.AddUnit('pikeman');
-		//this.AddUnit('pikeman');
-		//this.AddUnit('pikeman');
-		//this.AddUnit("Archer");
-		//this.AddUnit("Archer");
-		//this.AddUnit("Pikeman");
-		//this.AddUnit('Pikeman');
-		//this.AddUnit('Pikeman');
-		//this.GetNearestTree();
-		//this.GetAIStats();
-		//this.printArrays();
-		//this.UpdateStaticRoles();
 		this.AddBuilding('Wizard Tower');
-		//this.AddBuilding('Barracks');
 	}
 }
 
