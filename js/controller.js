@@ -43,7 +43,7 @@ class Controller{
                 this.highestPrioritySelected = obj;
                 obj.drawSelectionCircle();
                 this.Perseus.ui.updateCommandList(obj);
-                this.Perseus.ui.infoBar.update(obj);
+                this.Perseus.ui.infoBar.fillInfoBar(obj);
             }
         } else if (this.state == 'attack'){
             this.Perseus.prompter.clearText();

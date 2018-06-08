@@ -43,7 +43,7 @@ class InfoBar
         });
         this.size = 0;
     }
-    
+
     renderHP(obj){
         let hpstr = obj.hp + '/' + obj.maxHP;
         return this.renderText('HP', hpstr)
@@ -88,16 +88,10 @@ class InfoBar
         }
     }
 
-    addBuildProgress(obj){
-        let bar = this.Perseus.game.add.graphics();
-        bar.lineStyle(2, 0xFFFFFF, 1);
-        bar.drawRect(this.x +20, this.y + this.size*this.elemHeight, 160, 20);
-        bar.fixedToCamera = true;
-        this.ui.add(bar);
-        this.infoElements.push(bar);
-
+    updateBuildProgress(obj){
         if (obj.building) {
             if (obj.building == true){
+                if (this.progressBar) this.progressBar.destroy();
                 let percent = obj.buildProgress/100;
                 let progress = this.Perseus.game.add.graphics();
                 progress.beginFill(0xFFFFFF);
@@ -105,16 +99,24 @@ class InfoBar
                 progress.fixedToCamera = true;
                 progress.endFill();
                 this.ui.add(progress);
-                this.size++;
                 this.infoElements.push(progress);
+                this.progressBar = progress;
             }
         }
     }
 
+    addBuildProgress(obj){
+        let bar = this.Perseus.game.add.graphics();
+        bar.lineStyle(2, 0xFFFFFF, 1);
+        bar.drawRect(this.x +20, this.y + this.size*this.elemHeight, 160, 20);
+        bar.fixedToCamera = true;
+        this.ui.add(bar);
+        this.infoElements.push(bar);
+    }
+
     update(obj){
         if (!obj) return;
-        this.fillInfoBar(obj);
+        this.updateBuildProgress(obj) ;
     }
 }
-
 export {InfoBar}
