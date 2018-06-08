@@ -18,7 +18,7 @@ class Worker extends Unit{
         this.woodCost = 0;
         this.goldCost = 300;
         this.maxHP = 70;
-        this.type="Worker";
+        this.type = "Worker";
         this.placing = false;
         this.building = false;
         this.buildProgress = 0;
