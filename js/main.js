@@ -18,7 +18,7 @@ var Perseus = Perseus || {};
 Perseus.graphics = {}
 
 // create the game, and pass it the configuration
-Perseus.game = new Phaser.Game(1150, 750, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+Perseus.game = new Phaser.Game(1600, 1000, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 var goldText, woodText, fortText, barracksText, towerText, enemyHealthText;
 
 // RESOURCES TEXT OBJECTS
@@ -139,7 +139,7 @@ function create()
     //Perseus.objects.push(new Worker ('human', 700, 300, Perseus));
     // Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
     // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    Perseus.objects.push(new Mine('human', 300, 300, Perseus));
+    //Perseus.objects.push(new Mine('human', 300, 300, Perseus));
 
     Perseus.Player.playerWood = 5000;
     Perseus.Player.playerGold = 5000;

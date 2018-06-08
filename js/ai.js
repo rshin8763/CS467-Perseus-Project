@@ -9,11 +9,12 @@ import {Barracks} from './barracks.js';
 import {ArcheryRange} from './archeryrange.js';
 import {Navigator} from './navigator.js';
 import {Tree} from './tree.js';
+import {Mine} from './mine.js';
 
 /*****************************************************************************/
 							// GLOBALS // 
 /*****************************************************************************/
-var MyResources = [];
+var MyGoldMines = [];
 var MyWorkers = [];
 var MyArchers = [];
 var MySwordInfantry = [];
@@ -25,7 +26,7 @@ var InnerSquareCoordinates = [];
 var InnerLCoordinates = [];
 var StationaryCoordinates = [];
 
-var spawnSpotX = 1200, spawnSpotY = 1200, spawnChanger = 50;
+var spawnSpotX = 1200, spawnSpotY = 1200, spawnChanger = -100;
 
 
 var timerTick = 200;
@@ -33,43 +34,47 @@ var timer = timerTick;
 var safe = true;
 
 // BUILDING COSTS
+var GoldMineCosts = {
+	wood: 10,
+	gold: 1
+};
 var FortCosts = {
-	wood: 100,
-	gold: 0
+	wood: 10,
+	gold: 1
 };
 var ArcheryRangeCosts = {
-	wood: 100,
-	gold: 0
+	wood: 10,
+	gold: 1
 };
 var BarracksCosts = {
-	wood: 100,
-	gold: 100
+	wood: 10,
+	gold: 1
 };
 var WizardTowerCosts = {
-	wood: 200,
-	gold: 200
+	wood: 10,
+	gold: 1
 };
 
 // UNIT COSTS
 var WorkerCost = {
-	wood: 50,
-	gold: 0
+	wood: 10,
+	gold: 1
 };
 var ArcherCost = {
-	wood: 50,
-	gold: 10
+	wood: 10,
+	gold: 1
 };
 var PikemanCost = {
 	gold: 10,
-	wood: 0
+	wood: 1
 };
 var SwordInfantryCost = {
-	wood: 30,
-	gold: 30
+	wood: 10,
+	gold: 1
 };
 var WizardCost = {
-	wood: 0,
-	gold: 70
+	wood: 10,
+	gold: 1
 };
 
 class AI
@@ -93,6 +98,7 @@ class AI
 		this.AISwordInfantry = 0;
 		this.AIArchers = 0;
 		this.AIWizards = 0;
+		this.AIGoldMines = 0;
 
 		// BUILDINGS
 		this.AIForts = 0;
@@ -145,7 +151,7 @@ class AI
             if (obj instanceof Tree)
             {
                 if (Math.hypot(43-obj.x, 43-obj.y) < min){
-                    min = Math.hypot(43-obj.x, 43-obj.y) < min;
+                    min = Math.hypot(43-obj.x, 43-obj.y);
                     closest = obj;
                 }
             }
@@ -155,24 +161,45 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
+	CreateMine()
+	{	
+		let thisMine = new Mine('human', 1600 + spawnChanger, 1150, this.Perseus);
+		this.objects.push(thisMine);
+		MyGoldMines.push(thisMine);
+		this.AIGoldMines++;
+		spawnChanger -= 100;
+		console.log(thisMine);
+		this.UpdateStaticRoles();
+	}
+
+	/*-----------------------------------------------------------------------*/
+	DeleteMine(thisMine)
+	{
+		for (let i = 0; i < MyGoldMines.length; i++)
+		{
+			if (MyGoldMines[i] == thisMine)
+			{
+				MyGoldMines.splice(i, 1);
+				this.AIGoldMines--;
+				UpdateStaticRoles();
+			}
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
 	GetNearestMine()
 	{
-		let closest = null;
-        let min = Number.MAX_SAFE_INTEGER;
-        this.Perseus.objects.forEach((obj)=>{
-            if (obj instanceof Tree)
-            {
-                //get distance
-                if (Math.hypot(43-obj.x, 43-obj.y) < min)
-                {
-                    min = Math.hypot(43-obj.x, 43-obj.y) < min;
-                    closest = obj;
-                }
-            }
-        });
-        console.log('found tree ', closest);
-        return closest;
-	}	
+		console.log(MyGoldMines);
+		let thisResource = null;
+		for (let i = 0; i < MyGoldMines.length; i++)
+		{
+			if(MyGoldMines[i].exhausted == false)
+			{
+				return MyGoldMines[i];
+			}
+		}
+	}
+
 /*****************************************************************************/
 							// BUILDINGS // 
 /*****************************************************************************/
@@ -469,6 +496,17 @@ class AI
 			}
 		}
 
+		if (type == 'Gold Mine' || type == 'gold mine')
+		{
+			if (this.AIWood >= GoldMineCosts.wood)
+			{
+				if(this.AIGold >= GoldMineCosts.gold)
+				{
+					this.CreateMine();
+				}
+			}
+		}
+
 		// BARRACKS
 		else if (type == 'Barracks' || type == 'barracks')
 		{
@@ -578,11 +616,17 @@ class AI
 	{
 		if (this.AIForts < 1)
 		{
-			return 'Fort';
+			// WAGE WAR
+			// CHECK FUNDS TO BUY ANYTHING ELSE
+			// return 'Fort';
 		}
 		else if (this.AIWorkers < 4)
 		{
 			return 'worker';
+		}
+		else if (this.AIGoldMines < 1)
+		{
+			return 'Gold Mine';
 		}
 		else if (this.AIArcheryRanges < 1)
 		{
@@ -622,8 +666,24 @@ class AI
 		for(let i = 0; i < MyWorkers.length; i++)
 		{
 			thisUnit = MyWorkers[i];
-			thisUnit.gather(this.GetNearestTree());
-			console.log(this.GetNearestTree());
+			if (this.AIGoldMines < 1)
+			{
+				thisUnit.gather(this.GetNearestTree());
+			}
+			else
+			{
+				var flag = true;
+				while (i < MyWorkers.length)
+				{
+					if (flag == true)
+					{
+						thisUnit.gather(this.GetNearestTree());
+						flag = false;
+					}
+					thisUnit.gather(this.GetNearestMine());					
+					i++;
+				}
+			}
 		}
 
 		let unit = null;
@@ -699,6 +759,7 @@ class AI
 		console.log("Current Amounts for AI");
 		console.log("Gold: " + this.AIGold);
 		console.log("Wood: " + this.AIWood);
+		console.log("Gold Mines: " + this.AIGoldMines);
 		console.log("Workers: " + this.AIWorkers);
 		console.log("Pikemen: " + this.AIPikemen);
 		console.log("Swordsman: " + this.AISwordInfantry);
@@ -720,10 +781,12 @@ class AI
 	{
 		//this.AddBuilding('Wizard Tower');
 		//this.AddBuilding('Barracks');
+		this.GetAIStats();
 		this.AddBuilding('Fort');
+		this.CreateMine();
 		//this.AddBuilding('Archery Range');
-		this.GetNearestTree();
-		//this.GetAIStats();
+		//this.GetNearestTree();
+		this.GetAIStats();
 		this.printArrays();
 		//this.UpdateStaticRoles();
 		

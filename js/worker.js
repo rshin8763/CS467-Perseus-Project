@@ -92,7 +92,7 @@ class Worker extends Unit{
             if (obj instanceof Fort && obj.faction == this.faction){
                 //get distance
                 if (Math.hypot(x-obj.x, y-obj.y) < min){
-                    min = Math.hypot(x-obj.x, y-obj.y) < min;
+                    min = Math.hypot(x-obj.x, y-obj.y);
                     closest = obj;
                 }
             }
