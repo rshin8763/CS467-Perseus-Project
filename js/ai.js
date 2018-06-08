@@ -863,6 +863,7 @@ class AI
 				return true;
 			}
 		}
+
 		if (thisUnit.hp > 0)
 		{
 			if(thisUnit.attacking == false && thisUnit.attackMoving == false)
@@ -984,7 +985,6 @@ class AI
 							this.SendAttackUnit(this.Perseus.Player.units[i]);
 						}
 					}
-
 					intruder = false;
 				}
 			}

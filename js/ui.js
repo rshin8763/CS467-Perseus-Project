@@ -275,7 +275,7 @@ class Ui
 
     saveGame()
     {
-        this.Perseus.GameState.SaveCurrentState();
+        this.Perseus.SaveGame.SaveGame();
     }
     quitGame()
     {
@@ -284,7 +284,7 @@ class Ui
 
     newGame()
     {
-        this.Perseus.GameState.LoadGame();
+        this.Perseus.SaveGame.LoadGame();
     }
 
     updateText(kind)

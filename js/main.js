@@ -131,6 +131,7 @@ function create()
     // AI
   
    Perseus.GameState = new GameState(Perseus);
+   Perseus.SaveGame = new SaveGame(Perseus);
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
