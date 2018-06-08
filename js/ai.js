@@ -488,6 +488,7 @@ class AI
 		// ERROR HANDLING
 		else
 		{
+			this.UpdateStaticRoles();
 			console.log("Error in trying to delete unit. Type unidentifiable.");
 			return false;
 		}
@@ -802,13 +803,11 @@ class AI
 					if (flag == true)
 					{
 						thisUnit.gather(this.GetNearestTree());
-						console.log("1");
 						flag = false;
 					}
 					else
 					{
 						thisUnit.gather(this.GetNearestMine());
-						console.log("2");
 						flag = true;
 					}				
 					i++;
