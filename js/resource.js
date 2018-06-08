@@ -10,7 +10,7 @@ class Resource  extends GameObject{
 
     loseResource(rate){
         this.resourceAmount -= rate;
-        console.log("The current resource amount is: " + this.resourceAmount);
+        //console.log("The current resource amount is: " + this.resourceAmount);
 
         if (this.resourceAmount <= 0) {
             console.log('resources is now exhasuted');

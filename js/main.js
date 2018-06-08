@@ -101,54 +101,39 @@ function create()
     Perseus.ui = {};
     Perseus.map = this.game.add.tilemap('demo');
     Perseus.controller = new Controller(Perseus);
-
     Perseus.navigator = new Navigator(Perseus.game, Perseus.map.width, Perseus.map.height, 32);
-
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
     Perseus.map.addTilesetImage('forestTiles', 'gameTiles');
-
     //create layer
     Perseus.backgroundLayer = Perseus.map.createLayer('backgroundLayer');
     Perseus.dirtLayer = Perseus.map.createLayer('dirtLayer');
     Perseus.collisionLayer = Perseus.map.createLayer('collisionLayer');
     Perseus.rockLayer = Perseus.map.createLayer('rockLayer');
-
     //resizes the game world to match the layer dimensions
     Perseus.backgroundLayer.resizeWorld();
-
     //Create an objects array on the game object and add a soldier to it.
     Perseus.objects = [];
-
     // Create display groups to keep gui on top
     Perseus.gameSprites = Perseus.game.add.group();
     Perseus.gui = Perseus.game.add.group();
   
     // ------------------------------------------------------------------------
-    // PLAYER
+    // MAIN MENU FORK
     Perseus.Player = new Player(Perseus);
     Perseus.Player.Main();
-    // ------------------------------------------------------------------------
-    // AI
   
-   Perseus.GameState = new GameState(Perseus);
-   Perseus.SaveGame = new SaveGame(Perseus);
+    Perseus.GameState = new GameState(Perseus);
+    Perseus.SaveGame = new SaveGame(Perseus);
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
 
-    Perseus.ui = new Ui(Perseus);
     Perseus.prompter = new Prompter(Perseus);
 
-
-<<<<<<< HEAD
     Perseus.AI = new AI(Perseus);
     Perseus.AI.Main();
     Perseus.ui = new Ui(Perseus);
 
-=======
-    Perseus.objects.push(new Worker ('human', 700, 300, Perseus));
-    Perseus.objects.push(new Worker ('human', 764, 300, Perseus));
->>>>>>> master
     // Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
     // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
     //Perseus.objects.push(new Mine('human', 300, 300, Perseus));
@@ -169,11 +154,6 @@ function create()
     console.log(Perseus.objects);
     console.log(Perseus.resources);
     console.log(Perseus.navigator.navmap);
-<<<<<<< HEAD
-    Perseus.prompter.drawToScreen('TEXT PROMPTER!! ', 100, '#00ff00');
-
-=======
->>>>>>> master
 }
 
 function update()
