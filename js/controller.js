@@ -27,6 +27,7 @@ class Controller{
         this.boxEndPos = {};
         this.wasDown = false;
         this.boxSelect = true;
+        this.updateProgress = 0;
         this.cooldownTimer = 0;
     }
     isPointerInUi() {
@@ -215,7 +216,11 @@ class Controller{
             this.selectionBox.destroy();
         }
 
-        this.Perseus.ui.infoBar.update(this.highestPrioritySelected);
+        if (this.updateProgress >= 9){
+            this.Perseus.ui.infoBar.update(this.highestPrioritySelected);
+            this.updateProgress = 0;
+        }
+        else this.updateProgress++;
 
         this.selectionBox = this.game.add.graphics();
         this.selectionBox.lineStyle(2, 0xFFFFFF, 1);
@@ -414,4 +419,3 @@ class Controller{
     }
 }
 export {Controller}
-
