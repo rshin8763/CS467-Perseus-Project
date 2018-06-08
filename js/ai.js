@@ -27,11 +27,14 @@ var PikemenLineCoord = [];
 var SwordInfantryWatch = [];
 var WizardPatrol = [];
 
-var spawnSpotX = 1700, spawnSpotY = 950, spawnChanger = -20;
+var spawnSpotX = 1700, spawnSpotY = 950, spawnChanger = -100;
 var intruder = false;
 
-var timerTick = 150;
-var timer = timerTick;
+var shortTimerTick = 150;
+var shortTimer = shortTimerTick;
+
+var longTimerTick = 1000;
+var longTimer = longTimerTick;
 
 ////////////////// ORGANIZE BY GOALS ////////
 
@@ -184,7 +187,7 @@ class AI
 		this.objects.push(thisMine);
 		MyGoldMines.push(thisMine);
 		this.AIGoldMines++;
-		this.UpdateStaticRoles();
+		
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -196,7 +199,7 @@ class AI
 			{
 				MyGoldMines.splice(i, 1);
 				this.AIGoldMines--;
-				UpdateStaticRoles();
+				
 			}
 		}
 	}
@@ -268,7 +271,7 @@ class AI
 		this.AIAllBuildings++;
 		this.Perseus.objects.push(thisBuilding);
 		this.MyBuildings.push(thisBuilding);
-		this.UpdateStaticRoles();
+		
 		//this.Perseus.updateText('Enemy');
 		return thisBuilding.tag;
 	}
@@ -385,7 +388,6 @@ class AI
 		this.Perseus.objects.push(thisUnit);
 		spawnSpotX += spawnChanger;
 		this.printArrays();
-		this.UpdateStaticRoles();
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -472,7 +474,7 @@ class AI
 			console.log("Error in trying to delete unit. Type unidentifiable.");
 			return false;
 		}
-		this.UpdateStaticRoles();
+		UpdateStaticRoles();
 	}
 
 /*****************************************************************************/
@@ -484,9 +486,9 @@ class AI
 	{
 		if (type == 'Fort' || type == 'fort')
 		{
-			if (this.AIWood >= (FortCosts.wood + (2 * WorkerCost.wood)))
+			if (this.AIWood >= FortCosts.wood)
 			{
-				if(this.AIGold >= (FortCosts.gold + (2 * WorkerCost.gold)))
+				if(this.AIGold >= FortCosts.gold)
 				{
 					this.AddBuilding(type);
 				}
@@ -507,11 +509,9 @@ class AI
 		// BARRACKS
 		else if (type == 'Barracks' || type == 'barracks')
 		{
-			var woodCost = BarracksCosts.wood + PikemanCost.wood + SwordInfantryCost.wood;
-			var goldCost = BarracksCosts.gold + PikemanCost.gold + SwordInfantryCost.gold;
-			if (this.AIWood >= woodCost)
+			if (this.AIWood >= BarracksCosts.wood)
 			{
-				if(this.AIGold >= goldCost)
+				if(this.AIGold >= BarracksCosts.gold)
 				{
 					this.AddBuilding(type);
 				}
@@ -521,9 +521,9 @@ class AI
 		// WIZARD TOWER
 		else if (type == 'Wizard Tower' || type == 'wizard tower')
 		{
-			if (this.AIWood >= (WizardTowerCosts.wood + (2 * WizardCost.wood)))
+			if (this.AIWood >= WizardTowerCosts.wood)
 			{
-				if(this.AIGold >= (WizardTowerCosts.gold + (2 * WizardCost.gold)))
+				if(this.AIGold >= WizardTowerCosts.gold)
 				{
 					this.AddBuilding(type);
 				}
@@ -533,9 +533,9 @@ class AI
 		// ARCHERY RANGE
 		else if (type == 'Archery Range' || type == 'archery range')
 		{
-			if (this.AIWood >= (ArcheryRangeCosts.wood + ArcherCost.wood + ArcherCost.wood))
+			if (this.AIWood >= ArcheryRangeCosts.wood)
 			{
-				if(this.AIGold >= (ArcheryRangeCosts.gold + ArcherCost.gold + ArcherCost.gold))
+				if(this.AIGold >= ArcheryRangeCosts.gold)
 				{
 					this.AddBuilding(type);
 				}
@@ -766,6 +766,8 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	UpdateStaticRoles()
 	{
+		longTimer = 0;
+		shortTimer = 0;
 		// WORKERS STATIC ROLES IS TO GATHER
 		let thisUnit = null;
 		for(let i = 0; i < MyWorkers.length; i++)
@@ -827,10 +829,143 @@ class AI
 			unit.move(WizardPatrol[i].x, WizardPatrol[i].y);
 		}
 		intruder = false;
+		longTimer = longTimerTick;
+		shortTimer = shortTimerTick;
 	}
 
 	/*-----------------------------------------------------------------------*/
-	SendAttackUnit(thisUnit)
+	MovementUpdateLoop()
+	{
+		shortTimerTick = 0;
+		// MOVES ARCHERS
+		let unit = null;
+		let thisX = null;
+		let thisY = null;
+
+		// ARCHERS CIRCLE
+		for (let i = 0; i < MyArchers.length; i++)
+		{
+			unit = MyArchers[i];
+			if(unit.x == unit.dest.x && unit.y == unit.dest.y)
+			{
+				//console.log("1");
+				for (let m = 0; m < ArcherCircleCoord.length; m++)
+				{
+					thisX = this.Perseus.navigator.getSquare(
+						ArcherCircleCoord[m].x, ArcherCircleCoord[m].y);
+					if(unit.x == thisX.x && unit.y == thisX.y)
+					{
+						if(m == ArcherCircleCoord.length - 1)
+						{
+							//console.log("2");
+							let s = 0;
+							unit.move(ArcherCircleCoord[s].x, ArcherCircleCoord[s].y);
+						}
+						else
+						{
+							unit.move(ArcherCircleCoord[m+1].x, ArcherCircleCoord[m+1].y);
+						}
+					}
+				}
+			}
+		}
+
+		// PIKEMEN LINE
+		for (let i = 0; i < MyPikemen.length; i++)
+		{
+			unit = MyPikemen[i];
+			if(unit.x == unit.dest.x && unit.y == unit.dest.y)
+			{
+				//console.log("1");
+				for (let m = 0; m < PikemenLineCoord.length; m++)
+				{
+					thisX = this.Perseus.navigator.getSquare(
+						PikemenLineCoord[m].x, PikemenLineCoord[m].y);
+					if(unit.x == thisX.x && unit.y == thisX.y)
+					{
+						if(m == PikemenLineCoord.length - 1)
+						{
+							//console.log("2");
+							let s = 0;
+							unit.move(PikemenLineCoord[s].x, PikemenLineCoord[s].y);
+						}
+						else
+						{
+							unit.move(PikemenLineCoord[m+1].x, PikemenLineCoord[m+1].y);
+						}
+					}
+				}
+			}
+		}
+
+		// WIZARD LINE
+		for (let i = 0; i < MyWizards.length; i++)
+		{
+			unit = MyWizards[i];
+			if(unit.x == unit.dest.x && unit.y == unit.dest.y)
+			{
+				for (let m = 0; m < WizardPatrol.length; m++)
+				{
+					thisX = this.Perseus.navigator.getSquare(
+						WizardPatrol[m].x, WizardPatrol[m].y);
+					if(unit.x == thisX.x && unit.y == thisX.y)
+					{
+						if(m == WizardPatrol.length - 1)
+						{
+							let s = 0;
+							unit.move(WizardPatrol[s].x, WizardPatrol[s].y);
+						}
+						else
+						{
+							unit.move(WizardPatrol[m+1].x, WizardPatrol[m+1].y);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	SafetyCheck()
+	{
+		// SAFETY CHECK
+		let thisUnit = null;
+		for (let i = 0; i < this.Perseus.Player.units.length; i++)
+		{
+			thisUnit = this.Perseus.Player.units[i];
+			if (thisUnit.y > 25)
+			{
+				/*if (thisUnit.attacking == false)
+				{
+					for(let i = 0; i < this.MyUnits; i++)
+					{
+						if(this.MyUnits[i].target == thisUnit)
+						{
+							longTimer = longTimerTick;
+							shortTimer = shortTimerTick;
+							return true;
+						}
+						else if(thisUnit.target == this.MyUnits[i])
+						{
+							longTimer = longTimerTick;
+							shortTimer = shortTimerTick;
+							return true;
+						}
+						else
+						{*/
+							console.log("Sending someone to attack the intruder");
+							DefenseAttackUnit(this.Perseus.Player.units[i]);
+						/*}
+					}
+				}*/
+			}
+		}
+		shortTimer = shortTimerTick;
+
+	}
+
+	/*-----------------------------------------------------------------------*/
+	DefenseAttackUnit(thisUnit)
 	{
 		var takenCareOf = false;
 		var type = thisUnit.type;
@@ -943,155 +1078,82 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
-	MovementUpdateLoop()
-	{
-		// SAFETY CHECK
-		let thisUnit = null;
-		for (let i = 0; i < this.Perseus.Player.units.length; i++)
-		{
-			thisUnit = this.Perseus.Player.units[i];
-			if (thisUnit.y > 25)
-			{
-				if (thisUnit.attacking == false || thisUnit.attackMoving == false)
-				{
-					for(let i = 0; i < this.MyUnits; i++)
-					{
-						if(this.MyUnits[i].target == thisUnit)
-						{
-							intruder = false;
-						}
-						else
-						{
-							this.SendAttackUnit(this.Perseus.Player.units[i]);
-						}
-					}
-					intruder = false;
-				}
-			}
-			if (thisUnit.attacking == true || thisUnit.attackMoving == true)
-			{
-				intruder = true;
-			}
-		}
-
-		if(intruder == false)
-		{
-			// MOVES ARCHERS
-			let unit = null;
-			let thisX = null;
-			let thisY = null;
-
-			// ARCHERS CIRCLE
-			for (let i = 0; i < MyArchers.length; i++)
-			{
-				unit = MyArchers[i];
-				if(unit.x == unit.dest.x && unit.y == unit.dest.y)
-				{
-					//console.log("1");
-					for (let m = 0; m < ArcherCircleCoord.length; m++)
-					{
-						thisX = this.Perseus.navigator.getSquare(
-							ArcherCircleCoord[m].x, ArcherCircleCoord[m].y);
-						if(unit.x == thisX.x && unit.y == thisX.y)
-						{
-							if(m == ArcherCircleCoord.length - 1)
-							{
-								//console.log("2");
-								let s = 0;
-								unit.move(ArcherCircleCoord[s].x, ArcherCircleCoord[s].y);
-							}
-							else
-							{
-								unit.move(ArcherCircleCoord[m+1].x, ArcherCircleCoord[m+1].y);
-							}
-						}
-					}
-				}
-			}
-
-			// PIKEMEN LINE
-			for (let i = 0; i < MyPikemen.length; i++)
-			{
-				unit = MyPikemen[i];
-				if(unit.x == unit.dest.x && unit.y == unit.dest.y)
-				{
-					//console.log("1");
-					for (let m = 0; m < PikemenLineCoord.length; m++)
-					{
-						thisX = this.Perseus.navigator.getSquare(
-							PikemenLineCoord[m].x, PikemenLineCoord[m].y);
-						if(unit.x == thisX.x && unit.y == thisX.y)
-						{
-							if(m == PikemenLineCoord.length - 1)
-							{
-								//console.log("2");
-								let s = 0;
-								unit.move(PikemenLineCoord[s].x, PikemenLineCoord[s].y);
-							}
-							else
-							{
-								unit.move(PikemenLineCoord[m+1].x, PikemenLineCoord[m+1].y);
-							}
-						}
-					}
-				}
-			}
-
-			// WIZARD LINE
-			for (let i = 0; i < MyWizards.length; i++)
-			{
-				unit = MyWizards[i];
-				if(unit.x == unit.dest.x && unit.y == unit.dest.y)
-				{
-					for (let m = 0; m < WizardPatrol.length; m++)
-					{
-						thisX = this.Perseus.navigator.getSquare(
-							WizardPatrol[m].x, WizardPatrol[m].y);
-						if(unit.x == thisX.x && unit.y == thisX.y)
-						{
-							if(m == WizardPatrol.length - 1)
-							{
-								let s = 0;
-								unit.move(WizardPatrol[s].x, WizardPatrol[s].y);
-							}
-							else
-							{
-								unit.move(WizardPatrol[m+1].x, WizardPatrol[m+1].y);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 
 	/*-----------------------------------------------------------------------*/
-	UpdateTimer()
+	ShortUpdateTimer()
 	{
 		// TIMER STARTS AT 800
-		timer -= 1;
-		if (timer == 1)
+		shortTimer -= 1;
+		//console.log(longTimer);
+		if (shortTimer == 1)
 		{
-			timer += timerTick;
 			this.MovementUpdateLoop();
+			this.SafetyCheck();
 		}
 		//console.log(timer);
+	}
+
+	LongUpdateTimer()
+	{
+		longTimer -= 1;
+		//console.log(longTimer);
+		if (longTimer == 1)
+		{
+			longTimer += longTimerTick;
+			this.UpdateStaticRoles(); 
+		}
 	}
 
 	/*-----------------------------------------------------------------------*/
 	update()
 	{
-		this.UpdateTimer();
+		this.ShortUpdateTimer();
+		this.LongUpdateTimer();
 	}
 
 	/*-----------------------------------------------------------------------*/
 	EasyMode()
 	{
+		this.CreateMovementMap();
+		this.AddBuilding('Fort');
+		this.AddUnit('worker');
+		this.AddUnit('worker');
+		this.AddBuilding('Archery Range');
+		this.AddUnit('Archer');
+		this.AddUnit('Archer');
+		this.AddBuilding('Barracks');
+		this.AddUnit('Pikeman');
+		this.AddUnit('Pikeman');
+		this.AddUnit('SwordInfantry');
+		this.AddUnit('SwordInfantry');
+		this.AddBuilding('Wizard Tower');
+		this.AddUnit('Wizard');
+		this.AddUnit('Wizard');
+		this.UpdateStaticRoles();
 	}
 
 	/*-----------------------------------------------------------------------*/
 	HardMode()
 	{
+		this.CreateMovementMap();
+		this.AddBuilding('Fort');
+		this.AddUnit('worker');
+		this.AddUnit('worker');
+		this.AddUnit('worker');
+		this.AddBuilding('Archery Range');
+		this.AddUnit('archer');
+		this.AddUnit('archer');
+		this.AddUnit('archer');
+		this.AddBuilding('Barracks');
+		this.AddUnit('Pikeman');
+		this.AddUnit('Pikeman');
+		this.AddUnit('SwordInfantry');
+		this.AddUnit('SwordInfantry');
+		this.AddUnit('SwordInfantry');
+		this.AddBuilding('Wizard Tower');
+		this.AddUnit('Wizard');
+		this.AddUnit('Wizard');
+		this.UpdateStaticRoles();
 	}
 
 /*****************************************************************************/
