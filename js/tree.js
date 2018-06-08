@@ -31,6 +31,7 @@ class Tree extends Resource{
         this.sprite.events.onInputUp.add(function(){
             this.Perseus.controller.endWithSelect(this);
         }, this);
+        this.Perseus.gameSprites.add(this.sprite);
     }
 
     loseResource(rate){

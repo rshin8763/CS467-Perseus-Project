@@ -26,7 +26,7 @@ class Ui
     }
 
     initialize(){
-        this.ui = this.Perseus.game.add.group();
+        this.ui = this.Perseus.gui;
 
         // Create GUI bar
         let bar = this.Perseus.game.add.sprite(0,0,'ui');
