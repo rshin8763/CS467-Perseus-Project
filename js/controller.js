@@ -147,8 +147,6 @@ class Controller{
     }
 
     input(state){
-        this.state = state;
-        // this.ui.writeToScreen('Choose a target');
         switch (state){
             case 'A':
                 if (this.commandState == 'build'){
@@ -166,6 +164,18 @@ class Controller{
                 break;
             case 'G':
                 this.state = 'gather';
+                break;
+            case 'S':
+                if (this.commandState == 'build'){
+                    this.selectedObjects[0].build('S');
+                    this.cooldownTimer = 20;
+                }
+                break;
+            case 'P':
+                if (this.commandState == 'build'){
+                    this.selectedObjects[0].build('P');
+                    this.cooldownTimer = 20;
+                }
                 break;
             case 'M':
                 if (this.commandState == 'build'){
