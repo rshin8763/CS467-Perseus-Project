@@ -1,17 +1,22 @@
 import {Building} from './building.js';
 import {Archer} from './archer.js';
 
-
+/****************
+ * Archery Range Building
+ *
+ **************/
 class ArcheryRange extends Building{
 
 
     constructor(faction, x,y,Perseus){
+        //Call Building constructor
         super(faction, 200, x, y, Perseus);
 
+        //Create Sprite
         this.addSprite('archeryrange');
-        this.SWORD = 1;
-        this.PIKE = 2;
-        this.ARCH = 3;
+
+
+        
         this.buildSpeed = .25;
         this.type="Archery Range";
 
@@ -25,6 +30,7 @@ class ArcheryRange extends Building{
         }
     }
 
+    //Control API function
     build(str){
         switch(str){
             case 'A':
@@ -32,9 +38,9 @@ class ArcheryRange extends Building{
         }
     }
     
-
     buildArcher()
     {
+        //Start building an archer, or tell the palyer there aren't enough resources
         if(!this.building)
         {
             if(this.Perseus.Player.playerWood >= this.ArcherCosts.wood
@@ -53,6 +59,7 @@ class ArcheryRange extends Building{
     }
 
     update(){
+        //Update build progess until 100, then call spawn archer
         if(this.building)
         {
             if(this.buildProgress >= 100)
@@ -69,6 +76,7 @@ class ArcheryRange extends Building{
 
     spawnArcher()
     {
+        //Create an archer
         let coords = this.Perseus.navigator.getCoords(this.x + 4,this.y +4)
             this.Perseus.objects.push(new Archer(this.faction, coords.x, coords.y , this.Perseus));     
 
