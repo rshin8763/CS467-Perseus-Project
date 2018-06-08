@@ -9,7 +9,7 @@ class Barracks extends Building{
 
 
     constructor(faction, x,y,Perseus){
-        super(faction, 1000, x, y, Perseus);
+        super(faction, 200, x, y, Perseus);
 
         this.addSprite('barracks');
         this.SWORD = 1;
@@ -21,8 +21,8 @@ class Barracks extends Building{
             buildList: {S: "Swordsperson", P: "Pikemen"}  
         };
         this.SwordInfantryCosts = {
-            wood : 30,
-            gold : 70
+            wood : 50,
+            gold : 50
         };
         this.PikemanCosts = {
             wood : 60,

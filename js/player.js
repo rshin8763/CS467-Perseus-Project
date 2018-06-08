@@ -92,8 +92,8 @@ class Player
 
         // RESOURCES
         // TODO change these later, for testing
-        this.playerGold = 10000;
-        this.playerWood = 10000;
+        this.playerGold = 0;
+        this.playerWood = 0;
 
         // UNITS
         this.playerWorkers = 0;

@@ -6,6 +6,7 @@ class Building extends GameObject{
         super(false, faction, Perseus);
         this.Perseus = Perseus;
         this.hp = hp;
+        this.maxHP = hp;
         this.x = this.Perseus.navigator.getSquare(x,y).x;
         this.y = this.Perseus.navigator.getSquare(x,y).y;
         this.centerX = x + 2;
@@ -15,13 +16,20 @@ class Building extends GameObject{
         this.units = {};
         this.Perseus.objects.push(this);
         this.movable = false;
+        this.hpbar = null;
     }
 
     addSprite(buildingType){       
         let x = this.x;
         let y = this.y;
         let coords = this.Perseus.navigator.getCoords(x,y);
-        this.sprite = this.game.add.sprite(coords.x, coords.y, buildingType);
+        this.sprite = this.game.add.sprite(coords.x, coords.y, buildingType + "_" + this.faction);
+
+        this.hpbar = this.game.add.sprite(coords.x,coords.y, 'hpbar_' + this.faction);
+        this.hpbar.width=128;
+        // this.hpbar.anchor.x = -.5;
+        // this.hpbar.anchor.y = 2;
+        console.log(this.hpbar)
         // this.sprite.anchor.x = 0.5;
         // this.sprite.anchor.y = 0.5;
         this.sprite.inputEnabled = true;
@@ -42,7 +50,7 @@ class Building extends GameObject{
         }, this);
 
         this.Perseus.gameSprites.add(this.sprite);
-
+        this.Perseus.gameSprites.add(this.hpbar);
         
     }
 
@@ -62,6 +70,7 @@ class Building extends GameObject{
             //this.Perseus.AI.printArrays();
             //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
+            this.hpbar.destroy();
 
             for(let i = 0; i < this.Perseus.objects.length; i++)
             {
@@ -71,6 +80,8 @@ class Building extends GameObject{
                 }
             }
         }
+
+        this.hpbar.width = (this.hp / this.maxHP) * 128;
     }
 
     

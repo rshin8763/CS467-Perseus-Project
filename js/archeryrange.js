@@ -6,7 +6,7 @@ class ArcheryRange extends Building{
 
 
     constructor(faction, x,y,Perseus){
-        super(faction, 1000, x, y, Perseus);
+        super(faction, 200, x, y, Perseus);
 
         this.addSprite('archeryrange');
         this.SWORD = 1;
