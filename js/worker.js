@@ -583,27 +583,27 @@ class Worker extends Unit{
 
                     if(this.selectedBuilding == "Fort")
                     {
-                        this.Perseus.objects.push(new Fort(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        new Fort(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     if(this.selectedBuilding == "Barracks")
                     {
-                        this.Perseus.objects.push(new Barracks(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        new Barracks(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     if(this.selectedBuilding == "Mine")
                     {
-                        this.Perseus.objects.push(new Mine(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        new Mine(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     if(this.selectedBuilding == "ArcheryRange")
                     {
-                        this.Perseus.objects.push(new ArcheryRange(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                       new ArcheryRange(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     if(this.selectedBuilding == "WizardTower")
                     {
-                        this.Perseus.objects.push(new WizardTower(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        new WizardTower(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     if(this.selectedBuilding == "Farm")
                     {
-                        this.Perseus.objects.push(new Farm(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        new Farm(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     this.building = false;
                     this.Perseus.Player.reduceResources(this.woodCosts[this.selectedBuilding], this.goldCosts[this.selectedBuilding]);

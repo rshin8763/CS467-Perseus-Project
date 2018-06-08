@@ -86,7 +86,6 @@ class Fort extends Building{
     {
         //Create a worker and push it to the objects thread
         let worker = new Worker(this.faction, x, y, this.Perseus)
-            this.Perseus.objects.push(worker);     
         this.Perseus.selected = worker;
     }
 }
