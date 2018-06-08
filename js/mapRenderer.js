@@ -40,7 +40,7 @@ class mapRenderer{
             Perseus.objects.push(new Tree(Math.floor(element.x), Math.floor(element.y), this.Perseus));
         }
         if (element.type == 'fort'){
-            Perseus.objects.push(new Fort('human', Math.floor(element.x), Math.floor(element.y), this.Perseus));
+            //Perseus.objects.push(new Fort('human', Math.floor(element.x), Math.floor(element.y), this.Perseus));
 
         }
         if (element.type == 'enemyFort'){

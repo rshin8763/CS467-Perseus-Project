@@ -17,8 +17,6 @@ class Ui
         this.pause_button;
         this.mute_button;
         this.saveButton;
-        this.quitButton;
-        this.newGameButton;
         this.resumeButton;
         this.enemyHealthText;
         // this.minimap = new Minimap(Perseus);
@@ -231,12 +229,6 @@ class Ui
 
             this.saveButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 160,
                     'saveButton', this.saveGame, this, 2, 1, 0);
-
-            this.quitButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 268,
-                    'quitButton', this.quitGame, this, 2, 1, 0);
-
-            this.newGameButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 376,
-                    'newGameButton', this.newGame, this, 2, 1, 0);
             this.Perseus.game.paused = true;
         }
 
@@ -270,15 +262,6 @@ class Ui
     saveGame()
     {
         this.Perseus.SaveGame.SaveGame();
-    }
-    quitGame()
-    {
-        this.unpause();
-    }
-
-    newGame()
-    {
-        this.Perseus.SaveGame.LoadGame();
     }
 
     updateText(kind)
