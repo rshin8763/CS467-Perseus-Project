@@ -29,6 +29,10 @@ class Controller{
         this.boxSelect = true;
         this.cooldownTimer = 0;
     }
+    isPointerInUi() {
+        console.log(this.pointer.position <= 198);
+        return (this.pointer.position.x  <= 198);
+    }
 
     select(obj){
         if (this.state == 'default'){
@@ -41,8 +45,6 @@ class Controller{
                 this.Perseus.ui.updateCommandList(obj);
             }
         } else if (this.state == 'attack'){
-            /***********MICHAEL ADDED THIS************** */
-            //Get the empty squares around the object to be attacked
             let emptySquares = [];
             let origin = {x:this.selectedObjects[0].x, y: this.selectedObjects[0].y};
             if(obj.movable == false)
@@ -71,10 +73,6 @@ class Controller{
                     this.selectedObjects[i].attack(obj, emptySquares[i]);
                 }
             }
-            /********************************************* */
-            // this.selectedObjects.forEach( (elem) => {
-            //     elem.attack(obj);
-            // });
             this.state = 'default';
         } else if (this.state == 'gather'){
             this.selectedObjects.forEach( (elem) => {
@@ -85,7 +83,6 @@ class Controller{
             this.state = 'default';
         }
     }
-
 
     selectInBox(){
         this.selectionBox.drawRect(Math.min(this.boxStartPos.x, this.boxEndPos.x) + this.game.camera.x, Math.min(this.boxStartPos.y, this.boxEndPos.y)+ this.game.camera.y, Math.abs(this.boxEndPos.x-this.boxStartPos.x), Math.abs(this.boxEndPos.y-this.boxStartPos.y));
@@ -154,7 +151,13 @@ class Controller{
         // this.ui.writeToScreen('Choose a target');
         switch (state){
             case 'A':
-                this.state = 'attack';
+                if (this.commandState == 'build'){
+                    this.selectedObjects[0].build('A');
+                    this.cooldownTimer = 20;
+                } else {
+                    this.state = 'attack';
+                    this.cooldownTimer = 20;
+                }
                 break;
             case 'B':
                 this.state = 'default';
@@ -165,13 +168,37 @@ class Controller{
                 this.state = 'gather';
                 break;
             case 'M':
-                this.state = 'move';
-                this.Perseus.ui.updateBuildList(this.highestPrioritySelected);
+                if (this.commandState == 'build'){
+                    this.selectedObjects[0].build('M');
+                    this.cooldownTimer = 20;
+                } else {
+                    this.state = 'move';
+                    this.cooldownTimer = 20;
+                }
+                break;
+            case 'F':
+                if (this.commandState == 'build'){
+                    this.selectedObjects[0].build('F');
+                    this.cooldownTimer = 20;
+                }
+                break;
+            case 'W':
+                if (this.commandState == 'build'){
+                    this.selectedObjects[0].build('W');
+                    this.cooldownTimer = 20;
+                }
+                break;
+            case 'R':
+                if (this.commandState == 'build'){
+                    this.selectedObjects[0].build('R');
+                    this.cooldownTimer = 20;
+                }
                 break;
         }
     }
 
     update(){
+        console.log(this.state);
         if(this.selectionBox){
             this.selectionBox.destroy();
         }
@@ -219,7 +246,7 @@ class Controller{
                     if (this.cooldownTimer == 0){
                         this.selectedObjects[0].build('W')
                             //cooldown
-                            this.cooldownTimer = 10;
+                            this.cooldownTimer = 20;
                     }
                 }
             }
@@ -228,7 +255,7 @@ class Controller{
                     if (this.cooldownTimer == 0){
                         this.selectedObjects[0].build('M')
                             //cooldown
-                            this.cooldownTimer = 10;
+                            this.cooldownTimer = 20;
                     }
                 }
             }
@@ -237,7 +264,7 @@ class Controller{
                     if (this.cooldownTimer == 0){
                         if (this.selectedObjects[0].build('A')){
                             //cooldown
-                            this.cooldownTimer = 10;
+                            this.cooldownTimer = 20;
                         }
                     }
                 }
@@ -247,7 +274,7 @@ class Controller{
                     if (this.cooldownTimer == 0){
                         if (this.selectedObjects[0].build('P')){
                             //cooldown
-                            this.cooldownTimer = 10;
+                            this.cooldownTimer = 20;
                         }
                     }
                 }
@@ -257,7 +284,7 @@ class Controller{
                     if (this.cooldownTimer == 0){
                         if (this.selectedObjects[0].build('S')){
                             //cooldown
-                            this.cooldownTimer = 10;
+                            this.cooldownTimer = 20;
                         }
                     }
                 }
@@ -267,7 +294,7 @@ class Controller{
                     if (this.cooldownTimer == 0){
                         if(this.selectedObjects[0].build('F')){
                             //cooldown
-                            this.cooldownTimer = 10;
+                            this.cooldownTimer = 20;
                         }
                     }
                 }
@@ -277,7 +304,7 @@ class Controller{
                     if (this.cooldownTimer == 0){
                         if(this.selectedObjects[0].build('R')){
                             //cooldown
-                            this.cooldownTimer = 10;
+                            this.cooldownTimer = 20;
                         }
                     }
                 }
@@ -297,21 +324,24 @@ class Controller{
 
         if (this.state == 'default' ){
             if (this.pointer.isDown == true){
-                //console.log('starting selection box');
-                this.boxStartPos = this.pointer.positionDown; 
-                //console.log(this.pointer.positionDown);
+                if (!this.isPointerInUi()){
+                    this.boxStartPos = this.pointer.positionDown; 
+                    //console.log(this.pointer.positionDown);
+                }
             }
         }
         if (this.state == 'move'){
             if (this.pointer.isDown == true){
-                this.selectedObjects.forEach((obj) => {
-                    if (obj instanceof Unit){
-                        obj.move(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
-                    }
-                }, this);
+                if (!this.isPointerInUi()){
+                    this.selectedObjects.forEach((obj) => {
+                        if (obj instanceof Unit){
+                            obj.move(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
+                        }
+                    }, this);
 
-                this.state = 'default';
-                this.commandState = 'default';
+                    this.state = 'default';
+                    this.commandState = 'default';
+                }
             }
         } 
         if (this.state == 'attack'){
@@ -319,9 +349,11 @@ class Controller{
         } 
         if (this.state == 'place'){
             if (this.pointer.isDown == true){
-                this.highestPrioritySelected.place(this.pointer.positionDown.x, this.pointer.positionDown.y);
-                this.state = 'default';
-                this.commandState = 'default';
+                if (!this.isPointerInUi()){
+                    this.highestPrioritySelected.place(this.pointer.positionDown.x, this.pointer.positionDown.y);
+                    this.state = 'default';
+                    this.commandState = 'default';
+                }
             }
         }
         if (this.state == 'pointerHold') {
@@ -339,11 +371,13 @@ class Controller{
             }
         }
         if (this.state == 'default' && this.pointer.isDown){
-            if(this.selectedObjects.length > 0 && this.selectedObjects[0].placing)
-            {
-                this.selectedObjects[0].place();
-            }else{
-                this.state = 'pointerHold';
+            if (!this.isPointerInUi()){
+                if(this.selectedObjects.length > 0 && this.selectedObjects[0].placing)
+                {
+                    this.selectedObjects[0].place();
+                }else{
+                    this.state = 'pointerHold';
+                }
             }
         }
         if (this.cooldownTimer > 0 )this.cooldownTimer--;
@@ -359,7 +393,7 @@ class Controller{
                 console.log("selected:", this.selectedObjects);
                 if (this.highestPrioritySelected == null || this.highestPrioritySelected.priority < obj.priority) 
                     this.highestPrioritySelected = obj;
-                
+
             }
         }
     }

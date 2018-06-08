@@ -368,7 +368,6 @@ class Worker extends Unit{
         //let rand = Math.floor(Math.random() * border.length);
 
         //console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
-        this.gatherState = 0;
         let coords = this.Perseus.navigator.getCoords(border[0].x, border[0].y);
         this.move(coords.x, coords.y);
     }
@@ -387,10 +386,10 @@ class Worker extends Unit{
             } 
             else 
             {
-                this.gatherState = 3;
                 this.sprite.animations.stop();
                 this.lastResource.loseResource(1);
                 this.moveTo(this.findNearestFort());
+                this.gatherState = 3;
             }
         } 
         if (this.gatherState == 3)
@@ -541,8 +540,6 @@ class Worker extends Unit{
 
                 this.move(this.selectedX, this.selectedY)
             } else {
-                console.log(this.buildProgress);
-
                 if(this.buildProgress > 1000)
                 {
 

@@ -133,7 +133,23 @@ class Ui
             let text = prop;
             let style = { font: "32px Arial", fill: "#ffffff", align: "center" };
             let button = this.Perseus.game.add.text(x+16,y+16,text,style);
+            button.Perseus = this.Perseus;
+            button.inputEnabled = true;
             button.fixedToCamera = true;
+            button.events.onInputDown.add(function(){
+                this.Perseus.ui.commandButtons.forEach(function (obj){
+                    obj.tint = 0xffffff;
+                });
+                this.tint = 0x00ff00;
+                this.Perseus.controller.input(text);
+            }, button);
+
+            button.events.onInputUp.add(function(){
+                this.Perseus.ui.commandButtons.forEach(function (obj){
+                    obj.tint = 0xffffff;
+                });
+            }, button);
+
             this.commandButtons.push(button);
         }
 
@@ -164,6 +180,9 @@ class Ui
             button.Perseus = this.Perseus;
             button.inputEnabled = true;
             button.events.onInputDown.add(function(){
+                this.Perseus.ui.commandButtons.forEach(function (obj){
+                    obj.tint = 0xffffff;
+                });
                 this.tint = 0x00ff00;
                 this.Perseus.controller.input(this.action);
             } , button);
