@@ -142,8 +142,8 @@ function create()
     // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
-    Perseus.Player.playerWood = 0;
-    Perseus.Player.playerGold = 0;
+    Perseus.Player.playerWood = 50;
+    Perseus.Player.playerGold = 50;
 
     console.log(Perseus.objects);
     console.log(Perseus.resources);

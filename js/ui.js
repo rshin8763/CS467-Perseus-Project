@@ -9,7 +9,7 @@ class Ui
         this.Perseus = Perseus;
         this.bar;
         this.ui;
-        this.infoBox;
+        this.infoBar;
         this.textBox;
         this.commandBox;
         this.woodText;
@@ -37,7 +37,7 @@ class Ui
         this.bar = bar;
         this.ui.add(bar);
 
-        this.infoBox = new InfoBar(16, 150, this.Perseus);
+        this.infoBar = new InfoBar(16, 150, this.Perseus);
 
         // Create GUI command box
         let commandBox = this.Perseus.game.add.graphics();

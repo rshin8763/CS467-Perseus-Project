@@ -364,6 +364,7 @@ class Worker extends Unit{
             return;
         }
 
+        this.Perseus.prompter.clearText();
         this.gatherProgress = 0;
         if (resource.exhausted == true){
             this.gatherState = 0;
@@ -558,7 +559,7 @@ class Worker extends Unit{
 
                 this.move(this.selectedX, this.selectedY)
             } else {
-                if(this.buildProgress > 1000)
+                if(this.buildProgress > 100)
                 {
 
                     if(this.selectedBuilding == "Fort")
@@ -595,7 +596,7 @@ class Worker extends Unit{
 
                 } else {
                     this.sprite.animations.play('work_right');
-                    this.buildProgress += 1;
+                    this.buildProgress += 0.1;
                 }
             }
         }

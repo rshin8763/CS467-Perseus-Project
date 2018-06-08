@@ -4,6 +4,7 @@ class Mine extends Resource{
     constructor(faction, x, y, Perseus){
         super(faction, 'gold', Perseus);
         this.sprite = null;
+        this.name = 'Mine'
         let square = this.Perseus.navigator.getSquare(x,y);
         let coords = this.Perseus.navigator.getCoords(square.x, square.y);
         this.x = square.x;

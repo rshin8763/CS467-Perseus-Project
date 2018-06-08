@@ -84,7 +84,7 @@ class Unit extends GameObject{
         //If the square is occupied, don't bother trying to move there
         if(this.Perseus.navigator.navmap[this.dest.x][this.dest.y] == 1)
         {
-            this.Perseus.prompter.drawToScreen('Cannot move to that location!', 20, '#ff0000')   
+            this.Perseus.prompter.drawToScreen('Cannot move to that location!', 100, '#ff0000')   
             console.log("Can not move to location " + this.dest.x + " , " + this.dest.y);
             this.dest.x = this.x;
             this.dest.y = this.y;
@@ -102,12 +102,14 @@ class Unit extends GameObject{
         //If there is no path, dont try to move to square
         if(!this.currentPath)
         {
-            console.log("Unit can't move");
+            this.Perseus.prompter.drawToScreen('Cannot move right now!', 100, '#ff0000')   
             this.moving=false;
             return;
         }
+
         this.nextSquare = this.currentPath[0];
         this.moving = true;
+        this.Perseus.prompter.clearText();
     }
 
 
