@@ -1,5 +1,9 @@
 import {BinaryHeap} from './BinaryHeap.js';
 
+/****************************
+ * Navigator Object
+ * 
+ ******************************/
 class Navigator {
     constructor(game, xTiles, yTiles, tileSize){
         this.game = game;
@@ -34,6 +38,7 @@ class Navigator {
         return coords;
     }
 
+    //Mark square (x,y) as occupied (1)
     markOccupied(x,y)
     {
         //Make sure that x,y is valid
@@ -49,6 +54,7 @@ class Navigator {
 
     }
 
+    //Mark square (x,y) as not occupied (0)
     markNotOccupied(x,y)
     {
         //Make sure that x,y is valid
@@ -118,11 +124,14 @@ class Navigator {
 
     }
    
+    //Just give me the first step in the path
     findNextNode(unit, target)
     {
         return this.findPath(unit, target)[0];
 
     }
+
+
     //Create nodes representing the squares around a given node
     getNeightbors(node, target){
         let neighbors = [];
@@ -249,6 +258,7 @@ class Navigator {
         });
     }
 
+    //Set a square (x,y) as rock (2)
     setIsRock(x,y)
     {
         if(x < 0 || y < 0 || x >= this.xTiles || y >= this.yTiles)
@@ -259,6 +269,7 @@ class Navigator {
         this.navmap[x][y] = 2;
     }
 
+    //Check if a nav square is considered rock
     checkIsRock(x,y)
     {
         if(x < 0 || y < 0 || x >= this.xTiles || y >= this.yTiles)
@@ -269,7 +280,7 @@ class Navigator {
         }
     }
 
-
+    //Check if there is any unit standing in a given nav square
     isOccupied(x, y, faction)
     {
         for(let i = 0; i < this.units.length; i++)
@@ -295,6 +306,8 @@ class Navigator {
         return false;
     }
 
+
+    //Find open border squares around an object
     findObjectBorder(obj, origin)
     {
         let squares = [];
@@ -397,17 +410,11 @@ class Navigator {
 
         squares.sort(function(a,b){return a.d-b.d});
         return squares; 
-        /*******DEBUG STUFF**** */
-        // // let coords = this.getCoords(obj.x, obj.y);
-        // //     this.game.add.sprite(coords.x, coords.y, 'navSquare');
-        
-        //     squares.forEach((square)=>{
-        //     let coords = this.getCoords(square.x, square.y);
-        //     this.game.add.sprite(coords.x, coords.y, 'navSquare');
-       // });
 
     
     }
+
+
     //Find all the empty squares around a square
     findAllEmpty(x,y, origin)
     {
@@ -497,6 +504,7 @@ class Navigator {
         return empties;
     }
 
+    //Find the distance between two squares. (x,y) and origin (which is just a packaged x,y)
     getDistance(x,y, origin)
     {
         let dx = x - origin.x;
@@ -505,6 +513,7 @@ class Navigator {
         let d = Math.sqrt((dx*dx) + (dy*dy));
         return d;
     }
+    
     //Return one random empty square
     findEmpty(x, y)
     {
