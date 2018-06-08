@@ -97,7 +97,7 @@ class Worker extends Unit{
                 }
             }
         });
-        console.log('found fort ', closest);
+        //console.log('found fort ', closest);
         return closest;
     }
 

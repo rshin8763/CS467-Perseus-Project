@@ -126,6 +126,7 @@ function create()
     // ------------------------------------------------------------------------
     // PLAYER
     Perseus.Player = new Player(Perseus);
+    Perseus.Player.Main();
     // ------------------------------------------------------------------------
     // AI
   
@@ -141,7 +142,7 @@ function create()
     Perseus.AI = new AI(Perseus);
     Perseus.AI.Main();
     Perseus.ui = new Ui(Perseus);
-    //Perseus.objects.push(new Worker ('human', 700, 300, Perseus));
+
     // Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
     // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
     //Perseus.objects.push(new Mine('human', 300, 300, Perseus));

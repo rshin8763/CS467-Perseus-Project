@@ -30,7 +30,8 @@ class Controller{
         this.cooldownTimer = 0;
     }
     isPointerInUi() {
-        console.log(this.pointer.position <= 198);
+        //console.log(this.pointer.position <= 198);
+        console.log((this.pointer.positionDown.x + this.Perseus.game.camera.view.x) + ", " + (this.pointer.positionDown.y + this.Perseus.game.camera.view.y));
         return (this.pointer.position.x  <= 198);
     }
 
@@ -300,6 +301,7 @@ class Controller{
                 }
             }
             if(this.keys.F.isDown) {
+                console.log("The coordinates are " + game.camera.x + game.camera.y);
                 if (this.isViableCommand('F')){
                     if (this.cooldownTimer == 0){
                         if(this.selectedObjects[0].build('F')){

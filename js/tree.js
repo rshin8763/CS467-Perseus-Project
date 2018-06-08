@@ -36,7 +36,7 @@ class Tree extends Resource{
 
     loseResource(rate){
         super.loseResource(rate);
-        console.log(this.exhausted);
+        //console.log(this.exhausted);
         if (this.exhausted == true){
             this.sprite.destroy();
             for(let i = 0; i < 2; i++)

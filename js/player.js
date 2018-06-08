@@ -1,5 +1,6 @@
 import {Unit} from './unit.js';
 import {Building} from './building.js';
+import {Worker} from './worker.js';
 
 // import {SwordInfantry} from './swordInfantry.js';
 // import {Archer} from './archer.js';
@@ -775,21 +776,24 @@ class Player
     /*****************************************************************************/
 
     ///*-----------------------------------------------------------------------*/
-    //Main()
-    //{
+    Main()
+    {
     //    // this.CreateResourcesArray();
     //    //this.AddBuilding('Fort');
     //    //this.AddBuilding('Barracks');
     //    //this.AddBuilding('Wizard Tower');
 
-    //    //this.AddUnit('Worker');
+        let worker1 = new Worker ('human', 700, 300, this.Perseus);
+        this.addObject(worker1);
+        let worker2 = new Worker ('human', 700, 300, this.Perseus);
+        this.addObject(worker2);
     //    //this.AddUnit('Archer');
     //    //this.AddUnit('Pikeman');
     //    //this.AddUnit('SwordInfantry');
     //    //this.AddUnit('Wizard');
     //    ////this.printArrays();
     //    //this.AddUnit('worker');
-    //}
+    }
 }
 
 export {Player};
