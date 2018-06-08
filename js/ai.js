@@ -19,12 +19,14 @@ var MySwordInfantry = [];
 var MyPikemen = [];
 var MyWizards = [];
 
-var objects, resources, enemyHealthText;
-var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
-var spawnSpotX = 1400, spawnSpotY = 1300, spawnChanger = 50;
-var freebie = true;
-var xBorder = 0, yBorder = 0;
-var bordersSafe = true;
+var TopLayerCoordinates = [];
+var InnerSquareCoordinates = [];
+var InnerLCoordinates = [];
+var StationaryCoordinates = [];
+
+var spawnSpotX = 1200, spawnSpotY = 1200, spawnChanger = 50;
+
+
 var timerTick = 200;
 var timer = timerTick;
 var safe = true;
@@ -175,7 +177,7 @@ class AI
 		else if (type == 'Archery Range' || type == 'archery range')
 		{
 			// ADD BARRACKS AND UPDATE BUILDINGS
-			thisBuilding = new ArcheryRange('orc', 1400, 1500, this.Perseus);
+			thisBuilding = new ArcheryRange('orc', 1200, 1400, this.Perseus);
 			this.AIArcheryRanges++;
 
 			// UPDATE RESOURCES + ADD TWO WIZARDS
@@ -189,7 +191,7 @@ class AI
 		else if (type == 'Barracks' || type == 'barracks')
 		{
 			// ADD BARRACKS AND UPDATE BUILDINGS
-			thisBuilding = new Barracks('orc', 1500, 1400, this.Perseus);
+			thisBuilding = new Barracks('orc', 1400, 1250, this.Perseus);
 			this.AIBarracks++;
 
 			// UPDATE RESOURCES + ADD TWO ARCHERS, 1 PIKEMAN, & 1 SWORDINFANTRY
@@ -203,7 +205,7 @@ class AI
 		else if (type == 'Wizard Tower' || type == 'wizard tower')
 		{
 			// ADD BARRACKS AND UPDATE BUILDINGS
-			thisBuilding = new WizardTower('orc', 1200, 1400, this.Perseus);
+			thisBuilding = new WizardTower('orc', 1550, 1400, this.Perseus);
 			this.AITowers++;
 
 			// UPDATE RESOURCES + ADD TWO WIZARDS
@@ -332,7 +334,7 @@ class AI
 		this.MyUnits.push(thisUnit);
 		this.Perseus.objects.push(thisUnit);
 		this.UpdateStaticRoles();
-		this.UpdateRoles();
+		//this.UpdateRoles();
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -418,7 +420,7 @@ class AI
 			console.log("Error in trying to delete unit. Type unidentifiable.");
 			return false;
 		}
-		this.UpdateRoles();
+		//this.UpdateRoles();
 	}
 
 /*****************************************************************************/
@@ -554,7 +556,7 @@ class AI
 		{
 			return 'Fort';
 		}
-		else if (this.AIWorkers < 2)
+		else if (this.AIWorkers < 4)
 		{
 			return 'worker';
 		}
@@ -562,7 +564,7 @@ class AI
 		{
 			return 'Archery Range';
 		}
-		else if(this.AIArchers < 4)
+		else if(this.AIArchers < 3)
 		{
 			return 'archer';
 		}
@@ -603,11 +605,7 @@ class AI
 			{
 				if (unit.x == unit.dest.x && unit.y == unit.dest.y)
 				{
-					if (counter == true)
-					{
 
-					}
-					//console.log(coords);
 				}
 				else
 				{
@@ -624,8 +622,23 @@ class AI
 
 	}
 
+	/*-----------------------------------------------------------------------*/
 	UpdateStaticRoles()
 	{
+		let unit = null;
+		for(let i = 0; i < MyArchers.length; i++)
+		{
+			unit = MyArchers[i];
+			if (unit.x == unit.dest.x && unit.y == unit.dest.y)
+			{
+				unit.move(1400, 1200);
+			}
+			else
+			{
+				console.log("1");
+				unit.move(1400, 1100);
+			}
+		}
 
 	}
 
@@ -637,7 +650,7 @@ class AI
 		if (timer == 1)
 		{
 			timer += timerTick;
-			//this.UpdateRoles();
+			this.UpdateRoles();
 		}
 		//console.log(timer);
 	}
@@ -704,11 +717,14 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	Main()
 	{
+		//this.AddBuilding('Wizard Tower');
+		//this.AddBuilding('Barracks');
 		//this.AddBuilding('Fort');
 		this.AddBuilding('Archery Range');
 
 		//this.GetAIStats();
 		this.printArrays();
+		//this.UpdateStaticRoles();
 		
 	}
 }

@@ -8,47 +8,17 @@ import {Resource} from './resource.js';
 
 // ******** GAME'S RESOURCES ********
 var savedMapResources = [];
-//	tag
-//	depleated or not
 
 // ******** PLAYER'S DATA ********
 var savedPlayerBuildings = [];
-//	Building = {
-//		name:
-//		hp:
-//	};
-
 var savedPlayerUnits = [];
-//	Units = {
-//		name:
-//		hp:
-//	};
-
-
 var savedPlayerStocks = [];	// ** LOAD LAST **
-//	Stock = {
-//		gold:
-//		wood:
-//	};
+
 
 // ******** AI DATA ********
 var savedAIBuildings = [];
-//	Building = {
-//		name:
-//		hp:
-//	};
-
 var savedAIUnits = [];
-//	Units = {
-//		name:
-//		hp:
-//	};
-
 var savedAIStocks = [];
-//	Stock = {
-//		gold:
-//		wood:
-//	};
 
 class SaveGame
 {
@@ -64,6 +34,10 @@ class SaveGame
 	// MAP RESOURCES
 	SaveMapResources()
 	{
+		// TAG STILL SAME? OR NEED LOCATION?
+		//	IF DEPRECATED
+		// 		IF NOT, HP 
+		
 
 	}
 
@@ -71,28 +45,37 @@ class SaveGame
 	// PLAYER
 	SavePlayerBuildings()
 	{
-
+		// GO THROUGH PLAYER BUILDINGS
+			// LOCATION
+			// HP
 	}
 
 	SavePlayerUnits()
 	{
+		// LOCATION
+		// HP
+		// MOVING?
+		// 	DESTINATION
 
+	}
+
+	SavePlayerStocks()
+	{
+		// GOLD
+		// SILVER
 	}
 
 	/*-----------------------------------------------------------------------*/
 	// AI
 	SaveAIBuildings()
 	{
-		var name, hp;
-		var Building;
-		for (var key in this.Perseus.AI.MyBuildings)
-		{
-			
-		}
+		// HP
+		
 	}
 
 	SaveAIUnits()
 	{
+		// HP
 
 	}
 
@@ -100,20 +83,91 @@ class SaveGame
 							// LOAD // 
 /*****************************************************************************/
 
+	/*-----------------------------------------------------------------------*/
+	// MAP RESOURCES
 	LoadMapResources()
 	{
+		// TAG STILL SAME? OR NEED LOCATION?
+		//	IF DEPRECATED
+		// 		IF NOT, HP 
+		
 
+	}
+
+	/*-----------------------------------------------------------------------*/
+	// PLAYER
+	LoadPlayerBuildings()
+	{
+			// SPAWN AT LOCATION, ADD TO PLAYER BUILDINGS
+			// SET HP
+	}
+
+	LoadPlayerUnits()
+	{
+		// SPAWN AT LOCATION
+		//  SET HP
+		//  IF MOVING?
+		// 		SET DESTINATION
+
+	}
+
+	/*-----------------------------------------------------------------------*/
+	// AI
+	LoadAIBuildings()
+	{
+		// SPAWN BUILDING
+		// SET HP 
+		
+	}
+
+	LoadAIUnits()
+	{
+		// SPAWN UNIT
+		// SET HP
+	}
+
+	LoadAIStocks()
+	{
+		// GOLD
+		// SILVER
 	}
 
 /*****************************************************************************/
 							// DEBUGGING // 
 /*****************************************************************************/
 
+printArrays()
+{
+	console.log("SAVED MAP RESOURCES -----------------------");
+	console.log(savedMapResources);
+
+	console.log("SAVED PLAYER BUILDINGS -----------------------");
+	console.log(savedPlayerBuildings);
+
+	console.log("SAVED PLAYER UNITS -----------------------");
+	console.log(savedPlayerUnits);
+
+	console.log("SAVED PLAYER STOCKS -----------------------");
+	console.log(savedPlayerStocks);
+
+	console.log("SAVED AI BUILDINGS -----------------------");
+	console.log(savedAIBuildings);
+
+	console.log("SAVED AI UNITS -----------------------");
+	console.log(savedAIUnits);
+
+	console.log("SAVED AI STOCKS -----------------------");
+	console.log(savedAIStocks);
+}
+
+
+
 /*****************************************************************************/
 							// MAIN // 
 /*****************************************************************************/
 	Main()
 	{
+		this.printArrays();
 
 	}
 }
