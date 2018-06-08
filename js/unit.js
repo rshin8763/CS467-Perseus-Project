@@ -169,7 +169,11 @@ class Unit extends GameObject{
             this.attacking = false;
             this.moving = false;
             attacker.stopAttack();
-            this.Perseus.AI.DeleteUnit(this);
+            if (this.faction == 'orc')
+            {
+                this.Perseus.AI.DeleteUnit(this);
+            }
+            
         }
 
         this.hpbar.width = (this.hp / this.maxHP) * 64;

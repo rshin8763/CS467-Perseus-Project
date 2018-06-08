@@ -76,7 +76,11 @@ class Building extends GameObject{
                     this.Perseus.objects.splice(i, 1);
                 }
             }
-            this.Perseus.AI.DeleteBuilding(this);
+            if(this.faction == 'orc')
+            {
+                this.Perseus.AI.DeleteBuilding(this);
+            }
+            
         }
 
         this.hpbar.width = (this.hp / this.maxHP) * 128;

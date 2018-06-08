@@ -32,7 +32,6 @@ var intruder = false;
 
 var timerTick = 150;
 var timer = timerTick;
-var safe = true;
 
 ////////////////// ORGANIZE BY GOALS ////////
 
@@ -122,7 +121,6 @@ class AI
 		// ARRAYS
 		this.MyBuildings = [];
 		this.MyUnits = [];
-		this.MyResources = [];
 	}
 
 /*****************************************************************************/
@@ -230,12 +228,7 @@ class AI
 		{
 			this.UpdateStock(-FortCosts.wood, 'wood');
 			this.UpdateStock(-FortCosts.gold, 'gold');
-			// UPDATE BUILDINGS
 			thisBuilding = new Fort('orc', 1400, 1400, this.Perseus)
-
-			// UPDATE RESOURCES & ADD WORKERS
-			this.AddUnit('worker');
-			this.AddUnit('worker');
 			this.AIForts++;
 		}
 
@@ -244,12 +237,7 @@ class AI
 		{
 			this.UpdateStock(-ArcheryRangeCosts.wood, 'wood');
 			this.UpdateStock(-ArcheryRangeCosts.gold, 'gold');
-			// ADD BARRACKS AND UPDATE BUILDINGS
 			thisBuilding = new ArcheryRange('orc', 1000, 1400, this.Perseus);
-
-			// UPDATE RESOURCES + ADD TWO WIZARDS
-			this.AddUnit('Archer');
-			this.AddUnit('Archer');
 			this.AIArcheryRanges++;
 		}
 
@@ -258,14 +246,7 @@ class AI
 		{
 			this.UpdateStock(-BarracksCosts.wood, 'wood');
 			this.UpdateStock(-BarracksCosts.gold, 'gold');
-			// ADD BARRACKS AND UPDATE BUILDINGS
 			thisBuilding = new Barracks('orc', 1000, 1250, this.Perseus);
-
-			// UPDATE RESOURCES + 1 PIKEMAN, & 1 SWORDINFANTRY
-			this.AddUnit('Pikeman');
-			this.AddUnit('Pikeman');
-			this.AddUnit('SwordInfantry');
-			this.AddUnit('SwordInfantry');
 			this.AIBarracks++;
 		}
 
@@ -274,12 +255,7 @@ class AI
 		{
 			this.UpdateStock(-WizardTowerCosts.wood, 'wood');
 			this.UpdateStock(-WizardTowerCosts.gold, 'gold');
-			// ADD BARRACKS AND UPDATE BUILDINGS
 			thisBuilding = new WizardTower('orc', 1550, 1400, this.Perseus);
-
-			// UPDATE RESOURCES + ADD TWO WIZARDS
-			this.AddUnit('Wizard');
-			this.AddUnit('Wizard');
 			this.AITowers++;
 		}
 
@@ -320,9 +296,13 @@ class AI
 		{
 			this.AIArcheryRanges--;
 		}
-		else
+		else if (type == 'Wizard Tower' || type == 'wizard tower')
 		{
 			this.AITowers--;
+		}
+		else
+		{
+			console.log("You tried to delete a building and failed");
 		}
 		this.AIAllBuildings--;
 		// CHECK TO SEE IF ITS A GAME OVER

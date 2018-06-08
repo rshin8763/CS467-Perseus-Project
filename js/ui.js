@@ -19,6 +19,7 @@ class Ui
         this.saveButton;
         this.resumeButton;
         this.enemyHealthText;
+        this.music;
         // this.minimap = new Minimap(Perseus);
         this.commandButtons = [];
         this.initialize();
@@ -55,6 +56,10 @@ class Ui
                 this.ui.add(tile);
             }
         }
+
+        this.music = this.Perseus.game.add.audio('backgroundMusic');
+        this.music.loop = true;
+        this.music.play();
 
         // ------------------------------------------------------------------------
         // PAUSE BUTTON, MUTE, MENU
@@ -236,13 +241,13 @@ class Ui
 
     muteMusic()
     {
-        if(music.mute == true)
+        if(this.music.mute == true)
         {
-            music.mute = false;
+            this.music.mute = false;
         }
         else
         {
-            music.mute = true;
+            this.music.mute = true;
         }
 
     }
