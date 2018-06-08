@@ -12,6 +12,7 @@ import {Player} from './player.js';
 import {AI} from './ai.js';
 import {Wizard} from './wizard.js';
 import {GameState} from './gameState.js';
+import {Prompter} from './prompter.js';
 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
@@ -132,6 +133,7 @@ function create()
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
     Perseus.ui = new Ui(Perseus);
+    Perseus.prompter = new Prompter(Perseus);
 
 
     Perseus.objects.push(new Worker ('human', 700, 300, Perseus));
@@ -145,6 +147,7 @@ function create()
     console.log(Perseus.objects);
     console.log(Perseus.resources);
     console.log(Perseus.navigator.navmap);
+    Perseus.prompter.drawToScreen('TEXT PROMPTER!! ', 100, '#00ff00');
 }
 
 function update()
@@ -154,6 +157,7 @@ function update()
     Perseus.objects.forEach(function(obj){
         obj.update();
     });
+    Perseus.prompter.update();
 }
 
 /******************************************************************************/
