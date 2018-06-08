@@ -1,6 +1,7 @@
 var style = { font: "17px Times New Roman", fill: "#ffffff", align: "left"};
 
-import {Player} from './player.js'
+import {Player} from './player.js';
+import {InfoBar} from './infoBar.js';
 
 class Ui
 {
@@ -36,14 +37,7 @@ class Ui
         this.bar = bar;
         this.ui.add(bar);
 
-        // Create GUI info box
-        let infoBox = this.Perseus.game.add.graphics();
-        let style = { font: "12px Arial", fill: "#ffffff", align: "center" };
-        infoBox.lineStyle(2, 0xFFFFFF, 1);
-        infoBox.drawRect(16,200,192,192);
-        infoBox.fixedToCamera = true;
-        this.infoBox = infoBox;
-        this.ui.add(infoBox);
+        this.infoBox = new InfoBar(16, 150, this.Perseus);
 
         // Create GUI command box
         let commandBox = this.Perseus.game.add.graphics();

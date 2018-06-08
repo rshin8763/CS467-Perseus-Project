@@ -60,6 +60,9 @@ class Barracks extends Building{
                 this.current = this.SWORD;
                 this.buildProgress = 0;
                 this.Perseus.Player.reduceResources(this.SwordInfantryCosts.wood, this.SwordInfantryCosts.gold);
+            } else {
+                if(this.faction == 'human')
+                    this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.SwordInfantryCosts.wood, this.SwordInfantryCosts.gold), 100, '#ff0000');   
             }
         }
     }
@@ -75,6 +78,9 @@ class Barracks extends Building{
                 this.current = this.PIKE;
                 this.buildProgress = 0;
                 this.Perseus.Player.reduceResources(this.PikemanCosts.wood, this.PikemanCosts.gold);
+            } else {
+                if(this.faction == 'human')
+                    this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.PikemanCosts.wood, this.PikemanCosts.gold), 100, '#ff0000');   
             }
         }
     }

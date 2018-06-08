@@ -46,6 +46,7 @@ class Controller{
                 this.Perseus.ui.updateCommandList(obj);
             }
         } else if (this.state == 'attack'){
+            this.Perseus.prompter.clearText();
             let emptySquares = [];
             let origin = {x:this.selectedObjects[0].x, y: this.selectedObjects[0].y};
             if(obj.movable == false)
@@ -81,6 +82,7 @@ class Controller{
                     elem.gather(obj);
                 }
             });
+            this.Perseus.prompter.clearText();
             this.state = 'default';
         }
     }
@@ -219,10 +221,11 @@ class Controller{
 
         this.cameraPan();
 
-        if(this.state != 'pointerHold' || this.commandState != 'build'){
+        if(this.state != 'pointerHold' && this.commandState != 'build'){
             if(this.keys.A.isDown){
                 if (this.isViableCommand('A')){
                     this.Perseus.ui.highlightButton('A');
+                    this.Perseus.prompter.drawToScreen('Choose Attack Target', -1);
                     //console.log('input attack command');
                     this.state = 'attack';
                 }
@@ -231,7 +234,7 @@ class Controller{
                 if (this.isViableCommand('M')){
                     this.Perseus.ui.highlightButton('M');
                     this.state = 'move';
-                    //console.log('input move command');
+                    this.Perseus.prompter.drawToScreen('Choose Target Location', -1);
                 }
             }
 
@@ -239,7 +242,7 @@ class Controller{
                 if (this.isViableCommand('G')){
                     this.Perseus.ui.highlightButton('G');
                     this.state = 'gather';
-                    //console.log('click on a resource');
+                    this.Perseus.prompter.drawToScreen('Click on a Resource', -1);
                 }
             }
 
@@ -322,7 +325,7 @@ class Controller{
                 }
             }
         }
-        // Cancel command ( no right click yet)
+        // Cancel command
         if (this.keys.X.isDown){
             this.selectedObjects.forEach((obj)=>{
                 if (obj instanceof Worker)
@@ -330,8 +333,8 @@ class Controller{
             });
             this.state = 'default';
             this.commandState = 'default';
-            //console.log('controller state is default');
             this.Perseus.ui.updateCommandList(this.highestPrioritySelected);
+            this.Perseus.prompter.clearText();
         }
 
         if (this.state == 'default' ){
@@ -351,6 +354,7 @@ class Controller{
                         }
                     }, this);
 
+                    this.Perseus.prompter.clearText();
                     this.state = 'default';
                     this.commandState = 'default';
                 }
@@ -365,6 +369,7 @@ class Controller{
                     this.highestPrioritySelected.place(this.pointer.positionDown.x, this.pointer.positionDown.y);
                     this.state = 'default';
                     this.commandState = 'default';
+                    this.Perseus.prompter.clearText();
                 }
             }
         }

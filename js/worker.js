@@ -7,12 +7,13 @@ import {WizardTower} from './wizardtower.js'
 import {Farm} from './farm.js'
 import {AI} from './ai.js';
 import {Player} from './player.js';
+import {Resource} from './resource.js';
 
 var woodHarvest = 10, goldMined = 10;
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
-        super(x,y, faction,'worker', 70, 17, 5, 3, Perseus)
+        super(x,y, faction,'worker', 70, 17, 5, 3, Perseus);
         this.woodCost = 0;
         this.goldCost = 300;
         this.maxHP = 70;
@@ -48,7 +49,7 @@ class Worker extends Unit{
             WizardTower : 500,
             Farm : 0
         }
-        
+
         if(Math.random() >= 0.5){
             this.addSprite('worker_male');
         } else {
@@ -76,13 +77,13 @@ class Worker extends Unit{
         this.selectedY = null;
         this.buildProgress = 0;
         this.gatherState = 0;
+        this.sprite.animations.stop();
         this.building = false;
         this.placing = false;
-
     }
 
     findNearestFort(){
-        
+
         let x = this.x;
         let y = this.y;
 
@@ -139,7 +140,8 @@ class Worker extends Unit{
             this.createConflictSquares();
             return true;
         } else {
-            console.log('not enough resources');
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.Fort, this.goldCosts.Fort), 100, '#ff0000');   
             return false;
         }
 
@@ -161,6 +163,8 @@ class Worker extends Unit{
             this.createMineConflictSquares();
             return true;
         } else {
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.Mine, this.goldCosts.Mine), 100, '#ff0000');   
             console.log('not enough resources');
             return false;
         }
@@ -180,6 +184,8 @@ class Worker extends Unit{
             this.createConflictSquares();
             return true;
         } else {
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.Barracks, this.goldCosts.Barracks), 100, '#ff0000');   
             console.log('not enough resources');
             return false;
         }
@@ -200,6 +206,8 @@ class Worker extends Unit{
             this.createConflictSquares();
             return true;
         } else {
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.ArcheryRange, this.goldCosts.ArcheryRange), 100, '#ff0000');   
             console.log('not enough resources');
             return false;
         }
@@ -220,6 +228,8 @@ class Worker extends Unit{
             this.createConflictSquares();    
             return true;
         } else {
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.WizardTower, this.goldCosts.WizardTower), 100, '#ff0000');
             console.log('not enough resources');
             return false;
         }
@@ -277,6 +287,8 @@ class Worker extends Unit{
             this.gatherState = 0;
             this.placing = false;
             this.building = true;
+            // Reduce Resources 
+            
             this.selectedSprite.alpha = 0.75;
             this.selectedX = this.selectedSprite.x; 
             this.selectedY = this.selectedSprite.y; 
@@ -343,6 +355,12 @@ class Worker extends Unit{
     }
 
     gather(resource){
+        if (!(resource instanceof Resource)){
+            this.Perseus.prompter.drawToScreen('Must Click on Resource!', 100, '#ff0000');
+            this.Perseus.controller.state = 'default';
+            return;
+        }
+
         this.gatherProgress = 0;
         if (resource.exhausted == true){
             this.gatherState = 0;
@@ -377,14 +395,14 @@ class Worker extends Unit{
             }
         } if (this.gatherState == 2){ //gathering at node
             if (this.gatherProgress < 300){
-                //TODO add animation
                 this.sprite.animations.play('work_right');
                 this.gatherProgress += 1;
             } 
             else 
             {
                 this.sprite.animations.stop();
-                this.lastResource.loseResource(1);
+                if (this.lastResource)
+                    this.lastResource.loseResource(1);
                 this.moveTo(this.findNearestFort());
                 this.gatherState = 3;
             }
@@ -417,7 +435,7 @@ class Worker extends Unit{
                     }
                 }
                 // CHECKS TO SEE IF RESOURCE IS EXHAUSTED
-                if (this.lastResource.exhausted == true)
+                if (this.lastResource && this.lastResource.exhausted == true)
                 {
                     this.gatherState = 0;
                     this.moveTo(this.findNearestFort());
@@ -437,8 +455,8 @@ class Worker extends Unit{
 
             if (this.selectedBuilding == "Mine"){
 
-            this.selectedSprite.x = coords.x - 32;
-            this.selectedSprite.y = coords.y - 32;
+                this.selectedSprite.x = coords.x - 32;
+                this.selectedSprite.y = coords.y - 32;
 
                 for(let i = 0; i < 4; i++)
                 {
