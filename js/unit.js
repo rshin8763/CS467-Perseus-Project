@@ -59,8 +59,8 @@ class Unit extends GameObject{
         this.sprite.animations.add('wlk_right', [143, 144, 145, 146, 147, 148, 149, 150, 151], 10, true);
         this.sprite.animations.add('wlk_left', [117, 118, 119, 120, 121, 122, 123, 124, 125], 10, true);
 
-        this.hpbar = this.game.add.sprite(coords.x,coords.y, 'hpbar');
-        this.hpbar.anchor.x = .5;
+        this.hpbar = this.game.add.sprite(coords.x,coords.y, 'hpbar_' + this.faction);
+        this.hpbar.anchor.x = 0.5;
         this.hpbar.anchor.y = 6;
         this.sprite.events.onInputDown.add(function(pointer){
             this.Perseus.controller.select(this);
