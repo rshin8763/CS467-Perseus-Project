@@ -116,11 +116,11 @@ class Barracks extends Building{
     {
         //Create the correct unit object and push to the main objects array
         if(unitType == this.SWORD){
-            this.Perseus.objects.push(new SwordInfantry(this.faction, x, y, this.Perseus));     
+            new SwordInfantry(this.faction, x, y, this.Perseus);     
         }
 
         if(unitType == this.PIKE){
-            this.Perseus.objects.push(new Pikeman(this.faction, x, y, this.Perseus));     
+            new Pikeman(this.faction, x, y, this.Perseus);     
 
         }
     }
