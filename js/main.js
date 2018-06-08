@@ -35,13 +35,29 @@ function preload() {
     // TODO insert tiles url and creators
     this.load.image('gameTiles', 'assets/tilemaps/forestTiles.png');
     this.load.image('tree', 'assets/images/tree.png');
-    this.load.image('barracks', 'assets/barracks.png');
-    this.load.image('fort', 'assets/fort.png');
-    this.load.image('wizardtower', 'assets/wizardtower.png');
+    this.load.image('barracks_human', 'assets/barracks.png');
+    this.load.image('barracks_orc', 'assets/barracks_orc.png');
+
+    this.load.image('fort_human', 'assets/fort.png');
+    this.load.image('fort_orc', 'assets/fort_orc.png');
+
+    this.load.image('wizardtower_human', 'assets/wizardtower.png');
+    this.load.image('wizardtower_orc', 'assets/wizardtower_orc.png');
+
+    this.load.image('archeryrange_human', 'assets/archeryrange.png');
+    this.load.image('archeryrange_orc', 'assets/archeryrange_orc.png');
+
     this.load.image('ui', 'assets/ui/stoneMenu.png');
+<<<<<<< HEAD
     this.load.image('hpbar', 'assets/healthbar.png');
     this.load.image('navSquare', 'assets/navSquare.png')
     this.load.image('archeryrange', 'assets/archeryrange.png');
+=======
+    this.load.image('hpbar_human', 'assets/healthbar.png');
+    this.load.image('hpbar_orc', 'assets/healthbar_orc.png');
+
+    this.load.image('navSquare', 'assets/navSquare.png');
+>>>>>>> master
     
 
     this.load.spritesheet('command_buttons', 'assets/ui/icons.png', 32, 32);
@@ -106,27 +122,25 @@ function create()
     Perseus.objects = [];
 
     // Create display groups to keep gui on top
-    // TODO add to gameSprites group for every sprite creation call in the unit files
     Perseus.gameSprites = Perseus.game.add.group();
-    Perseus.uiGraphics = Perseus.game.add.group();
     Perseus.gui = Perseus.game.add.group();
   
     // ------------------------------------------------------------------------
     // PLAYER
-    //
     Perseus.Player = new Player(Perseus);
-    // Perseus.Player.Main();
-
     // ------------------------------------------------------------------------
     // AI
   
    Perseus.GameState = new GameState(Perseus);
 
+<<<<<<< HEAD
 
     //console.log(Perseus.navigator.navmap);
 
     Perseus.navigator.markOccupied(300, 300);
 
+=======
+>>>>>>> master
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
@@ -136,11 +150,21 @@ function create()
     Perseus.ui = new Ui(Perseus);
 
 
+<<<<<<< HEAD
     Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
     Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
     Perseus.objects.push(new Archer('human', 300, 300, Perseus));
     Perseus.objects.push(new Worker('human', 300, 300, Perseus));
     Perseus.resources.push(new Mine(300, 450, 'human', Perseus));
+=======
+    Perseus.objects.push(new Worker ('human', 700, 300, Perseus));
+    // Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
+    // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
+    // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
+
+    Perseus.Player.playerWood = 5000;
+    Perseus.Player.playerGold = 5000;
+>>>>>>> master
 
     //console.log(Perseus.objects);
     //console.log(Perseus.resources);

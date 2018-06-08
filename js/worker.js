@@ -1,4 +1,4 @@
-
+import {Mine} from './mine.js';
 import {Unit} from './unit.js'
 import {Fort} from './fort.js'
 import {Barracks} from './barracks.js'
@@ -24,6 +24,7 @@ class Worker extends Unit{
         this.selectedSprite = null;
         this.selectedX = null;
         this.selectedY = null;
+        this.squareMarkers = [];
         this.gatherState = 0;
         this.gatherProgress = 0;
         this.lastResource = null;
@@ -32,18 +33,20 @@ class Worker extends Unit{
 
         this.woodCosts = {
             Fort : 150,
-            Barracks: 100,
-            ArcheryRange : 120,
+            Barracks: 150,
+            Mine: 100,
+            ArcheryRange : 300,
             WizardTower : 100,
-            Farm : 500
+            Farm : 100
         }
 
         this.goldCosts = {
             Fort : 250,
-            Barracks: 100,
+            Barracks: 0,
+            Mine: 0,
             ArcheryRange : 300,
             WizardTower : 500,
-            Farm : 100
+            Farm : 0
         }
         
         if(Math.random() >= 0.5){
@@ -54,25 +57,30 @@ class Worker extends Unit{
 
         this.uiData = {
             commandList: {M: "Move", A: "Attack", G:"Gather", B:"Build"},
-            buildList:{F: "Fort", R: "Barracks", A: "Archery Range", W: "Wizard Tower", F: "Farm"}  
+            buildList:{F: "Fort", R: "Barracks", M: "Mine", A: "Archery Range", W: "Wizard Tower", F: "Farm"}  
         };
 
+        //TODO Add work left
         this.sprite.animations.add('work_right', [91, 92, 93, 94, 95, 96, 97, 98], 10, true);
         this.sprite.animations.add('atk_right', [195, 196, 197, 198, 199, 200], 10, true);
         this.sprite.animations.add('atk_left', [169, 170, 171, 172, 173, 174], 10, true);
     }
 
     cancelPlacing(){
-        this.selectedSprite.destroy();
-        //
+        this.squareMarkers.forEach((elem)=>{
+            elem.destroy();
+        });
+        if(this.selectedSprite)
+            this.selectedSprite.destroy();
         this.selectedX = null;
         this.selectedY = null;
         this.buildProgress = 0;
-        this.gatherstate = 0;
+        this.gatherState = 0;
         this.building = false;
         this.placing = false;
 
     }
+
     findNearestFort(){
         
         let x = this.x;
@@ -99,6 +107,9 @@ class Worker extends Unit{
             case 'F':
                 return this.buildFort();
                 break;
+            case 'M':
+                return this.buildMine();
+                break;
             case 'R':
                 return this.buildBarracks();
                 break;
@@ -117,12 +128,13 @@ class Worker extends Unit{
 
     buildFort()
     {
-        if(this.Perseus.Player.playerWood > this.woodCosts.Fort 
+        if(this.Perseus.Player.playerWood >= this.woodCosts.Fort 
                 && this.Perseus.Player.playerGold > this.goldCosts.Fort)
         {            
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort');
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort' + "_" + this.faction);
             this.selectedBuilding = "Fort";
             this.placing = true;
+            this.gatherState = 0;
             this.Perseus.controller.state = 'place';
             this.createConflictSquares();
             return true;
@@ -133,13 +145,36 @@ class Worker extends Unit{
 
     }
 
+    buildMine()
+    {
+        if(this.Perseus.Player.playerWood >= this.woodCosts.Mine 
+                && this.Perseus.Player.playerGold >= this.goldCosts.Mine)
+        {            
+            this.selectedSprite = this.game.add.sprite(this.game.input.x+64, this.game.input.y+64, 'mine');
+            this.selectedSprite.height = 64;
+            this.selectedSprite.width = 64;
+            this.selectedBuilding = "Mine";
+            this.placing = true;
+            this.gatherState = 0;
+            this.Perseus.controller.state = 'place';
+
+            this.createMineConflictSquares();
+            return true;
+        } else {
+            console.log('not enough resources');
+            return false;
+        }
+
+    }
+
     buildBarracks()
     {
-        if(this.Perseus.Player.playerWood  > this.woodCosts.Barracks 
-                && this.Perseus.Player.playerGold  > this.goldCosts.Barracks)
+        if(this.Perseus.Player.playerWood  >= this.woodCosts.Barracks 
+                && this.Perseus.Player.playerGold  >= this.goldCosts.Barracks)
         {            
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks');
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'barracks' + "_" + this.faction);
             this.selectedBuilding = "Barracks";
+            this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
             this.createConflictSquares();
@@ -152,16 +187,15 @@ class Worker extends Unit{
     }
     buildArcheryRange()
     {
-        if(this.Perseus.Player.playerWood > this.woodCosts.ArcheryRange 
-                && this.Perseus.Player.playerGold > this.goldCosts.ArcheryRange)
+        if(this.Perseus.Player.playerWood >= this.woodCosts.ArcheryRange 
+                && this.Perseus.Player.playerGold >= this.goldCosts.ArcheryRange)
         {
 
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange');
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'archeryrange' + "_" + this.faction);
             this.selectedBuilding = "ArcheryRange";
+            this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
-
-            // UpdatePlayerBuildings(1, 'ArcheryRange');
 
             this.createConflictSquares();
             return true;
@@ -173,17 +207,15 @@ class Worker extends Unit{
 
     buildWizardTower()
     {
-
-        if(this.Perseus.Player.playerWood > this.woodCosts.WizardTower 
-                && this.Perseus.Player.playerGold > this.goldCosts.WizardTower)
+        if(this.Perseus.Player.playerWood >= this.woodCosts.WizardTower 
+                && this.Perseus.Player.playerGold >= this.goldCosts.WizardTower)
         {
 
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower');
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'wizardtower' + "_" + this.faction);
             this.selectedBuilding = "WizardTower";
+            this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
-
-            // UpdatePlayerBuildings(1, 'WizardTower');
 
             this.createConflictSquares();    
             return true;
@@ -195,17 +227,21 @@ class Worker extends Unit{
 
     buildFarm()
     {
-        if(this.Perseus.Player.playerWood > this.woodCosts.Farm 
-                && this.Perseus.Player.playerGold > this.goldCosts.Farm)
+        if(this.Perseus.Player.playerWood >= this.woodCosts.Farm 
+                && this.Perseus.Player.playerGold >= this.goldCosts.Farm)
         {
-            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm');
+            this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm' + "_" + this.faction);
             this.selectedBuilding = "Farm";
+            this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
 
+<<<<<<< HEAD
 
             // UpdatePlayerBuildings(1, 'Farm');
 
+=======
+>>>>>>> master
             this.createConflictSquares(); 
             return true;
         } else {
@@ -228,20 +264,43 @@ class Worker extends Unit{
         }
     }
 
+    createMineConflictSquares()
+    {
+        this.squareMarkers = [];
+
+        for(let i = 0; i < 4; i++)
+        {
+            let square = this.Perseus.navigator.getSquare(this.selectedSprite.x , this.selectedSprite.y );
+            let coords = this.Perseus.navigator.getCoords(square.x + i % 2, square.y+ Math.floor(i / 2));
+            let newSquare = this.Perseus.game.add.sprite(coords.x, coords.y, 'navSquare');
+            newSquare.alpha = 0;
+            this.squareMarkers[i] = newSquare;
+        }
+    }
+
     place(){
         if(this.validToPlace == true)
         {
-            this.gatherstate = 0;
+            this.gatherState = 0;
             this.placing = false;
             this.building = true;
             this.selectedSprite.alpha = 0.75;
             this.selectedX = this.selectedSprite.x; 
             this.selectedY = this.selectedSprite.y; 
             let square = this.Perseus.navigator.getSquare(this.selectedSprite.x, this.selectedSprite.y);
-            for(let i = 0; i < 4; i++)
-            {
-                for(let j = 0; j < 4; j++){
-                    this.Perseus.navigator.markOccupied(square.x+i, square.y+j);
+            if (this.selectedBuilding == "Mine"){
+                for(let i = 0; i < 2; i++)
+                {
+                    for(let j = 0; j < 2; j++){
+                        this.Perseus.navigator.markOccupied(square.x+i, square.y+j);
+                    }
+                }
+            }else {
+                for(let i = 0; i < 4; i++)
+                {
+                    for(let j = 0; j < 4; j++){
+                        this.Perseus.navigator.markOccupied(square.x+i, square.y+j);
+                    }
                 }
             }
             //unmark the top left square so the worker can stand there while building
@@ -292,6 +351,10 @@ class Worker extends Unit{
 
     gather(resource){
         this.gatherProgress = 0;
+        if (resource.exhausted == true){
+            this.gatherState = 0;
+            console.log('Resource node is exhausted!');
+        }
         this.moveTo(resource);
         this.gatherState = 1;
         this.lastResource = resource;
@@ -299,7 +362,7 @@ class Worker extends Unit{
 
     move(x,y){
         super.move(x,y);
-        this.gatherstate = 0;
+        this.gatherState = 0;
         //console.log(this.destx, this.desty);
     }
 
@@ -309,7 +372,6 @@ class Worker extends Unit{
         //let rand = Math.floor(Math.random() * border.length);
 
         //console.log("moving to ", obj.sprite.x, " ", obj.sprite.y);
-        this.gatherstate = 0;
         let coords = this.Perseus.navigator.getCoords(border[0].x, border[0].y);
         this.move(coords.x, coords.y);
     }
@@ -321,16 +383,17 @@ class Worker extends Unit{
                 this.gatherState = 2;
             }
         } if (this.gatherState == 2){ //gathering at node
-            if (this.gatherProgress < 150){
+            if (this.gatherProgress < 300){
                 //TODO add animation
+                this.sprite.animations.play('work_right');
                 this.gatherProgress += 1;
             } 
             else 
             {
-                this.gatherState = 3;
-
-                this.lastResource.takeDamage(5);
+                this.sprite.animations.stop();
+                this.lastResource.loseResource(1);
                 this.moveTo(this.findNearestFort());
+                this.gatherState = 3;
             }
         } 
         if (this.gatherState == 3)
@@ -342,12 +405,10 @@ class Worker extends Unit{
                     if(this.faction == 'orc') // IF IS AI, UPDATE AI
                     {
                         this.Perseus.AI.UpdateStock(woodHarvest, 'wood');
-                        this.lastResource.takeDamage(10);
                     }
                     else // ELSE IS PLAYER
                     {
                         this.Perseus.Player.UpdateStock(woodHarvest, 'wood');
-                        this.lastResource.takeDamage(10);
                     }
 
                 } 
@@ -356,12 +417,10 @@ class Worker extends Unit{
                     if(this.faction == 'orc') // 
                     {
                         this.Perseus.AI.UpdateStock(goldMined, 'gold');
-                        this.lastResource.takeDamage(10);
                     }
                     else
                     {
                         this.Perseus.Player.UpdateStock(goldMined, 'gold');
-                        this.lastResource.takeDamage(10);
                     }
                 }
                 // CHECKS TO SEE IF RESOURCE IS EXHAUSTED
@@ -382,49 +441,98 @@ class Worker extends Unit{
         {
             let selectedSquare = this.Perseus.navigator.getSquare(this.game.input.activePointer.x + this.game.camera.view.x, this.game.input.activePointer.y + this.game.camera.view.y);
             let coords = this.Perseus.navigator.getCoords(selectedSquare.x, selectedSquare.y);
-            this.selectedSprite.x = coords.x - 64;
-            this.selectedSprite.y = coords.y - 64;
 
-            for(let i = 0; i < 16; i++)
-            {
-                let square = this.Perseus.navigator.getSquare(this.selectedSprite.x , this.selectedSprite.y );
-                let coords = this.Perseus.navigator.getCoords(square.x + i % 4, square.y+ Math.floor(i / 4));
+            if (this.selectedBuilding == "Mine"){
 
+            this.selectedSprite.x = coords.x - 32;
+            this.selectedSprite.y = coords.y - 32;
 
-                this.squareMarkers[i].x = coords.x;
-                this.squareMarkers[i].y = coords.y;
-            }
-
-            let square = this.Perseus.navigator.getSquare(this.selectedSprite.x, this.selectedSprite.y,);
-            coords = this.Perseus.navigator.getCoords(square.x, square.y);
-
-            let conflicts = 0;
-
-            if(square.x > 0 && square.y > 0)
-            {
                 for(let i = 0; i < 4; i++)
                 {
-                    for (let j = 0; j < 4; j++)
-                    {
-                        let index = i + j*4
-                            if(this.Perseus.navigator.navmap[square.x+i][square.y+j] == 1){
-                                this.squareMarkers[index].alpha = .5;
-                                conflicts++;
-                            } else {
-                                this.squareMarkers[index].alpha = .0;
-                            }
+                    let square = this.Perseus.navigator.getSquare(this.selectedSprite.x , this.selectedSprite.y );
+                    let coords = this.Perseus.navigator.getCoords(square.x + i % 2, square.y+ Math.floor(i / 2));
 
+
+                    this.squareMarkers[i].x = coords.x;
+                    this.squareMarkers[i].y = coords.y;
+                }
+
+                let square = this.Perseus.navigator.getSquare(this.selectedSprite.x, this.selectedSprite.y,);
+                coords = this.Perseus.navigator.getCoords(square.x, square.y);
+
+                let conflicts = 0;
+
+                if(square.x > 0 && square.y > 0)
+                {
+                    for(let i = 0; i < 2; i++)
+                    {
+                        for (let j = 0; j < 2; j++)
+                        {
+                            let index = i + j*2
+                                if(this.Perseus.navigator.navmap[square.x+i][square.y+j] != 2){
+                                    this.squareMarkers[index].alpha = .5;
+                                    conflicts++;
+                                } else {
+                                    this.squareMarkers[index].alpha = .0;
+                                }
+
+                        }
                     }
                 }
-            }
 
-            if(conflicts > 0)
-            {
-                this.validToPlace = false;
-            }else{
-                this.validToPlace = true;
+                if(conflicts > 0)
+                {
+                    this.validToPlace = false;
+                }else{
+                    this.validToPlace = true;
+                }
+                console.log(selectedSquare);
+
+            } else {
+                this.selectedSprite.x = coords.x - 64;
+                this.selectedSprite.y = coords.y - 64;
+
+                for(let i = 0; i < 16; i++)
+                {
+                    let square = this.Perseus.navigator.getSquare(this.selectedSprite.x , this.selectedSprite.y );
+                    let coords = this.Perseus.navigator.getCoords(square.x + i % 4, square.y+ Math.floor(i / 4));
+
+
+                    this.squareMarkers[i].x = coords.x;
+                    this.squareMarkers[i].y = coords.y;
+                }
+
+                let square = this.Perseus.navigator.getSquare(this.selectedSprite.x, this.selectedSprite.y,);
+                coords = this.Perseus.navigator.getCoords(square.x, square.y);
+
+                let conflicts = 0;
+
+                if(square.x > 0 && square.y > 0)
+                {
+                    for(let i = 0; i < 4; i++)
+                    {
+                        for (let j = 0; j < 4; j++)
+                        {
+                            let index = i + j*4
+                                if(this.Perseus.navigator.navmap[square.x+i][square.y+j] == 1){
+                                    this.squareMarkers[index].alpha = .5;
+                                    conflicts++;
+                                } else {
+                                    this.squareMarkers[index].alpha = .0;
+                                }
+
+                        }
+                    }
+                }
+
+                if(conflicts > 0)
+                {
+                    this.validToPlace = false;
+                }else{
+                    this.validToPlace = true;
+                }
+                console.log(selectedSquare);
             }
-            console.log(selectedSquare);
         }
 
         if(this.building)
@@ -434,8 +542,6 @@ class Worker extends Unit{
 
                 this.move(this.selectedX, this.selectedY)
             } else {
-                console.log(this.buildProgress);
-
                 if(this.buildProgress > 1000)
                 {
 
@@ -446,6 +552,10 @@ class Worker extends Unit{
                     if(this.selectedBuilding == "Barracks")
                     {
                         this.Perseus.objects.push(new Barracks(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                    }
+                    if(this.selectedBuilding == "Mine")
+                    {
+                        this.Perseus.objects.push(new Mine(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
                     }
                     if(this.selectedBuilding == "ArcheryRange")
                     {

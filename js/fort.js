@@ -6,7 +6,7 @@ import {AI} from './ai.js';
 
 class Fort extends Building{
     constructor(faction, x,y,Perseus){
-        super(faction, 2500, x, y, Perseus);
+        super(faction, 350, x, y, Perseus);
         this.addSprite('fort');
         this.faction = faction;
         this.type = "Fort";

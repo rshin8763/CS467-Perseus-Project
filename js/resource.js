@@ -1,19 +1,19 @@
 import {GameObject} from './gameObject.js'
 class Resource  extends GameObject{
-    constructor(x, y, Perseus){
+    constructor(faction, type, Perseus){
         super(false, faction, Perseus);
         this.sprite = null;
-        this.resource = null;
+        this.type = type;
         this.resourceAmount = 100;
         this.exhausted = false;
-        let square = this.Perseus.navigator.getSquare(x,y);
-        this.x = square.x;
-        this.y = square.y;
     }
 
-    takeDamage(rate){
-        resourceAmount -= rate;
-        if (resouceAmount <= 0) {
+    loseResource(rate){
+        this.resourceAmount -= rate;
+        console.log("The current resource amount is: " + this.resourceAmount);
+
+        if (this.resourceAmount <= 0) {
+            console.log('resources is now exhasuted');
             this.exhausted = true;
         }
     }
