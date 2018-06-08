@@ -90,6 +90,11 @@ class Unit extends GameObject{
             return;
         }
 
+        //Don't move if youre already standing in the square
+        if(this.x == this.dest.x && this.y == this.dest.y)
+        {
+            return;
+        }
 
         this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
 
