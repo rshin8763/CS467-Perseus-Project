@@ -4,10 +4,14 @@ class InfoBar
 {
     constructor(x,y, Perseus){
         this.infoElements = [];
+        this.Perseus = Perseus;
         this.progressBar;
         this.stats;
         this.x = x;
         this.y = y;
+        this.initialize();
+        this.infoBox;
+        this.infoTitle;
     }
 
     initialize(){
@@ -15,7 +19,6 @@ class InfoBar
 
         // Create GUI info box
         let infoBox = this.Perseus.game.add.graphics();
-        let style = { font: "16px Arial", fill: "#ffffff", align: "left" };
         infoBox.lineStyle(2, 0xFFFFFF, 1);
         infoBox.drawRect(this.x, this.y,192,192+50);
         infoBox.fixedToCamera = true;
@@ -35,17 +38,20 @@ class InfoBar
     }
     fillBuildingStats(){
     }
+
     fillResourceStats(){
     }
+
     fillInfoBar(obj){
     }
 
-    addBuildProgress(){
+    addBuildProgress(obj){
+        if (obj instanceof Building){
+        }
     }
 
     update(){
-        updateBuildProgress(){
-        }
+        this.addBuildProgress(this.Perseus.controller.highestPrioritySelected);
     }
 }
 
