@@ -12,7 +12,11 @@ import {Player} from './player.js';
 import {AI} from './ai.js';
 import {Wizard} from './wizard.js';
 import {GameState} from './gameState.js';
+<<<<<<< HEAD
 import {SaveGame} from './saveGame.js';
+=======
+import {Prompter} from './prompter.js';
+>>>>>>> master
 
 var Perseus = Perseus || {};
 Perseus.graphics = {}
@@ -132,6 +136,11 @@ function create()
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
     Perseus.mapRenderer.createResources();
+<<<<<<< HEAD
+=======
+    Perseus.ui = new Ui(Perseus);
+    Perseus.prompter = new Prompter(Perseus);
+>>>>>>> master
 
     Perseus.AI = new AI(Perseus);
     Perseus.AI.Main();
@@ -144,6 +153,7 @@ function create()
     Perseus.Player.playerWood = 5000;
     Perseus.Player.playerGold = 5000;
 
+<<<<<<< HEAD
     //console.log(Perseus.objects);
     //console.log(Perseus.resources);
     //console.log(Perseus.navigator.navmap);
@@ -152,6 +162,12 @@ function create()
     // save game testing
     Perseus.SaveGame = new SaveGame(Perseus);
     Perseus.SaveGame.SaveAIBuildings();
+=======
+    console.log(Perseus.objects);
+    console.log(Perseus.resources);
+    console.log(Perseus.navigator.navmap);
+    Perseus.prompter.drawToScreen('TEXT PROMPTER!! ', 100, '#00ff00');
+>>>>>>> master
 }
 
 function update()
@@ -161,7 +177,11 @@ function update()
     Perseus.objects.forEach(function(obj){
         obj.update();
     });
+<<<<<<< HEAD
     Perseus.AI.update();
+=======
+    Perseus.prompter.update();
+>>>>>>> master
 }
 
 /******************************************************************************/
