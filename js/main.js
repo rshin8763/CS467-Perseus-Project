@@ -18,11 +18,9 @@ var Perseus = Perseus || {};
 Perseus.graphics = {}
 
 // create the game, and pass it the configuration
-<<<<<<< HEAD
-Perseus.game = new Phaser.Game(1000, 800, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-=======
+
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
->>>>>>> master
+
 var goldText, woodText, fortText, barracksText, towerText, enemyHealthText;
 var titlescreen, easyGameButton, loadGameButton, music, newGameButton, hardGameButton, gameName, mute_button, music;
 var style = { font: "20px Times New Roman", fill: "#ffffff", align: "center"};
@@ -118,14 +116,8 @@ function create()
     // ------------------------------------------------------------------------
     // MAIN MENU FORK  
     Perseus.SaveGame = new SaveGame(Perseus);
-<<<<<<< HEAD
     //Create resources
     Perseus.Player = new Player(Perseus);
-    Perseus.mapRenderer = new mapRenderer(Perseus);
-    Perseus.mapRenderer.createResources();
-=======
->>>>>>> master
-
 
     Perseus.prompter = new Prompter(Perseus);
     Perseus.AI = new AI(Perseus);
@@ -136,15 +128,6 @@ function create()
 
     Perseus.ui = new Ui(Perseus);
     Perseus.SaveGame = new SaveGame(Perseus);
-<<<<<<< HEAD
-=======
-    //Perseus.MainMenu = new MainMenu(Perseus);
-    //Perseus.ui.StartingScreen();
-
-    // Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
-    // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
->>>>>>> master
 
     Perseus.Player.playerWood = 5000;
     Perseus.Player.playerGold = 5000;
