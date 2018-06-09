@@ -116,7 +116,8 @@ class Player
             }
         }
         if (obj instanceof Building){
-            this.buildings.remove(obj);
+            let index = this.buildings.indexOf(obj);
+            this.buildings.splice(index, 1);
             this.playerAllBuildings--;
         }
     }
