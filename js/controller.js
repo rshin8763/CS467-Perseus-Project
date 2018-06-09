@@ -37,7 +37,7 @@ class Controller{
         if (this.state == 'default'){
             this.selectedObjects.forEach((elem)=>{elem.undrawCircle();});
             this.selectedObjects = [];
-            if(obj.faction == 'human'){
+            if(obj.faction != 'orc'){
                 this.selectedObjects.push(obj);
                 this.highestPrioritySelected = obj;
                 obj.drawSelectionCircle();
@@ -220,7 +220,7 @@ class Controller{
 
         this.cameraPan();
 
-        if(this.state != 'pointerHold' && this.commandState != 'build'){
+        if(this.state != 'pointerHold' && this.commandState == 'default'){
             if(this.keys.A.isDown){
                 if (this.isViableCommand('A')){
                     this.Perseus.ui.highlightButton('A');
@@ -357,9 +357,23 @@ class Controller{
             }
         } 
         if (this.state == 'attack'){
+            //TODO maybe comment this out for attack move
+            if (this.pointer.isDown == true){
+                if (!this.isPointerInUi()){
+                    this.selectedObjects.forEach((obj) => {
+                        if (obj instanceof Unit){
+                            obj.attackMove(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
+                        }
+                    }, this);
+
+                    this.state = 'default';
+                    this.commandState = 'default';
+                }
+            }
             //wait for click event
         } 
         if (this.state == 'place'){
+            this.commandState = 'place'; //TODO
             if (this.pointer.isDown == true){
                 if (!this.isPointerInUi()){
                     this.highestPrioritySelected.place(this.pointer.positionDown.x, this.pointer.positionDown.y);

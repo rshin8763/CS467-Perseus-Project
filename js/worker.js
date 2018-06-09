@@ -305,6 +305,7 @@ class Worker extends Unit{
             this.Perseus.Player.reduceResources(this.woodCosts[this.selectedBuilding], this.goldCosts[this.selectedBuilding]);
             
             this.selectedSprite.alpha = 0.75;
+            this.Perseus.gameSprites.add(this.selectedSprite);
             this.selectedX = this.selectedSprite.x; 
             this.selectedY = this.selectedSprite.y; 
             let square = this.Perseus.navigator.getSquare(this.selectedSprite.x, this.selectedSprite.y);
