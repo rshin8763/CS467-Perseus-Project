@@ -45,13 +45,13 @@ var buildRaidTimer = buildRaidTick;
 // UNIT COSTS
 
 var WorkerCost = {
-	wood: 100,
-	gold: 100
+	wood: 50,
+	gold: 0
 };
 
 var GoldMineCosts = {
-	wood: 150,
-	gold: 150
+	wood: 100,
+	gold: 0
 };
 
 var ArcheryRangeCosts = {
@@ -75,7 +75,7 @@ var PikemanCost = {
 };
 
 var SwordInfantryCost = {
-	wood: 400,
+	wood: 50,
 	gold: 400
 };
 

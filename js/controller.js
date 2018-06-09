@@ -358,18 +358,18 @@ class Controller{
         } 
         if (this.state == 'attack'){
             //TODO maybe comment this out for attack move
-            if (this.pointer.isDown == true){
-                if (!this.isPointerInUi()){
-                    this.selectedObjects.forEach((obj) => {
-                        if (obj instanceof Unit){
-                            obj.attackMove(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
-                        }
-                    }, this);
+            // if (this.pointer.isDown == true){
+            //     if (!this.isPointerInUi()){
+            //         this.selectedObjects.forEach((obj) => {
+            //             if (obj instanceof Unit){
+            //                 obj.attackMove(this.pointer.positionDown.x + this.Perseus.game.camera.view.x, this.pointer.positionDown.y + this.Perseus.game.camera.view.y);
+            //             }
+            //         }, this);
 
-                    this.state = 'default';
-                    this.commandState = 'default';
-                }
-            }
+            //         this.state = 'default';
+            //         this.commandState = 'default';
+            //     }
+            // }
             //wait for click event
         } 
         if (this.state == 'place'){

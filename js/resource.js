@@ -16,5 +16,8 @@ class Resource  extends GameObject{
             this.exhausted = true;
         }
     }
+    takeDamage(rate){
+        return;
+    }
 }
 export {Resource};
