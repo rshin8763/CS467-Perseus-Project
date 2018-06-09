@@ -129,6 +129,8 @@ function create()
     console.log(Perseus.resources);
     console.log(Perseus.navigator.navmap);
     startScreen();
+
+
 }
 
 function update()
