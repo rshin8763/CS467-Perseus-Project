@@ -20,6 +20,8 @@ class GameObject {
             // this.Perseus.enemy.addObject(this);
         }
 
+        this.Perseus.objects.push(this);
+
         this.game = Perseus.game;
         this.movable = movable;
         this.circle = null;

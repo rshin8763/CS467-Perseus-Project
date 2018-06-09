@@ -9,7 +9,7 @@ import {AI} from './ai.js';
 import {Player} from './player.js';
 import {Resource} from './resource.js';
 
-var woodHarvest = 10, goldMined = 10;
+var woodHarvest = 20, goldMined = 20;
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
@@ -18,7 +18,7 @@ class Worker extends Unit{
         this.woodCost = 0;
         this.goldCost = 300;
         this.maxHP = 70;
-        this.type="Worker";
+        this.type = "Worker";
         this.placing = false;
         this.building = false;
         this.buildProgress = 0;
@@ -89,17 +89,16 @@ class Worker extends Unit{
     //Find the nearest fort to the units current postion
     findNearestFort(){
 
-        let x = this.x;
-        let y = this.y;
+        let x = this.sprite.x;
+        let y = this.sprite.y;
 
         let closest = null;
         let min = Number.MAX_SAFE_INTEGER;
         this.Perseus.objects.forEach((obj)=>{
             if (obj instanceof Fort && obj.faction == this.faction){
-                //get distance
-                if (Math.hypot(x-obj.x, y-obj.y) < min){
-                    min = Math.hypot(x-obj.x, y-obj.y);
-                    closest = obj;
+                if (Math.hypot(x-obj.sprite.x, y-obj.sprite.y) < min){
+                    min = Math.hypot(x-obj.sprite.x, y-obj.sprite.y);
+                  closest = obj;
                 }
             }
         });
@@ -575,7 +574,6 @@ class Worker extends Unit{
             } else {
                 if(this.buildProgress > 100)
                 {
-
                     if(this.selectedBuilding == "Fort")
                     {
                         new Fort(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);

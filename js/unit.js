@@ -38,9 +38,7 @@ class Unit extends GameObject{
         this.pathStep = 0;
         this.attackMoving = false;
         this.attackMoveDest = null;
-
-        //Add object to object array
-        Perseus.objects.push(this);
+      
         Perseus.navigator.units.push(this);
     }
 
@@ -107,7 +105,7 @@ class Unit extends GameObject{
         var rand = Math.random() * emptySquares.length;
 
         //Don't move the unit if it's already within attack range
-        if(Math.abs(this.selectedObjects[i].x - obj.x) <= 1 && Math.abs(this.selectedObjects[i].y - obj.y) <= 1 )
+        if(Math.abs(this.x - obj.x) <= 1 && Math.abs(this.y - obj.y) <= 1 )
         {
             this.attack(obj, {x: this.x, y: this.y});
         }else{
@@ -115,7 +113,7 @@ class Unit extends GameObject{
         }
         
     }
-    
+
     //Move a unit to the square in which point (x, y) is.
     move(x, y){
 

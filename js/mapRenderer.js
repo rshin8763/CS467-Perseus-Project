@@ -37,14 +37,14 @@ class mapRenderer{
     //create a sprite from an object
     createFromTiledObject(element, Perseus) {
         if (element.type == 'tree'){
-            Perseus.objects.push(new Tree(Math.floor(element.x), Math.floor(element.y), this.Perseus));
+            new Tree(Math.floor(element.x), Math.floor(element.y), this.Perseus);
         }
         if (element.type == 'fort'){
-            //Perseus.objects.push(new Fort('human', Math.floor(element.x), Math.floor(element.y), this.Perseus));
-
+            new Fort('human', Math.floor(element.x), Math.floor(element.y), this.Perseus);
         }
         if (element.type == 'enemyFort'){
-            //Perseus.objects.push(new Fort('orc', Math.floor(element.x), Math.floor(element.y), this.Perseus));
+            new Fort('orc', Math.floor(element.x), Math.floor(element.y), this.Perseus);
+
 
         }
     }
