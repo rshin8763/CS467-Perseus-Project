@@ -283,7 +283,7 @@ class AI
 		this.MyBuildings.push(thisBuilding);
 		
 		//this.Perseus.updateText('Enemy');
-		return thisBuilding.tag;
+		return thisBuilding;
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -397,6 +397,7 @@ class AI
 		this.MyUnits.push(thisUnit);
 		this.Perseus.objects.push(thisUnit);
 		spawnSpotX += spawnChanger;
+		return thisUnit;
 	}
 
 	/*-----------------------------------------------------------------------*/
