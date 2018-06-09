@@ -4,6 +4,7 @@ class Tree extends Resource{
         super('neither', 'wood', Perseus);
         this.sprite = null;
 
+        this.name = 'Tree';
         let square = this.Perseus.navigator.getSquare(x,y);
         let coords = this.Perseus.navigator.getCoords(square.x, square.y);
         this.addSprite(coords.x, coords.y);

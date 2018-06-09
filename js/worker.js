@@ -7,16 +7,18 @@ import {WizardTower} from './wizardtower.js'
 import {Farm} from './farm.js'
 import {AI} from './ai.js';
 import {Player} from './player.js';
+import {Resource} from './resource.js';
 
-var woodHarvest = 10, goldMined = 10;
+var woodHarvest = 20, goldMined = 20;
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
+        //Call Unit Constructor
         super(x,y, faction,'worker', 70, 17, 5, 3, Perseus);
         this.woodCost = 0;
         this.goldCost = 300;
         this.maxHP = 70;
-        this.type="Worker";
+        this.type = "Worker";
         this.placing = false;
         this.building = false;
         this.buildProgress = 0;
@@ -49,6 +51,10 @@ class Worker extends Unit{
             Farm : 0
         }
 
+<<<<<<< HEAD
+=======
+        //Create sprite
+>>>>>>> 7f63972a632909442af994130104f14f146dc839
         if(Math.random() >= 0.5){
             this.addSprite('worker_male');
         } else {
@@ -60,12 +66,14 @@ class Worker extends Unit{
             buildList:{F: "Fort", R: "Barracks", M: "Mine", A: "Archery Range", W: "Wizard Tower", F: "Farm"}  
         };
 
-        //TODO Add work left
+        //Add Animations
+        this.sprite.animations.add('work_left', [65, 66, 67, 68, 69, 70, 71, 72], 10, true);
         this.sprite.animations.add('work_right', [91, 92, 93, 94, 95, 96, 97, 98], 10, true);
         this.sprite.animations.add('atk_right', [195, 196, 197, 198, 199, 200], 10, true);
         this.sprite.animations.add('atk_left', [169, 170, 171, 172, 173, 174], 10, true);
     }
 
+    //Cancel placing a building
     cancelPlacing(){
         this.squareMarkers.forEach((elem)=>{
             elem.destroy();
@@ -76,23 +84,28 @@ class Worker extends Unit{
         this.selectedY = null;
         this.buildProgress = 0;
         this.gatherState = 0;
+        this.sprite.animations.stop();
         this.building = false;
         this.placing = false;
-
     }
 
+    //Find the nearest fort to the units current postion
     findNearestFort(){
 
+<<<<<<< HEAD
         let x = this.x;
         let y = this.y;
+=======
+        let x = this.sprite.x;
+        let y = this.sprite.y;
+>>>>>>> 7f63972a632909442af994130104f14f146dc839
 
         let closest = null;
         let min = Number.MAX_SAFE_INTEGER;
         this.Perseus.objects.forEach((obj)=>{
             if (obj instanceof Fort && obj.faction == this.faction){
-                //get distance
-                if (Math.hypot(x-obj.x, y-obj.y) < min){
-                    min = Math.hypot(x-obj.x, y-obj.y) < min;
+                if (Math.hypot(x-obj.sprite.x, y-obj.sprite.y) < min){
+                    min = Math.hypot(x-obj.sprite.x, y-obj.sprite.y);
                     closest = obj;
                 }
             }
@@ -101,6 +114,7 @@ class Worker extends Unit{
         return closest;
     }
 
+    //For controller to call for correct build option
     build(str){
         switch (str) {
             default:
@@ -126,6 +140,7 @@ class Worker extends Unit{
         }
     }
 
+    //Allow user to place a fort
     buildFort()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.Fort 
@@ -140,12 +155,14 @@ class Worker extends Unit{
             this.createConflictSquares();
             return true;
         } else {
-            console.log('not enough resources');
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.Fort, this.goldCosts.Fort), 100, '#ff0000');   
             return false;
         }
 
     }
 
+    //Allow a user to palce a mine
     buildMine()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.Mine 
@@ -162,12 +179,15 @@ class Worker extends Unit{
             this.createMineConflictSquares();
             return true;
         } else {
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.Mine, this.goldCosts.Mine), 100, '#ff0000');   
             console.log('not enough resources');
             return false;
         }
 
     }
 
+    //Allow a user to place a barracks
     buildBarracks()
     {
         if(this.Perseus.Player.playerWood  >= this.woodCosts.Barracks 
@@ -182,11 +202,15 @@ class Worker extends Unit{
             this.createConflictSquares();
             return true;
         } else {
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.Barracks, this.goldCosts.Barracks), 100, '#ff0000');   
             console.log('not enough resources');
             return false;
         }
 
     }
+    
+    //Allow a user to place an Archery Range
     buildArcheryRange()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.ArcheryRange 
@@ -202,11 +226,14 @@ class Worker extends Unit{
             this.createConflictSquares();
             return true;
         } else {
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.ArcheryRange, this.goldCosts.ArcheryRange), 100, '#ff0000');   
             console.log('not enough resources');
             return false;
         }
     }
 
+    //Allow a user to place a Wizard Tower
     buildWizardTower()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.WizardTower 
@@ -222,11 +249,14 @@ class Worker extends Unit{
             this.createConflictSquares();    
             return true;
         } else {
+            if(this.faction == 'human')
+                this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.WizardTower, this.goldCosts.WizardTower), 100, '#ff0000');
             console.log('not enough resources');
             return false;
         }
     }
 
+    //Allow a user to place a Farm
     buildFarm()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.Farm 
@@ -246,6 +276,7 @@ class Worker extends Unit{
         }
     }
 
+    //Create sprites that will show up if you try to place a building in an invalid place
     createConflictSquares()
     {
         this.squareMarkers = [];
@@ -274,12 +305,15 @@ class Worker extends Unit{
         }
     }
 
+    //Place the building currently being placed and start building it
     place(){
         if(this.validToPlace == true)
         {
             this.gatherState = 0;
             this.placing = false;
             this.building = true;
+            // Reduce Resources 
+            
             this.selectedSprite.alpha = 0.75;
             this.selectedX = this.selectedSprite.x; 
             this.selectedY = this.selectedSprite.y; 
@@ -304,6 +338,7 @@ class Worker extends Unit{
         }
     }
 
+    //Called if the unit is attacking this frame
     attackTick()
     {
         //if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
@@ -346,6 +381,13 @@ class Worker extends Unit{
     }
 
     gather(resource){
+        if (!(resource instanceof Resource)){
+            this.Perseus.prompter.drawToScreen('Must Click on Resource!', 100, '#ff0000');
+            this.Perseus.controller.state = 'default';
+            return;
+        }
+
+        this.Perseus.prompter.clearText();
         this.gatherProgress = 0;
         if (resource.exhausted == true){
             this.gatherState = 0;
@@ -380,14 +422,14 @@ class Worker extends Unit{
             }
         } if (this.gatherState == 2){ //gathering at node
             if (this.gatherProgress < 300){
-                //TODO add animation
                 this.sprite.animations.play('work_right');
                 this.gatherProgress += 1;
             } 
             else 
             {
                 this.sprite.animations.stop();
-                this.lastResource.loseResource(1);
+                if (this.lastResource)
+                    this.lastResource.loseResource(1);
                 this.moveTo(this.findNearestFort());
                 this.gatherState = 3;
             }
@@ -422,7 +464,7 @@ class Worker extends Unit{
                     }
                 }
                 // CHECKS TO SEE IF RESOURCE IS EXHAUSTED
-                if (this.lastResource.exhausted == true)
+                if (this.lastResource && this.lastResource.exhausted == true)
                 {
                     this.gatherState = 0;
                     this.moveTo(this.findNearestFort());
@@ -435,6 +477,8 @@ class Worker extends Unit{
             //loop
         }
 
+        //If the unit is palcing a building show a partially transparent version of that building at the cursor and turn on the correct conflict square if the
+        //  user hovers over an invalid square
         if(this.placing)
         {
             let selectedSquare = this.Perseus.navigator.getSquare(this.game.input.activePointer.x + this.game.camera.view.x, this.game.input.activePointer.y + this.game.camera.view.y);
@@ -535,6 +579,7 @@ class Worker extends Unit{
                 }
             }
 
+<<<<<<< HEAD
             if(this.building)
             {
                 if(Math.abs(this.sprite.x - this.selectedX) > this.sprite.width || Math.abs(this.sprite.y - this.selectedY) > this.sprite.height)
@@ -581,6 +626,53 @@ class Worker extends Unit{
                         this.sprite.animations.play('work_right');
                         this.buildProgress += 1;
                     }
+=======
+        if(this.building)
+        {
+            //Move to the place we're going to build
+            if(Math.abs(this.sprite.x - this.selectedX) > this.sprite.width || Math.abs(this.sprite.y - this.selectedY) > this.sprite.height)
+            {
+
+                this.move(this.selectedX, this.selectedY)
+            } else {
+                if(this.buildProgress > 100)
+                {
+                    if(this.selectedBuilding == "Fort")
+                    {
+                        new Fort(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
+                    }
+                    if(this.selectedBuilding == "Barracks")
+                    {
+                        new Barracks(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
+                    }
+                    if(this.selectedBuilding == "Mine")
+                    {
+                        new Mine(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
+                    }
+                    if(this.selectedBuilding == "ArcheryRange")
+                    {
+                       new ArcheryRange(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
+                    }
+                    if(this.selectedBuilding == "WizardTower")
+                    {
+                        new WizardTower(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
+                    }
+                    if(this.selectedBuilding == "Farm")
+                    {
+                        new Farm(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
+                    }
+                    this.building = false;
+                    this.Perseus.Player.reduceResources(this.woodCosts[this.selectedBuilding], this.goldCosts[this.selectedBuilding]);
+                    this.selectedSprite.destroy();
+                    this.selectedX = null;
+                    this.selectedY = null;
+                    this.buildProgress = 0;
+                    this.sprite.animations.stop();
+
+                } else {
+                    this.sprite.animations.play('work_right');
+                    this.buildProgress += 0.1;
+>>>>>>> 7f63972a632909442af994130104f14f146dc839
                 }
             }
         }

@@ -20,6 +20,8 @@ class GameObject {
             // this.Perseus.enemy.addObject(this);
         }
 
+        this.Perseus.objects.push(this);
+
         this.game = Perseus.game;
         this.movable = movable;
         this.circle = null;
@@ -52,6 +54,9 @@ class GameObject {
         this.circle.drawCircle(this.sprite.centerX,this.sprite.centerY, this.sprite.height);
     }
     update(){
+    }
+    createResourceCostMsg(woodCost, goldCost){
+        return ('Need ' + woodCost + ' wood and ' + goldCost + ' gold!')
     }
 }
 export {GameObject}
