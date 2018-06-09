@@ -486,6 +486,7 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	CheckFunds(type)
 	{
+		// FORT
 		if (type == 'Fort' || type == 'fort')
 		{
 			if (this.AIWood >= FortCosts.wood)
@@ -1237,20 +1238,6 @@ class AI
 		console.log("Barracks: " + this.AIBarracks);
 		console.log("Wizard Towers: " + this.AITowers);
 		console.log("All Buildings: " + this.AIAllBuildings);
-	}
-
-/*****************************************************************************/
-							// MAIN // 
-/*****************************************************************************/
-
-	/*-----------------------------------------------------------------------*/
-	Main()
-	{
-		this.CreateMovementMap();
-		this.AddBuilding('Fort');
-		this.AddBuilding('Archery Range');
-		this.AddBuilding('Barracks');
-		this.AddBuilding('Wizard Tower');
 	}
 }
 

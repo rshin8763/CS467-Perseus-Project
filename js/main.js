@@ -11,7 +11,6 @@ import {Worker} from './worker.js';
 import {Player} from './player.js';
 import {AI} from './ai.js';
 import {Wizard} from './wizard.js';
-import {GameState} from './gameState.js';
 import {SaveGame} from './saveGame.js';
 import {Prompter} from './prompter.js';
 
@@ -112,7 +111,6 @@ function create()
   
     // ------------------------------------------------------------------------
     // MAIN MENU FORK  
-    Perseus.GameState = new GameState(Perseus);
     Perseus.SaveGame = new SaveGame(Perseus);
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
