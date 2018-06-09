@@ -40,8 +40,6 @@ class Unit extends GameObject{
         this.attackMoveDest = null;
 
 
-        //Add object to object array
-        Perseus.objects.push(this);
         Perseus.navigator.units.push(this);
     }
 
