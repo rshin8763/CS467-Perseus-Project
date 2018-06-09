@@ -127,14 +127,12 @@ function create()
     //Perseus.MainMenu = new MainMenu(Perseus);
     //Perseus.ui.StartingScreen();
 
-    new Worker ('human', 700, 300, Perseus);
-    new Worker ('human', 764, 300, Perseus);
     // Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
     // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
-    Perseus.Player.playerWood = 5000;
-    Perseus.Player.playerGold = 5000;
+    // Perseus.Player.playerWood = 5000;
+    // Perseus.Player.playerGold = 5000;
 
 
     console.log(Perseus.objects);
