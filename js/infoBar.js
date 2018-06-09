@@ -97,9 +97,8 @@ class InfoBar
                 this.infoElements.push(progress);
                 this.progressBar = progress;
             }
-            if (obj.building == false)
-                this.fillInfoBar(obj);
-        }
+        } else (obj.building == false)
+            this.fillInfoBar(obj);
     }
 
     addBuildProgress(obj){
