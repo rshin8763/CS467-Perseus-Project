@@ -7,7 +7,7 @@ import {Arrow} from './arrow.js';
 class Archer extends Unit {
     constructor(faction, x, y, Perseus){
         //Call Unit Constructor
-        super(x,y, faction, 'archer', 100, 15, 10, 1, Perseus);
+        super(x,y, faction, 'archer', 100, 35, 10, 1, Perseus);
 
 
         this.woodCost = 100;

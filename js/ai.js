@@ -186,7 +186,7 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	CreateMine()
 	{	
-		let thisMine = new Mine('human', 1600 + spawnChanger, 1150, this.Perseus);
+		let thisMine = new Mine('orc', 1600 + spawnChanger, 1150, this.Perseus);
 		MyGoldMines.push(thisMine);
 		this.AIGoldMines++;
 		
