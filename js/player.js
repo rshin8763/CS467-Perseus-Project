@@ -238,6 +238,22 @@ class Player
         let fort1 = new Fort('human', 650, 100, this.Perseus);
         this.addObject(fort1);
     }
+
+    TestSaveMode()
+    {
+        let worker1 = new Worker ('human', 800, 350, this.Perseus);
+        this.Perseus.objects.push(worker1);
+        this.addObject(worker1);
+        let worker2 = new Worker ('human', 700, 350, this.Perseus);
+        this.Perseus.objects.push(worker2);
+        this.addObject(worker2);
+        let fort1 = new Fort('human', 650, 100, this.Perseus);
+        this.Perseus.objects.push(fort1);
+        this.addObject(fort1);
+        let thisUnit = null;
+        fort1 = new Fort('human', 700, 800, this.Perseus);
+        this.addObject(fort1);
+    }
 }
 
 export {Player};

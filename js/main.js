@@ -18,7 +18,9 @@ var Perseus = Perseus || {};
 Perseus.graphics = {}
 
 // create the game, and pass it the configuration
+
 Perseus.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
 var goldText, woodText, fortText, barracksText, towerText, enemyHealthText;
 var titlescreen, easyGameButton, loadGameButton, music, newGameButton, hardGameButton, gameName, mute_button, music;
 var style = { font: "20px Times New Roman", fill: "#ffffff", align: "center"};
@@ -76,6 +78,8 @@ function preload() {
     Perseus.game.load.image('arrow_left', 'assets/arrow_left.png');
     Perseus.game.load.image('fireball_right', 'assets/fireball_right.png');
     Perseus.game.load.image('fireball_left', 'assets/fireball_left.png');
+    Perseus.game.load.image('wonMessage', 'assets/images/wonMessage.png');
+    Perseus.game.load.image('lostMessage', 'assets/images/lostMessage.png');
 
     // MENU BAR AND BUTTONS
     Perseus.game.load.image('menuBar', 'assets/images/menuBar.png');
@@ -112,11 +116,11 @@ function create()
     // ------------------------------------------------------------------------
     // MAIN MENU FORK  
     Perseus.SaveGame = new SaveGame(Perseus);
-
+    //Create resources
+    Perseus.Player = new Player(Perseus);
 
     Perseus.prompter = new Prompter(Perseus);
     Perseus.AI = new AI(Perseus);
-    Perseus.Player = new Player(Perseus);
     //Perseus.AI.Main();
     //Create resources
     Perseus.mapRenderer = new mapRenderer(Perseus);
@@ -124,16 +128,9 @@ function create()
 
     Perseus.ui = new Ui(Perseus);
     Perseus.SaveGame = new SaveGame(Perseus);
-    //Perseus.MainMenu = new MainMenu(Perseus);
-    //Perseus.ui.StartingScreen();
-
-    // Perseus.objects.push(new Wizard('human', 250, 250, Perseus));
-    // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
-    // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
     Perseus.Player.playerWood = 5000;
     Perseus.Player.playerGold = 5000;
-
 
     console.log(Perseus.objects);
     console.log(Perseus.resources);
@@ -156,72 +153,43 @@ function update()
 
     Perseus.prompter.update();
 
+    // GAME OVER UPDATE
+    gameOverCheck();
+
 }
 
-/******************************************************************************/
+// ------------------------
+// TITLE SCREEN
 
-function pause()
+// GAME OVER UPDATE
+function gameOverCheck()
 {
-    // ERROR HANDLING: GAME IS ALREADY PAUSED
-    if (Perseus.game.paused) 
+    if(Perseus.AI.AIBuildings <= 0)
     {
-        // do nothing
+        if(Perseus.game.paused == false)
+        {
+            Perseus.game.paused = true;
+        }
+        titlescreen = Perseus.game.add.sprite(400, 300, 'titlescreen');
+        titlescreen.scale.setTo(.57, .57);
+        titlescreen.anchor.setTo(0.5, 0.5);
+
+        gameName = Perseus.game.add.text(275, 75, "YOU WON!", 
+        { font: 'bold 60pt Times New Roman', fill: '#ffffff'});
     }
-    else
+    if(Perseus.Player.PlayerBuildings <= 0)
     {
-        // ADD MENU BUTTONS
-        resumeButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 50,
-                'resumeButton', unpause, this, 2, 1, 0);
+        if(Perseus.game.paused == false)
+        {
+            Perseus.game.paused = true;
+        }
+        titlescreen = Perseus.game.add.sprite(400, 300, 'titlescreen');
+        titlescreen.scale.setTo(.57, .57);
+        titlescreen.anchor.setTo(0.5, 0.5);
 
-        saveButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 160,
-                'saveButton', saveGame, this, 2, 1, 0);
-
-        quitButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 268,
-                'quitButton', quitGame, this, 2, 1, 0);
-
-        newGameButton = Perseus.game.add.button(Perseus.game.camera.x + 300, Perseus.game.camera.y + 376,
-                'newGameButton', newGame, this, 2, 1, 0);
-        Perseus.game.paused = true;
+        gameName = Perseus.game.add.text(275, 75, "YOU LOST!", 
+        { font: 'bold 60pt Times New Roman', fill: '#ffffff'});
     }
-    
-}
-
-function muteMusic()
-{
-    if(music.mute == true)
-    {
-        music.mute = false;
-    }
-    else
-    {
-        music.mute = true;
-    }
-}
-
-function unpause()
-{
-    if(Perseus.game.paused)
-    {
-        Perseus.game.paused = false;
-        saveButton.destroy();
-        quitButton.destroy();
-        newGameButton.destroy();
-        resumeButton.destroy();
-    }
-}
-
-function saveGame()
-{
-    Perseus.SaveGame.SaveAIBuildings();
-}
-function quitGame()
-{
-    unpause();
-}
-
-function newGame()
-{
-    Perseus.GameState.LoadGame();
 }
 
 function startScreen()
@@ -258,6 +226,7 @@ function startScreen()
         easyGameButton.destroy();
         titlescreen.destroy();
         gameName.destroy();
+        //Perseus.Player.EasyMode();
         Perseus.Player.EasyMode();
         Perseus.AI.EasyMode();
     });
