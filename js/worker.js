@@ -89,16 +89,15 @@ class Worker extends Unit{
     //Find the nearest fort to the units current postion
     findNearestFort(){
 
-        let x = this.x;
-        let y = this.y;
+        let x = this.sprite.x;
+        let y = this.sprite.y;
 
         let closest = null;
         let min = Number.MAX_SAFE_INTEGER;
         this.Perseus.objects.forEach((obj)=>{
             if (obj instanceof Fort && obj.faction == this.faction){
-                //get distance
-                if (Math.hypot(x-obj.x, y-obj.y) < min){
-                    min = Math.hypot(x-obj.x, y-obj.y) < min;
+                if (Math.hypot(x-obj.sprite.x, y-obj.sprite.y) < min){
+                    min = Math.hypot(x-obj.sprite.x, y-obj.sprite.y);
                     closest = obj;
                 }
             }
@@ -580,7 +579,6 @@ class Worker extends Unit{
             } else {
                 if(this.buildProgress > 100)
                 {
-
                     if(this.selectedBuilding == "Fort")
                     {
                         new Fort(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);

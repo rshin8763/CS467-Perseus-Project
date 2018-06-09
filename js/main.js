@@ -33,7 +33,6 @@ var buttonClick = false;
 function preload() {
     this.load.tilemap('demo', 'assets/tilemaps/map2.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.image('topbar', 'assets/topbar.png');
-    // TODO insert tiles url and creators
     this.load.image('gameTiles', 'assets/tilemaps/forestTiles.png');
     this.load.image('tree', 'assets/images/tree.png');
     this.load.image('barracks_human', 'assets/barracks.png');
@@ -142,8 +141,8 @@ function create()
     // Perseus.objects.push(new SwordInfantry('human', 250, 400, Perseus));
     // Perseus.objects.push(new Archer('human', 300, 300, Perseus));
 
-    Perseus.Player.playerWood = 50;
-    Perseus.Player.playerGold = 50;
+    Perseus.Player.playerWood = 5000;
+    Perseus.Player.playerGold = 5000;
 
     console.log(Perseus.objects);
     console.log(Perseus.resources);
@@ -152,6 +151,7 @@ function create()
 
 function update()
 {    
+    // console.log(Perseus.objects);
     Perseus.controller.update();
     //Call the update function on each game object
     Perseus.objects.forEach(function(obj){
