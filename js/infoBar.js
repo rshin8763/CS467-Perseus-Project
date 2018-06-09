@@ -69,7 +69,7 @@ class InfoBar
     fillResourceStats(obj){
         this.infoElements.push(this.renderText('Selected', obj.name)); 
         this.infoElements.push(this.renderText('Type', obj.type)); 
-        this.infoElements.push(this.renderText('Resources Amount', obj.resourceAmount)); 
+        this.infoElements.push(this.renderText('Resource Amount', obj.resourceAmount)); 
     }
 
     fillInfoBar(obj){
