@@ -164,7 +164,7 @@ function update()
 // GAME OVER UPDATE
 function gameOverCheck()
 {
-    if(Perseus.AI.AIBuildings <= 0)
+    if(Perseus.AI.AIAllBuildings <= 0)
     {
         if(Perseus.game.paused == false)
         {
@@ -177,7 +177,7 @@ function gameOverCheck()
         gameName = Perseus.game.add.text(275, 75, "YOU WON!", 
         { font: 'bold 60pt Times New Roman', fill: '#ffffff'});
     }
-    if(Perseus.Player.PlayerBuildings <= 0)
+    if(Perseus.Player.playerAllBuildings <= 0)
     {
         if(Perseus.game.paused == false)
         {

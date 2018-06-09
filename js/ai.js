@@ -280,7 +280,7 @@ class AI
 		this.AIAllBuildings++;
 		this.MyBuildings.push(thisBuilding);
 		
-		//this.Perseus.updateText('Enemy');
+		this.Perseus.ui.updateText('Enemy');
 		return thisBuilding;
 	}
 
@@ -1233,6 +1233,7 @@ class AI
 		this.AIWood = 0;
 		this.AIGold = 0;
 		this.UpdateStaticRoles();
+		this.Perseus.Player.playerAllBuildings = -1;
 	}
 
 /*****************************************************************************/
