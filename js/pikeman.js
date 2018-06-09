@@ -1,16 +1,25 @@
 import {Unit} from './unit.js';
 
+
+/******************
+ * Pike Unit
+ * 
+ *****************/
 class Pikeman extends Unit {
     constructor(faction, x, y, Perseus){
+        //Call Unit constructor
         super(x,y,faction,'pikeman', 120, 40, 15, 3, Perseus);
+
+
         this.woodCost = 100;
         this.goldCost = 600;
         this.maxHP = 100;
+        
+        
+        //Create Sprite
         if (Math.random() >= 0.5){
             this.type="Pikeman";
             this.addSprite('pikeman_male');
-
-
         } else {
             this.type="Pikeman";
             this.addSprite('pikeman_female'); 
@@ -28,15 +37,21 @@ class Pikeman extends Unit {
 
     }
 
+
+
+    /*****************************************************************
+     * attackTick() is called each update if the unit is attacking
+     * 
+     ****************************************************************/
     attackTick()
     {
-        //if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width / 2) * this.range )
+        //Move to the target
         if(this.x != this.attackSquare.x || this.y != this.attackSquare.y)
         {
             let attackCoords = this.Perseus.navigator.getCoords(this.attackSquare.x, this.attackSquare.y);
             this.move(attackCoords.x, attackCoords.y);
         } else{
-            //console.log(this.target);
+            //Start attacking
             this.moving = false;
             if(this.cooldown > 0)
             {
@@ -50,11 +65,13 @@ class Pikeman extends Unit {
 
                 }
 
+                //if the target is still alive, damage it, and reset attack cooldown.
                 if(this.target.hp > 1)
                 {
                     this.cooldown = 200 / this.attkSpeed;
                     this.target.takeDamage(this.attk, this);
                 }else {
+                    //Otherwise stop attacking
                     this.stopAttack();
                 }
 

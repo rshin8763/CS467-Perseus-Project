@@ -33,8 +33,11 @@ var intruder = false;
 var shortTimerTick = 150;
 var shortTimer = shortTimerTick;
 
-var longTimerTick = 1000;
+var longTimerTick = 800;
 var longTimer = longTimerTick;
+
+var buildRaidTick = 100;
+var buildRaidTimer = buildRaidTick;
 
 ////////////////// ORGANIZE BY GOALS ////////
 
@@ -168,7 +171,7 @@ class AI
         let closest = null;
         let min = Number.MAX_SAFE_INTEGER;
         this.Perseus.objects.forEach((obj)=>{
-            if (obj instanceof Tree)
+            if (obj instanceof Tree && obj.exhausted == false)
             {
                 if (Math.hypot(43-obj.x, 43-obj.y) < min){
                     min = Math.hypot(43-obj.x, 43-obj.y);
@@ -387,7 +390,6 @@ class AI
 		this.MyUnits.push(thisUnit);
 		this.Perseus.objects.push(thisUnit);
 		spawnSpotX += spawnChanger;
-		this.printArrays();
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -828,7 +830,6 @@ class AI
 			unit = MyWizards[i];
 			unit.move(WizardPatrol[i].x, WizardPatrol[i].y);
 		}
-		intruder = false;
 		longTimer = longTimerTick;
 		shortTimer = shortTimerTick;
 	}
@@ -836,7 +837,6 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	MovementUpdateLoop()
 	{
-		shortTimerTick = 0;
 		// MOVES ARCHERS
 		let unit = null;
 		let thisX = null;
@@ -933,35 +933,12 @@ class AI
 		for (let i = 0; i < this.Perseus.Player.units.length; i++)
 		{
 			thisUnit = this.Perseus.Player.units[i];
-			if (thisUnit.y > 25)
-			{
-				/*if (thisUnit.attacking == false)
-				{
-					for(let i = 0; i < this.MyUnits; i++)
-					{
-						if(this.MyUnits[i].target == thisUnit)
-						{
-							longTimer = longTimerTick;
-							shortTimer = shortTimerTick;
-							return true;
-						}
-						else if(thisUnit.target == this.MyUnits[i])
-						{
-							longTimer = longTimerTick;
-							shortTimer = shortTimerTick;
-							return true;
-						}
-						else
-						{*/
-							console.log("Sending someone to attack the intruder");
-							DefenseAttackUnit(this.Perseus.Player.units[i]);
-						/*}
-					}
-				}*/
+			if (thisUnit.y > 25 && thisUnit.hp > 0)
+			{	
+				console.log("Sending someone to attack the intruder");
+				this.DefenseAttackUnit(this.Perseus.Player.units[i]);
 			}
 		}
-		shortTimer = shortTimerTick;
-
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -970,7 +947,7 @@ class AI
 		var takenCareOf = false;
 		var type = thisUnit.type;
 
-		console.log(thisUnit);
+		console.log("1");
 		for(let i = 0; i < this.MyUnits; i++)
 		{
 			if(this.MyUnits[i].target == thisUnit)
@@ -981,7 +958,8 @@ class AI
 
 		if (thisUnit.hp > 0)
 		{
-			if(thisUnit.attacking == false && thisUnit.attackMoving == false)
+			console.log("this hp: " + thisUnit.hp);
+			if(thisUnit.attacking == false)
 			{
 				if(this.MyUnits.length > 0)
 				{
@@ -1078,6 +1056,47 @@ class AI
 	}
 
 	/*-----------------------------------------------------------------------*/
+	BuildingsRaid()
+	{
+		// SEND EVERY OTHER UNIT IN MY MILITARY TO ATTACK THE PLAYERS BUILDINGS
+		let thisUnit = null;
+		let m = 0;
+		let enemyBuilding = null;
+		for(let i = 0; i < this.MyUnits.length; i++)
+		{
+			thisUnit = this.MyUnits[i];
+			console.log(this.Perseus.Player.buildings[0]);
+			enemyBuilding = this.Perseus.Player.buildings[m];
+			if(m < this.Perseus.Player.buildings.length)
+			{
+				thisUnit.attack(enemyBuilding, {x:enemyBuilding.x, y:enemyBuilding.y});
+				m++;
+				i++;
+				i++;
+			}
+		}
+	}
+
+	UnitsRaid()
+	{
+		// SEND EVERY OTHER UNIT IN MY MILITARY TO ATTACK THE PLAYERS UNITS
+		let thisUnit = null;
+		let m = 0;
+		let enemyUnit = null;
+		for(let i = 0; i < this.MyUnits.length; i++)
+		{
+			thisUnit = this.MyUnits[i];
+			console.log(this.Perseus.Player.units[0]);
+			enemyUnit = this.Perseus.Player.units[m];
+			if(m < this.Perseus.Player.units.length)
+			{
+				thisUnit.attack(enemyUnit, {x:enemyUnit.x, y:enemyUnit.y});
+				m++;
+				i++;
+				i++;
+			}
+		}
+	}
 
 	/*-----------------------------------------------------------------------*/
 	ShortUpdateTimer()
@@ -1085,8 +1104,9 @@ class AI
 		// TIMER STARTS AT 800
 		shortTimer -= 1;
 		//console.log(longTimer);
-		if (shortTimer == 1)
+		if (shortTimer == 0)
 		{
+			shortTimer += shortTimerTick;
 			this.MovementUpdateLoop();
 			this.SafetyCheck();
 		}
@@ -1097,10 +1117,20 @@ class AI
 	{
 		longTimer -= 1;
 		//console.log(longTimer);
-		if (longTimer == 1)
+		if (longTimer == 0)
 		{
 			longTimer += longTimerTick;
 			this.UpdateStaticRoles(); 
+		}
+	}
+
+	BuildingsRaidTimer()
+	{
+		buildRaidTimer -= 1;
+		if(buildRaidTimer == 0)
+		{
+			this.BuildingsRaid();
+			buildRaidTimer += buildRaidTick;
 		}
 	}
 
@@ -1109,6 +1139,7 @@ class AI
 	{
 		this.ShortUpdateTimer();
 		this.LongUpdateTimer();
+		this.BuildingsRaidTimer();
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -1129,6 +1160,8 @@ class AI
 		this.AddBuilding('Wizard Tower');
 		this.AddUnit('Wizard');
 		this.AddUnit('Wizard');
+		this.AIWood = 0;
+		this.AIGold = 0;
 		this.UpdateStaticRoles();
 	}
 
@@ -1153,6 +1186,8 @@ class AI
 		this.AddBuilding('Wizard Tower');
 		this.AddUnit('Wizard');
 		this.AddUnit('Wizard');
+		this.AIWood = 0;
+		this.AIGold = 0;
 		this.UpdateStaticRoles();
 	}
 

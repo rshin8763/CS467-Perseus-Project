@@ -4,14 +4,20 @@ import {Pikeman} from './pikeman.js';
 import {AI} from './ai.js';
 import {Player} from './player.js';
 
-
+/****************
+ * Barracks Building
+ *
+ **************/
 class Barracks extends Building{
 
 
     constructor(faction, x,y,Perseus){
+        //Call Building Constructor
         super(faction, 200, x, y, Perseus);
 
+        //Add Sprite
         this.addSprite('barracks');
+
         this.SWORD = 1;
         this.PIKE = 2;
         this.buildSpeed = .25;
@@ -40,6 +46,7 @@ class Barracks extends Building{
         }
     }
 
+    //Control API function
     build(str){
         switch(str){
             case 'S':
@@ -49,10 +56,13 @@ class Barracks extends Building{
         }
     }
 
+
+
     buildSword()
     {
         if(!this.building)
         {
+            //Start building a sword unit, or tell the player there is insufficent funds
             if(this.Perseus.Player.playerWood >= this.SwordInfantryCosts.wood
                     && this.Perseus.Player.playerGold >= this.SwordInfantryCosts.gold)
             {
@@ -71,6 +81,8 @@ class Barracks extends Building{
     {
         if(!this.building)
         {
+            //Start building a pike unit, or tell the player there is insufficent funds
+
             if(this.Perseus.Player.playerWood >= this.PikemanCosts.wood
                     && this.Perseus.Player.playerGold >= this.PikemanCosts.gold)
             {
@@ -88,6 +100,7 @@ class Barracks extends Building{
     update(){
         if(this.building)
         {
+             //Update build progess until 100, thenc all spawnUnit for the correct unit type
             if(this.buildProgress >= 100)
             {
                 this.building = false;
@@ -109,12 +122,13 @@ class Barracks extends Building{
 
     spawnUnit(x,y, unitType)
     {
+        //Create the correct unit object and push to the main objects array
         if(unitType == this.SWORD){
-            this.Perseus.objects.push(new SwordInfantry(this.faction, x, y, this.Perseus));     
+            new SwordInfantry(this.faction, x, y, this.Perseus);     
         }
 
         if(unitType == this.PIKE){
-            this.Perseus.objects.push(new Pikeman(this.faction, x, y, this.Perseus));     
+            new Pikeman(this.faction, x, y, this.Perseus);     
 
         }
     }

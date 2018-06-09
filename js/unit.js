@@ -1,7 +1,13 @@
 import {GameObject} from './gameObject.js';
 //import {AI} from './ai.js';
+
+/**********************
+ * Unit Template class
+ * 
+ ***********************/
 class Unit extends GameObject{
     constructor(x,y, faction, type, hp, attk, defense, attkSpeed, Perseus){
+        //Call GameObject constuctor
         super(true, faction, Perseus);
         
         this.id = type;
@@ -24,7 +30,7 @@ class Unit extends GameObject{
         this.attacking = false;
         this.cooldown = 0;
         this.range=1;
-        this.priority=0; // commandList priority. Mages will have spells visible when group selected with others.
+        this.priority=0; // commandList priority
         this.hpbar = null; 
         this.nudgeY = 0;
         this.nudgeX = 0;
@@ -33,11 +39,14 @@ class Unit extends GameObject{
         this.attackMoving = false;
         this.attackMoveDest = null;
 
+        //Add object to object array
         Perseus.objects.push(this);
         Perseus.navigator.units.push(this);
     }
 
+    //Create a sprite to represent the unit
     addSprite(unitType){
+        //Choose the correct sprite for faction
         if(this.faction == 'orc')
         {
             unitType += '_orc';
@@ -48,16 +57,21 @@ class Unit extends GameObject{
 
         let coords = this.Perseus.navigator.getCoords(this.x, this.y);    
         this.sprite = this.game.add.sprite(coords.x, coords.y, unitType);
+        //Move sprite anchor to the middle of the sprite
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
 
         this.sprite.frame = 26;
         this.sprite.inputEnabled = true;
+
+        //Add animations
         this.sprite.animations.add('wlk_up', [104, 105, 106, 107, 108, 109, 110, 111, 112], 10, true);
         this.sprite.animations.add('wlk_down', [130, 131, 132, 133, 134, 135, 136, 137, 138], 10, true);
         this.sprite.animations.add('wlk_right', [143, 144, 145, 146, 147, 148, 149, 150, 151], 10, true);
         this.sprite.animations.add('wlk_left', [117, 118, 119, 120, 121, 122, 123, 124, 125], 10, true);
 
+
+        //Add HP Bar
         this.hpbar = this.game.add.sprite(coords.x,coords.y, 'hpbar_' + this.faction);
         this.hpbar.anchor.x = 0.5;
         this.hpbar.anchor.y = 6;
@@ -69,21 +83,27 @@ class Unit extends GameObject{
             this.Perseus.controller.endWithSelect(this);
         }, this);
 
+
+        //Add Sprites to sprite group
         this.Perseus.gameSprites.add(this.sprite);
         this.Perseus.gameSprites.add(this.hpbar);
         // this.Perseus.uiGraphics.add(this.hpbar);
 
     }
 
+
+
+    //Move a unit to the square in which point (x, y) is.
     move(x, y){
 
-        //console.log(this);
+        
+        //Get nav square of the x,y coordinates
         this.dest = this.Perseus.navigator.getSquare(x, y);
 
         //If the square is occupied, don't bother trying to move there
         if(this.Perseus.navigator.navmap[this.dest.x][this.dest.y] == 1)
         {
-            this.Perseus.prompter.drawToScreen('Cannot move to that location!', 20, '#ff0000')   
+            this.Perseus.prompter.drawToScreen('Cannot move to that location!', 100, '#ff0000')   
             console.log("Can not move to location " + this.dest.x + " , " + this.dest.y);
             this.dest.x = this.x;
             this.dest.y = this.y;
@@ -101,15 +121,19 @@ class Unit extends GameObject{
         //If there is no path, dont try to move to square
         if(!this.currentPath)
         {
-            console.log("Unit can't move");
+            this.Perseus.prompter.drawToScreen('Cannot move right now!', 100, '#ff0000')   
             this.moving=false;
             return;
         }
+
         this.nextSquare = this.currentPath[0];
         this.moving = true;
+        this.Perseus.prompter.clearText();
     }
 
 
+    //Designate an object as this unit's target, and the square to which the unit 
+    //  has been assigned as the unit's attackSquare, then set attacking to true. 
     attack(target, square)
     {
 
@@ -122,6 +146,7 @@ class Unit extends GameObject{
         this.attacking = true;
     }
 
+    //Move to a point, attacking hostile units along the way
     attackMove(x,y)
     {
         console.log("Attack Moving!");
@@ -133,6 +158,8 @@ class Unit extends GameObject{
 
     }
 
+
+    //Take damage from an attacker and handle this unit dying
     takeDamage(damage, attacker)
     {
         if(this.moving != true && this.attacking != true)
@@ -181,6 +208,8 @@ class Unit extends GameObject{
         return false; //Unit not dead
     }
 
+
+    //DEPRECIATED
     checkCollision()
     {
         let x = this.sprite.x;
@@ -206,6 +235,7 @@ class Unit extends GameObject{
 
     }
 
+    //Stop all attacking functions for this unit
     stopAttack()
     {
         this.sprite.animations.stop();
@@ -214,11 +244,11 @@ class Unit extends GameObject{
         this.cooldown = 0;
 
     }
+
+    //Stop all movement for this unit
     stop()
     {
         this.moving = false;
-        // this.attacking = false;
-        //this.currentPath = null;
         this.pathStep = 0;
         this.dest.x = this.x;
         this.dest.y = this.y;
@@ -229,11 +259,14 @@ class Unit extends GameObject{
     }
 
 
+    //Called every frame by the main update loop of the Phaser Game Object
     update(){
 
+        //Make sure this unit isn't standing on another unit, or heading toward the same square as another unit
         this.Perseus.navigator.checkCollision(this);
 
 
+        //Handle attack moving
         if(this.attackMoving)
         {
             if(this.y == this.attackMoveDest.y && this.x == this.attackMoveDest.x)
@@ -264,32 +297,35 @@ class Unit extends GameObject{
             }
         }
 
+        //If this unit is attacking, call the unit's attackTick() fucntion (Implemented in the derived class)
         if(this.attacking)
         {
             this.attackTick();
 
         }
 
+        //Handle movement
         if(this.moving)
         {
-            if(this.nextSquare == null)
-            {
-                //console.log(this);
-            }
-
+            //Calculate the coordinates of the centers of the destination square, and the next square
             let destCoords = this.Perseus.navigator.getCoords(this.dest.x, this.dest.y);
             let nextSquareCoords = this.Perseus.navigator.getCoords(this.nextSquare.x, this.nextSquare.y);
 
+
+            //Update the current x, or y value of the unit if it has passed into a new row or column
             if(this.sprite.y == nextSquareCoords.y)
             {
                 this.y = this.nextSquare.y;
             }
-
             if(this.sprite.x == nextSquareCoords.x)
             {
                 this.x = this.nextSquare.x;
             }
 
+            //If the unit has reached the center of the destination square, stop all movement
+            //If the unit has reached the center of the next square in the path, increment the path counter and check
+                    // for collisions.
+            //Otherweise, move the sprite in the direction of the next square along the path.
             if(this.sprite.y == destCoords.y && this.sprite.x == destCoords.x)
             {
                 this.x = this.dest.x;
@@ -305,10 +341,7 @@ class Unit extends GameObject{
                     this.currentPath = this.Perseus.navigator.findPath(this, this.dest);
                     this.pathStep = 0;
                 }
-                if(this.currentPath == null)
-                {
-                    //console.log(this);
-                }
+               
                 this.nextSquare = this.currentPath[this.pathStep];
                 this.Perseus.navigator.checkCollision(this);
 

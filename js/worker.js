@@ -13,6 +13,7 @@ var woodHarvest = 10, goldMined = 10;
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
+        //Call Unit Constructor
         super(x,y, faction,'worker', 70, 17, 5, 3, Perseus);
         this.woodCost = 0;
         this.goldCost = 300;
@@ -50,6 +51,7 @@ class Worker extends Unit{
             Farm : 0
         }
 
+        //Create sprite
         if(Math.random() >= 0.5){
             this.addSprite('worker_male');
         } else {
@@ -61,12 +63,14 @@ class Worker extends Unit{
             buildList:{F: "Fort", R: "Barracks", M: "Mine", A: "Archery Range", W: "Wizard Tower", F: "Farm"}  
         };
 
-        //TODO Add work left
+        //Add Animations
+        this.sprite.animations.add('work_left', [65, 66, 67, 68, 69, 70, 71, 72], 10, true);
         this.sprite.animations.add('work_right', [91, 92, 93, 94, 95, 96, 97, 98], 10, true);
         this.sprite.animations.add('atk_right', [195, 196, 197, 198, 199, 200], 10, true);
         this.sprite.animations.add('atk_left', [169, 170, 171, 172, 173, 174], 10, true);
     }
 
+    //Cancel placing a building
     cancelPlacing(){
         this.squareMarkers.forEach((elem)=>{
             elem.destroy();
@@ -82,6 +86,7 @@ class Worker extends Unit{
         this.placing = false;
     }
 
+    //Find the nearest fort to the units current postion
     findNearestFort(){
 
         let x = this.x;
@@ -102,6 +107,7 @@ class Worker extends Unit{
         return closest;
     }
 
+    //For controller to call for correct build option
     build(str){
         switch (str) {
             default:
@@ -127,6 +133,7 @@ class Worker extends Unit{
         }
     }
 
+    //Allow user to place a fort
     buildFort()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.Fort 
@@ -147,6 +154,7 @@ class Worker extends Unit{
 
     }
 
+    //Allow a user to palce a mine
     buildMine()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.Mine 
@@ -171,6 +179,7 @@ class Worker extends Unit{
 
     }
 
+    //Allow a user to place a barracks
     buildBarracks()
     {
         if(this.Perseus.Player.playerWood  >= this.woodCosts.Barracks 
@@ -191,6 +200,8 @@ class Worker extends Unit{
         }
 
     }
+    
+    //Allow a user to place an Archery Range
     buildArcheryRange()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.ArcheryRange 
@@ -213,6 +224,7 @@ class Worker extends Unit{
         }
     }
 
+    //Allow a user to place a Wizard Tower
     buildWizardTower()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.WizardTower 
@@ -235,6 +247,7 @@ class Worker extends Unit{
         }
     }
 
+    //Allow a user to place a Farm
     buildFarm()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.Farm 
@@ -253,6 +266,7 @@ class Worker extends Unit{
         }
     }
 
+    //Create sprites that will show up if you try to place a building in an invalid place
     createConflictSquares()
     {
         this.squareMarkers = [];
@@ -281,6 +295,7 @@ class Worker extends Unit{
         }
     }
 
+    //Place the building currently being placed and start building it
     place(){
         if(this.validToPlace == true)
         {
@@ -313,6 +328,7 @@ class Worker extends Unit{
         }
     }
 
+    //Called if the unit is attacking this frame
     attackTick()
     {
         //if(Math.abs(this.sprite.x - this.target.sprite.x) > (this.sprite.width) * this.range  || Math.abs(this.sprite.y - this.target.sprite.y) > (this.sprite.width) * this.range )
@@ -361,6 +377,7 @@ class Worker extends Unit{
             return;
         }
 
+        this.Perseus.prompter.clearText();
         this.gatherProgress = 0;
         if (resource.exhausted == true){
             this.gatherState = 0;
@@ -448,6 +465,8 @@ class Worker extends Unit{
             //loop
         }
 
+        //If the unit is palcing a building show a partially transparent version of that building at the cursor and turn on the correct conflict square if the
+        //  user hovers over an invalid square
         if(this.placing)
         {
             let selectedSquare = this.Perseus.navigator.getSquare(this.game.input.activePointer.x + this.game.camera.view.x, this.game.input.activePointer.y + this.game.camera.view.y);
@@ -548,37 +567,38 @@ class Worker extends Unit{
 
         if(this.building)
         {
+            //Move to the place we're going to build
             if(Math.abs(this.sprite.x - this.selectedX) > this.sprite.width || Math.abs(this.sprite.y - this.selectedY) > this.sprite.height)
             {
 
                 this.move(this.selectedX, this.selectedY)
             } else {
-                if(this.buildProgress > 1000)
+                if(this.buildProgress > 100)
                 {
 
                     if(this.selectedBuilding == "Fort")
                     {
-                        this.Perseus.objects.push(new Fort(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        new Fort(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     if(this.selectedBuilding == "Barracks")
                     {
-                        this.Perseus.objects.push(new Barracks(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        new Barracks(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     if(this.selectedBuilding == "Mine")
                     {
-                        this.Perseus.objects.push(new Mine(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        new Mine(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     if(this.selectedBuilding == "ArcheryRange")
                     {
-                        this.Perseus.objects.push(new ArcheryRange(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                       new ArcheryRange(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     if(this.selectedBuilding == "WizardTower")
                     {
-                        this.Perseus.objects.push(new WizardTower(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        new WizardTower(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     if(this.selectedBuilding == "Farm")
                     {
-                        this.Perseus.objects.push(new Farm(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
+                        new Farm(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     this.building = false;
                     this.Perseus.Player.reduceResources(this.woodCosts[this.selectedBuilding], this.goldCosts[this.selectedBuilding]);
@@ -590,7 +610,7 @@ class Worker extends Unit{
 
                 } else {
                     this.sprite.animations.play('work_right');
-                    this.buildProgress += 1;
+                    this.buildProgress += 0.1;
                 }
             }
         }

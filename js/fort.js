@@ -3,11 +3,19 @@ import {Worker} from './worker.js';
 import {Player} from './player.js';
 import {AI} from './ai.js';
 
-
+/****************
+ * Fort Building
+ * 
+ ***************/
 class Fort extends Building{
     constructor(faction, x,y,Perseus){
+
+        //Call Building Constructor
         super(faction, 350, x, y, Perseus);
+
+        //Create Sprite
         this.addSprite('fort');
+
         this.faction = faction;
         this.type = "Fort";
         this.WORKER = 1;
@@ -22,6 +30,8 @@ class Fort extends Building{
         }
     }
 
+
+    //Control API function
     build(str){
         switch(str){
             case 'W':
@@ -29,8 +39,10 @@ class Fort extends Building{
         }
     }
 
+
     buildWorker()
     {
+        //Start building a worker if the player has the resources and the building isn't already building
         if(this.Perseus.Player.playerWood >= this.WorkerCosts.wood
                 && this.Perseus.Player.playerGold >= this.WorkerCosts.gold)
         {
@@ -49,7 +61,7 @@ class Fort extends Building{
     update(){
         if(this.building)
         {
-            //console.log(this.buildProgress);
+            //Increment the build counter unitl finished, then spawn unit
             if(this.buildProgress >= 100)
             {
                 this.building = false;
@@ -72,8 +84,8 @@ class Fort extends Building{
 
     spawnWorker(x,y)
     {
+        //Create a worker and push it to the objects thread
         let worker = new Worker(this.faction, x, y, this.Perseus)
-            this.Perseus.objects.push(worker);     
         this.Perseus.selected = worker;
     }
 }

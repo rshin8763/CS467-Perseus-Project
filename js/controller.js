@@ -44,6 +44,7 @@ class Controller{
                 this.highestPrioritySelected = obj;
                 obj.drawSelectionCircle();
                 this.Perseus.ui.updateCommandList(obj);
+                this.Perseus.ui.infoBar.fillInfoBar(obj);
             }
         } else if (this.state == 'attack'){
             this.Perseus.prompter.clearText();
@@ -82,7 +83,6 @@ class Controller{
                     elem.gather(obj);
                 }
             });
-            this.Perseus.prompter.clearText();
             this.state = 'default';
         }
     }
@@ -215,6 +215,8 @@ class Controller{
         if(this.selectionBox){
             this.selectionBox.destroy();
         }
+
+        this.Perseus.ui.infoBar.update(this.highestPrioritySelected);
 
         this.selectionBox = this.game.add.graphics();
         this.selectionBox.lineStyle(2, 0xFFFFFF, 1);
@@ -354,7 +356,6 @@ class Controller{
                         }
                     }, this);
 
-                    this.Perseus.prompter.clearText();
                     this.state = 'default';
                     this.commandState = 'default';
                 }
@@ -369,7 +370,6 @@ class Controller{
                     this.highestPrioritySelected.place(this.pointer.positionDown.x, this.pointer.positionDown.y);
                     this.state = 'default';
                     this.commandState = 'default';
-                    this.Perseus.prompter.clearText();
                 }
             }
         }

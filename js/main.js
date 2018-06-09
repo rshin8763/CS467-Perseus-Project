@@ -119,7 +119,6 @@ function create()
     Perseus.mapRenderer.createResources();
 
     Perseus.prompter = new Prompter(Perseus);
-
     Perseus.AI = new AI(Perseus);
     Perseus.Player = new Player(Perseus);
     //Perseus.AI.Main();
