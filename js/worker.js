@@ -9,7 +9,7 @@ import {AI} from './ai.js';
 import {Player} from './player.js';
 import {Resource} from './resource.js';
 
-var woodHarvest = 10, goldMined = 10;
+var woodHarvest = 20, goldMined = 20;
 
 class Worker extends Unit{
     constructor(faction, x,y,Perseus){
