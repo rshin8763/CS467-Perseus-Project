@@ -13,7 +13,6 @@ class Building extends GameObject{
         this.building = false;
         this.current = null;
         this.units = {};
-        this.Perseus.objects.push(this);
         this.movable = false;
         this.hpbar = null;
     }
