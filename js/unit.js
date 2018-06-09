@@ -92,7 +92,30 @@ class Unit extends GameObject{
     }
 
 
+    aiAttack(obj)
+    {
+        let emptySquares = [];
+        let origin = {x:this.x, y: this.y};
+        if(obj.movable == false)
+        {    
+            emptySquares = this.Perseus.navigator.findObjectBorder(obj, origin);
+        }else{
+            emptySquares = this.Perseus.navigator.findAllEmpty(obj.x, obj.y, origin);
+        }
+        let limit;
 
+        rand = Math.random() * emptySquares.length;
+
+        //Don't move the unit if it's already within attack range
+        if(Math.abs(this.selectedObjects[i].x - obj.x) <= 1 && Math.abs(this.selectedObjects[i].y - obj.y) <= 1 )
+        {
+            this.attack(obj, {x: this.x, y: this.y});
+        }else{
+            this.attack(obj, emptySquares[rand]);
+        }
+        
+    }
+    
     //Move a unit to the square in which point (x, y) is.
     move(x, y){
 
