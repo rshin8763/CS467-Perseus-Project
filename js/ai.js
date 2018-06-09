@@ -36,8 +36,15 @@ var shortTimer = shortTimerTick;
 var longTimerTick = 800;
 var longTimer = longTimerTick;
 
-var buildRaidTick = 100;
+var buildRaidTick = 10500;
 var buildRaidTimer = buildRaidTick;
+
+var newbuildRaidTick = 1000;
+var war = false;
+
+var unitRaidTick = 10000;
+var UnitsRaidTimer = unitRaidTick;
+var newUnitRaidTick = 300;
 
 ////////////////// ORGANIZE BY GOALS ////////
 
@@ -1070,7 +1077,7 @@ class AI
 			enemyBuilding = this.Perseus.Player.buildings[m];
 			if(m < this.Perseus.Player.buildings.length)
 			{
-				thisUnit.aiAttack(enemyBuilding);
+				thisUnit.attack(enemyBuilding, {x:enemyBuilding.x-1, y:enemyBuilding.y-1});
 				m++;
 				i++;
 				i++;
@@ -1091,7 +1098,10 @@ class AI
 			enemyUnit = this.Perseus.Player.units[m];
 			if(m < this.Perseus.Player.units.length)
 			{
-				thisUnit.attack(enemyUnit, {x:enemyUnit.x, y:enemyUnit.y});
+				if(enemyUnit.hp > 0)
+				{
+					thisUnit.attack(enemyUnit, {x:enemyUnit.x, y:enemyUnit.y});
+				}
 				m++;
 				i++;
 				i++;
@@ -1128,11 +1138,45 @@ class AI
 	BuildingsRaidTimer()
 	{
 		buildRaidTimer -= 1;
-		if(buildRaidTimer == 0)
+		if (war == false)
 		{
-			this.BuildingsRaid();
-			//buildRaidTimer += buildRaidTick;
+			if(buildRaidTimer == 0)
+			{
+				this.BuildingsRaid();
+				buildRaidTimer += buildRaidTick;
+			}
 		}
+		else
+		{
+			if(buildRaidTimer == 0)
+			{
+				this.BuildingsRaid();
+				buildRaidTimer += newbuildRaidTick;
+			}
+		}
+		
+	}
+
+	UnitsRaidTimer()
+	{
+		UnitsRaidTimer -= 1;
+		if(war == false)
+		{
+			if(UnitsRaidTimer == 0)
+			{
+				this.UnitsRaid();
+				UnitsRaidTimer += unitRaidTick;
+			}
+		}
+		else
+		{
+			if(buildRaidTimer == 0)
+			{
+				this.UnitsRaid();
+				buildRaidTimer += newUnitRaidTick;
+			}
+		}
+		
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -1141,6 +1185,7 @@ class AI
 		this.ShortUpdateTimer();
 		this.LongUpdateTimer();
 		this.BuildingsRaidTimer();
+		this.UnitsRaidTimer();
 	}
 
 	/*-----------------------------------------------------------------------*/

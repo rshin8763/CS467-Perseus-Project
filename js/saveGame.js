@@ -240,6 +240,19 @@ class SaveGame
 	{
 		var loadMap = JSON.parse(Cookies.get('bookableResources'));
 		console.log(loadMap);
+		var objectsArr = this.Perseus.objects
+		for (var thisResource in objectsArr)
+		{
+			if(objectsArr[thisResource].tag)
+			{
+				if((objectsArr[thisResource].tag) == loadMap[thisResource].tag);
+				{
+					console.log(loadMap.tag);
+					objectsArr[thisResource].exhausted = loadMap[thisResource].exhausted;
+					
+				}
+			}
+		}
 	}
 
 	/*-----------------------------------------------------------------------*/
@@ -298,6 +311,7 @@ class SaveGame
 		// SILVER
 		var LoadEnemyStocks = JSON.parse(Cookies.get('bookableAIStocks'));
 		console.log(LoadEnemyStocks);
+
 	}
 
 /*****************************************************************************/

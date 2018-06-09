@@ -92,6 +92,7 @@ class Unit extends GameObject{
 
     aiAttack(obj)
     {
+        console.log(this);
         let emptySquares = [];
         let origin = {x:this.x, y: this.y};
         if(obj.movable == false)
@@ -102,7 +103,8 @@ class Unit extends GameObject{
         }
         let limit;
 
-        var rand = Math.random() * emptySquares.length;
+         let len = emptySquares.length;
+       let rand = Math.random() * len;
 
         //Don't move the unit if it's already within attack range
         if(Math.abs(this.x - obj.x) <= 1 && Math.abs(this.y - obj.y) <= 1 )
