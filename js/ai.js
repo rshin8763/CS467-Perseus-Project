@@ -1139,7 +1139,7 @@ class AI
 	{
 		this.ShortUpdateTimer();
 		this.LongUpdateTimer();
-		this.BuildingsRaidTimer();
+		//this.BuildingsRaidTimer();
 	}
 
 	/*-----------------------------------------------------------------------*/
