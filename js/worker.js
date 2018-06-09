@@ -413,7 +413,10 @@ class Worker extends Unit{
             }
         } if (this.gatherState == 2){ //gathering at node
             if (this.gatherProgress < 300){
-                this.sprite.animations.play('work_right');
+                if(this.lastResource.x >= this.x)
+                    this.sprite.animations.play('work_right');
+                else 
+                    this.sprite.animations.play('work_left');
                 this.gatherProgress += 1;
             } 
             else 
