@@ -92,7 +92,7 @@ class SaveGame
 					thisBuilding = {
 						type: thisObject.type,
 						xCoor: thisX.x,
-						yCoor: thisY.yCoor,
+						yCoor: thisX.yCoor,
 						hp: thisObject.hp
 					}
 					savedPlayerBuildings.push(thisBuilding);
