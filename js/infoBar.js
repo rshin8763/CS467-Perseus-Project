@@ -89,6 +89,8 @@ class InfoBar
                 if (this.progressBar) this.progressBar.destroy();
                 let percent = obj.buildProgress/100;
                 let progress = this.Perseus.game.add.graphics();
+                // if (percent == obj.buildProgress)
+                //     percent = 0;
                 progress.beginFill(0xFFFFFF);
                 progress.drawRect(this.x +20, this.y + this.size * this.elemHeight, percent*160, 20);
                 progress.fixedToCamera = true;
@@ -97,8 +99,7 @@ class InfoBar
                 this.infoElements.push(progress);
                 this.progressBar = progress;
             }
-        } else (obj.building == false)
-            this.fillInfoBar(obj);
+        }
     }
 
     addBuildProgress(obj){
