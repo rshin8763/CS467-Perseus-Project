@@ -31,7 +31,6 @@ class Controller{
         this.cooldownTimer = 0;
     }
     isPointerInUi() {
-        // console.log(this.pointer.position <= 198);
         return (this.pointer.position.x  <= 198);
     }
 
@@ -211,7 +210,6 @@ class Controller{
     }
 
     update(){
-        // console.log(this.state);
         if(this.selectionBox){
             this.selectionBox.destroy();
         }
@@ -309,6 +307,7 @@ class Controller{
                 }
             }
             if(this.keys.F.isDown) {
+                console.log("The coordinates are " + game.camera.x + game.camera.y);
                 if (this.isViableCommand('F')){
                     if (this.cooldownTimer == 0){
                         if(this.selectedObjects[0].build('F')){

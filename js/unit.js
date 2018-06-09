@@ -38,8 +38,7 @@ class Unit extends GameObject{
         this.pathStep = 0;
         this.attackMoving = false;
         this.attackMoveDest = null;
-
-
+      
         Perseus.navigator.units.push(this);
     }
 
@@ -91,7 +90,30 @@ class Unit extends GameObject{
     }
 
 
+    aiAttack(obj)
+    {
+        let emptySquares = [];
+        let origin = {x:this.x, y: this.y};
+        if(obj.movable == false)
+        {    
+            emptySquares = this.Perseus.navigator.findObjectBorder(obj, origin);
+        }else{
+            emptySquares = this.Perseus.navigator.findAllEmpty(obj.x, obj.y, origin);
+        }
+        let limit;
 
+        rand = Math.random() * emptySquares.length;
+
+        //Don't move the unit if it's already within attack range
+        if(Math.abs(this.selectedObjects[i].x - obj.x) <= 1 && Math.abs(this.selectedObjects[i].y - obj.y) <= 1 )
+        {
+            this.attack(obj, {x: this.x, y: this.y});
+        }else{
+            this.attack(obj, emptySquares[rand]);
+        }
+        
+    }
+    
     //Move a unit to the square in which point (x, y) is.
     move(x, y){
 
@@ -185,7 +207,7 @@ class Unit extends GameObject{
                     this.Perseus.objects.splice(i, 1);
                 }
             }
-            this.Perseus.AI.DeleteUnit(this.tag);
+            
             //this.Perseus.AI.printArrays();
             //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
@@ -195,6 +217,11 @@ class Unit extends GameObject{
             this.attacking = false;
             this.moving = false;
             attacker.stopAttack();
+            if (this.faction == 'orc')
+            {
+                this.Perseus.AI.DeleteUnit(this);
+            }
+            
         }
 
         this.hpbar.width = (this.hp / this.maxHP) * 64;

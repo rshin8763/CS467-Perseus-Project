@@ -37,6 +37,14 @@ class Barracks extends Building{
         this.faction = faction;
         this.Perseus = Perseus;
     }
+    build(str){
+        switch(str){
+            case 'S':
+                return this.buildSword();
+            case 'P':
+                return this.buildPike();
+        }
+    }
 
     //Control API function
     build(str){

@@ -1,5 +1,4 @@
 import {GameObject} from './gameObject.js';
-// import {Player} from './player.js';
 
 class Building extends GameObject{
     constructor(faction, hp, x, y, Perseus){
@@ -60,12 +59,10 @@ class Building extends GameObject{
     takeDamage(damage, attacker)
     {
         this.hp -= damage;
-
+        console.log("The hp is now " + this.hp);
         if(this.hp < 1)
         {
             attacker.stopAttack();
-
-            this.Perseus.AI.DeleteBuilding(this.tag);
             //this.Perseus.AI.printArrays();
             //this.Perseus.AI.GetAIStats();
             this.sprite.destroy();
@@ -78,6 +75,11 @@ class Building extends GameObject{
                     this.Perseus.objects.splice(i, 1);
                 }
             }
+            if(this.faction == 'orc')
+            {
+                this.Perseus.AI.DeleteBuilding(this);
+            }
+            
         }
 
         this.hpbar.width = (this.hp / this.maxHP) * 128;

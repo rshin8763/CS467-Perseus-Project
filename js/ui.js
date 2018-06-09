@@ -17,10 +17,9 @@ class Ui
         this.pause_button;
         this.mute_button;
         this.saveButton;
-        this.quitButton;
-        this.newGameButton;
         this.resumeButton;
         this.enemyHealthText;
+        this.music;
         // this.minimap = new Minimap(Perseus);
         this.commandButtons = [];
         this.initialize();
@@ -57,6 +56,10 @@ class Ui
                 this.ui.add(tile);
             }
         }
+
+        this.music = this.Perseus.game.add.audio('backgroundMusic');
+        this.music.loop = true;
+        this.music.play();
 
         // ------------------------------------------------------------------------
         // PAUSE BUTTON, MUTE, MENU
@@ -231,12 +234,6 @@ class Ui
 
             this.saveButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 160,
                     'saveButton', this.saveGame, this, 2, 1, 0);
-
-            this.quitButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 268,
-                    'quitButton', this.quitGame, this, 2, 1, 0);
-
-            this.newGameButton = this.Perseus.game.add.button(this.Perseus.game.camera.x + 300, this.Perseus.game.camera.y + 376,
-                    'newGameButton', this.newGame, this, 2, 1, 0);
             this.Perseus.game.paused = true;
         }
 
@@ -244,13 +241,13 @@ class Ui
 
     muteMusic()
     {
-        if(music.mute == true)
+        if(this.music.mute == true)
         {
-            music.mute = false;
+            this.music.mute = false;
         }
         else
         {
-            music.mute = true;
+            this.music.mute = true;
         }
 
     }
@@ -269,16 +266,7 @@ class Ui
 
     saveGame()
     {
-        this.Perseus.GameState.SaveCurrentState();
-    }
-    quitGame()
-    {
-        this.unpause();
-    }
-
-    newGame()
-    {
-        this.Perseus.GameState.LoadGame();
+        this.Perseus.SaveGame.SaveGame();
     }
 
     updateText(kind)

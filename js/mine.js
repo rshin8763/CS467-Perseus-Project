@@ -1,5 +1,7 @@
 import {GameObject} from './gameObject.js'
 import {Resource} from './resource.js'
+import {AI} from './ai.js';
+
 class Mine extends Resource{
     constructor(faction, x, y, Perseus){
         super(faction, 'gold', Perseus);
@@ -40,6 +42,7 @@ class Mine extends Resource{
         super.loseResource(rate);
         if (this.exhausted == true){
             this.sprite.frame = 0;
+            this.Perseus.AI.DeleteMine(this);
         }
     }
 }

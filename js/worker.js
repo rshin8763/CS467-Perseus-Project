@@ -98,11 +98,11 @@ class Worker extends Unit{
             if (obj instanceof Fort && obj.faction == this.faction){
                 if (Math.hypot(x-obj.sprite.x, y-obj.sprite.y) < min){
                     min = Math.hypot(x-obj.sprite.x, y-obj.sprite.y);
-                    closest = obj;
+                  closest = obj;
                 }
             }
         });
-        console.log('found fort ', closest);
+        //console.log('found fort ', closest);
         return closest;
     }
 
@@ -143,7 +143,6 @@ class Worker extends Unit{
             this.placing = true;
             this.gatherState = 0;
             this.Perseus.controller.state = 'place';
-
             this.createConflictSquares();
             return true;
         } else {
@@ -190,7 +189,6 @@ class Worker extends Unit{
             this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
-
             this.createConflictSquares();
             return true;
         } else {
@@ -259,7 +257,6 @@ class Worker extends Unit{
             this.gatherState = 0;
             this.placing = true;
             this.Perseus.controller.state = 'place';
-
             this.createConflictSquares(); 
             return true;
         } else {
@@ -434,12 +431,10 @@ class Worker extends Unit{
                 {
                     if(this.faction == 'orc') // IF IS AI, UPDATE AI
                     {
-                        console.log("1");
                         this.Perseus.AI.UpdateStock(woodHarvest, 'wood');
                     }
                     else // ELSE IS PLAYER
                     {
-                        console.log("2");
                         this.Perseus.Player.UpdateStock(woodHarvest, 'wood');
                     }
 

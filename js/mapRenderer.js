@@ -41,10 +41,10 @@ class mapRenderer{
         }
         if (element.type == 'fort'){
             new Fort('human', Math.floor(element.x), Math.floor(element.y), this.Perseus);
-
         }
         if (element.type == 'enemyFort'){
             new Fort('orc', Math.floor(element.x), Math.floor(element.y), this.Perseus);
+
 
         }
     }

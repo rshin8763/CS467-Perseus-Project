@@ -37,7 +37,6 @@ class ArcheryRange extends Building{
                 return this.buildArcher();
         }
     }
-    
     buildArcher()
     {
         //Start building an archer, or tell the palyer there aren't enough resources
