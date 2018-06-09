@@ -1230,7 +1230,7 @@ class AI
 		this.AddUnit('Wizard');
 		this.AddUnit('Wizard');
 		this.AIWood = 0;
-		this.AIGold = 0;
+		this.AIGold = 0; 
 		this.UpdateStaticRoles();
 	}
 

@@ -151,7 +151,7 @@ function update()
     Perseus.prompter.update();
 
     // GAME OVER UPDATE
-    gameOverCheck();
+    //gameOverCheck();
 
 }
 
