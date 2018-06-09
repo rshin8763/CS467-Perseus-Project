@@ -187,7 +187,6 @@ class AI
 	CreateMine()
 	{	
 		let thisMine = new Mine('human', 1600 + spawnChanger, 1150, this.Perseus);
-		this.objects.push(thisMine);
 		MyGoldMines.push(thisMine);
 		this.AIGoldMines++;
 		
@@ -272,7 +271,6 @@ class AI
 			return false;
 		}
 		this.AIAllBuildings++;
-		this.Perseus.objects.push(thisBuilding);
 		this.MyBuildings.push(thisBuilding);
 		
 		//this.Perseus.updateText('Enemy');
@@ -388,7 +386,6 @@ class AI
 
 		// ADDS TO BOTH GLOBAL AND AI ARRAYS, THEN UPDATES ROLES
 		this.MyUnits.push(thisUnit);
-		this.Perseus.objects.push(thisUnit);
 		spawnSpotX += spawnChanger;
 	}
 
