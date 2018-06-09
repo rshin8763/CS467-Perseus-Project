@@ -118,7 +118,6 @@ class Player
         if (obj instanceof Building){
             this.buildings.remove(obj);
             this.playerAllBuildings--;
-            }
         }
     }
 
