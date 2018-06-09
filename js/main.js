@@ -129,9 +129,6 @@ function create()
     Perseus.ui = new Ui(Perseus);
     Perseus.SaveGame = new SaveGame(Perseus);
 
-    Perseus.Player.playerWood = 5000;
-    Perseus.Player.playerGold = 5000;
-
     console.log(Perseus.objects);
     console.log(Perseus.resources);
     console.log(Perseus.navigator.navmap);
@@ -164,7 +161,7 @@ function update()
 // GAME OVER UPDATE
 function gameOverCheck()
 {
-    if(Perseus.AI.AIBuildings <= 0)
+    if(Perseus.AI.AIAllBuildings <= 0)
     {
         if(Perseus.game.paused == false)
         {
@@ -177,7 +174,7 @@ function gameOverCheck()
         gameName = Perseus.game.add.text(275, 75, "YOU WON!", 
         { font: 'bold 60pt Times New Roman', fill: '#ffffff'});
     }
-    if(Perseus.Player.PlayerBuildings <= 0)
+    if(Perseus.Player.playerAllBuildings <= 0)
     {
         if(Perseus.game.paused == false)
         {

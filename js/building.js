@@ -75,6 +75,9 @@ class Building extends GameObject{
                     this.Perseus.objects.splice(i, 1);
                 }
             }
+            if(this.faction == 'human'){
+                this.Perseus.Player.removeObject(this);
+            }
             if(this.faction == 'orc')
             {
                 this.Perseus.AI.DeleteBuilding(this);

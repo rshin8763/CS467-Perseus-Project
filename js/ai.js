@@ -279,8 +279,7 @@ class AI
 		}
 		this.AIAllBuildings++;
 		this.MyBuildings.push(thisBuilding);
-		
-		//this.Perseus.updateText('Enemy');
+		this.Perseus.ui.updateText('Enemy');
 		return thisBuilding;
 	}
 

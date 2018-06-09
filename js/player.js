@@ -117,20 +117,7 @@ class Player
         }
         if (obj instanceof Building){
             this.buildings.remove(obj);
-            let type = obj.type;
-            switch (type){
-                case 'Fort':
-                    this.playerForts--;
-                    break;
-                case 'Wizard Tower':
-                    this.playerTowers--;
-                    break;
-                case 'Barracks':
-                    this.playerBarracks--;
-                    break;
-                case 'Archery Range':
-                    //remove archery range
-                    break;
+            this.playerAllBuildings--;
             }
         }
     }
