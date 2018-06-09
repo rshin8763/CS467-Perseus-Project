@@ -1070,7 +1070,7 @@ class AI
 			enemyBuilding = this.Perseus.Player.buildings[m];
 			if(m < this.Perseus.Player.buildings.length)
 			{
-				thisUnit.attack(enemyBuilding, {x:enemyBuilding.x, y:enemyBuilding.y});
+				thisUnit.aiAttack(enemyBuilding);
 				m++;
 				i++;
 				i++;
@@ -1131,7 +1131,7 @@ class AI
 		if(buildRaidTimer == 0)
 		{
 			this.BuildingsRaid();
-			buildRaidTimer += buildRaidTick;
+			//buildRaidTimer += buildRaidTick;
 		}
 	}
 
@@ -1140,7 +1140,7 @@ class AI
 	{
 		this.ShortUpdateTimer();
 		this.LongUpdateTimer();
-		//this.BuildingsRaidTimer();
+		this.BuildingsRaidTimer();
 	}
 
 	/*-----------------------------------------------------------------------*/

@@ -104,7 +104,7 @@ class Unit extends GameObject{
         }
         let limit;
 
-        rand = Math.random() * emptySquares.length;
+        var rand = Math.random() * emptySquares.length;
 
         //Don't move the unit if it's already within attack range
         if(Math.abs(this.selectedObjects[i].x - obj.x) <= 1 && Math.abs(this.selectedObjects[i].y - obj.y) <= 1 )

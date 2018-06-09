@@ -203,15 +203,6 @@ function saveGame()
 {
     Perseus.SaveGame.SaveAIBuildings();
 }
-function quitGame()
-{
-    unpause();
-}
-
-function newGame()
-{
-    Perseus.GameState.LoadGame();
-}
 
 function startScreen()
 {
