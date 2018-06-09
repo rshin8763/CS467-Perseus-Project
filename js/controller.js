@@ -27,7 +27,6 @@ class Controller{
         this.boxEndPos = {};
         this.wasDown = false;
         this.boxSelect = true;
-        this.updateProgress = 0;
         this.cooldownTimer = 0;
     }
     isPointerInUi() {
@@ -113,7 +112,10 @@ class Controller{
             }
         }, this);
 
-        if (this.highestPrioritySelected != null) this.Perseus.ui.updateCommandList(this.highestPrioritySelected);
+        if (this.highestPrioritySelected != null) {
+            this.Perseus.ui.updateCommandList(this.highestPrioritySelected);
+            this.Perseus.ui.infoBar.fillInfoBar(this.highestPrioritySelected);
+        }
     }
 
     cameraPan(){
@@ -216,11 +218,7 @@ class Controller{
             this.selectionBox.destroy();
         }
 
-        if (this.updateProgress >= 9){
-            this.Perseus.ui.infoBar.update(this.highestPrioritySelected);
-            this.updateProgress = 0;
-        }
-        else this.updateProgress++;
+        this.Perseus.ui.infoBar.update(this.highestPrioritySelected);
 
         this.selectionBox = this.game.add.graphics();
         this.selectionBox.lineStyle(2, 0xFFFFFF, 1);

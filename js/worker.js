@@ -51,10 +51,7 @@ class Worker extends Unit{
             Farm : 0
         }
 
-<<<<<<< HEAD
-=======
         //Create sprite
->>>>>>> 7f63972a632909442af994130104f14f146dc839
         if(Math.random() >= 0.5){
             this.addSprite('worker_male');
         } else {
@@ -92,13 +89,8 @@ class Worker extends Unit{
     //Find the nearest fort to the units current postion
     findNearestFort(){
 
-<<<<<<< HEAD
-        let x = this.x;
-        let y = this.y;
-=======
         let x = this.sprite.x;
         let y = this.sprite.y;
->>>>>>> 7f63972a632909442af994130104f14f146dc839
 
         let closest = null;
         let min = Number.MAX_SAFE_INTEGER;
@@ -110,7 +102,6 @@ class Worker extends Unit{
                 }
             }
         });
-        console.log('found fort ', closest);
         return closest;
     }
 
@@ -144,7 +135,7 @@ class Worker extends Unit{
     buildFort()
     {
         if(this.Perseus.Player.playerWood >= this.woodCosts.Fort 
-                && this.Perseus.Player.playerGold > this.goldCosts.Fort)
+                && this.Perseus.Player.playerGold >= this.goldCosts.Fort)
         {            
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'fort' + "_" + this.faction);
             this.selectedBuilding = "Fort";
@@ -181,7 +172,6 @@ class Worker extends Unit{
         } else {
             if(this.faction == 'human')
                 this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.Mine, this.goldCosts.Mine), 100, '#ff0000');   
-            console.log('not enough resources');
             return false;
         }
 
@@ -204,7 +194,6 @@ class Worker extends Unit{
         } else {
             if(this.faction == 'human')
                 this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.Barracks, this.goldCosts.Barracks), 100, '#ff0000');   
-            console.log('not enough resources');
             return false;
         }
 
@@ -228,7 +217,6 @@ class Worker extends Unit{
         } else {
             if(this.faction == 'human')
                 this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.ArcheryRange, this.goldCosts.ArcheryRange), 100, '#ff0000');   
-            console.log('not enough resources');
             return false;
         }
     }
@@ -251,7 +239,6 @@ class Worker extends Unit{
         } else {
             if(this.faction == 'human')
                 this.Perseus.prompter.drawToScreen(this.createResourceCostMsg(this.woodCosts.WizardTower, this.goldCosts.WizardTower), 100, '#ff0000');
-            console.log('not enough resources');
             return false;
         }
     }
@@ -263,6 +250,8 @@ class Worker extends Unit{
                 && this.Perseus.Player.playerGold >= this.goldCosts.Farm)
         {
             this.selectedSprite = this.game.add.sprite(this.game.input.x, this.game.input.y, 'farm' + "_" + this.faction);
+            this.Perseus.gameSprites.add(this.selectedSprite);
+
             this.selectedBuilding = "Farm";
             this.gatherState = 0;
             this.placing = true;
@@ -579,54 +568,6 @@ class Worker extends Unit{
                 }
             }
 
-<<<<<<< HEAD
-            if(this.building)
-            {
-                if(Math.abs(this.sprite.x - this.selectedX) > this.sprite.width || Math.abs(this.sprite.y - this.selectedY) > this.sprite.height)
-                {
-
-                    this.move(this.selectedX, this.selectedY)
-                } else {
-                    if(this.buildProgress > 1000)
-                    {
-
-                        if(this.selectedBuilding == "Fort")
-                        {
-                            this.Perseus.objects.push(new Fort(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
-                        }
-                        if(this.selectedBuilding == "Barracks")
-                        {
-                            this.Perseus.objects.push(new Barracks(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
-                        }
-                        if(this.selectedBuilding == "Mine")
-                        {
-                            this.Perseus.objects.push(new Mine(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
-                        }
-                        if(this.selectedBuilding == "ArcheryRange")
-                        {
-                            this.Perseus.objects.push(new ArcheryRange(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
-                        }
-                        if(this.selectedBuilding == "WizardTower")
-                        {
-                            this.Perseus.objects.push(new WizardTower(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
-                        }
-                        if(this.selectedBuilding == "Farm")
-                        {
-                            this.Perseus.objects.push(new Farm(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus));
-                        }
-                        this.building = false;
-                        this.Perseus.Player.reduceResources(this.woodCosts[this.selectedBuilding], this.goldCosts[this.selectedBuilding]);
-                        this.selectedSprite.destroy();
-                        this.selectedX = null;
-                        this.selectedY = null;
-                        this.buildProgress = 0;
-                        this.sprite.animations.stop();
-
-                    } else {
-                        this.sprite.animations.play('work_right');
-                        this.buildProgress += 1;
-                    }
-=======
         if(this.building)
         {
             //Move to the place we're going to build
@@ -635,7 +576,7 @@ class Worker extends Unit{
 
                 this.move(this.selectedX, this.selectedY)
             } else {
-                if(this.buildProgress > 100)
+                if(this.buildProgress >= 100)
                 {
                     if(this.selectedBuilding == "Fort")
                     {
@@ -672,7 +613,6 @@ class Worker extends Unit{
                 } else {
                     this.sprite.animations.play('work_right');
                     this.buildProgress += 0.1;
->>>>>>> 7f63972a632909442af994130104f14f146dc839
                 }
             }
         }

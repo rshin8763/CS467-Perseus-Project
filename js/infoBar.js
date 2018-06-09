@@ -43,6 +43,7 @@ class InfoBar
         let hpstr = obj.hp + '/' + obj.maxHP;
         return this.renderText('HP', hpstr)
     }
+
     renderText(type, value){
         let text = type + ': ' + value;
         let elem = this.Perseus.game.add.text(this.x+20, this.y + this.size*this.elemHeight, text, style);
@@ -87,9 +88,10 @@ class InfoBar
         if (obj.building) {
             if (obj.building == true){
                 if (this.progressBar) this.progressBar.destroy();
-                let percent = obj.buildProgress/100;
+                let percent = obj.buildProgress/98;
                 let progress = this.Perseus.game.add.graphics();
                 progress.beginFill(0xFFFFFF);
+                console.log(obj.buildProgress);
                 progress.drawRect(this.x +20, this.y + this.size * this.elemHeight, percent*160, 20);
                 progress.fixedToCamera = true;
                 progress.endFill();
@@ -97,9 +99,9 @@ class InfoBar
                 this.infoElements.push(progress);
                 this.progressBar = progress;
             }
-            if (obj.building == false)
+            if (obj.buildProgress == 0){
                 this.fillInfoBar(obj);
-        }
+            }
     }
 
     addBuildProgress(obj){
