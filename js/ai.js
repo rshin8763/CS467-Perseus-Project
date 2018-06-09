@@ -476,7 +476,7 @@ class AI
 			console.log("Error in trying to delete unit. Type unidentifiable.");
 			return false;
 		}
-		UpdateStaticRoles();
+		this.UpdateStaticRoles();
 	}
 
 /*****************************************************************************/
@@ -1036,11 +1036,11 @@ class AI
 					//SendRandomAttackUnit(intruder);
 					for(let m = 0; m < this.MyUnits.length; m++)
 					{
-						if(this.MyUnits[i].attacking == false && this.MyUnits.attackMoving == false)
+						if(this.MyUnits[m].attacking == false && this.MyUnits.attackMoving == false)
 						{
-							if(this.MyUnits[i].type != 'worker' || this.MyUnits[i].type != 'Worker')
+							if(this.MyUnits[m].type != 'worker' || this.MyUnits[m].type != 'Worker')
 							{
-								this.MyUnits[i].attack(thisUnit, {x: thisUnit.x, y: thisUnit.y});
+								this.MyUnits[m].attack(thisUnit, {x: thisUnit.x, y: thisUnit.y});
 								return true;
 							}
 						}
