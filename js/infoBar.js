@@ -28,13 +28,8 @@ class InfoBar
         infoBox.lineStyle(2, 0xFFFFFF, 1);
         infoBox.drawRect(this.x, this.y-10,192,192+50);
         infoBox.fixedToCamera = true;
-        // this.infoTitle = this.Perseus.game.add.text(32, 160, 'Selected:', style);
-        // this.infoTitle.fixedToCamera = true;
         this.infoBox = infoBox;
         this.ui.add(infoBox);
-        // 2/ this.ui.add(this.infoTitle);
-        // this.clearInfoBar();
-
     }
 
     clearInfoBar(){
@@ -102,6 +97,8 @@ class InfoBar
                 this.infoElements.push(progress);
                 this.progressBar = progress;
             }
+            if (obj.building == false)
+                this.fillInfoBar(obj);
         }
     }
 
