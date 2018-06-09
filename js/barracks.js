@@ -13,7 +13,7 @@ class Barracks extends Building{
 
     constructor(faction, x,y,Perseus){
         //Call Building Constructor
-        super(faction, 200, x, y, Perseus);
+        super(faction, 1000, x, y, Perseus);
 
         //Add Sprite
         this.addSprite('barracks');
@@ -31,8 +31,8 @@ class Barracks extends Building{
             gold : 50
         };
         this.PikemanCosts = {
-            wood : 60,
-            gold : 90
+            wood : 200,
+            gold : 100
         };
         this.faction = faction;
         this.Perseus = Perseus;

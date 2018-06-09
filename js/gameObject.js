@@ -31,7 +31,7 @@ class GameObject {
         };
     }
     drawSelectionCircle(){
-        if (this.faction == 'human'){
+        if (this.faction == 'human' || this.faction == 'neither'){
             if (this.circle == null){
                 this.circle = this.game.add.graphics();
                 this.circle.lineStyle(1, 0x00FF00, 1);

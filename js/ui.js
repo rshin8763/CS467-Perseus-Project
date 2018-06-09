@@ -102,7 +102,7 @@ class Ui
         this.mute_button.fixedToCamera = true;
         this.mute_button.cameraOffset.setTo(755, 3);
         this.mute_button.inputEnabled = true;
-        this.mute_button.events.onInputUp.add(this.muteMusic);
+        this.mute_button.events.onInputUp.add(this.muteMusic, this);
         // this.pause_button.events.onInputUp.add(()=>{this.pause}, this);
         this.ui.add(this.mute_button);
 
@@ -258,8 +258,8 @@ class Ui
         {
             this.Perseus.game.paused = false;
             this.saveButton.destroy();
-            this.quitButton.destroy();
-            this.newGameButton.destroy();
+            // this.quitButton.destroy();
+            // this.newGameButton.destroy();
             this.resumeButton.destroy();
         }
     }

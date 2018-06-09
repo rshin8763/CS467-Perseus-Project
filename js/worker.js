@@ -302,8 +302,10 @@ class Worker extends Unit{
             this.placing = false;
             this.building = true;
             // Reduce Resources 
+            this.Perseus.Player.reduceResources(this.woodCosts[this.selectedBuilding], this.goldCosts[this.selectedBuilding]);
             
             this.selectedSprite.alpha = 0.75;
+            this.Perseus.gameSprites.add(this.selectedSprite);
             this.selectedX = this.selectedSprite.x; 
             this.selectedY = this.selectedSprite.y; 
             let square = this.Perseus.navigator.getSquare(this.selectedSprite.x, this.selectedSprite.y);
@@ -599,7 +601,6 @@ class Worker extends Unit{
                         new Farm(this.faction, this.selectedSprite.x, this.selectedSprite.y, this.Perseus);
                     }
                     this.building = false;
-                    this.Perseus.Player.reduceResources(this.woodCosts[this.selectedBuilding], this.goldCosts[this.selectedBuilding]);
                     this.selectedSprite.destroy();
                     this.selectedX = null;
                     this.selectedY = null;

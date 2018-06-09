@@ -224,23 +224,18 @@ class Player
     EasyMode()
     {
         let worker1 = new Worker ('human', 800, 350, this.Perseus);
-        this.Perseus.objects.push(worker1);
         this.addObject(worker1);
         let worker2 = new Worker ('human', 700, 350, this.Perseus);
-        this.Perseus.objects.push(worker2);
         this.addObject(worker2);
         let fort1 = new Fort('human', 650, 100, this.Perseus);
-        this.Perseus.objects.push(fort1);
         this.addObject(fort1);
     }
 
     HardMode()
     {
         let worker2 = new Worker ('human', 700, 350, this.Perseus);
-        this.Perseus.objects.push(worker2);
         this.addObject(worker2);
         let fort1 = new Fort('human', 650, 100, this.Perseus);
-        this.Perseus.objects.push(fort1);
         this.addObject(fort1);
     }
 

@@ -52,13 +52,13 @@ var newUnitRaidTick = 300;
 // UNIT COSTS
 
 var WorkerCost = {
-	wood: 100,
-	gold: 100
+	wood: 50,
+	gold: 0
 };
 
 var GoldMineCosts = {
-	wood: 150,
-	gold: 150
+	wood: 100,
+	gold: 0
 };
 
 var ArcheryRangeCosts = {
@@ -82,7 +82,7 @@ var PikemanCost = {
 };
 
 var SwordInfantryCost = {
-	wood: 400,
+	wood: 50,
 	gold: 400
 };
 
@@ -193,8 +193,7 @@ class AI
 	/*-----------------------------------------------------------------------*/
 	CreateMine()
 	{	
-		let thisMine = new Mine('human', 1600 + spawnChanger, 1150, this.Perseus);
-		this.objects.push(thisMine);
+		let thisMine = new Mine('orc', 1600 + spawnChanger, 1150, this.Perseus);
 		MyGoldMines.push(thisMine);
 		this.AIGoldMines++;
 		
@@ -279,7 +278,6 @@ class AI
 			return false;
 		}
 		this.AIAllBuildings++;
-		this.Perseus.objects.push(thisBuilding);
 		this.MyBuildings.push(thisBuilding);
 		
 		//this.Perseus.updateText('Enemy');
@@ -395,7 +393,6 @@ class AI
 
 		// ADDS TO BOTH GLOBAL AND AI ARRAYS, THEN UPDATES ROLES
 		this.MyUnits.push(thisUnit);
-		this.Perseus.objects.push(thisUnit);
 		spawnSpotX += spawnChanger;
 		return thisUnit;
 	}
@@ -484,7 +481,7 @@ class AI
 			console.log("Error in trying to delete unit. Type unidentifiable.");
 			return false;
 		}
-		UpdateStaticRoles();
+		this.UpdateStaticRoles();
 	}
 
 /*****************************************************************************/
@@ -1044,11 +1041,11 @@ class AI
 					//SendRandomAttackUnit(intruder);
 					for(let m = 0; m < this.MyUnits.length; m++)
 					{
-						if(this.MyUnits[i].attacking == false && this.MyUnits.attackMoving == false)
+						if(this.MyUnits[m].attacking == false && this.MyUnits.attackMoving == false)
 						{
-							if(this.MyUnits[i].type != 'worker' || this.MyUnits[i].type != 'Worker')
+							if(this.MyUnits[m].type != 'worker' || this.MyUnits[m].type != 'Worker')
 							{
-								this.MyUnits[i].attack(thisUnit, {x: thisUnit.x, y: thisUnit.y});
+								this.MyUnits[m].attack(thisUnit, {x: thisUnit.x, y: thisUnit.y});
 								return true;
 							}
 						}

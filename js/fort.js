@@ -11,7 +11,7 @@ class Fort extends Building{
     constructor(faction, x,y,Perseus){
 
         //Call Building Constructor
-        super(faction, 350, x, y, Perseus);
+        super(faction, 1350, x, y, Perseus);
 
         //Create Sprite
         this.addSprite('fort');
