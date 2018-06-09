@@ -1,11 +1,19 @@
-import {Player} from './player.js';
-import {AI} from './ai.js';
-import {Resource} from './resource.js';
+import {SwordInfantry} from './swordInfantry.js';
+import {Archer} from './archer.js';
+import {Fort} from './fort.js';
+import {Worker} from './worker.js';
+import {Pikeman} from './pikeman.js';
+import {WizardTower} from './wizardtower.js';
+import {Wizard} from './wizard.js';
+import {Barracks} from './barracks.js';
+import {ArcheryRange} from './archeryrange.js';
+import {Navigator} from './navigator.js';
 import {Tree} from './tree.js';
+import {Mine} from './mine.js';
+import {Player} from './player.js';
 
 // USING JQUERY COOKIES PLUGIN
 // https://github.com/js-cookie/js-cookie
-
 
 /*****************************************************************************/
 							// GLOBALS // 
@@ -32,7 +40,7 @@ class SaveGame
 		this.Perseus = Perseus;
 	}
 /*****************************************************************************/
-							// SAVE // 
+							// RESOURCES // 
 /*****************************************************************************/
 	
 	/*-----------------------------------------------------------------------*/
@@ -60,7 +68,9 @@ class SaveGame
 		}
 
 	}
-
+/*****************************************************************************/
+							// PLAYER // 
+/*****************************************************************************/
 	/*-----------------------------------------------------------------------*/
 	// PLAYER
 	SavePlayerBuildings()
@@ -74,44 +84,30 @@ class SaveGame
 		for(let i = 0; i < this.Perseus.Player.buildings.length; i++)
 		{
 			thisObject = this.Perseus.Player.buildings[i];
-			if(thisObject.type == 'Fort')
-			{
-				if(thisObject.x == 19 && thisObject.y == 3)
-				{
-					thisBuilding = {
-						type: 'starting fort',
-						xCoor: null, 
-						yCoor: null,
-						hp: thisObject.hp
-					}
-					savedPlayerBuildings.push(thisBuilding);
-				}
-				else
-				{
-					let thisX = this.Perseus.navigator.getCoords(thisObject.x, thisObject.y);
-					thisBuilding = {
-						type: thisObject.type,
-						xCoor: thisX.x,
-						yCoor: thisY.yCoor,
-						hp: thisObject.hp
-					}
-					savedPlayerBuildings.push(thisBuilding);
-				}
+			let thisX = this.Perseus.navigator.getCoords(thisObject.x, thisObject.y);
+			thisBuilding = {
+				type: thisObject.type,
+				xCoor: thisX.x,
+				yCoor: thisX.yCoor,
+				hp: thisObject.hp
 			}
+			savedPlayerBuildings.push(thisBuilding);
 		}
 	}
 
+	/*-----------------------------------------------------------------------*/
 	SavePlayerUnits()
 	{
 		// LOCATION
 		// HP
+		// TYPE
 		savedPlayerUnits.length = 0;
 		let thisObject = null;
 		var thisUnit;
 		for(let i = 0; i < this.Perseus.Player.units.length; i++)
 		{
 			thisObject = this.Perseus.Player.units[i];
-			console.log(thisObject);
+			//console.log(thisObject);
 			let thisX = this.Perseus.navigator.getCoords(thisObject.x, thisObject.y)
 			thisUnit = {
 				type: thisObject.type,
@@ -123,6 +119,7 @@ class SaveGame
 		}
 	}
 
+	/*-----------------------------------------------------------------------*/
 	SavePlayerStocks()
 	{
 		var thisObject;
@@ -134,6 +131,9 @@ class SaveGame
 		savedPlayerStocks.push(thisObject);
 	}
 
+/*****************************************************************************/
+							// AI // 
+/*****************************************************************************/
 	/*-----------------------------------------------------------------------*/
 	// AI
 	SaveAIBuildings()
@@ -146,14 +146,17 @@ class SaveGame
 		for(let i = 0; i < this.Perseus.AI.MyBuildings.length; i++)
 		{
 			thisObject = this.Perseus.AI.MyBuildings[i];
+			let thisX = this.Perseus.navigator.getCoords(thisObject.x, thisObject.y);
 			thisBuilding = {
 				hp: thisObject.hp,
-				type: thisObject.type
+				type: thisObject.type,
+				xCoor: thisX.x,
+				yCoor: thisX.y
 			}
 			savedAIBuildings.push(thisBuilding);
 		}
 	}
-
+	/*-----------------------------------------------------------------------*/
 	SaveAIUnits()
 	{
 		// HP
@@ -164,14 +167,19 @@ class SaveGame
 		for(let i = 0; i < this.Perseus.AI.MyUnits.length; i++)
 		{
 			thisObject = this.Perseus.AI.MyUnits[i];
+			let thisX = this.Perseus.navigator.getCoords(thisObject.x, thisObject.y);
+			thisObject = this.Perseus.AI.MyUnits[i];
 			thisUnit = {
 				hp: thisObject.hp,
-				type: thisObject.type
+				type: thisObject.type,
+				xCoor: thisX.x,
+				yCoor: thisX.y
 			}
 			savedAIUnits.push(thisUnit);
 		}
 	}
 
+	/*-----------------------------------------------------------------------*/
 	SaveAIStocks()
 	{
 		// HP
@@ -183,7 +191,10 @@ class SaveGame
 		};
 		savedAIStocks.push(thisUnit);
 	}
-
+/*****************************************************************************/
+							// COOKIES // 
+/*****************************************************************************/
+	/*-----------------------------------------------------------------------*/
 	SaveArraysToCookies()
 	{
 		// SAVE RESOURCES
@@ -231,102 +242,221 @@ class SaveGame
 	}
 
 /*****************************************************************************/
-							// LOAD // 
+							// LOAD MAP // 
 /*****************************************************************************/
-
 	/*-----------------------------------------------------------------------*/
-	// MAP RESOURCES
 	LoadMapResources()
 	{
 		var loadMap = JSON.parse(Cookies.get('bookableResources'));
 		console.log(loadMap);
+		var objectsArr = this.Perseus.objects
+		for (var thisResource in objectsArr)
+		{
+			if(objectsArr[thisResource].tag)
+			{
+				if(objectsArr[thisResource].tag == loadMap[thisResource].tag);
+				{
+					//console.log(loadMap.tag);
+					objectsArr[thisResource].exhausted = loadMap[thisResource].exhausted;
+					objectsArr[thisResource].exhausted = loadMap[thisResource].resourceAmount;
+				}
+			}
+		}
+	}
+/*****************************************************************************/
+							// LOAD PLAYER // 
+/*****************************************************************************/
+	/*-----------------------------------------------------------------------*/
+	LoadPlayerBuildings()
+	{
+		// SPAWN AT LOCATION, ADD TO PLAYER BUILDINGS
+		// SET HP
+		var loadPlayBuildings = JSON.parse(Cookies.get('bookablePlayerBuildings'));
+		for(let i = 0; i < loadPlayBuildings.length; i++)
+		{
+			var type = loadPlayBuildings[i].type
+			let thisBuilding = null;
+
+			// FORT
+			if (type == 'Fort' || type == 'fort')
+			{
+				thisBuilding = new Fort('human', loadPlayBuildings[i].xCoor, loadPlayBuildings[i].yCoor, this.Perseus)
+			}
+
+			// ARCHERY RANGE
+			else if (type == 'Archery Range' || type == 'archery range')
+			{
+				thisBuilding = new ArcheryRange('human', loadPlayBuildings[i].xCoor, loadPlayBuildings[i].yCoor, this.Perseus);
+			}
+			// BARRACKS
+			else if (type == 'Barracks' || type == 'barracks')
+			{
+				thisBuilding = new Barracks('human', loadPlayBuildings[i].xCoor, loadPlayBuildings[i].yCoor, this.Perseus);
+			}
+
+			// WIZARD TOWER
+			else if (type == 'Wizard Tower' || type == 'wizard tower')
+			{
+				thisBuilding = new WizardTower('human', loadPlayBuildings[i].xCoor, loadPlayBuildings[i].yCoor, this.Perseus);
+			}
+
+			// ERROR HANDLING
+			else
+			{
+				console.log("You tried to add a building and failed.");
+				return false;
+			}
+			thisBuilding.hp = loadPlayBuildings[i].hp;
+			this.Perseus.objects.push(thisBuilding);
+			this.Perseus.Player.addObject(thisBuilding);
+		}
+	}
+	/*-----------------------------------------------------------------------*/
+	LoadPlayerUnits()
+	{
+		var loadPlayUnits = JSON.parse(Cookies.get('bookablePlayerUnits'));
+		console.log(loadPlayUnits);
+		for (let i = 0; i < loadPlayUnits.length; i++)
+		{
+			let thisUnit = null;
+			var	type = loadPlayUnits[i].type;
+			var x = loadPlayUnits[i].x;
+			var y = loadPlayUnits[i].y;
+
+			// WORKER 
+			if (type == 'worker' || type == 'Worker')
+			{
+				thisUnit = new Worker('human', x, y, this.Perseus);
+			}
+
+			// ARCHER 
+			else if (type == 'archer' || type == 'Archer')
+			{
+				thisUnit = new Archer('human', x, y, this.Perseus);
+			}
+
+			// SWORDINFANTRY 
+			else if (type == 'swordInfantry' || type == 'SwordInfantry')
+			{
+				thisUnit = new SwordInfantry('orc', x, y, this.Perseus);
+			}
+
+			// PIKEMAN - ATTACKS THE ARMED
+			else if (type == 'pikeman' || type == 'Pikeman')
+			{
+				thisUnit = new Pikeman('human', x , y, this.Perseus);
+			}
+
+			// WIZARD - ATTACKS BUILDINGS
+			else if (type == 'wizard' || type == 'Wizard')
+			{
+				thisUnit = new Wizard('human', x, y, this.Perseus);
+			}
+			else
+			{
+				console.log("You tried to Add a Unit to an Array and failed.");
+				return false;
+			}
+
+			thisUnit.hp = loadPlayUnits[i].hp;
+			this.Perseus.Player.addObject(thisUnit);
+			this.Perseus.objects.push(thisUnit);
+		}
+
 	}
 
 	/*-----------------------------------------------------------------------*/
-	// PLAYER
-	LoadPlayerBuildings()
-	{
-			// SPAWN AT LOCATION, ADD TO PLAYER BUILDINGS
-			// SET HP
-			var loadPlayBuildings = JSON.parse(Cookies.get('bookablePlayerBuildings'));
-			console.log(loadPlayBuildings);
-	}
-
-	LoadPlayerUnits()
-	{
-		// SPAWN AT LOCATION
-		//  SET HP
-		//  IF MOVING?
-		// 		SET DESTINATION
-		var LoadPlayUnits = JSON.parse(Cookies.get('bookablePlayerUnits'));
-		console.log(LoadPlayUnits);
-
-	}
-
 	LoadPlayerStocks()
 	{
 		// SPAWN AT LOCATION
 		//  SET HP
 		//  IF MOVING?
 		// 		SET DESTINATION
-		var LoadPlayStocks = JSON.parse(Cookies.get('bookablePlayerStocks'));
-		console.log(LoadPlayStocks);
-	}
+		var loadPlayStocks = JSON.parse(Cookies.get('bookablePlayerStocks'));
+		console.log(loadPlayStocks);
+		this.Perseus.Player.playerGold = loadPlayStocks[0].gold;
+		this.Perseus.Player.playerWood = loadPlayStocks[0].wood;
 
+	}
+/*****************************************************************************/
+							// LOAD AI // 
+/*****************************************************************************/
 	/*-----------------------------------------------------------------------*/
 	// AI
 	LoadAIBuildings()
 	{
 		// SPAWN BUILDING
 		// SET HP
-		var LoadEnemyBuildings = JSON.parse(Cookies.get('bookableAIBuildings'));
-		console.log(LoadEnemyBuildings);
+		var loadEnemyBuildings = JSON.parse(Cookies.get('bookableAIBuildings'));
+		for(let i = 0; i < loadEnemyBuildings.length; i++)
+		{
+			var type = loadEnemyBuildings[i].type;
+			let thisBuilding = this.Perseus.AI.AddBuilding(type);
+			thisBuilding.hp = loadEnemyBuildings[i].hp;		
+		}
 		
 	}
 
+	/*-----------------------------------------------------------------------*/
 	LoadAIUnits()
 	{
 		// SPAWN UNIT
 		// SET HP
-		var LoadEnemyUnits = JSON.parse(Cookies.get('bookableAIUnits'));
-		console.log(LoadEnemyUnits);
+		var loadEnemyUnits = JSON.parse(Cookies.get('bookableAIUnits'));
+		console.log(loadEnemyUnits);
+		for(var i  = 0; i < loadEnemyUnits.length; i++)
+		{
+			var m = 3001000000;
+			while(m > 1)
+			{
+				m--;
+			}
+			let thisUnit = this.Perseus.AI.AddUnit(loadEnemyUnits[i].type);
+			console.log(loadEnemyUnits[i]);
+			thisUnit.hp = loadEnemyUnits[i].hp;
+			thisUnit.move(loadEnemyUnits[i].xCoor, loadEnemyUnits[i].yCoor);
+		}
 	}
 
+	/*-----------------------------------------------------------------------*/
 	LoadAIStocks()
 	{
 		// GOLD
 		// SILVER
-		var LoadEnemyStocks = JSON.parse(Cookies.get('bookableAIStocks'));
+		var loadEnemyStocks = JSON.parse(Cookies.get('bookableAIStocks'));
 		console.log(LoadEnemyStocks);
+		this.Perseus.AI.AIWood = loadEnemyStocks[0].wood;
+		this.Perseus.AI.AIGold = loadEnemyStocks[0].gold;
+
 	}
 
 /*****************************************************************************/
 							// DEBUGGING // 
 /*****************************************************************************/
 
-printArrays()
-{
-	console.log("SAVED MAP RESOURCES -----------------------");
-	console.log(savedMapResources);
+	printArrays()
+	{
+		console.log("SAVED MAP RESOURCES -----------------------");
+		console.log(savedMapResources);
 
-	console.log("SAVED PLAYER BUILDINGS -----------------------");
-	console.log(savedPlayerBuildings);
+		console.log("SAVED PLAYER BUILDINGS -----------------------");
+		console.log(savedPlayerBuildings);
 
-	console.log("SAVED PLAYER UNITS -----------------------");
-	console.log(savedPlayerUnits);
+		console.log("SAVED PLAYER UNITS -----------------------");
+		console.log(savedPlayerUnits);
 
-	console.log("SAVED PLAYER STOCKS -----------------------");
-	console.log(savedPlayerStocks);
+		console.log("SAVED PLAYER STOCKS -----------------------");
+		console.log(savedPlayerStocks);
 
-	console.log("SAVED AI BUILDINGS -----------------------");
-	console.log(savedAIBuildings);
+		console.log("SAVED AI BUILDINGS -----------------------");
+		console.log(savedAIBuildings);
 
-	console.log("SAVED AI UNITS -----------------------");
-	console.log(savedAIUnits);
+		console.log("SAVED AI UNITS -----------------------");
+		console.log(savedAIUnits);
 
-	console.log("SAVED AI STOCKS -----------------------");
-	console.log(savedAIStocks);
-}
+		console.log("SAVED AI STOCKS -----------------------");
+		console.log(savedAIStocks);
+	}
 
 
 

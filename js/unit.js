@@ -92,6 +92,7 @@ class Unit extends GameObject{
 
     aiAttack(obj)
     {
+        console.log(this);
         let emptySquares = [];
         let origin = {x:this.x, y: this.y};
         if(obj.movable == false)
@@ -102,10 +103,11 @@ class Unit extends GameObject{
         }
         let limit;
 
-        rand = Math.random() * emptySquares.length;
+         let len = emptySquares.length;
+       let rand = Math.random() * len;
 
         //Don't move the unit if it's already within attack range
-        if(Math.abs(this.selectedObjects[i].x - obj.x) <= 1 && Math.abs(this.selectedObjects[i].y - obj.y) <= 1 )
+        if(Math.abs(this.x - obj.x) <= 1 && Math.abs(this.y - obj.y) <= 1 )
         {
             this.attack(obj, {x: this.x, y: this.y});
         }else{
@@ -113,7 +115,7 @@ class Unit extends GameObject{
         }
         
     }
-    
+
     //Move a unit to the square in which point (x, y) is.
     move(x, y){
 
