@@ -37,13 +37,13 @@ class Controller{
         if (this.state == 'default'){
             this.selectedObjects.forEach((elem)=>{elem.undrawCircle();});
             this.selectedObjects = [];
-            if(obj.faction != 'orc'){
+            
                 this.selectedObjects.push(obj);
                 this.highestPrioritySelected = obj;
                 obj.drawSelectionCircle();
                 this.Perseus.ui.updateCommandList(obj);
                 this.Perseus.ui.infoBar.fillInfoBar(obj);
-            }
+            
         } else if (this.state == 'attack'){
             this.Perseus.prompter.clearText();
             let emptySquares = [];
