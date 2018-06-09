@@ -13,7 +13,7 @@ class Pikeman extends Unit {
 
         this.woodCost = 100;
         this.goldCost = 600;
-        this.maxHP = 100;
+        this.maxHP = 120;
         
         
         //Create Sprite

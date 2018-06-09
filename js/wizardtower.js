@@ -10,7 +10,7 @@ class WizardTower extends Building{
 
     constructor(faction, x,y,Perseus){
         //Call Building Constructor
-        super(faction, 200, x, y, Perseus);
+        super(faction, 600, x, y, Perseus);
 
         //Create Sprite
         this.addSprite('wizardtower');

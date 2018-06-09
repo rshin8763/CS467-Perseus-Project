@@ -10,7 +10,7 @@ class ArcheryRange extends Building{
 
     constructor(faction, x,y,Perseus){
         //Call Building constructor
-        super(faction, 200, x, y, Perseus);
+        super(faction, 1000, x, y, Perseus);
 
         //Create Sprite
         this.addSprite('archeryrange');
