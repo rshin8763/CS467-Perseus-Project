@@ -650,7 +650,7 @@ class AI
 			return 'Archery Range';
 		}
 
-		else if(this.AIArchers < 2)
+		else if(this.AIArchers < 4)
 		{
 			return 'archer';
 		}
@@ -663,7 +663,7 @@ class AI
 		{
 			return 'pikeman';
 		}
-		else if(this.AISwordInfantry < 2)
+		else if(this.AISwordInfantry < 3)
 		{
 			return 'SwordInfantry';
 		}
@@ -748,7 +748,7 @@ class AI
 		SwordInfantryWatch.push(thisCoord);
 
 		// SWORDINFANTRY GUARD COORDINATES
-		// SPOT 2
+		// SPOT 3
 		thisCoord = {
 			x: 900,
 			y: 1500
@@ -756,12 +756,15 @@ class AI
 		SwordInfantryWatch.push(thisCoord);
 
 		// WIZARD PATROL
+		// SPOT 1
 		thisCoord = {
 			x: 1700,
 			y: 1300
 		}
 		WizardPatrol.push(thisCoord);
 
+		// WIZARD PATROL
+		// SPOT 2
 		thisCoord = {
 			x: 1250, 
 			y: 1300
@@ -1217,6 +1220,7 @@ class AI
 		this.AddUnit('worker');
 		this.AddUnit('worker');
 		this.AddBuilding('Archery Range');
+		this.AddUnit('archer');
 		this.AddUnit('archer');
 		this.AddUnit('archer');
 		this.AddUnit('archer');
